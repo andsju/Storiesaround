@@ -1,0 +1,32 @@
+# cms settings
+
+# restrict access
+# deny from all
+# session.save_path
+
+# PHP 5 deprecated 5.4
+# php_flag register_globals off
+
+# handle errors custom page
+ErrorDocument 404 /error/404.php
+
+# disable directory browsing, follow symbolic links
+Options All -Indexes +FollowSymlinks
+
+# default handler
+DirectoryIndex index.php index.html index.htm
+
+# rewrite 
+RewriteEngine on
+
+# stop redirecting if the request has already been redirected once
+RewriteCond %{ENV:REDIRECT_STATUS} 200
+RewriteRule .* - [L]
+
+# rewrite rule handle friendly urls
+RewriteRule ^pages/(.*)$ cms/pages.php/$1 [L]
+
+# handle requests not referring directly to files 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
