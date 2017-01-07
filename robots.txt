@@ -1,0 +1,14 @@
+#
+# robots.txt
+#
+User-agent: *
+Crawl-delay: 10
+# Directories
+Disallow: /cms/classes/
+Disallow: /cms/includes/
+Disallow: /cms/install/
+Disallow: /cms/libraries/
+Disallow: /cms/languages/
+Disallow: /content/includes/
+Disallow: /log/
+Disallow: /sys/
