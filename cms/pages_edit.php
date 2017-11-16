@@ -404,7 +404,13 @@ foreach ( $js_files as $js ): ?>
 			
 			var html = "";
 			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-trash-o fa-2x\"></i></div>";
-			var cell = "<div class=\"grid-cell\" style=\"position:relative\">"+tool+"<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div>Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>Link<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><br><button class=\"grid-preview\">Preview</button></div>";
+			var dynamic = "<div class=\"dynamic hidden\"<p>Dynamic content</p>";
+			dynamic += "<p><input type=\"radio\" name=\"dynamic-content\" value=\"none\"> none (default)</p>"; 
+			dynamic += "<p><input type=\"radio\" name=\"dynamic-content\" value=\"promoted\"> promoted stories</p>"; 
+			dynamic += "<p><input type=\"radio\" name=\"dynamic-content\" value=\"event\"> event stories</p>"; 
+			dynamic += "<p>Set filter (tag): <input type=\"text\"></p></div>"; 
+			//var cell = "<div class=\"grid-cell\" style=\"position:relative\">"+tool+"<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div>Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>Link<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><br><button class=\"grid-preview\">Preview</button></div>";
+			var cell = "<div class=\"grid-cell\" style=\"position:relative\">"+tool+"<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div>Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>URL<br><input type=\"text\" name=\"url\"><br>Link title<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"<button class=\"grid-preview\">Preview</button></div>";
 			for (var i = 0; i < 1; i++) {
 				html += cell;
 			}
@@ -434,6 +440,14 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 			console.log("click", $(this));
 			$(this).parent().remove();
+		});
+
+		$("div#grids").delegate( "a.toggle", "click", function(event) {
+			event.preventDefault();
+			console.log("click", $(this));
+			console.log($(this).parent());
+			$(this).parent().parent().find("div.dynamic").toggle();
+			
 		});
 		
 		$("div#grids").delegate( "button", "click", function(event) {
@@ -481,7 +495,6 @@ foreach ( $js_files as $js ): ?>
 			formData = formData.replace(/'/g, "\\'");
 			console.log(formData);
 		});
-
 
 
 
