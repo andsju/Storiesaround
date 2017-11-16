@@ -1,0 +1,1 @@
+<a href="javascript:moxman.browse({fields: 'absurl', no_host: true, path : ''});" class="btn btn-primary">Browse</a>

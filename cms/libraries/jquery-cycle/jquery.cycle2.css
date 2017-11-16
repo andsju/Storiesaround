@@ -1,0 +1,7 @@
+.cycle-overlay { 
+    font-family: georgia;
+	font-size:1.7em;
+	font-weight:700;
+    position: absolute; bottom: 150px; width: ; z-index: 900;
+    background: #FFF; color: #000; padding: 10px; opacity: .7;
+}
