@@ -1,0 +1,16 @@
+.vertical { position: relative; top: 50%; transform: translateY(-50%);}	
+
+div { box-sizing:border-box; overflow:hidden;} 
+div.container { }
+div.box { float:left;padding:30px; }
+
+div.serif { font-family:Georgia;font-size:3em;margin:0 0 100px 0; }
+div.sans-serif {font-family:Georgia;font-size:3em;margin:0 0 100px 0; }
+
+div.date { position:absolute; top:2%; right: 2%; font-family:Verdana;font-size:1.3em;padding:0; text-align:right;}
+img.logotype { position:absolute; bottom:2%; right: 2%; width:100px;}
+
+img.right-aligned { width:100%;height:auto; margin:0 0 20px 20px; }
+
+h1.serif {font-family:Georgia;font-size:3em;}
+h1.sans-serif { font-family:Arial;font-size:3em; }

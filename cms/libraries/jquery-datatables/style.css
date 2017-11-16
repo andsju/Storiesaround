@@ -1,0 +1,175 @@
+
+#add_table div.dataTables_wrapper   {
+	background-color: #FFFFFF;
+	border: 4px solid green;
+	border-radius: 0px;
+    box-shadow: 2px 2px 6px #F5F5F5;	
+}
+
+
+/*
+ * DataTables framework
+ */
+div.dataTables_wrapper   {
+	background-color: #F0F0F0;
+	border: 1px solid #aaa;
+	border-radius: 0px;
+    box-shadow: 2px 2px 6px #F5F5F5;	
+	color:#000;	
+}
+
+div.dataTables_length {
+	float: left;
+}
+
+div.dataTables_filter {
+	float: right;
+}
+
+div.dataTables_info {
+	padding: 9px 6px 6px 6px;
+	float: left;
+}
+
+div.dataTables_paginate {
+	float: right;
+}
+
+div.dataTables_length,
+div.dataTables_filter,
+div.dataTables_paginate {
+	padding: 6px;
+}
+
+div.dataTables_length select {
+	margin: 0 5px;
+}
+
+div.dataTables_filter input {
+	margin-left: 5px;
+}
+
+/* Self clearing - http://www.webtoolkit.info/css-clearfix.html */
+.dataTables_wrapper:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+html[xmlns] .dataTables_wrapper {
+	display: block;
+}
+ 
+* html .dataTables_wrapper {
+	height: 1%;
+}
+
+
+/*
+ * Table styles
+ */
+table.lightgrey {
+	width: 100%;
+	clear: both;
+}
+
+table.lightgrey td,
+table.lightgrey th {
+	padding: 5px;
+	border: 1px solid #fff;
+}
+
+table.lightgrey td a {
+	
+	color: inherit;
+	
+}
+
+/* Header cells */
+table.lightgrey thead th {
+	text-align: left;
+}
+
+/* Body cells */
+table.lightgrey tbody th {
+	text-align: left;
+	background: #91c5d4;
+}
+	
+table.lightgrey tbody td {
+	font-family: ;
+	text-align: left;
+	background: #F8F8F8;
+}
+		
+table.lightgrey tbody tr.odd td { 
+	background: #FCFCFC;
+}
+
+/* Footer cells */	
+table.lightgrey tfoot th {
+	background: #FFF;
+	text-align: left;
+}
+	
+table.lightgrey tfoot td {
+	background: #FFF;
+	text-align: center;
+	font-weight: bold;	
+}
+
+
+.lightgrey tr.odd:hover td, .lightgrey tr.even:hover td { background: #FFF; }
+
+
+/*
+ * Pagination
+ */
+a.paginate_button,
+a.paginate_active {
+	display: inline-block;
+	background-color: #E8E8E8;
+	padding: 2px 6px;
+	margin-left: 2px;
+	cursor: pointer;
+	*cursor: hand;
+}
+
+a.paginate_active {
+	background-color: transparent;
+	border: 1px solid black;
+}
+
+a.paginate_button_disabled {
+	color: #3d6672;
+}
+.paging_full_numbers a:active {
+	outline: none
+}
+.paging_full_numbers a:hover {
+	text-decoration: none;
+}
+
+div.dataTables_paginate span>a {
+	width: 15px;
+	text-align: center;
+}
+
+
+/*
+ * Sorting
+ */
+table.lightgrey thead th.sorting_asc {
+	background: #E0E0E0 url('images/sort_asc.png') no-repeat right center;
+}
+
+table.lightgrey thead th.sorting_desc {
+	background: #E0E0E0 url('images/sort_desc.png') no-repeat right center;
+}
+
+table.lightgrey thead th.sorting {
+	background: #E0E0E0 url('images/sort_both.png') no-repeat right center;
+}
