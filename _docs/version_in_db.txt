@@ -1,0 +1,10 @@
+
+CREATE TABLE IF NOT EXISTS `version` (
+  `version_id` int(6) NOT NULL AUTO_INCREMENT,
+  `version` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `version_type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `version_comment` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'domain URL',
+  `version_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'friendly domain name',
+  `utc_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`version_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

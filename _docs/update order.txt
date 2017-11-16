@@ -1,0 +1,13 @@
+Backup database - database server phpmyadmin
+Backup site	- web server backup
+
+Login to site and delete history files
+Administration -> Site -> Maintenance	
+
+Backup site - ftp
+
+Upload new files / change file structure - ftp
+
+Visit site - and login to site
+
+Run update cmd

@@ -1,0 +1,27 @@
+replace some text inside a text field
+// 1.5.1
+update `pages_selections` set content_code = replace(content_code, '/uploads/', '/content/uploads/') where instr(content_code, '/uploads/') > 0
+update `pages_selections` set content_code = replace(content_code, '/content/uploads/', '/uploads/') where instr(content_code, '/content/uploads/') > 0
+//1.5.9
+update `pages` set header = replace(header, '/uploads/', '/content/uploads/') where instr(content_code, '/uploads/') > 0
+
+
+
+UPDATE `pages`
+SET header = 'site_header_image_6.jpg'
+WHERE pages_id = 15
+
+
+
+
+update `pages_selections` set content_code = replace(content_code, '../content/', '/content/') where instr(content_code, '../content/') > 0 
+
+update `pages_selections` set content_html = replace(content_html, '../content/', '/content/') where instr(content_html, '../content/') > 0
+update `pages` set content = replace(content, '../content/', '/content/') where instr(content, '../content/') > 0
+
+
+
+
+update `pages` set content = replace(content, '/sundsgarden/content/uploads/', '/content/uploads/') where instr(content, '/sundsgarden/content/uploads/') > 0
+update `pages` set story_content = replace(story_content, '/sundsgarden/content/uploads/', '/content/uploads/') where instr(story_content, '/sundsgarden/content/uploads/') > 0
+update `pages` set story_wide_content = replace(story_wide_content, '/sundsgarden/content/uploads/', '/content/uploads/') where instr(story_wide_content, '/sundsgarden/content/uploads/') > 0

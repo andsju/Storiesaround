@@ -1,0 +1,209 @@
+<somename></somename> 		div/span/ul 		id
+<.somename></.somename> 	div/span/ul 		class
+
+
+
+
+<wrapper-toolbar>
+	<toolbar>
+		home
+		administration
+		help
+	</toolbar>
+	<user>
+		user
+		ip
+		logout
+	</user>
+</wrapper-toolbar>
+
+
+<wrapper-page>
+
+	<wrapper-header>
+		<site-navigation-top>
+			home
+			sitemap
+			contact
+			login
+			search
+		</site-navigation-top>
+		<site-id>
+			image, flash...
+		</site-id>
+		<site-navigation-modules>
+			modules select list
+		</site-navigation-modules>
+		<site-navigation-root>
+			root level pages
+		</site-navigation-root>
+	</wrapper-header>
+
+	<wrapper-ads-top>
+	</wrapper-ads-top>
+
+	<wrapper-main>
+
+		<wrapper-left-sidebar .wrapper-sidebar>
+		
+			<sidebar-navigation>
+				<sidebar-navigation-tree>
+					tree
+				</sidebar-navigation-tree>
+			</sidebar-navigation>
+			
+			<left-sidebar-widgets>
+				<.widgets-wrapper>
+					<.widgets-header>
+					</.widgets-header>
+					<.widgets-classname-?>
+					</.widgets-classname-?>
+					<.widgets-footer>
+					</.widgets-footer>
+				</.widgets-wrapper>
+				->
+			</left-sidebar-widgets>
+			
+		</.wrapper-left-sidebar .wrapper-sidebar>
+		
+		<wrapper-content>
+			
+			<content-top>
+				<content-breadcrumb>
+				</content-breadcrumb>
+				<content-links>
+					edit
+					new
+				</content-links>
+			</content-top>
+			
+			<content-title>
+				choose heading size | h1 default, h2, h3, h4, h5, h6
+			</content-title>
+
+			<content-meta>
+				show publish date | true,false
+			</content-meta>
+
+			<content-html>
+				editor
+			</content-html>
+			
+			<content-author>
+				show author | true,false
+			</content-author>
+
+			<content-social-networking>	
+				show social networking | true,false
+					facebook
+					twitter
+					mail
+			</content-social-networking>
+
+			<content-widgets>
+				<.widgets-wrapper>
+					<.widgets-header>
+					</.widgets-header>
+					<.widgets-classname-?>
+					</.widgets-classname-?>
+					<.widgets-footer>
+					</.widgets-footer>
+				</.widgets-wrapper>
+				->
+			</content-widgets>
+			
+			
+			<content-stories>
+				
+				<.stories-column>
+					<.stories-wrapper>
+						<.stories-image>
+						</.stories-image>
+						<.stories-image-meta>
+						</.stories-image-meta>
+						<.stories-title>
+						</.stories-title>
+						<.stories-meta>
+							date published
+						</.stories-meta>
+						<.stories-content>
+						</.stories-content>
+					</.stories-wrapper>
+					->
+				<.stories-column>
+				->
+				
+			</content-stories>
+			
+
+			<content-child-stories>
+				
+				<.stories-column>
+					<.stories-wrapper>
+						<.stories-image>
+						</.stories-image>
+						<.stories-image-meta>
+						</.stories-image-meta>
+						<.stories-title>
+						</.stories-title>
+						<.stories-meta>
+							date published
+						</.stories-meta>
+						<.stories-content>
+						</.stories-content>
+					</.stories-wrapper>
+					->
+				<.stories-column>
+				->
+				
+			</content-child-stories>
+
+			
+		</wrapper-content>
+		
+		<wrapper-right-sidebar .wrapper-sidebar >
+				
+				<right-sidebar-widgets .sidebar-widgets>
+					<.widgets-wrapper>
+					...
+					</.widgets-wrapper>
+					->
+				</right-sidebar-widgets .sidebar-widgets>
+				
+				
+				<sidebar-promoted-stories .stories-column>
+					<.stories-wrapper>
+					...
+					</.stories-wrapper>
+					->
+				</sidebar-promoted-stories>
+				
+				<right-sidebar-stories .stories-column>
+					<.stories-wrapper>
+					...
+					</.stories-wrapper>
+					->
+				</right-sidebar-stories>
+				
+		</wrapper-right-sidebar .wrapper-sidebar >
+		
+	</wrapper-main>	
+
+
+
+	<wrapper-site-selection>
+		<.site-selection>
+		</.site-selection>
+		-> (3/4/6 cols)
+	</wrapper-site-selection>
+
+	<wrapper-footer>
+		<site-about>
+		</site-about>
+		<site-contact>
+		</site-contact>
+		<site-rss>
+		</site-rss>
+	</wrapper-footer>
+	
+</wrapper-page>

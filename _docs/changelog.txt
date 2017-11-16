@@ -1,0 +1,46 @@
+Changes
+
+20130422
+table: 		site
+column:		site_navigation_horizontal
+Comments:	0:none, 1:root level, 2:all (menubar) 
+
+
+20130422
+table: 		pages_selections
+column:		position (change name to area)
+Comments:	
+
+table: 		pages_selections
+column:		position (new column int(4))
+Comments:	
+
+
+
+table: 		pages_selections
+column:		content_code (change field from VARCHAR (1000) to TEXT )
+Comments:	
+
+
+
+
+
+- - - 
+
+20130424
+implementation of function include_once_customfile - some settings can be removed
+
+=>
+
+
+
+20130426
+table: 		site
+columns:	site_contact, site_sitemap, site_search, site_modules
+
+
+"ALTER TABLE `site`
+  DROP `site_contact`,
+  DROP `site_sitemap`;
+  DROP `site_search`;
+  DROP `site_modules`;"

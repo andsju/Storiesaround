@@ -1,0 +1,7 @@
+Installation / mer automatisk uppdatering
+
+Ny tabell version (alt nytt fält version i tabell site) versionsnummer, datum
+
+Plugins versionshantering, uppdatering individuellt
+
+Ev flytta mappen widgets till cms-strukturen
