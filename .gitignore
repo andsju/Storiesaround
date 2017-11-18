@@ -1,0 +1,11 @@
+# ignore version control
+content/includes/
+content/rss/
+content/uploads/ads/**
+content/uploads/files/**
+content/uploads/images/**
+content/uploads/media/**
+content/uploads/misc/**
+content/uploads/pages/**
+content/uploads/plugins/
+sys/inc.db.php
