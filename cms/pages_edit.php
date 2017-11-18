@@ -402,20 +402,36 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 			console.log();
 			
-			var html = "";
-			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-trash-o fa-2x\"></i></div>";
-			var dynamic = "<div class=\"dynamic hidden\"<p>Dynamic content</p>";
-			dynamic += "<p><input type=\"radio\" name=\"dynamic-content\" value=\"none\"> none (default)</p>"; 
-			dynamic += "<p><input type=\"radio\" name=\"dynamic-content\" value=\"promoted\"> promoted stories</p>"; 
-			dynamic += "<p><input type=\"radio\" name=\"dynamic-content\" value=\"event\"> event stories</p>"; 
-			dynamic += "<p>Set filter (tag): <input type=\"text\"></p></div>"; 
-			//var cell = "<div class=\"grid-cell\" style=\"position:relative\">"+tool+"<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div>Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>Link<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><br><button class=\"grid-preview\">Preview</button></div>";
-			var cell = "<div class=\"grid-cell\" style=\"position:relative\">"+tool+"<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div>Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>URL<br><input type=\"text\" name=\"url\"><br>Link title<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"<button class=\"grid-preview\">Preview</button></div>";
-			for (var i = 0; i < 1; i++) {
-				html += cell;
+			var select = "<select name=\"order\">";
+			for (var i = 0; i < 4; i++) {
+				select += "<option value="+i+">"+i+"</option>";	
 			}
+			select += "</select><br>";
+			var html = "";
+			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br>"+select+"</div>";
+			var dynamic = "<div class=\"dynamic hidden\"<p>Dynamic content</p>";
 			
-			//$(html).insertAfter($(this));
+			dynamic += "<select name=\"grid-dynamic-content\">";
+			dynamic += "<option value=\"none\">none</option>";
+			dynamic += "<option value=\"stories-promoted\">Promoted stories</option>";
+			dynamic += "<option value=\"stories-event\">Event stories</option>";
+			dynamic += "<option value=\"calendar-event\">Calendar event</option>";
+			dynamic += "</select>";
+			dynamic += "<p>Set filter (tag): <input type=\"text\" name=\"grid-dynamic-content-filter\"></p>"; 
+			var limit = "<p>Limit<br><select name=\"grid-dynamic-content-limit\">";
+			for (var i = 0; i < 4; i++) {
+				limit += "<option value="+i+">"+i+"</option>";	
+			}
+			limit += "</select></p></div>";
+			dynamic += limit;
+
+			var cell = "<div class=\"grid-cell\" style=\"position:relative\">"
+			cell += tool;
+			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-link hidden\"></div><div class=\"grid-dynamic hidden\"></div>";
+
+			var form = "<div class=\"grid-form\">Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>URL<br><input type=\"text\" name=\"url\"><br>Link title<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
+
+			html += cell + form + "</div>";
 
 			$("div#grids").append(html);
 
@@ -436,55 +452,127 @@ foreach ( $js_files as $js ): ?>
 
 
 		
-		$("div#grids").delegate( "div.grid-tools", "click", function(event) {
+		$("div#grids").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
 			event.preventDefault();
 			console.log("click", $(this));
-			$(this).parent().remove();
+			$(this).parent().parent().remove();
 		});
 
+		$("div#grids").delegate( "div.grid-tools i.fa-pencil-square-o", "click", function(event) {
+			event.preventDefault();
+			console.log("time to edit");
+			$(this).parent().parent().children("div.grid-form").show();
+		});
 		$("div#grids").delegate( "a.toggle", "click", function(event) {
 			event.preventDefault();
 			console.log("click", $(this));
 			console.log($(this).parent());
-			$(this).parent().parent().find("div.dynamic").toggle();
-			
+			$(this).parent().parent().find("div.dynamic").toggle();			
 		});
 		
-		$("div#grids").delegate( "button", "click", function(event) {
+		$("div#grids").delegate( ".fa-floppy-o", "click", function(event) {
 			event.preventDefault();
-			console.log($((this)));
-			console.log($(this).parent().children());
-			if ($(this).parent().children().length > 2) {
-				var image = $(this).parent().children("input")[0].value;
-				var heading = $(this).parent().children("input")[1].value;
-				var link = $(this).parent().children("input")[2].value;
-				tinyMCE.triggerSave();
-				var content = $(this).siblings("textarea").val();
-				
-				console.log("image", image);
-				console.log("heading", heading);
-				console.log("link", link);
-				console.log("content", content);
-				if (image.length) {
-					var imagePreview = $(this).siblings("div.grid-image-crop");
-					imagePreview.css("background-image", "url("+image+")");
-					imagePreview.removeClass("hidden");					
-				}
-				if (heading.length) {
-					console.log("h2 ...");
-					var headingPreview = $(this).siblings("h2.grid-heading");
-					headingPreview.text(heading);
-					headingPreview.removeClass("hidden");					
-				}
-				if (content.length) {
-					var contentPreview = $(this).siblings("div.grid-content");
-					contentPreview.html(content);
-					contentPreview.removeClass("hidden");
+			console.log($((this)));			
+			console.log($(this).parent().parent().children("div.grid-form"));
+
+			var form = $(this).parent().parent().children("div.grid-form");
+			var image, heading, url, link, content;
+			image = form.children("input")[0].value;
+			heading = form.children("input")[1].value;
+			url = form.children("input")[2].value;
+			link = form.children("input")[3].value;
+
+			tinyMCE.triggerSave();
+			content = form.children("textarea").val();
+			console.log("image", image);
+			console.log("heading", heading);
+			console.log("url", url);
+			console.log("link", link);
+			console.log("content", content);
+
+			var imagePreview = $(this).parent().siblings("div.grid-image-crop");
+			imagePreview.css("background-image", "url("+image+")");
+			imagePreview.removeClass("hidden");					
+
+			var headingPreview = $(this).parent().siblings("h2.grid-heading");
+			headingPreview.text(heading);
+			headingPreview.removeClass("hidden");					
+
+			var contentPreview = $(this).parent().siblings("div.grid-content");
+			contentPreview.html(content);
+			contentPreview.removeClass("hidden");
+
+			var urlPreview = $(this).parent().siblings("div.grid-link");
+			urlPreview.html("<a href=\""+url+"\">"+link+"</a>");
+			urlPreview.removeClass("hidden");					
+
+			// dynamic
+			var dynamicContent, dynamicContentFilter, dynamicContentLimit;
+			dynamicContent = form.children("div.dynamic").find("select[name=grid-dynamic-content]").val();
+			dynamicContentFilter = form.children("div.dynamic").find("input[name='grid-dynamic-content-filter']")[0].value;
+			dynamicContentLimit = form.children("div.dynamic").find("select[name=grid-dynamic-content-limit]").val();
+
+			console.log("dynamicContent", dynamicContent);
+			console.log("dynamicContentFilter", dynamicContentFilter);
+			console.log("dynamicContentLimit", dynamicContentLimit);
+
+			// ajax dynamic call
+			// Promoted stories
+			
+			var action = "get_stories_promoted";
+			var token = $("#token").val();
+			var users_id = $("#users_id").val();
+			var pages_id = $("#pages_id").val();
+
+			var dynamicBox = $(this).parent().siblings("div.grid-dynamic"); 
+			
+			$.ajax({
+				beforeSend: function() { loading = form.children("div.dynamic").find('.ajax_spinner_dynamic').show()},
+				//complete: function(){ loading = setTimeout(form.children("div.dynamic").find('.ajax_spinner_dynamic').hide()",700)},
+				type: 'POST',
+				url: 'pages_edit_ajax.php',
+				data: { 
+					action: action, token: token, users_id: users_id, pages_id: pages_id,
+					dynamicContent: dynamicContent, dynamicContentFilter: dynamicContentFilter, dynamicContentLimit: dynamicContentLimit,
+				},
+				success: function(result){
+					ajaxReply('','#ajax_status_stories_child');
+					//$("#container_stories_child").empty().append(message).hide().fadeIn('fast');
+					var html = "";
+					console.log(result);
+					if (result.length) {
+						$.each(JSON.parse(result), function(index, object) {
+							html += "<div>"
+							$.each(object, function(key, value) {
+								console.log("key : "+key+" ; value : "+value);
+								if (key == 'title') {
+									html += "<h5>"+value+"</h5>";
+								}
+								if (key == 'story_content') {
+									html += "<div>"+value+"</div>";
+								}
+							});
+							html += "</div>"
+						});
+
+						console.log("html", html);
+
+						dynamicBox.html(html);
+						dynamicBox.removeClass("hidden");					
+						
+					}
 					
+					
+
 				}
-				//html1 = "<div class=\"grid-image-crop\" style=\"background-image: url("+image+");background-size=cover\"></div>";
-				
-			}
+			});
+
+			
+
+
+
+			$(this).parent().parent().children("div.grid-form").hide();
+
 		});
 
 		

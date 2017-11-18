@@ -678,9 +678,13 @@ div.grid-cell:last-child {margin-right: 0;}
 div.grid-cell input[type="text"] {width:90%}
 div.grid-cell textarea {width:90%}
 div.grid-image-crop {min-height:150px;max-height:250px;background-position-y: 30%;background-size:cover;}
-div.grid-tools {border:1px solid black;padding:5px;position:absolute;top:0;left:-30px; background-color:black;color:white }
-div.grid-tools .fa {font-size:1.8em}
+div.grid-tools {border:1px solid black;padding:5px;position:absolute;top:0;right:-10px; background-color:black;color:white;text-align: center }
+div.grid-tools i {margin-bottom:10px}
+div.grid-tools .fa {font-size:1.4em}
 div#grid-settings input[type="radio"] {margin-left:20px;}
+ul#grid {list-style: none;margin:0;padding:0;width:80%}
+ul#grid li {float:left;width:30%;margin-left:2%}
+
 
 .hidden {display: none;}
 
