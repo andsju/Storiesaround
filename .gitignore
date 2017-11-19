@@ -8,5 +8,5 @@ content/uploads/media/**
 content/uploads/misc/**
 content/uploads/pages/**
 content/uploads/plugins/
-
+log/
 sys/inc.db.php
