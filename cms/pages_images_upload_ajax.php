@@ -149,11 +149,12 @@ if(isset($_REQUEST['token'])){
 					$ratio = $objImg->image_ratio($uploadDirectory . $filename . '.' . $ext);
 					
 					//save versions
-					$objImg->image_resize($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename .'_726.'. $ext, 726);
-					//$objImg->image_resize($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename .'_474.'. $ext, 474);
-					$objImg->image_resize($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename .'_222.'. $ext, 222);
-					$objImg->image_resize($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename .'_100.'. $ext, 100);
-					
+
+					$sizes = $objImg->get_image_sizes();
+					foreach($sizes as $size) {
+						$objImg->image_resize($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename .'_'. $size .'.'. $ext, $size);
+					}
+
 					$image_description = $image_artist = '';
 					
 					if (is_file($uploadDirectory . $filename .'.'. $ext)) {

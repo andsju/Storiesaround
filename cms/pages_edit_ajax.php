@@ -641,20 +641,21 @@ if (isset($_POST['token'])){
 						$pathinfo = pathinfo($file);
 						$ext = $pathinfo['extension'];
 						$filename = $pathinfo['filename'];
-						
-						//remove 4 chars						
-						$filename_base = substr($filename, 0, -4);
-						
+						$pos_underscore = strrpos($filename, '_') + 1;
+						$filename_base = substr($filename, 0, $pos_underscore);
+
 						$f = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/';					
 
-						//save versions
-						$one = $image->image_resize($f . $filename .'.'. $ext, $f . $filename_base .'_222.'. $ext, 222);
-						$two = $image->image_resize($f . $filename .'.'. $ext, $f . $filename_base .'_100.'. $ext, 100);
+						$sizes = $image->get_image_sizes();
+
+						//save versions						
+						foreach($sizes as $size) {
+							$image->image_resize($f . $filename .'.'. $ext, $f . $filename_base . $size .'.'. $ext, $size);
+						}
 						
 						// update db
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');						
 						$result = $pages->updatePagesImagesCrop($pages_images_id, $ratio, $utc_modified);
-
 					}
 					
 					echo CMS_DIR.'/content/uploads/pages/'. $pages_id .'/'.$filename .'.'. $ext;
@@ -662,59 +663,7 @@ if (isset($_POST['token'])){
 					
 				break;
 				
-				case 'image_saveit':				
-
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
-
-					$pages = new Pages();
-					$row = $pages->getPagesImagesMeta($pages_images_id);
-				
-
-					$file = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/'. $row['filename'];
-					
-					
-
-					
-					
-					
-					$image = new Image();
-					
-					
-					$filename = $row['filename'];
-
-
-					$extension = pathinfo($_SERVER['DOCUMENT_ROOT'] . $filename, PATHINFO_EXTENSION);
-					$ext = strlen($extension);
-					$width_ext = $ext + 4;
-					$pre = substr($filename, 0, - $width_ext);
-				
-
-					//echo $filename;
-				
-				
-					// biggest possible
-					$filename = $pre.'726.'.$extension;	
-									
-					
-
-					$path = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/';
-					$dst_path = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/';
-					
-			
-					$img = $image->image_filter($filename, $path, $dst_path, $filter);
-					
-					//$img = $image->image_rotate($file, 90);
-					
-
-					//echo $file;
-					echo CMS_DIR.'/content/uploads/pages/'. $pages_id .'/_'.$filename;
-					
-				break;
-								
-				
 				case 'image_crop':
-					
 					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
 					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
 
@@ -769,7 +718,6 @@ if (isset($_POST['token'])){
 					$filename_and_path = CMS_DIR.'/content/uploads/pages/'. $pages_id .'/'. $row['filename'];
 										
 					$filename = $image->get_max_image2($filename_and_path, $return='filename');
-					
 					// absolute path to open file
 					$path = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/';
 					
@@ -860,9 +808,10 @@ if (isset($_POST['token'])){
 						$ext = strrchr($filename,'.');
 						// get position of right '_'
 						$pos = strrpos($filename, '_');
+
 						// possible image sizes
-						$sizes = array('100','222','474','726');
-						
+						$objImage = new Image();
+						$sizes = $objImage->get_image_sizes();		
 						foreach ($sizes as $size) {
 							$f = substr($filename, 0, $pos) .'_'.$size . $ext;
 							//echo $f;

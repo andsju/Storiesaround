@@ -202,14 +202,12 @@ include_once 'includes/inc.header_minimal.php';
 		$( ".toolbar_rotate_left button" ).button({
 			icons: {
 				secondary: "ui-icon-arrowreturnthick-1-w"
-			},
-			//text: true
+			}
 		});
 		$( ".toolbar_rotate_right button" ).button({
 			icons: {
 				secondary: "ui-icon-arrowreturnthick-1-e"
-			},
-			//text: true
+			}			
 		});
 		
 		$("#filter").change(function(){
@@ -220,8 +218,7 @@ include_once 'includes/inc.header_minimal.php';
 		
 		$('#btn_image_apply_filter').click(function(event) {
 			event.preventDefault();
-			
-			
+						
 			var action = "image_apply_filter";
 			var token = $("#token").val();
 			var pages_id = $("#pages_id").val();
@@ -266,9 +263,7 @@ include_once 'includes/inc.header_minimal.php';
 				success: function(respons){
 					$('#edit_image').attr("src", respons+'?t='+t);
 					$('#btn_save_new_image').hide();
-					$('#box_image').hide();
-
-				},
+				}
 			});
 
 		});
@@ -309,7 +304,7 @@ include_once 'includes/inc.header_minimal.php';
 			var img = document.getElementById('edit_image'); 
 			var w = img.width;			
 			var h = Math.round(w/ratio);
-
+			
 			$('#box_image').css('top','0px').css('left','0px').css('width',+w+'px');
 
 			switch(ratio) {
@@ -345,15 +340,12 @@ include_once 'includes/inc.header_minimal.php';
 			}
 			
 			$('#box_image').show();
-
-			//$("#box_image").resizable( "destroy" );
-			//$("#box_image").resizable(settings); 
-		
 		});		
 		
 		
 		$('#btn_crop').click(function(event) {
 			event.preventDefault();
+			console.log("Apply...");
 			var action = "image_crop";
 			var token = $("#token").val();
 			var pages_id = $("#pages_id").val();
@@ -366,15 +358,18 @@ include_once 'includes/inc.header_minimal.php';
 			var ratio = $('#ratio').val();
 			var width_edited_image = $('#width_edited_image').val();
 			
-			
 			if(ratio.length > 0) {
 				$.ajax({
 					beforeSend: function() { loading = $('#ajax_spinner_image').show()},
 					complete: function(){ loading = setTimeout("$('#ajax_spinner_image').hide()",700)},
 					type: 'POST',
 					url: 'pages_edit_ajax.php',
-					data: { action: action, token: token, pages_id: pages_id, pages_images_id: pages_images_id, top: top, left: left, width: width, height: height, ratio: ratio, width_edited_image: width_edited_image},
-					success: function(respons){					
+					data: { 
+						action: action, token: token, pages_id: pages_id, pages_images_id: pages_images_id, 
+						top: top, left: left, width: width, height: height, ratio: ratio, 
+						width_edited_image: width_edited_image
+						},
+					success: function(respons){
 						$('#new_image_container').show();
 						$('#edit_image_filter').attr("src", respons+'?t='+t).hide().fadeIn(200);
 						$('#btn_save_new_image').show();
@@ -382,8 +377,6 @@ include_once 'includes/inc.header_minimal.php';
 				});
 			}		
 		});
-		
-		
 		
 		
 	});
@@ -541,38 +534,18 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 			</p>
 			<?php
 			echo '<ul id="image_versions">';
-			$w = '100';
-			
-			if(get_file($p, $preview_img_filename, $w)) {			
-				$version = get_file_version($p, $preview_img_filename, $w);	
-				echo '<li><span class="toolbar"><button id="'.$version.'" class="version">'.$w .'</button></span></li>';
-			} else {
-				echo '<li class="missing">'.$w .'</li>';
-			};
-			echo '<li>|</li>';
-			$w = '222';
-			if(get_file($p, $preview_img_filename, $w)) {
-				$version = get_file_version($p, $preview_img_filename, $w);	
-				echo '<li><li><span class="toolbar"><button id="'.$version.'" class="version">'.$w .'</button></span></li>';
-			} else {
-				echo '<li class="missing">'.$w .'</li>';
-			};
-			echo '<li>|</li>';
-			$w = '474';
-			if(get_file($p, $preview_img_filename, $w)) {
-				$version = get_file_version($p, $preview_img_filename, $w);	
-				echo '<li><li><span class="toolbar"><button id="'.$version.'" class="version">'.$w .'</button></span></li>';
-			} else {
-				echo '<li class="missing">'.$w .'</li>';
-			};
-			echo '<li>|</li>';
-			$w = '726';
-			if(get_file($p, $preview_img_filename, $w)) {
-				$version = get_file_version($p, $preview_img_filename, $w);	
-				echo '<li><li><span class="toolbar"><button id="'.$version.'" class="version">'.$w .'</button></span></li>';
-			} else {
-				echo '<li class="missing">'.$w .'</li>';
-			};
+
+			$sizes = $image->get_image_sizes();
+			foreach($sizes as $size) {
+				if(get_file($p, $preview_img_filename, $size)) {			
+					$version = get_file_version($p, $preview_img_filename, $size);	
+					
+					echo '<li><span class="toolbar"><button id="'.$version.'" class="version">'.$size .'</button></span></li>';
+				} else {
+					echo '<li class="missing">'.$size .'</li>';
+				};					
+			}
+
 			echo '</ul>';
 			
 
@@ -705,29 +678,38 @@ function show_image($img, $w) {
 	}
 }
 
-function get_file($path, $filename, $width) {	
-	if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path .'/'. $filename)) {
-		$extension = pathinfo($_SERVER['DOCUMENT_ROOT'] .'/'. $path .'/'. $filename, PATHINFO_EXTENSION);
+function get_file($path, $filename, $w) {
+	if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path . $filename)) {
+		$extension = pathinfo($_SERVER['DOCUMENT_ROOT'] .'/'. $path . $filename, PATHINFO_EXTENSION);
 		$ext = strlen($extension);
-		$width_ext = $ext + 4;
-		$pre = substr($filename, 0, - $width_ext);
-		if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path .'/'. $pre . $width .'.'.$extension)) {
+		$pos_underscore = strrpos($filename, '_') + 1;
+		$pos_dot = strrpos($filename, '.') + 1;
+		$width_numbers =  $pos_dot - $pos_underscore;
+		$width = substr($filename, $pos_underscore, $width_numbers - 1);
+		$pre = substr($filename, 0, $pos_underscore);
+		if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path . $pre . $w .'.'.$extension)) {
 			return true;
 		}
 	}
 }
 
-function get_file_version($path, $filename, $width) {	
-	if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path .'/'. $filename)) {
-		$extension = pathinfo($_SERVER['DOCUMENT_ROOT'] .'/'. $path .'/'. $filename, PATHINFO_EXTENSION);
-		$i = strlen($extension);
-		$width_ext = $i + 4;
-		$pre = substr($filename, 0, - $width_ext);
-		if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path .'/'. $pre . $width .'.'.$extension)) {
-			return $pre . $width .'.'.$extension;
+
+
+function get_file_version($path, $filename, $w) {
+	if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path . $filename)) {
+		$extension = pathinfo($_SERVER['DOCUMENT_ROOT'] .'/'. $path . $filename, PATHINFO_EXTENSION);
+		$ext = strlen($extension);
+		$pos_underscore = strrpos($filename, '_') + 1;
+		$pos_dot = strrpos($filename, '.') + 1;
+		$width_numbers =  $pos_dot - $pos_underscore;
+		$width = substr($filename, $pos_underscore, $width_numbers - 1);
+		$pre = substr($filename, 0, $pos_underscore);
+		if(is_file($_SERVER['DOCUMENT_ROOT'] .'/'. $path . $pre . $w .'.'.$extension)) {
+			return $pre . $w .'.'.$extension;
 		}
 	}
 }
+
 
 
 ?>
