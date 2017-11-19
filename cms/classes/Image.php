@@ -76,6 +76,15 @@ class Image
 
 
     /**
+     * @return array
+     */
+    public function get_image_sizes()
+    {
+        return array(100, 222, 474, 726, 1024, 1366, 1920);
+    }
+
+    
+    /**
      * @param $image
      * @param $dst
      * @param $width
@@ -528,6 +537,7 @@ class Image
 
         $new_image = imagecreatetruecolor($dst_w, $dst_h);
 
+
         switch ($type) {
             case 'bmp':
                 $src_image = imagecreatefromwbmp($path . $filename);
@@ -560,25 +570,19 @@ class Image
 
             $extension = pathinfo($_SERVER['DOCUMENT_ROOT'] . $path_and_filename, PATHINFO_EXTENSION);
             $ext = strlen($extension);
-            $width_ext = $ext + 4;
-            $pre = substr($path_and_filename, 0, -$width_ext);
+            
+            $pos_underscore = strrpos($path_and_filename, '_') + 1;
+            $pos_dot = strrpos($path_and_filename, '.') + 1;
+            $pre = substr($path_and_filename, 0, $pos_underscore);
+            $sizes = $this->get_image_sizes();
+            rsort($sizes);
 
-            // biggest possible
-            $img = $pre . '726.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $img)) {
-                return $img;
-            }
-            $img = $pre . '474.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $img)) {
-                return $img;
-            }
-            $img = $pre . '222.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $img)) {
-                return $img;
-            }
-            $img = $pre . '100.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $img)) {
-                return $img;
+            foreach($sizes as $size) {
+                // biggest possible
+                $img = $pre . $size . '.'. $extension;
+                if (is_file($_SERVER['DOCUMENT_ROOT'] . $img)) {
+                    return $img;
+                }            
             }
         }
 
@@ -591,36 +595,31 @@ class Image
      */
     public function get_max_image2($path_and_filename, $return)
     {
+
         if (is_file($_SERVER['DOCUMENT_ROOT'] . $path_and_filename)) {
+            
             $extension = pathinfo($_SERVER['DOCUMENT_ROOT'] . $path_and_filename, PATHINFO_EXTENSION);
-            $i = strlen($extension);
-            $width_ext = $i + 4;
-            $pre = substr($path_and_filename, 0, -$width_ext);
+            $ext = strlen($extension);
+            
+            $pos_underscore = strrpos($path_and_filename, '_') + 1;
+            $pos_dot = strrpos($path_and_filename, '.') + 1;
+            $pre = substr($path_and_filename, 0, $pos_underscore);
+            $sizes = $this->get_image_sizes();
+            rsort($sizes);
 
-            // biggest possible
-            $f = $pre . '726.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $f)) {
-                $s = $return == 'filename' ? substr($f, strrpos($f, '/') + 1) : $f;
-                return $s;
-            }
-            $f = $pre . '474.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $f)) {
-                $s = $return == 'filename' ? substr($f, strrpos($f, '/') + 1) : $f;
-                return $s;
-            }
-            $f = $pre . '222.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $f)) {
-                $s = $return == 'filename' ? substr($f, strrpos($f, '/') + 1) : $f;
-                return $s;
-            }
-            $f = $pre . '100.' . $extension;
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . $f)) {
-                $s = $return == 'filename' ? substr($f, strrpos($f, '/') + 1) : $f;
-                return $s;
-            }
+            foreach($sizes as $size) {
+                // biggest possible
+                $f = $pre . $size .'.'. $extension;
+                if (is_file($_SERVER['DOCUMENT_ROOT'] . $f)) {
+                    $s = $return == 'filename' ? substr($f, strrpos($f, '/') + 1) : $f;
+                    return $s;
+                }                
+            } 
+            return null;
         }
-
     }
+
+
 
     /**
      * @param $filename

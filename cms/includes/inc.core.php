@@ -101,7 +101,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     $ip = $_SERVER['REMOTE_ADDR'];
     $agent = $_SERVER['HTTP_USER_AGENT'];
     $message = "[" . $errno . "] An error occurred in script " . $errfile . " on line " . $errline;
-    $contents = $date . ', ' . $ip . ', ' . $agent . ', ' . $message . "\r\n";
+    $contents = $date . ', ' . $ip . ', ' . $agent . ', ' . $message .', '. $errstr ."\r\n";
 
     file_put_contents($file, $contents, FILE_APPEND | LOCK_EX);
 
