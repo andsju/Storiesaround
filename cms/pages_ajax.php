@@ -311,11 +311,12 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 			
 			case 'getStories':
 		
-				//$number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT) ? $_POST['number'] : null;
-				$number = 2;
+				$number = filter_input(INPUT_GET, 'number', FILTER_VALIDATE_INT) ? $_GET['number'] : 0;
+				$tag = filter_var(trim($_GET['tag']), FILTER_SANITIZE_STRING);
 				$a = array();
+				
 
-				$rows = $pages->getPagesStoryContentPublishPromoted("story", $number);
+				$rows = $pages->getPagesStoryContentPublishPromoted($tag, $number);
 				if($rows) {
 					$i = 0;
 					foreach($rows as $row) {
