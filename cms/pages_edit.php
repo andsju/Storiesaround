@@ -305,6 +305,11 @@ foreach ( $js_files as $js ): ?>
 			modal: true
 		});		
 
+		$("#dialog_delete_item").dialog({
+			autoOpen: false,
+			modal: true
+		});		
+
 		$( "#search_story" ).autocomplete({
 			delay: 300,
 			source: function( request, response ) {
@@ -368,57 +373,23 @@ foreach ( $js_files as $js ): ?>
 		////////////////////////////
 
 
-		$('.add-grid').click(function(event){
-			event.preventDefault();
-			console.log();
-			
-			var html = "<div class=\"grid-row\">";
-			html += "<div class=\"grid-tools\"><i class=\"fa fa-trash-o fa-2x\"></i></div>";
-			var cell = "<div class=\"grid-cell\"><div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div>Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>Link<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><br><button class=\"grid-preview\">Preview</button></div>";
-			for (var i = 0; i < 3; i++) {
-				html += cell;
-			}
-			html += "</div>";
-			
-			//$(html).insertAfter($(this));
 
-			$("div#grids").append(html);
-
-			tinymce.init({
-				forced_root_block : "", 
-				mode : "specific_textareas",
-				editor_selector : "tinymce",
-				menubar: "",
-				plugins: [
-					"autolink lists link hr anchor pagebreak code image stories"
-				],
-				toolbar: "undo redo bold italic link code image stories"
-
-			});
-		});
 
 		// floats instead
 		$('.add-grid-item').click(function(event){
 			event.preventDefault();
-			console.log();
-			
-			var select = "<select name=\"order\">";
-			for (var i = 0; i < 4; i++) {
-				select += "<option value="+i+">"+i+"</option>";	
-			}
-			select += "</select><br>";
+			var pages_id = $("#pages_id").val();			
 			var html = "";
-			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br>"+select+"</div>";
-			var dynamic = "<div class=\"dynamic hidden\"<p>Dynamic content</p>";
-			
+			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i></div>";
+			var dynamic = "<hr><div class=\"dynamic hidden\"<p>Dynamic content</p>";			
 			dynamic += "<select name=\"grid-dynamic-content\">";
-			dynamic += "<option value=\"none\">none</option>";
-			dynamic += "<option value=\"stories-promoted\">Promoted stories</option>";
+			dynamic += "<option value=\"none\" selected>none</option>";
+			dynamic += "<option value=\"stories-child\">Child stories</option>";
 			dynamic += "<option value=\"stories-event\">Event stories</option>";
-			dynamic += "<option value=\"calendar-event\">Calendar event</option>";
+			dynamic += "<option value=\"stories-promoted\">Promoted stories</option>";
 			dynamic += "</select>";
-			dynamic += "<p>Set filter (tag): <input type=\"text\" name=\"grid-dynamic-content-filter\"></p>"; 
-			var limit = "<p>Limit<br><select name=\"grid-dynamic-content-limit\">";
+			dynamic += "<p>Filter promoted stories (tag): <input type=\"text\" name=\"grid-dynamic-content-filter\"></p>"; 
+			var limit = "<p>Limit promoted stories<br><select name=\"grid-dynamic-content-limit\">";
 			for (var i = 0; i < 4; i++) {
 				limit += "<option value="+i+">"+i+"</option>";	
 			}
@@ -427,9 +398,9 @@ foreach ( $js_files as $js ): ?>
 
 			var cell = "<div class=\"grid-cell\" style=\"position:relative\">"
 			cell += tool;
-			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-link hidden\"></div><div class=\"grid-dynamic hidden\"></div>";
+			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
 
-			var form = "<div class=\"grid-form\">Image<br><input type=\"text\" name=\"grid-image\"><br>Heading<br><input type=\"text\" name=\"heading\"><br>URL<br><input type=\"text\" name=\"url\"><br>Link title<br><input type=\"text\" name=\"link\"><br>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
+			var form = "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\"></p><p>Heading<br><input type=\"text\" name=\"heading\"></p><p>URL<br><input type=\"text\" name=\"url\"></p><p>Link title<br><input type=\"text\" name=\"link\"></p><p>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
 
 			html += cell + form + "</div>";
 
@@ -443,69 +414,103 @@ foreach ( $js_files as $js ): ?>
 				plugins: [
 					"autolink lists link hr anchor pagebreak code image stories"
 				],
-				toolbar: "undo redo bold italic link code image stories"
-
+				toolbar: "undo redo bold italic link code image stories",
+				extended_valid_elements:'script'
 			});
 		});
 		
-
-
-
 		
 		$("div#grids").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
 			event.preventDefault();
-			console.log("click", $(this));
-			$(this).parent().parent().remove();
+			var that = $(this); 
+			$("#dialog_delete_item").dialog("open");
+			$("#dialog_delete_item").dialog({
+				buttons : {
+				"Confirm" : function() {
+					$(this).dialog("close");
+					that.parent().parent().remove();
+					equalheight('div.grid-cell');
+				},
+				"Cancel" : function() {
+					$(this).dialog("close");
+					}
+				}
+			});
 		});
 
 		$("div#grids").delegate( "div.grid-tools i.fa-pencil-square-o", "click", function(event) {
 			event.preventDefault();
-			console.log("time to edit");
 			$(this).parent().parent().children("div.grid-form").show();
+			equalheight('div.grid-cell');
+		});
+		$("div#grids").delegate( "div.grid-tools i.fa-arrow-left", "click", function(event) {
+			event.preventDefault();
+			var item = $(this).parent().parent();
+			var prev_item = item.prev();
+			item.insertBefore(item.prev());
+			equalheight('div.grid-cell');
+		});
+		$("div#grids").delegate( "div.grid-tools i.fa-arrow-right", "click", function(event) {
+			event.preventDefault();
+			var item = $(this).parent().parent();
+			var next_item = item.next();
+			item.insertAfter(item.next());
+			equalheight('div.grid-cell');
 		});
 		$("div#grids").delegate( "a.toggle", "click", function(event) {
 			event.preventDefault();
-			console.log("click", $(this));
-			console.log($(this).parent());
 			$(this).parent().parent().find("div.dynamic").toggle();			
+			equalheight('div.grid-cell');
 		});
 		
 		$("div#grids").delegate( ".fa-floppy-o", "click", function(event) {
 			event.preventDefault();
-			console.log($((this)));			
-			console.log($(this).parent().parent().children("div.grid-form"));
 
 			var form = $(this).parent().parent().children("div.grid-form");
-			var image, heading, url, link, content;
-			image = form.children("input")[0].value;
-			heading = form.children("input")[1].value;
-			url = form.children("input")[2].value;
-			link = form.children("input")[3].value;
+			var image, heading, url, link, content, css, pages_id;
+			image = form.find("input")[0].value;
+			heading = form.find("input")[1].value;
+			url = form.find("input")[2].value;
+			link = form.find("input")[3].value;
+			css = form.find("input")[4].value;
+			pages_id = form.find("input")[5].value;
 
 			tinyMCE.triggerSave();
-			content = form.children("textarea").val();
+			content = form.find("textarea").val();
 			console.log("image", image);
 			console.log("heading", heading);
 			console.log("url", url);
 			console.log("link", link);
 			console.log("content", content);
+			console.log("css", css);
+			console.log("pages_id", pages_id);
+
+			console.log("cell", $(this).parent().parent());
+			var cell = $(this).parent().parent();
+			cell.attr("class", "grid-cell");
+
+			cell.addClass(css);
 
 			var imagePreview = $(this).parent().siblings("div.grid-image-crop");
 			imagePreview.css("background-image", "url("+image+")");
-			imagePreview.removeClass("hidden");					
-
+			if(image.length) {
+				imagePreview.removeClass("hidden");			
+			}
 			var headingPreview = $(this).parent().siblings("h2.grid-heading");
 			headingPreview.text(heading);
-			headingPreview.removeClass("hidden");					
-
+			if(heading.length) {
+				headingPreview.removeClass("hidden");					
+			}
 			var contentPreview = $(this).parent().siblings("div.grid-content");
 			contentPreview.html(content);
-			contentPreview.removeClass("hidden");
-
+			if(content.length) {
+				contentPreview.removeClass("hidden");
+			}
 			var urlPreview = $(this).parent().siblings("div.grid-link");
 			urlPreview.html("<a href=\""+url+"\">"+link+"</a>");
-			urlPreview.removeClass("hidden");					
-
+			if(link.length) {
+				urlPreview.removeClass("hidden");		
+			}
 			// dynamic
 			var dynamicContent, dynamicContentFilter, dynamicContentLimit;
 			dynamicContent = form.children("div.dynamic").find("select[name=grid-dynamic-content]").val();
@@ -519,7 +524,7 @@ foreach ( $js_files as $js ): ?>
 			// ajax dynamic call
 			// Promoted stories
 			
-			var action = "get_stories_promoted";
+			var action = "get_dynamic_stories";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
@@ -538,53 +543,66 @@ foreach ( $js_files as $js ): ?>
 				success: function(result){
 					ajaxReply('','#ajax_status_stories_child');
 					//$("#container_stories_child").empty().append(message).hide().fadeIn('fast');
-					var html = "";
+					var html = dynamicContent == "stories-child" ? "<ul>" : "";
 					console.log(result);
 					if (result.length) {
 						$.each(JSON.parse(result), function(index, object) {
-							html += "<div>"
+							html += dynamicContent == "stories-child" ? "<li>" : "<div>";
 							$.each(object, function(key, value) {
 								console.log("key : "+key+" ; value : "+value);
-								if (key == 'title') {
-									html += "<h5>"+value+"</h5>";
+								if (dynamicContent == "stories-promoted") {
+									if (key == 'title') {
+										html += "<h5>"+value+"</h5>";
+									}
+									if (key == 'story_content') {
+										html += "<div>"+value+"</div>";
+									}
 								}
-								if (key == 'story_content') {
-									html += "<div>"+value+"</div>";
+
+								if (dynamicContent == "stories-child") {
+									if (key == 'pages_id') {
+										html += "<a href=\"\pages.php?pages_id="+value+"\">";
+									}
+									if (key == 'title') {
+										html += value+"</a>";
+									}
 								}
+
 							});
-							html += "</div>"
+							html += dynamicContent == "stories-child" ? "</li>" : "</div>";
+
 						});
 
+						html += dynamicContent == "stories-child" ? "</ul>" : "";
 						console.log("html", html);
 
 						dynamicBox.html(html);
-						dynamicBox.removeClass("hidden");					
-						
+						dynamicBox.removeClass("hidden");	
 					}
 					
-					
-
 				}
 			});
 
-			
-
-
-
 			$(this).parent().parent().children("div.grid-form").hide();
-
+			equalheight('div.grid-cell');
 		});
 
-		
-		$('#gridform').submit(function(event){
+	
+		$("#btnSaveGrid").click(function(event) {
 			event.preventDefault();
 			console.log("tada");
 			var formData = JSON.stringify($("#gridform").serializeArray());
-			formData = formData.replace(/'/g, "\\'");
+
+
+
+			//formData = formData.replace(/'/g, "\\'");
+			formData = stringEscape(formData);
 			console.log(formData);
 		});
 
-
+		function stringEscape(s) {
+			return s ? s.replace(/\\/g,'\\\\').replace(/'/g,"\\'") : s;
+		}
 
 		////////////////////////////
 
@@ -2326,6 +2344,9 @@ foreach ( $js_files as $js ): ?>
 <div id="dialog_delete_page" title="Confirmation required" style="display:none;">
   Delete this page?
 </div>
+<div id="dialog_delete_item" title="Confirmation required" style="display:none;">
+  Delete?
+</div>
 
 <div id="dialog_token" title="Confirmation required" style="display:none;">
   <h3>Ouch!</h3>
@@ -3347,8 +3368,8 @@ if(is_array($check_edit)) {
 						<input type="text" name="style" size="50"> CSS inline style (grid cells)
 					</p>
 					<p>
-						<button class="add-grid">Add grid row <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button>
-						<button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button>
+					<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
+					<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
 					</p>
 					
 				</div>
@@ -3358,10 +3379,11 @@ if(is_array($check_edit)) {
 
 		
 		<form id="gridform"  method="post">
-		<div id="grids" class="column_description">
 			<div class="column_description ui-state-disabled">Grid</div>
-		</div>
-		<input type="submit" name="btnSaveGrid" value="Save">
+			<div id="grids">
+				
+			</div>
+			
 		</form>
 
 		
