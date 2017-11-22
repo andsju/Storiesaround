@@ -1,45 +1,45 @@
 function get_textarea_editor(editor, textarea_id) {
 
 	var arg = null;
-	switch(editor) {
+	switch (editor) {
 		case 'nicedit':
-			if (typeof(nicEditors) != "undefined") {
+			if (typeof (nicEditors) != "undefined") {
 				arg = nicEditors.findEditor(textarea_id).getContent();
 			}
-		break;
+			break;
 		case 'tinymce':
-			if (typeof(tinyMCE) != "undefined") {
+			if (typeof (tinyMCE) != "undefined") {
 				arg = tinyMCE.get(textarea_id).getContent();
 			}
-		break;
+			break;
 		case 'none':
 		default:
-			arg = $("textarea#"+textarea_id).val();
-		break;
+			arg = $("textarea#" + textarea_id).val();
+			break;
 	}
 	return arg;
 }
 
 function isValidPassword(input) {
 	var reg1 = /^[^%\s]{8,}$/;
-	var reg2 = /[A-Z]/;		//upper
-	var reg3 = /[a-z]/;		//lower
-	var reg4 = /[0-9]/;		//numeric
+	var reg2 = /[A-Z]/; //upper
+	var reg3 = /[a-z]/; //lower
+	var reg4 = /[0-9]/; //numeric
 	var reg5 = /[\@\'\"\!\&\|\<\>\#\?\:\;\$\*\_\+\-\^\.\,\(\)\{\}\[\]\\\/\=\~]/;
-		
+
 	var a = reg1.test(input);
 	var b = reg2.test(input);
 	var c = reg3.test(input);
 	var d = reg4.test(input);
 	var e = reg5.test(input);
-	
-	if(b+c+d+e >= 3 && a) {
+
+	if (b + c + d + e >= 3 && a) {
 		return true;
 	}
 }
 
 function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 // check length
@@ -66,7 +66,7 @@ function get_number(str) {
 function get_special_char(str) {
 	return /[@#$%&!*)(-+=^~.,]/.test(str);
 }
-		
+
 // check 8 characters - lowercase or uppercase
 function get_8_letters(str) {
 	return /[a-z]{8}/i.test(str);
@@ -96,23 +96,23 @@ function count_special_char(str) {
 		return 0;
 	}
 }
-	
+
 // check unique characters
 function get_unique_char(str) {
 	var result = "";
 	var char_count = new Array();
 	var i = str.length;
 	var char_code;
-	for (var i=0; i<str.length; i++ ) {
-		char_code = str.charCodeAt( i );
-		if (typeof(char_count[char_code]) == 'undefined' ) {
-			char_count[char_code] = 1;	// first occurrence
+	for (var i = 0; i < str.length; i++) {
+		char_code = str.charCodeAt(i);
+		if (typeof (char_count[char_code]) == 'undefined') {
+			char_count[char_code] = 1; // first occurrence
 		} else {
-			char_count[char_code]++  // increase count
+			char_count[char_code]++ // increase count
 		}
 	}
-	for (var i=0; i<char_count.length; i++ ) {
-		if (typeof(char_count[i]) == 'number' && char_count[i] == 1) result += String.fromCharCode(i);
+	for (var i = 0; i < char_count.length; i++) {
+		if (typeof (char_count[i]) == 'number' && char_count[i] == 1) result += String.fromCharCode(i);
 	}
 	return result;
 }
@@ -123,16 +123,16 @@ function get_duplicate_char(str) {
 	var char_count = new Array();
 	var i = str.length;
 	var char_code;
-	for (var i=0; i<str.length; i++ ) {
-		char_code = str.charCodeAt( i );
-		if (typeof(char_count[char_code]) == 'undefined' ) {
-			char_count[char_code] = 1;	// first occurrence
+	for (var i = 0; i < str.length; i++) {
+		char_code = str.charCodeAt(i);
+		if (typeof (char_count[char_code]) == 'undefined') {
+			char_count[char_code] = 1; // first occurrence
 		} else {
-			char_count[char_code]++  // increase count
+			char_count[char_code]++ // increase count
 		}
 	}
-	for (var i=0; i<char_count.length; i++ ) {
-		if (typeof(char_count[i]) == 'number' && char_count[i] > 1) result += char_count[i];
+	for (var i = 0; i < char_count.length; i++) {
+		if (typeof (char_count[i]) == 'number' && char_count[i] > 1) result += char_count[i];
 	}
 	return result;
 }
@@ -142,15 +142,15 @@ function toggleLayer(whichLayer) {
 	if (document.getElementById) {
 		// browser std
 		var style2 = document.getElementById(whichLayer).style;
-		style2.display = style2.display? "":"block";
+		style2.display = style2.display ? "" : "block";
 	} else if (document.all) {
 		//browser old msie
 		var style2 = document.all[whichLayer].style;
-		style2.display = style2.display? "":"block";
+		style2.display = style2.display ? "" : "block";
 	} else if (document.layers) {
 		// browser nn4 
 		var style2 = document.layers[whichLayer].style;
-		style2.display = style2.display? "":"block";
+		style2.display = style2.display ? "" : "block";
 	}
 }
 
@@ -159,17 +159,17 @@ function toggleLayer(whichLayer) {
 function limitText(limitField, limitNum) {
 	if (limitField.value.length > limitNum) {
 		limitField.value = limitField.value.substring(0, limitNum);
-	} 
+	}
 }
 
 // autosave - highlight ajax_result span tag
-function showAutoSave(){
+function showAutoSave() {
 	document.getElementById("ajax_status_autosave").style.color = "#000000";
 	document.getElementById("ajax_status_autosave").style.background = "#ffff00";
 	alertTimerId = setTimeout("hideAutoSave()", 10000);
 }
 // autosave - hide
-function hideAutoSave(){
+function hideAutoSave() {
 	document.getElementById("ajax_status_autosave").style.color = "#f0f0f0";
 	document.getElementById("ajax_status_autosave").style.background = "";
 	clearTimeout(alertTimerId);
@@ -177,31 +177,31 @@ function hideAutoSave(){
 
 
 // autosave - highlight ajax_result span tag
-function delayscript(){
+function delayscript() {
 	setTimeout("hideAutoSave()", 5000);
 }
 
 // function ajax_reply - highlight reply -> hide reply
 // param message
 // param tag_id - ie, span tag
-function ajaxReply(message,tag_id){
+function ajaxReply(message, tag_id) {
 	var now = getTime();
-	if(message=="!token") {
+	if (message == "!token") {
 		$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-close" style="display:inline-block;vertical-align:text-bottom;"></span>Edited by another user!').attr('style', 'border:1px solid #999999;background:#FF3300;padding:2px;color:#FFF;font-size:1.1em;').show();
-		$( ":button" ).attr('style','background:#FFF;').attr("disabled", true);	
+		$(":button").attr('style', 'background:#FFF;').attr("disabled", true);
 		$("#dialog_token_text").text("This page was recently edited by another user. If you want to edit this page again, please close window and click edit link again. Buttons are now disabled.");
-		$("#dialog_token").dialog("open");		
-			$("#dialog_token").dialog({
-				buttons : {
-				"Confirm" : function() {
+		$("#dialog_token").dialog("open");
+		$("#dialog_token").dialog({
+			buttons: {
+				"Confirm": function () {
 					$(this).dialog("close");
-					},
-				}
-			});
-		
+				},
+			}
+		});
+
 	} else {
-		$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>'+message+' '+now).addClass('ui-state-highlight').attr('style', 'padding:2px;').show();
-		setTimeout('$("'+tag_id+'").hide()',10000);
+		$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>' + message + ' ' + now).addClass('ui-state-highlight').attr('style', 'padding:2px;').show();
+		setTimeout('$("' + tag_id + '").hide()', 10000);
 	}
 }
 
@@ -209,27 +209,27 @@ function ajaxReply(message,tag_id){
 // function ajax_reply - highlight reply -> hide reply
 // param message
 // param tag_id - ie, span tag
-function ajaxReplyLetItBe(message,tag_id){
+function ajaxReplyLetItBe(message, tag_id) {
 	var now = getTime();
-	$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>'+message+' '+now).attr('style', 'border:1px solid #999999;background:#CCFF66;padding:2px;').show();
+	$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>' + message + ' ' + now).attr('style', 'border:1px solid #999999;background:#CCFF66;padding:2px;').show();
 }
 
 
 // function ajax_reply - highlight reply -> hide reply
 // param jsonfomat
 // param tag_id - ie, span tag
-function ajaxReplyUser(json,tag_id){
+function ajaxReplyUser(json, tag_id) {
 	var now = getTime();
 	var json = JSON.parse(json);
 	console.log(json);
 	var message = json['text'];
-	
-	if(json['success']==true) {
-		$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>'+message+' '+now).attr('style', 'border:1px solid #999999;background:#CCFF66;padding:2px;').show();
+
+	if (json['success'] == true) {
+		$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>' + message + ' ' + now).attr('style', 'border:1px solid #999999;background:#CCFF66;padding:2px;').show();
 	} else {
-		$(tag_id).empty().append('<span class="ui-icon ui-icon-notice" style="display:inline-block;vertical-align:text-bottom;"></span>'+message+' '+now).attr('style', 'border:1px solid #999999;background:#FF0000;padding:2px;color:#FFF;').show();
+		$(tag_id).empty().append('<span class="ui-icon ui-icon-notice" style="display:inline-block;vertical-align:text-bottom;"></span>' + message + ' ' + now).attr('style', 'border:1px solid #999999;background:#FF0000;padding:2px;color:#FFF;').show();
 	}
-	setTimeout('$("'+tag_id+'").hide()',10000);
+	setTimeout('$("' + tag_id + '").hide()', 10000);
 
 }
 
@@ -237,9 +237,9 @@ function ajaxReplyUser(json,tag_id){
 // function ajax_reply - highlight reply -> hide reply
 // param message
 // param tag_id - ie, span tag
-function ajaxReplyHistory(message,tag_id){
+function ajaxReplyHistory(message, tag_id) {
 	$(tag_id).empty().append(message).attr('style', 'font-style:italic;border:1px dashed #fff;padding:2px;').show();
-	setTimeout('$("'+tag_id+'").hide()',10000);
+	setTimeout('$("' + tag_id + '").hide()', 10000);
 }
 
 function getTime() {
@@ -247,27 +247,27 @@ function getTime() {
 	var hour = date.getHours();
 	var minutes = date.getMinutes();
 	var seconds = date.getSeconds();
-	hour = (hour < 10) ? '0'+hour : hour;
-	minutes = (minutes < 10) ? '0'+minutes : minutes;
-	seconds = (seconds < 10) ? '0'+seconds : seconds;							
-	return hour+':'+minutes+':'+seconds;
+	hour = (hour < 10) ? '0' + hour : hour;
+	minutes = (minutes < 10) ? '0' + minutes : minutes;
+	seconds = (seconds < 10) ? '0' + seconds : seconds;
+	return hour + ':' + minutes + ':' + seconds;
 }
 
 
-function setNewDate(d,days_months_years,i) {
+function setNewDate(d, days_months_years, i) {
 
 	var d = new Date(d);
-	
-	switch(days_months_years) {
+
+	switch (days_months_years) {
 		case 'd':
 			d.setDate(d.getDate() + i);
-		break;
+			break;
 		case 'm':
 			d.setMonth(d.getMonth() + i);
-		break;
+			break;
 		case 'y':
 			d.setFullYear(d.getFullYear() + i);
-		break;
+			break;
 	}
 	return d.toISOString().substring(0, 10);
 }
@@ -277,11 +277,11 @@ function setNewDate(d,days_months_years,i) {
 // name: parameter name 
 // stringURL: from jQuery click $(this).attr("href") | window.location.search
 function getParameter(name, stringURL) {
-	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	var regexS = "[\\?&]"+name+"=([^&#]*)";
-	var regex = new RegExp( regexS );
-	var results = regex.exec( stringURL );
-	if( results == null )
+	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	var regexS = "[\\?&]" + name + "=([^&#]*)";
+	var regex = new RegExp(regexS);
+	var results = regex.exec(stringURL);
+	if (results == null)
 		return "";
 	else
 		return results[1];
@@ -289,40 +289,40 @@ function getParameter(name, stringURL) {
 
 // function toggleCheckboxes in a form
 function toggleCheckboxes(theForm, cName) {
-    for (i=0,n=theForm.elements.length;i<n;i++) {
-        if (theForm.elements[i].className.indexOf(cName) !=-1) {
-            if (theForm.elements[i].checked == true) {
-                theForm.elements[i].checked = false;
-            } else {
-                theForm.elements[i].checked = true;
-            }
+	for (i = 0, n = theForm.elements.length; i < n; i++) {
+		if (theForm.elements[i].className.indexOf(cName) != -1) {
+			if (theForm.elements[i].checked == true) {
+				theForm.elements[i].checked = false;
+			} else {
+				theForm.elements[i].checked = true;
+			}
 		}
 	}
 }
-	
+
 
 // add leading zero
-function addZ(n){
-	return n<10? '0'+n:''+n;
+function addZ(n) {
+	return n < 10 ? '0' + n : '' + n;
 }
 
 // output yyyy-mm-dd h:i:s from utc
 function format_utc_date(utc) {
-	var date = new Date(utc*1000);
+	var date = new Date(utc * 1000);
 	var y = date.getFullYear()
-	var m = date.getMonth()+1;
+	var m = date.getMonth() + 1;
 	var d = date.getDate();
 	var h = date.getHours();
 	var mi = date.getMinutes();
 	var s = date.getSeconds();
-	return y+"-"+addZ(m)+"-"+addZ(d)+" "+addZ(h)+":"+addZ(mi)+":"+addZ(s);
+	return y + "-" + addZ(m) + "-" + addZ(d) + " " + addZ(h) + ":" + addZ(mi) + ":" + addZ(s);
 }
 
 
 function ImageExist(url) {
-   var img = new Image();
-   img.src = url;
-   return img.height != 0;
+	var img = new Image();
+	img.src = url;
+	return img.height != 0;
 }
 
 
@@ -333,9 +333,9 @@ function update_passwordmeter(pw) {
 	i_uppercase = 0;
 	i_number = 0;
 	i_special_char = 0;
-	i_sum = 0;	
+	i_sum = 0;
 	i_score = 0;
-	
+
 	if (get_length(pw) >= 4) {
 		i_score += 3;
 	}
@@ -353,7 +353,7 @@ function update_passwordmeter(pw) {
 	}
 	if (get_length(pw) >= 9) {
 		i_score += 3;
-	}	
+	}
 	if (get_length(pw) >= 10) {
 		i_score += 3;
 	}
@@ -362,19 +362,19 @@ function update_passwordmeter(pw) {
 	}
 	if (get_length(pw) >= 12) {
 		i_score += 3;
-	}		
+	}
 	if (get_length(pw) >= 13) {
 		i_score += 3;
 	}
 	if (get_length(pw) >= 14) {
 		i_score += 3;
 	}
-		
+
 	if (get_lowecase(pw)) {
 		i_score += 5;
 		i_lowercase = 1;
 	}
-		
+
 	if (get_uppercase(pw)) {
 		i_score += 5;
 		i_uppercase = 1;
@@ -384,29 +384,29 @@ function update_passwordmeter(pw) {
 		i_score += 5;
 		i_number = 1;
 	}
-			
+
 	if (get_special_char(pw)) {
 		i_score += 5;
 		i_special_char = 1;
 	}
-	
+
 	// combinations matter
 	isum = i_lowercase + i_uppercase + i_number + i_special_char;
-	if (isum == 2){
+	if (isum == 2) {
 		i_score += 10;
 	}
-	
-	if (isum == 3){
+
+	if (isum == 3) {
 		i_score += 20;
 	}
-	
-	if (isum == 4){
+
+	if (isum == 4) {
 		i_score += 30;
 	}
-	
+
 	// many unique characters are good in passwords (generally), few not good
 	var res = get_unique_char(pw);
-	switch(res.length) {
+	switch (res.length) {
 		case 0:
 			i_score -= -0;
 			break;
@@ -443,12 +443,12 @@ function update_passwordmeter(pw) {
 		default:
 			i_score += 40;
 	}
-	
+
 	// prevent duplicated char 
 	if (get_duplicate_char(pw) > 8) {
 		//i_score -= 10;
-	}	
-	
+	}
+
 	// if space found - reset i_score
 	if (get_space(pw)) {
 		i_score = 0;
@@ -465,14 +465,14 @@ function update_passwordmeter(pw) {
 			i_score = 49;
 		}
 	}
-	
+
 	// if i_score is 100 + - set i_score = 100
 	if (i_score > 100) {
 		i_score = 100;
 	}
-	
+
 	var s_status = 'pending';
-			
+
 	// style passwordmeter
 	if (i_score <= 9) {
 		s_background = 'rgb(255,0,0)';
@@ -496,27 +496,27 @@ function update_passwordmeter(pw) {
 		s_background = 'rgb(0,153,51)';
 		s_status = '<span class="ui-icon ui-icon-check" style="display:inline-block;"></span>';
 	}
-			
+
 	// css change
 	document.getElementById("passmeter").style.width = i_score + '%';
-	document.getElementById("passmeter").style.background = s_background;		
+	document.getElementById("passmeter").style.background = s_background;
 	document.getElementById("password_score").innerHTML = i_score;
-	
+
 	if (get_length(pw) >= 8 && i_score >= 50) {
 		document.getElementById("password_status").innerHTML = s_status;
-	} else{
+	} else {
 		document.getElementById("password_status").innerHTML = '';
 	}
 }
 
 function get_prexix_filesize(size) {
-	var i = Math.floor( Math.log(size) / Math.log(1024) );
-	return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+	var i = Math.floor(Math.log(size) / Math.log(1024));
+	return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 };
 
 function set_jquery_ui_touch_punch() {
-		
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		/*!
 		 * jQuery UI Touch Punch 0.2.3
 		 *
@@ -527,21 +527,57 @@ function set_jquery_ui_touch_punch() {
 		 *  jquery.ui.widget.js
 		 *  jquery.ui.mouse.js
 		 */
-		!function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,d=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(this._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),this._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),d.call(b)}}}(jQuery);
+		! function (a) {
+			function f(a, b) {
+				if (!(a.originalEvent.touches.length > 1)) {
+					a.preventDefault();
+					var c = a.originalEvent.changedTouches[0],
+						d = document.createEvent("MouseEvents");
+					d.initMouseEvent(b, !0, !0, window, 1, c.screenX, c.screenY, c.clientX, c.clientY, !1, !1, !1, !1, 0, null), a.target.dispatchEvent(d)
+				}
+			}
+			if (a.support.touch = "ontouchend" in document, a.support.touch) {
+				var e, b = a.ui.mouse.prototype,
+					c = b._mouseInit,
+					d = b._mouseDestroy;
+				b._touchStart = function (a) {
+					var b = this;
+					!e && b._mouseCapture(a.originalEvent.changedTouches[0]) && (e = !0, b._touchMoved = !1, f(a, "mouseover"), f(a, "mousemove"), f(a, "mousedown"))
+				}, b._touchMove = function (a) {
+					e && (this._touchMoved = !0, f(a, "mousemove"))
+				}, b._touchEnd = function (a) {
+					e && (f(a, "mouseup"), f(a, "mouseout"), this._touchMoved || f(a, "click"), e = !1)
+				}, b._mouseInit = function () {
+					var b = this;
+					b.element.bind({
+						touchstart: a.proxy(b, "_touchStart"),
+						touchmove: a.proxy(b, "_touchMove"),
+						touchend: a.proxy(b, "_touchEnd")
+					}), c.call(b)
+				}, b._mouseDestroy = function () {
+					var b = this;
+					b.element.unbind({
+						touchstart: a.proxy(b, "_touchStart"),
+						touchmove: a.proxy(b, "_touchMove"),
+						touchend: a.proxy(b, "_touchEnd")
+					}), d.call(b)
+				}
+			}
+		}(jQuery);
 	}
 
 }
 
 function enc(str, number) {
-    var encoded = "";
-    for (i=0; i<str.length;i++) {
-        var a = str.charCodeAt(i);
-        // bitwise XOR
-		var b = a ^ number;    
-        encoded = encoded+String.fromCharCode(b);
-    }
-	
-    return encoded;
+	var encoded = "";
+	for (i = 0; i < str.length; i++) {
+		var a = str.charCodeAt(i);
+		// bitwise XOR
+		var b = a ^ number;
+		encoded = encoded + String.fromCharCode(b);
+	}
+
+	return encoded;
 }
 
 /**
@@ -554,3 +590,42 @@ function enc(str, number) {
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+/**
+ * Set equal height of elements in a row
+ * https://codepen.io/micahgodbolt/pen/FgqLc
+ * 
+ * @param min
+ * @param max
+ * @returns {*}
+ */
+equalheight = function (container) {
+
+	var currentTallest = 0,
+		currentRowStart = 0,
+		rowDivs = new Array(),
+		$el,
+		topPosition = 0;
+	$(container).each(function () {
+
+		$el = $(this);
+		$($el).height('auto')
+		topPostion = $el.position().top;
+
+		if (currentRowStart != topPostion) {
+			for (currentDiv = 0; currentDiv < rowDivs.length; currentDiv++) {
+				rowDivs[currentDiv].height(currentTallest);
+			}
+			rowDivs.length = 0; // empty the array
+			currentRowStart = topPostion;
+			currentTallest = $el.height();
+			rowDivs.push($el);
+		} else {
+			rowDivs.push($el);
+			currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+		}
+		for (currentDiv = 0; currentDiv < rowDivs.length; currentDiv++) {
+			rowDivs[currentDiv].height(currentTallest);
+		}
+	});
+}

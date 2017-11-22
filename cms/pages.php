@@ -1399,6 +1399,8 @@ echo "\n".'<div id="wrapper-site">';
 		
 	
 		$app = '[{"name":"grid-image","value":"https://thebukitbrownexperience.files.wordpress.com/2012/06/birds-of-paradise.jpg"},{"name":"heading","value":"Paradise birds!"},{"name":"link","value":"https://thebukitbrownexperience.files.wordpress.com/"},{"name":"grid-content","value":"<span style=\"font-family: \'Open Sans\', Arial, sans-serif; text-align: justify;\">Lorem ipsum <strong>dolor sit amet</strong>, consectetur adipiscing elit. Praesent ex mi, gravida at magna eu, convallis aliquam neque. Ut tempor ligula vestibulum feugiat sagittis.</span>"},{"name":"grid-image","value":"https://www.nps.gov/dena/learn/nature/images/birds-landing.jpg"},{"name":"heading","value":"Somewhere over"},{"name":"link","value":"https://www.nps.gov"},{"name":"grid-content","value":"<span style=\"font-family: \'Open Sans\', Arial, sans-serif; text-align: justify;\">&nbsp;Phasellus convallis, nisl quis luctus cursus, lacus tellus finibus sapien, <a href=\"http://google.se\" target=\"_blank\" rel=\"noopener noreferrer\">vel scelerisque </a>turpis eros ut justo. In hac habitasse platea dictumst.</span>"},{"name":"grid-image","value":"https://www.freewebheaders.com/wordpress/wp-content/gallery/birds/colorful-love-birds-website-header.jpg"},{"name":"heading","value":"In a row..."},{"name":"link","value":"https://www.freewebheaders.com"},{"name":"grid-content","value":"<span style=\"font-family: \'Open Sans\', Arial, sans-serif; text-align: justify;\">Pellentesque ac risus pretium, ornare erat eget, fringilla dui. Nullam dapibus augue mattis nunc lobortis dictum. Nulla eu enim sit amet mi tincidunt facilisis. Nunc non nulla consequat, vehicula tortor at, dignissim odio. Proin mollis aliquet urna, in imperdiet est commodo a.&nbsp;</span>"},{"name":"grid-image","value":"http://www.ramojifilmcity.com/daytour/images-1/sigma-gallery/electus-parrot.jpg"},{"name":"heading","value":"A red parrot "},{"name":"link","value":"http://www.ramojifilmcity.com"},{"name":"grid-content","value":"Birdie nam nam"},{"name":"grid-image","value":"http://animals.sandiegozoo.org/sites/default/files/2017-03/animals_hero_bee-eaters.jpg"},{"name":"heading","value":"Kvididivvv"},{"name":"link","value":"http://animals.sandiegozoo.org"},{"name":"grid-content","value":"<h3 style=\"background-image: none; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; margin: 0.3em 0px 0px; overflow: hidden; padding-top: 0.5em; padding-bottom: 0px; border-bottom: 0px; font-size: 1.2em; line-height: 1.6; font-family: sans-serif;\"><a style=\"text-decoration-line: none; color: #0b0080; background: none;\" title=\"The Birds (band)\" href=\"https://en.wikipedia.org/wiki/The_Birds_(band)\">The Birds (band)</a>, a UK rhythm and blues band during the mid-1960s</h3>\r\n<ul style=\"margin: 0.3em 0px 0px 1.6em; padding: 0px; color: #222222; font-family: sans-serif;\">\r\n<li style=\"margin-bottom: 0.1em;\"><a style=\"text-decoration-line: none; color: #0b0080; background: none;\" title=\"Charlie Parker\" href=\"https://en.wikipedia.org/wiki/Charlie_Parker\">Charlie Parker</a>&nbsp;(1920&ndash;1955), jazz saxophonist with the nickname&nbsp;<em>Bird</em></li>\r\n<li style=\"margin-bottom: 0.1em;\"><a style=\"text-decoration-line: none; color: #0b0080; background: none;\" title=\"Bird (B.A.L.L. album)\" href=\"https://en.wikipedia.org/wiki/Bird_(B.A.L.L._album)\"><em>Bird</em>&nbsp;(B.A.L.L. album)</a>, 1988</li>\r\n<li style=\"margin-bottom: 0.1em;\"><a style=\"text-decoration-line: none; color: #0b0080; background: none;\" title=\"Bird (Lisbeth Scott album)\" href=\"https://en.wikipedia.org/wiki/Bird_(Lisbeth_Scott_album)\"><em>Bird</em>&nbsp;(Lisbeth Scott album)</a>, 2</li>\r\n</ul>"},{"name":"grid-image","value":"http://funblogging.net/wp-content/uploads/2016/12/22-drives-birds.7.jpg"},{"name":"heading","value":"Unreal colors"},{"name":"link","value":"http://funblogging.net"},{"name":"grid-content","value":"<span style=\"color: #222222; font-family: sans-serif;\">The album was supporte</span>"},{"name":"grid-image","value":"https://kids.nationalgeographic.com/content/dam/kids/photos/articles/Other%20Explore%20Photos/R-Z/Wacky%20Weekend/Strange%20Birds/ww-birds-secretary-bird.adapt.945.1.jpg"},{"name":"heading","value":"En hövding"},{"name":"link","value":"https://upload.wikimedia.org"},{"name":"grid-content","value":"Alrights!"},{"name":"grid-image","value":""},{"name":"heading","value":""},{"name":"link","value":""},{"name":"grid-content","value":""},{"name":"grid-image","value":""},{"name":"heading","value":""},{"name":"link","value":""},{"name":"grid-content","value":""}]';
+		$app = '[{"name":"grid-image","value":"https://upload.wikimedia.org/wikipedia/commons/3/32/House_sparrow04.jpg"},{"name":"heading","value":"Sparrow - a bird"},{"name":"url","value":"http://sr.se"},{"name":"link","value":"Sveriges television"},{"name":"grid-content","value":"Aloha I\'m so good :) \\\\ good to know"},{"name":"css","value":"blue"},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"stories-child"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"0"},{"name":"grid-image","value":"https://www.iucn.org/sites/dev/files/styles/850x500_no_menu_article/public/content/images/2016/tasmania_wilderness-by_nik_lopoukhine_photo_6.jpg?itok=fHx639ly"},{"name":"heading","value":"Some pages u might find interesting"},{"name":"url","value":"http://svt.se"},{"name":"link","value":"https://upload.wikimedia.org"},{"name":"grid-content","value":"Ciao"},{"name":"css","value":"red"},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"stories-promoted"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"2"}]';
+		$app = '[{"name":"grid-image","value":"https://upload.wikimedia.org/wikipedia/commons/3/32/House_sparrow04.jpg"},{"name":"heading","value":"Sparrow - a bird"},{"name":"url","value":"http://sr.se"},{"name":"link","value":"Sveriges radio"},{"name":"grid-content","value":"<span style=\\"color: #333333; font-family: Arial, Helvetica, sans-serif; background-color: #fbfafa;\\">Select the first letter of the common name or a shape to browse the matching birds. If you do not know the name of the bird, try selecting a shape or use our&nbsp;</span><a style=\\"padding: 0px; margin: 0px; color: #597627; text-decoration-line: none; border-width: 0px 0px 1px; border-image: initial; font-family: Arial, Helvetica, sans-serif; background-color: #fbfafa; border-color: initial initial #a4a4a4 initial; border-style: initial initial solid initial;\\" href=\\"https://www.allaboutbirds.org/guide/search\\">Search</a><span style=\\"color: #333333; font-family: Arial, Helvetica, sans-serif; background-color: #fbfafa;\\">&nbsp;tool.</span>"},{"name":"css","value":"blue"},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"none"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"0"},{"name":"grid-image","value":"https://www.iucn.org/sites/dev/files/styles/850x500_no_menu_article/public/content/images/2016/tasmania_wilderness-by_nik_lopoukhine_photo_6.jpg?itok=fHx639ly"},{"name":"heading","value":"Some pages u might find interesting"},{"name":"url","value":"http://sr.se"},{"name":"link","value":"https://upload.wikimedia.org"},{"name":"grid-content","value":"<span style=\\"font-family: Georgia, serif; font-size: 17px; letter-spacing: 0.17px;\\">Everything about the anatomy of a bird reflects its ability to fly. The wings, for example, are shaped to create lift.&nbsp; I\' think so \\\\ or....</span>"},{"name":"css","value":"green"},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"stories-promoted"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"2"},{"name":"grid-image","value":"https://www.allaboutbirds.org/guide/PHOTO/LARGE/bald_eagle_adult2.jpg"},{"name":"heading","value":"An eagel has landed"},{"name":"url","value":"https://www.allaboutbirds.org"},{"name":"link","value":"All about birds"},{"name":"grid-content","value":"Th eagle has <a title=\\"Th ebord\\" href=\\"https://www.allaboutbirds.org/guide/PHOTO/LARGE/bald_eagle_adult2.jpg\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\">landed</a>"},{"name":"css","value":""},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"stories-child"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"0"},{"name":"grid-image","value":"http://www.ramojifilmcity.com/daytour/images-1/sigma-gallery/electus-parrot.jpg"},{"name":"heading","value":"Is this a parrot"},{"name":"url","value":""},{"name":"link","value":""},{"name":"grid-content","value":"<iframe src=\\"https://www.youtube.com/embed/4vuW6tQ0218\\" width=\\"300\\" height=\\"200\\" frameborder=\\"0\\" allowfullscreen=\\"allowfullscreen\\"></iframe>"},{"name":"css","value":""},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"none"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"0"}]';
 		$app_json = json_decode($app);
 		//print_r($app);
 		//print_r2($app_json);
@@ -1419,6 +1421,94 @@ echo "\n".'<div id="wrapper-site">';
 			}
 		}
 
+		//print_r2($result);
+		//echo count($result);
+		$result_copy = $result;
+		$counter = 0;
+		// 0: grid-image, 2: heading, 4: url, 6: link, 8: grid-content, 
+		// 10: css, 12: pages_id, 14: grid-dynamic-content, 16: grid-dynamic-content-filter, 18: grid-dynamic-content-limit
+		foreach($result as $key => $value) {
+			foreach ($value as $key2 => $value2) {
+			
+				switch ($key2) {
+					case "0":
+						echo '<div class="grid-cell '.$result_copy[$counter][11].'">';
+					break;
+					case "1":
+						if(strlen($value2)) {
+							echo '<div class="grid-image-crop" style="background-image: url('.$value2.')"></div>';
+						}
+						
+					break;
+					case "3":
+						if(strlen($value2)) {
+							echo '<h3 class="grid-heading">' . $value2 . '</h3>';
+						}
+					break;
+
+					case "9":
+						if(strlen($value2)) {
+							echo '<div class="grid-content">' . $value2 . '</div>';
+						}
+						break;
+					case "":
+					break;
+					case "15":
+
+						if ($value2 == "stories-child") {
+							
+							$p_id = (int)$result_copy[$counter][13];
+							$rows_children = $pages->getPagesChildren($p_id);
+
+							if ($rows_children) {
+								echo '<ul>';
+								foreach ($rows_children as $row_child) {
+									echo '<li><a href="pages.php?pages_id='.$row_child['pages_id'].'">'.$row_child['title'].'</a></li>';
+								}
+								echo '</ul>';								
+							}
+						}
+						if ($value2 == "stories-promoted") {
+							
+							$stories_filter = (string)$result_copy[$counter][17];
+							$limit = (int)$result_copy[$counter][19];
+							$rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
+
+							if ($rows_promoted) {
+								
+								foreach ($rows_promoted as $row_promoted) {
+									echo '<div class="story">';
+									echo '<h5>'.$row_promoted['title'] . '</h5>';
+									echo '<p>'.$row_promoted['story_content'] . '</p>';
+									echo '</div>';
+								}
+																
+							}
+						}
+					break;
+					case "19":
+						$link = strlen($result_copy[$counter][7]) ? $result_copy[$counter][7] : $result_copy[$counter][5];
+						if (strlen($result_copy[$counter][5])) {
+							echo '<div class="grid-link"><a href="'.$result_copy[$counter][5].'">'.$link.'</a></div>';
+						}
+						echo '</div>';
+					break;
+				
+				}
+	
+				/*
+				if ($key2 == "heading") {
+					echo $value2 . "<br>";
+					echo $result_copy[$counter][1];
+				}
+				*/
+			}
+			$counter++;
+			//print_r2($value);	
+
+		}
+
+
 
 		// iterate array
 		$iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($result));
@@ -1426,6 +1516,23 @@ echo "\n".'<div id="wrapper-site">';
 		$parts = 0;
 		$count_cols = 0;
 		foreach($iterator as $key=>$value) {
+			//echo $key .": " . $value . '<br>';
+			// 0: grid-image, 2: heading, 4: url, 6: link, 8: grid-content, 10: css, 12: pages_id, 14: grid-dynamic-content, 16: grid-dynamic-content-filter, 18: grid-dynamic-content-limit
+			/*			
+			switch ($key) {
+				case "0":
+					echo '<div class="grid-cell">';
+				break;
+				case "1":
+					echo '<div class="grid-image-crop" style="background-image: url('.$value.')"></div>';
+				break;
+				case "19":
+				echo '</div>';
+			break;
+			
+			}
+			*/
+			/*
 			if ($key % 2 != 0) {
 				if ($parts == 0) {
 					//echo '<div class=\"grid-row\">';
@@ -1472,6 +1579,7 @@ echo "\n".'<div id="wrapper-site">';
 					}
 				}
 			}
+			*/
 		}
 
 

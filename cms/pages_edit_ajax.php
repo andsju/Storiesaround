@@ -1811,7 +1811,32 @@ if (isset($_POST['token'])){
 					
 				break;
 				
+				case 'get_dynamic_stories':
+				//echo 'Aloha';	
+
+				$dynamic_content = $_POST['dynamicContent'];
+				$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_STRING) ? $_POST['dynamicContentFilter'] : '';
+				$limit = filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT) ? $_POST['dynamicContentLimit'] : 0;
+				//echo "$stories_filter: ". $stories_filter;
+				//echo "$limit:" . $limit;
+				switch ($dynamic_content) {
+					case "stories-promoted":
+						$rows = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
+					break;
+					case "stories-child":
+						$rows = $pages->getPagesChildren($pages_id);
+					break;
+										
+				}
 				
+				if($rows) {
+					//print_r($rows);
+					echo json_encode($rows);
+				}
+		
+				
+			break;
+			
 
 
 
