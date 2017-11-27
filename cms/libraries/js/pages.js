@@ -287,7 +287,7 @@ $(document).ready(function() {
 		window.location.href = "http://sunet.se";
 		
 	});	
-	
+	equalheight('div.grid-cell');
 	//replace_image_path('/content/', '/somefolder/content/');
 	
 });
