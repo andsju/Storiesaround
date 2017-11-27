@@ -373,38 +373,31 @@ foreach ( $js_files as $js ): ?>
 		////////////////////////////
 
 
-
-
-		// floats instead
+		// grid
 		$('.add-grid-item').click(function(event){
 			event.preventDefault();
 			var pages_id = $("#pages_id").val();			
+			var cell = "";
+			var form = "";
 			var html = "";
-			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i></div>";
-			var dynamic = "<hr><div class=\"dynamic hidden\"<p>Dynamic content</p>";			
-			dynamic += "<select name=\"grid-dynamic-content\">";
-			dynamic += "<option value=\"none\" selected>none</option>";
-			dynamic += "<option value=\"stories-child\">Child stories</option>";
-			dynamic += "<option value=\"stories-event\">Event stories</option>";
-			dynamic += "<option value=\"stories-promoted\">Promoted stories</option>";
-			dynamic += "</select>";
-			dynamic += "<p>Filter promoted stories (tag): <input type=\"text\" name=\"grid-dynamic-content-filter\"></p>"; 
-			var limit = "<p>Limit promoted stories<br><select name=\"grid-dynamic-content-limit\">";
-			for (var i = 0; i < 4; i++) {
-				limit += "<option value="+i+">"+i+"</option>";	
-			}
-			limit += "</select></p></div>";
-			dynamic += limit;
-
-			var cell = "<div class=\"grid-cell\" style=\"position:relative\">"
+			
+			var dynamic = "<hr><div class=\"dynamic hidden\"><p>Dynamic content</p>";			
+			var dynamicSelectList = getSelectStrings([["none", "none"], ["stories-child", "Child stories"], ["stories-event", "Event stories"], ["stories-promoted", "Promoted stories"]], "", "grid-dynamic-content", "", "");
+			dynamic += dynamicSelectList;
+			dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\">"; 
+			dynamic += "<p>Limit promoted stories</p>";
+			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 2, "grid-dynamic-content-limit", "", "");
+			dynamic += limitSelectList;
+			cell += "<div class=\"grid-cell\" style=\"position:relative\">"
+			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i></div>";
 			cell += tool;
+
+			var adjustSelectList = getSelectNumber([0,10,20,30,40,50,60,70,80,90,100], 0, "grid-image-y", "", "");
 			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
-
-			var form = "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\"></p><p>Heading<br><input type=\"text\" name=\"heading\"></p><p>URL<br><input type=\"text\" name=\"url\"></p><p>Link title<br><input type=\"text\" name=\"link\"></p><p>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
-
+			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\"></p><p>URL<br><input type=\"text\" name=\"url\"></p><p>Link title<br><input type=\"text\" name=\"link\"></p><p>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
 			html += cell + form + "</div>";
 
-			$("div#grids").append(html);
+			$("div#wrapper-grid").append(html);
 
 			tinymce.init({
 				forced_root_block : "", 
@@ -417,10 +410,10 @@ foreach ( $js_files as $js ): ?>
 				toolbar: "undo redo bold italic link code image stories",
 				extended_valid_elements:'script'
 			});
+			$('.grid-image-slider-y').slider()
 		});
 		
-		
-		$("div#grids").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
+		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
 			event.preventDefault();
 			var that = $(this); 
 			$("#dialog_delete_item").dialog("open");
@@ -438,32 +431,35 @@ foreach ( $js_files as $js ): ?>
 			});
 		});
 
-		$("div#grids").delegate( "div.grid-tools i.fa-pencil-square-o", "click", function(event) {
+		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-pencil-square-o", "click", function(event) {
 			event.preventDefault();
 			$(this).parent().parent().children("div.grid-form").show();
 			equalheight('div.grid-cell');
 		});
-		$("div#grids").delegate( "div.grid-tools i.fa-arrow-left", "click", function(event) {
+
+		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-arrow-left", "click", function(event) {
 			event.preventDefault();
 			var item = $(this).parent().parent();
 			var prev_item = item.prev();
 			item.insertBefore(item.prev());
 			equalheight('div.grid-cell');
 		});
-		$("div#grids").delegate( "div.grid-tools i.fa-arrow-right", "click", function(event) {
+
+		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-arrow-right", "click", function(event) {
 			event.preventDefault();
 			var item = $(this).parent().parent();
 			var next_item = item.next();
 			item.insertAfter(item.next());
 			equalheight('div.grid-cell');
 		});
-		$("div#grids").delegate( "a.toggle", "click", function(event) {
+		
+		$("div#wrapper-grid").delegate( "a.toggle", "click", function(event) {
 			event.preventDefault();
 			$(this).parent().parent().find("div.dynamic").toggle();			
 			equalheight('div.grid-cell');
 		});
 		
-		$("div#grids").delegate( ".fa-floppy-o", "click", function(event) {
+		$("div#wrapper-grid").delegate( ".fa-floppy-o", "click", function(event) {
 			event.preventDefault();
 
 			var form = $(this).parent().parent().children("div.grid-form");
@@ -474,10 +470,12 @@ foreach ( $js_files as $js ): ?>
 			link = form.find("input")[3].value;
 			css = form.find("input")[4].value;
 			pages_id = form.find("input")[5].value;
+			image_position_y = form.find("select[name=grid-image-y]").val();
 
 			tinyMCE.triggerSave();
 			content = form.find("textarea").val();
 			console.log("image", image);
+			console.log("image_position_y", image_position_y);
 			console.log("heading", heading);
 			console.log("url", url);
 			console.log("link", link);
@@ -496,6 +494,10 @@ foreach ( $js_files as $js ): ?>
 			if(image.length) {
 				imagePreview.removeClass("hidden");			
 			}
+
+
+
+
 			var headingPreview = $(this).parent().siblings("h2.grid-heading");
 			headingPreview.text(heading);
 			if(heading.length) {
@@ -603,6 +605,33 @@ foreach ( $js_files as $js ): ?>
 		function stringEscape(s) {
 			return s ? s.replace(/\\/g,'\\\\').replace(/'/g,"\\'") : s;
 		}
+
+		
+
+		$("div#wrapper-grid").delegate( "select[name='grid-image-y']", "change", function(event) {
+			event.preventDefault();
+			var value = $(this).val();
+			$(this).parent().parent().parent().find("div.grid-image-crop").css("background-position-y", value + "%");
+			equalheight('div.grid-cell');
+		});
+
+		$( "#grid-image-slider-height" ).slider({
+			orientation: "vertical",
+			value: 140,
+			min: 100,
+			max: 400,
+			step: 20,
+			slide: function( event, ui ) {
+			$( "#grid-image-height" ).val( ui.value );
+
+				$("div.grid-image-crop").each(function() {  
+					$(this).css("min-height", ui.value + "px");
+				});
+				equalheight('div.grid-cell');
+			}
+
+    	});
+
 
 		////////////////////////////
 
@@ -3344,34 +3373,38 @@ if(is_array($check_edit)) {
 					</div>
 				
 				</div>
+
 				
-				
-				
+
+
 				<h3>Grid <i class="fa fa-th" aria-hidden="true"></i></h3>
 				<div id="grid-settings">
+					<div style="float:right" class="templates"><p>Grid cell template</p><img src="css/images/grid-cell-image-heading.png"><img src="css/images/grid-cell-heading-image.png"></div>
+					<div style="float:right;margin:0 40px">
+						<p>Grid images height</p>
+						<input id="grid-image-height" type="text" value="140" readonly style="border:1px dotted grey;width:3em">
+						<br>
+						<div style="float:left;margin:20px">600px<div id="grid-image-slider-height" style="height:100px;"></div>100px</div>
+					</div>
 					<h4>Grid propeties</h4>
 					<p>
-					<input type="checkbox" value="1"> Activate grid
+						<input type="checkbox" name="grid-active" value="1"> Active
 					</p>
 					<p>
-						Image ratio (width:height)
-						<input type="radio" value="1:1" name="ratio"> 1:1
-						<input type="radio" value="16:9"name="ratio"> 16:9
-						<input type="radio" value="21:9"name="ratio" checked="checked"> 21:9
-
-						<input type="text" placeholder="set custom ratio">
+						Grid cell template
+						<br>
+						<input type="radio" value="0" name="grid-cell-template" checked="checked"> Image above heading
+						<br>
+						<input type="radio" value="1" name="grid-cell-template"> Heading above image
 					</p>
 					<p>
-						<input type="text" name="style" size="50"> CSS class (grid cells)
+						Custom CSS class (grid wrapper)<br>
+						<input type="text" name="grid-class" size="50" id="grid-class">
 					</p>
 					<p>
-						<input type="text" name="style" size="50"> CSS inline style (grid cells)
+						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
+						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
 					</p>
-					<p>
-					<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
-					<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
-					</p>
-					
 				</div>
 			</div>
 			
@@ -3380,7 +3413,7 @@ if(is_array($check_edit)) {
 		
 		<form id="gridform"  method="post">
 			<div class="column_description ui-state-disabled">Grid</div>
-			<div id="grids">
+			<div id="wrapper-grid" class="grid-edit">
 				
 			</div>
 			
