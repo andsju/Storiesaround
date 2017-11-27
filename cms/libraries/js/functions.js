@@ -629,3 +629,35 @@ equalheight = function (container) {
 		}
 	});
 }
+
+function getSelectNumber(arrayOfNumbers, current, name, id, classes) {
+	if (!Array.isArray(arrayOfNumbers)) { return null}
+	name = name.length ? " name=\""+name+"\"" : "";
+	id = id.length ? " id=\""+id+"\"" : "";
+	classes = classes.length ? " class=\""+classes+"\"" : "";
+
+	var html = "<select "+name + id + classes+">"
+	var selected = "";
+	for (var i = 0; i < arrayOfNumbers.length; i++) {
+		selected = current === arrayOfNumbers[i] ? " selected" : ""; 
+		html += "<option value=\""+arrayOfNumbers[i]+"\""+selected+">"+arrayOfNumbers[i]+"</option>";
+	}
+	html += "</select>";
+	return html;
+}
+
+function getSelectStrings(arrayOfStrings, current, name, id, classes) {
+	if (!Array.isArray(arrayOfStrings)) { return null}
+	name = name.length ? " name=\""+name+"\"" : "";
+	id = id.length ? " id=\""+id+"\"" : "";
+	classes = classes.length ? " class=\""+classes+"\"" : "";
+
+	var html = "<select "+name + id + classes+">"
+	var selected = "";
+	for (var i = 0; i < arrayOfStrings.length; i++) {
+		selected = current === arrayOfStrings[i][0] ? " selected" : ""; 
+		html += "<option value=\""+arrayOfStrings[i][0]+"\""+selected+">"+arrayOfStrings[i][1]+"</option>";
+	}
+	html += "</select>";
+	return html;
+}
