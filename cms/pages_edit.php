@@ -50,7 +50,7 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/css/layout.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
-	CMS_DIR.'/cms/libraries/font-awesome/font-awesome.min.css'
+	CMS_DIR.'/cms/libraries/font-awesome/css/font-awesome.min.css'
 );
 
 // css files... add css jquery-ui theme
@@ -384,7 +384,7 @@ foreach ( $js_files as $js ): ?>
 			var dynamic = "<hr><div class=\"dynamic hidden\"><p>Dynamic content</p>";			
 			var dynamicSelectList = getSelectStrings([["none", "none"], ["stories-child", "Child stories"], ["stories-event", "Event stories"], ["stories-promoted", "Promoted stories"]], "", "grid-dynamic-content", "", "");
 			dynamic += dynamicSelectList;
-			dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\">"; 
+			dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\" maxlength=\"25\">"; 
 			dynamic += "<p>Limit promoted stories</p>";
 			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 2, "grid-dynamic-content-limit", "", "");
 			dynamic += limitSelectList;
@@ -394,7 +394,7 @@ foreach ( $js_files as $js ): ?>
 
 			var adjustSelectList = getSelectNumber([0,10,20,30,40,50,60,70,80,90,100], 0, "grid-image-y", "", "");
 			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
-			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\"></p><p>URL<br><input type=\"text\" name=\"url\"></p><p>Link title<br><input type=\"text\" name=\"link\"></p><p>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
+			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p><p>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
 			html += cell + form + "</div>";
 
 			$("div#wrapper-grid").append(html);
@@ -411,7 +411,7 @@ foreach ( $js_files as $js ): ?>
     			paste_remove_styles: true,
 				extended_valid_elements:'script'
 			});
-			$('.grid-image-slider-y').slider()
+			//$('.grid-image-slider-y').slider()
 		});
 		
 		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
@@ -462,13 +462,7 @@ foreach ( $js_files as $js ): ?>
 		
 
 		function showValidation(parent, node, message) {
-			//$(resetElements).each( function(i) {
-			//	$(this).remove();
-			//});
-			console.log("parent", parent);
-			console.log("node", node);
 			parent.find("span").remove();
-			//console.log("node...", node.parent().find("span"));
 			$("<span class=\"reply_fail\">"+message+"</span>").insertAfter(node);
 		} 
 
@@ -480,8 +474,6 @@ foreach ( $js_files as $js ): ?>
 			image = form.find("input[name=grid-image]")[0].value;
 			heading = form.find("input[name=heading]")[0].value;
 			url = form.find("input[name=url]")[0].value;
-			var urlNode = form.find("input[name=url]")[0];
-			var urlNodeParent = form.find("input[name=url]").parent();
 			link = form.find("input[name=link]")[0].value;
 			css = form.find("input[name=css]")[0].value;
 			pages_id = form.find("input[name=pages_id]")[0];
@@ -492,40 +484,18 @@ foreach ( $js_files as $js ): ?>
 			});
 
 			if (!validateThis(url, "url")) {
-				showValidation(urlNodeParent, urlNode, " * check URL");
+				showValidation(form.find("input[name=url]").parent(), form.find("input[name=url]")[0], " * check URL");
 			}
 
-		
-			tinyMCE.triggerSave();	
+			tinyMCE.triggerSave();
 
 			var content = form.find("textarea").val();
-			var contentWords = $(content).text().split(' ').length || 0;
-			var contentNode = form.find("textarea");
-			console.log("content.length", content.length);
-			console.log("contentWords", contentWords);
-			
-
-			if (content.length > 5000 || contentWords > 500) {
+			if (content.length > 5000) {
 				var words = $(content).text().split(' ').length;
 				
-				showValidation(form.find("textarea").parent(), contentNode, " * Exceeded 5000 characters or 500 words: " + "(" +content.length+ ", "+words+")");
+				showValidation(form.find("textarea").parent(), form.find("textarea"), " * Exceeded 5000 characters: " + "(" +content.length+ ")");
 				content = "";
 			}
-
-
-
-			console.log("image", image);
-			console.log("image_position_y", image_position_y);
-			console.log("heading", heading);
-			console.log("url", url);
-			console.log("url1", url1);
-			console.log("link", link);
-			console.log("content", content);
-			console.log("css", css);
-			console.log("pages_id", pages_id);
-
-			console.log("cell", $(this).parent().parent());
-			
 
 			var cell = $(this).parent().parent();
 			cell.attr("class", "grid-cell");
@@ -537,9 +507,6 @@ foreach ( $js_files as $js ): ?>
 			if(image.length) {
 				imagePreview.removeClass("hidden");			
 			}
-
-
-
 
 			var headingPreview = $(this).parent().siblings("h2.grid-heading");
 			headingPreview.text(heading);
@@ -562,10 +529,6 @@ foreach ( $js_files as $js ): ?>
 			dynamicContentFilter = form.children("div.dynamic").find("input[name='grid-dynamic-content-filter']")[0].value;
 			dynamicContentLimit = form.children("div.dynamic").find("select[name=grid-dynamic-content-limit]").val();
 
-			console.log("dynamicContent", dynamicContent);
-			console.log("dynamicContentFilter", dynamicContentFilter);
-			console.log("dynamicContentLimit", dynamicContentLimit);
-
 			// ajax dynamic call
 			// Promoted stories
 			
@@ -575,7 +538,6 @@ foreach ( $js_files as $js ): ?>
 			var pages_id = $("#pages_id").val();
 
 			var dynamicBox = $(this).parent().siblings("div.grid-dynamic"); 
-			
 			$.ajax({
 				beforeSend: function() { loading = form.children("div.dynamic").find('.ajax_spinner_dynamic').show()},
 				//complete: function(){ loading = setTimeout(form.children("div.dynamic").find('.ajax_spinner_dynamic').hide()",700)},
@@ -589,7 +551,7 @@ foreach ( $js_files as $js ): ?>
 					ajaxReply('','#ajax_status_stories_child');
 					//$("#container_stories_child").empty().append(message).hide().fadeIn('fast');
 					var html = dynamicContent == "stories-child" ? "<ul>" : "";
-					console.log(result);
+					//console.log(result);
 					if (result.length) {
 						$.each(JSON.parse(result), function(index, object) {
 							html += dynamicContent == "stories-child" ? "<li>" : "<div>";
@@ -619,7 +581,7 @@ foreach ( $js_files as $js ): ?>
 						});
 
 						html += dynamicContent == "stories-child" ? "</ul>" : "";
-						console.log("html", html);
+						//console.log("html", html);
 
 						dynamicBox.html(html);
 						dynamicBox.removeClass("hidden");	
@@ -2476,6 +2438,7 @@ if(is_array($check_edit)) {
 		<li><a href="#files">Files</a></li>
 		<li><a href="#content_editor">Content</a></li>		
 		<li><a href="#add_content">Additional content</a></li>		
+		<li><a href="#grid">Grid</a></li>
 		<li><a href="#story">Story</a></li>
 		<li><a href="#rss">RSS</a></li>
 		<li><a href="#move">Move</a></li>
@@ -3417,51 +3380,14 @@ if(is_array($check_edit)) {
 				
 				</div>
 
-				
+				<!-- -->
 
 
-				<h3>Grid <i class="fa fa-th" aria-hidden="true"></i></h3>
-				<div id="grid-settings">
-					<div style="float:right" class="templates"><p>Grid cell template</p><img src="css/images/grid-cell-image-heading.png"><img src="css/images/grid-cell-heading-image.png"></div>
-					<div style="float:right;margin:0 40px">
-						<p>Grid images height</p>
-						<input id="grid-image-height" type="text" value="140" readonly style="border:1px dotted grey;width:3em">
-						<br>
-						<div style="float:left;margin:20px">600px<div id="grid-image-slider-height" style="height:100px;"></div>100px</div>
-					</div>
-					<h4>Grid propeties</h4>
-					<p>
-						<input type="checkbox" name="grid-active" value="1"> Active
-					</p>
-					<p>
-						Grid cell template
-						<br>
-						<input type="radio" value="0" name="grid-cell-template" checked="checked"> Image above heading
-						<br>
-						<input type="radio" value="1" name="grid-cell-template"> Heading above image
-					</p>
-					<p>
-						Custom CSS class (grid wrapper)<br>
-						<input type="text" name="grid-class" size="50" id="grid-class">
-					</p>
-					<p>
-						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
-						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
-					</p>
-				</div>
 			</div>
 			
 		</div>
 
 		
-		<form id="gridform"  method="post">
-			<div class="column_description ui-state-disabled">Grid</div>
-			<div id="wrapper-grid" class="grid-edit">
-				
-			</div>
-			
-		</form>
-
 		
 		<?php
 		if($arr['stories_promoted'] > 0) {
@@ -3851,6 +3777,89 @@ if(is_array($check_edit)) {
 		
 	</div>
 	
+
+
+	
+	<div id="grid">
+	
+		<div class="admin-panel clearfix">
+			<p>
+
+
+				<div style="float:right;width:50%;" class="grid-cell-settings">
+				
+					<h4>Grid cell settings</h4>
+
+					<div style="float:left">
+						<p>
+							Grid cell template
+							<br>
+							<input type="radio" value="0" name="grid-cell-template" checked="checked"> Image above heading
+							<br>
+							<input type="radio" value="1" name="grid-cell-template"> Heading above image
+						</p>
+
+						<img src="css/images/grid-cell-image-heading.png" class="template">
+						<img src="css/images/grid-cell-heading-image.png" class="template">
+
+					</div>
+				
+					<div style="float:left">
+						<p>Grid images height</p>
+						<input id="grid-image-height" type="text" value="140" readonly style="border:1px dotted grey;width:3em">
+						<br>
+						<div style="float:left;margin:20px">600px<div id="grid-image-slider-height" style="height:100px;"></div>100px</div>
+
+					</div>
+
+
+				</div>
+
+				<div style="float:left" class="grid-settings">
+
+					<h4>Grid settings <i class="fa fa-th" aria-hidden="true"></i></h4>
+					<p>
+						<input type="checkbox" name="grid-active" value="1"> Active
+					</p>
+					<p>
+						Grid area relative to content | article
+						<br>
+						<input type="radio" value="0" name="grid-area" checked="checked"> Above 
+						<br>
+						<input type="radio" value="1" name="grid-area"> Above content and next to any sidebar
+						<br>
+						<input type="radio" value="2" name="grid-area"> Below content and next to any sidebar
+						<br>
+						<input type="radio" value="3" name="grid-area"> Below
+					</p>
+					<p>
+						Custom CSS class (grid wrapper)<br>
+						<input type="text" name="grid-class" size="50" id="grid-class">
+					</p>
+					<p>
+						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
+						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
+					</p>
+				</div>
+
+
+
+			</p>
+		</div>
+		
+		<p>
+			<form id="gridform"  method="post">
+				
+				<div id="wrapper-grid" class="grid-edit clearfix">
+					
+				</div>
+				
+			</form>
+		</p>
+		
+		
+	</div>
+
 	
 	
 	<div id="story">
