@@ -405,9 +405,10 @@ foreach ( $js_files as $js ): ?>
 				editor_selector : "tinymce",
 				menubar: "",
 				plugins: [
-					"autolink lists link hr anchor pagebreak code image stories"
+					"autolink lists link hr anchor pagebreak code image paste stories"
 				],
-				toolbar: "undo redo bold italic link code image stories",
+				toolbar: "undo redo bold italic link code image stories removeformat ",
+    			paste_remove_styles: true,
 				extended_valid_elements:'script'
 			});
 			$('.grid-image-slider-y').slider()
@@ -459,31 +460,73 @@ foreach ( $js_files as $js ): ?>
 			equalheight('div.grid-cell');
 		});
 		
+
+		function showValidation(parent, node, message) {
+			//$(resetElements).each( function(i) {
+			//	$(this).remove();
+			//});
+			console.log("parent", parent);
+			console.log("node", node);
+			parent.find("span").remove();
+			//console.log("node...", node.parent().find("span"));
+			$("<span class=\"reply_fail\">"+message+"</span>").insertAfter(node);
+		} 
+
 		$("div#wrapper-grid").delegate( ".fa-floppy-o", "click", function(event) {
 			event.preventDefault();
 
 			var form = $(this).parent().parent().children("div.grid-form");
-			var image, heading, url, link, content, css, pages_id;
-			image = form.find("input")[0].value;
-			heading = form.find("input")[1].value;
-			url = form.find("input")[2].value;
-			link = form.find("input")[3].value;
-			css = form.find("input")[4].value;
-			pages_id = form.find("input")[5].value;
+			var image, heading, url, url1, url2, link, css, pages_id;
+			image = form.find("input[name=grid-image]")[0].value;
+			heading = form.find("input[name=heading]")[0].value;
+			url = form.find("input[name=url]")[0].value;
+			var urlNode = form.find("input[name=url]")[0];
+			var urlNodeParent = form.find("input[name=url]").parent();
+			link = form.find("input[name=link]")[0].value;
+			css = form.find("input[name=css]")[0].value;
+			pages_id = form.find("input[name=pages_id]")[0];
 			image_position_y = form.find("select[name=grid-image-y]").val();
 
-			tinyMCE.triggerSave();
-			content = form.find("textarea").val();
+			$(form.find("span.reply_fail")).each( function(i) {
+				$(this).remove();
+			});
+
+			if (!validateThis(url, "url")) {
+				showValidation(urlNodeParent, urlNode, " * check URL");
+			}
+
+		
+			tinyMCE.triggerSave();	
+
+			var content = form.find("textarea").val();
+			var contentWords = $(content).text().split(' ').length || 0;
+			var contentNode = form.find("textarea");
+			console.log("content.length", content.length);
+			console.log("contentWords", contentWords);
+			
+
+			if (content.length > 5000 || contentWords > 500) {
+				var words = $(content).text().split(' ').length;
+				
+				showValidation(form.find("textarea").parent(), contentNode, " * Exceeded 5000 characters or 500 words: " + "(" +content.length+ ", "+words+")");
+				content = "";
+			}
+
+
+
 			console.log("image", image);
 			console.log("image_position_y", image_position_y);
 			console.log("heading", heading);
 			console.log("url", url);
+			console.log("url1", url1);
 			console.log("link", link);
 			console.log("content", content);
 			console.log("css", css);
 			console.log("pages_id", pages_id);
 
 			console.log("cell", $(this).parent().parent());
+			
+
 			var cell = $(this).parent().parent();
 			cell.attr("class", "grid-cell");
 
