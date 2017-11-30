@@ -671,7 +671,8 @@ div#login_form  td input {width:80%;padding:3px;}
 
 
 /* grid front*/
-div.grid-edit {border:1px dotted black;min-height:10px;margin:0 0 20px 0}
+div.grid-edit {margin:0 0 20px 0}
+
 div.grid-cell {float:left;width:32%; display: flex; flex-direction: column; margin-right:2%; margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;min-height:200px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 div.grid-cell:nth-child(3n) {margin-right: 0;}
 div.grid-image-crop {min-height:150px;max-height:768px;background-size:cover;}
@@ -693,7 +694,7 @@ div.grid-tools i {margin-bottom:10px}
 div.grid-tools .fa {font-size:1.4em}
 div.grid-tools .fa:hover {color: rgb(205,205,205)}
 div#grid-settings input[type="radio"] {margin-left:0}
-div#grid-settings div.templates img {margin:10px;}
+div.grid-cell-settings img.template {margin:10px;}
 
 /* grid custom class*/
 div.grid-cell.blue div.grid-link {border-bottom:3px solid blue} 
