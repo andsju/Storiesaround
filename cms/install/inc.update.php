@@ -26,4 +26,13 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "title_hid
 // 1.6.3
 //20160306
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "story_link", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0:false, 1:true' AFTER `story_event_date`");
+// 1.8.0
+//20171201
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_active", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:false, 1:true' AFTER `content_author`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_area", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:above, 1:above next to, 2:below next to, 3:below' AFTER `grid_active`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_custom_classes", "column_definition" => "varchar(50) DEFAULT '' COMMENT 'custom css' AFTER `grid_area`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_content", "column_definition" => "longtext DEFAULT '' COMMENT 'json format' AFTER `grid_custom_classes`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_cell_template", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:image top 1:heading top' AFTER `grid_content`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_cell_image_height", "column_definition" => "int(3) unsigned NOT NULL DEFAULT '140' COMMENT '0:image above 1:image below' AFTER `grid_cell_template`");
+
 ?>

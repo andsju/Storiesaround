@@ -274,6 +274,51 @@ class Pages extends Database
     }
 
 
+
+    /**
+     * @param int $pages_id
+     * @param int $grid_active
+     * @param int $grid_area
+     * @param string $grid_custom_classes
+     * @param string $grid_content     
+     * @param int $grid_cell_template
+     * @param int $grid_cell_image_height
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function setPagesGrid($pages_id, $grid_active, $grid_area, $grid_custom_classes, $grid_content, $grid_cell_template, $grid_cell_image_height, $utc_modified)
+    {
+        try {
+            $sql_update = "UPDATE pages
+			SET grid_active = :grid_active,
+			grid_area = :grid_area,
+            grid_custom_classes = :grid_custom_classes,
+            grid_content = :grid_content,
+            grid_cell_template = :grid_cell_template,
+            grid_cell_image_height = :grid_cell_image_height,
+			utc_modified = :utc_modified
+			WHERE pages_id = :pages_id";
+
+            $stmt = $this->db->prepare($sql_update);
+            $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(":grid_active", $grid_active, PDO::PARAM_INT);
+            $stmt->bindParam(":grid_area", $grid_area, PDO::PARAM_INT);
+            $stmt->bindParam(":grid_custom_classes", $grid_custom_classes, PDO::PARAM_STR);
+            $stmt->bindParam(":grid_content", $grid_content, PDO::PARAM_STR);
+            $stmt->bindParam(":grid_cell_template", $grid_cell_template, PDO::PARAM_INT);
+            $stmt->bindParam(":grid_cell_image_height", $grid_cell_image_height, PDO::PARAM_INT);
+            $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
+
+
+
+
     /**
      * @param int $pages_id
      * @param int $ads
