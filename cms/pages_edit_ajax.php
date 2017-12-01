@@ -1826,7 +1826,12 @@ if (isset($_POST['token'])){
 					case "stories-child":
 						$rows = $pages->getPagesChildren($pages_id);
 					break;
-										
+					case "stories-event":
+						$date = date('Y-m-d');
+						$period = "next";						 
+						$rows = $pages->getPagesStoryContentPublishEvent($stories_filter, $date, $period);
+					break;
+					
 				}
 				
 				if($rows) {
@@ -1835,13 +1840,31 @@ if (isset($_POST['token'])){
 				}
 		
 				
-			break;
+				break;
 			
 
+				case 'save_grid':
 
+					//echo "oki";
+					
 
+					$grid_active = filter_input(INPUT_POST, 'grid_active', FILTER_VALIDATE_INT) ? $_POST['grid_active'] : 0;
+					$grid_area = filter_input(INPUT_POST, 'grid_area', FILTER_VALIDATE_INT) ? $_POST['grid_area'] : 0;
+					$grid_cell_template = filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT) ? $_POST['grid_cell_template'] : 0;
+					$grid_cell_image_height = filter_input(INPUT_POST, 'grid_cell_image_height', FILTER_VALIDATE_INT) ? $_POST['grid_cell_image_height'] : 0;
+					$grid_custom_classes = filter_var(trim($_POST['grid_custom_classes']), FILTER_SANITIZE_STRING);
+					$grid_content = trim($_POST['grid_content']);
+					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
-
+					$result = $pages->setPagesGrid($pages_id, $grid_active, $grid_area, $grid_custom_classes, $grid_content, $grid_cell_template, $grid_cell_image_height, $utc_modified);
+					if($result) {
+						$history = new History();
+						$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('grid', $grid_active), $users_id, $_SESSION['token'], $utc_modified);
+					}
+					echo reply($result);
+					
+				
+				break;
 
 
 

@@ -386,7 +386,7 @@ foreach ( $js_files as $js ): ?>
 			dynamic += dynamicSelectList;
 			dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\" maxlength=\"25\">"; 
 			dynamic += "<p>Limit promoted stories</p>";
-			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 2, "grid-dynamic-content-limit", "", "");
+			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 1, "grid-dynamic-content-limit", "", "");
 			dynamic += limitSelectList;
 			cell += "<div class=\"grid-cell\" style=\"position:relative\">"
 			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i></div>";
@@ -407,7 +407,7 @@ foreach ( $js_files as $js ): ?>
 				plugins: [
 					"autolink lists link hr anchor pagebreak code image paste stories"
 				],
-				toolbar: "undo redo bold italic link code image stories removeformat ",
+				toolbar: "undo redo bold italic link code image removeformat stories",
     			paste_remove_styles: true,
 				extended_valid_elements:'script'
 			});
@@ -538,9 +538,9 @@ foreach ( $js_files as $js ): ?>
 			var pages_id = $("#pages_id").val();
 
 			var dynamicBox = $(this).parent().siblings("div.grid-dynamic"); 
-			$.ajax({
-				beforeSend: function() { loading = form.children("div.dynamic").find('.ajax_spinner_dynamic').show()},
-				//complete: function(){ loading = setTimeout(form.children("div.dynamic").find('.ajax_spinner_dynamic').hide()",700)},
+			$.ajax({	
+				beforeSend: function() { loading = $('#ajax_spinner_grid').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_grid').hide()",500)},
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
@@ -549,14 +549,12 @@ foreach ( $js_files as $js ): ?>
 				},
 				success: function(result){
 					ajaxReply('','#ajax_status_stories_child');
-					//$("#container_stories_child").empty().append(message).hide().fadeIn('fast');
 					var html = dynamicContent == "stories-child" ? "<ul>" : "";
-					//console.log(result);
 					if (result.length) {
 						$.each(JSON.parse(result), function(index, object) {
 							html += dynamicContent == "stories-child" ? "<li>" : "<div>";
 							$.each(object, function(key, value) {
-								console.log("key : "+key+" ; value : "+value);
+								//console.log("key : "+key+" ; value : "+value);
 								if (dynamicContent == "stories-promoted") {
 									if (key == 'title') {
 										html += "<h5>"+value+"</h5>";
@@ -575,13 +573,25 @@ foreach ( $js_files as $js ): ?>
 									}
 								}
 
+								if (dynamicContent == "stories-event") {
+									if (key == 'story_event_date') {
+										var eventDate = value.split(" "); 
+										html += "<i>"+eventDate[0]+"</i>";
+									}
+									var story_event_date
+									if (key == 'title') {
+										html += "<h4>"+value+"</h4>";
+									}
+									if (key == 'story_content') {
+										html += "<div>"+value+"</div>";
+									}
+								}
 							});
 							html += dynamicContent == "stories-child" ? "</li>" : "</div>";
 
 						});
 
 						html += dynamicContent == "stories-child" ? "</ul>" : "";
-						//console.log("html", html);
 
 						dynamicBox.html(html);
 						dynamicBox.removeClass("hidden");	
@@ -597,14 +607,38 @@ foreach ( $js_files as $js ): ?>
 	
 		$("#btnSaveGrid").click(function(event) {
 			event.preventDefault();
-			console.log("tada");
-			var formData = JSON.stringify($("#gridform").serializeArray());
+			var grid_content = JSON.stringify($("#gridform").serializeArray());
+			// escape quotes
+			grid_content = stringEscape(grid_content);
+			console.log(grid_content);
+
+			var action = "save_grid";
+			var token = $("#token").val();
+			var users_id = $("#users_id").val();
+			var pages_id = $("#pages_id").val();
+			var grid_active = $('input:checkbox[name=grid_active]').is(':checked') ? 1 : 0;
+			var grid_custom_classes = $("#grid_custom_classes").val();
+			var grid_cell_image_height = $("#grid_cell_image_height").val();
+			var grid_area = $('input:radio[name=grid_area]:checked').val();
+			var grid_cell_template = $('input:radio[name=grid_cell_template]:checked').val();
+
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_grid').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_grid').hide()",700)},
+				type: 'POST',
+				url: 'pages_edit_ajax.php',
+				data: { 
+					action: action, token: token, users_id: users_id, pages_id: pages_id,
+					grid_content: grid_content, grid_active: grid_active, grid_area: grid_area, 
+					grid_cell_template: grid_cell_template, grid_custom_classes: grid_custom_classes,
+					grid_cell_image_height: grid_cell_image_height
+				},
+				success: function(message){	
+					ajaxReply(message,'#ajax_status_grid');
+				},
+			});
 
 
-
-			//formData = formData.replace(/'/g, "\\'");
-			formData = stringEscape(formData);
-			console.log(formData);
 		});
 
 		function stringEscape(s) {
@@ -620,19 +654,19 @@ foreach ( $js_files as $js ): ?>
 			equalheight('div.grid-cell');
 		});
 
-		$( "#grid-image-slider-height" ).slider({
+		$( "#grid_image_slider_height" ).slider({
 			orientation: "vertical",
 			value: 140,
 			min: 100,
 			max: 400,
 			step: 20,
 			slide: function( event, ui ) {
-			$( "#grid-image-height" ).val( ui.value );
+				$( "#grid_cell_image_height" ).val( ui.value );
 
 				$("div.grid-image-crop").each(function() {  
 					$(this).css("min-height", ui.value + "px");
 				});
-				equalheight('div.grid-cell');
+				equalheight('div.grid_cell_image_height');
 			}
 
     	});
@@ -3794,9 +3828,9 @@ if(is_array($check_edit)) {
 						<p>
 							Grid cell template
 							<br>
-							<input type="radio" value="0" name="grid-cell-template" checked="checked"> Image above heading
+							<input type="radio" value="0" name="grid_cell_template" checked="checked"> Image above heading
 							<br>
-							<input type="radio" value="1" name="grid-cell-template"> Heading above image
+							<input type="radio" value="1" name="grid_cell_template"> Heading above image
 						</p>
 
 						<img src="css/images/grid-cell-image-heading.png" class="template">
@@ -3806,9 +3840,9 @@ if(is_array($check_edit)) {
 				
 					<div style="float:left">
 						<p>Grid images height</p>
-						<input id="grid-image-height" type="text" value="140" readonly style="border:1px dotted grey;width:3em">
+						<input id="grid_cell_image_height" type="text" value="140" readonly style="border:1px dotted grey;width:3em">
 						<br>
-						<div style="float:left;margin:20px">600px<div id="grid-image-slider-height" style="height:100px;"></div>100px</div>
+						<div style="float:left;margin:20px">600px<div id="grid_image_slider_height" style="height:100px;"></div>100px</div>
 
 					</div>
 
@@ -3819,26 +3853,28 @@ if(is_array($check_edit)) {
 
 					<h4>Grid settings <i class="fa fa-th" aria-hidden="true"></i></h4>
 					<p>
-						<input type="checkbox" name="grid-active" value="1"> Active
+						<input type="checkbox" name="grid_active" id="grid_active" value="1"> Active
 					</p>
 					<p>
 						Grid area relative to content | article
 						<br>
-						<input type="radio" value="0" name="grid-area" checked="checked"> Above 
+						<input type="radio" value="0" name="grid_area" checked="checked"> Above 
 						<br>
-						<input type="radio" value="1" name="grid-area"> Above content and next to any sidebar
+						<input type="radio" value="1" name="grid_area"> Above content and next to any sidebar
 						<br>
-						<input type="radio" value="2" name="grid-area"> Below content and next to any sidebar
+						<input type="radio" value="2" name="grid_area"> Below content and next to any sidebar
 						<br>
-						<input type="radio" value="3" name="grid-area"> Below
+						<input type="radio" value="3" name="grid_area"> Below
 					</p>
 					<p>
 						Custom CSS class (grid wrapper)<br>
-						<input type="text" name="grid-class" size="50" id="grid-class">
+						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class">
 					</p>
 					<p>
 						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
 						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
+						<span id="ajax_spinner_grid" style='display:none'><img src="css/images/spinner.gif"></span>
+						<span id="ajax_status_grid" style='display:none'></span>
 					</p>
 				</div>
 
