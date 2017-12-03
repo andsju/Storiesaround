@@ -602,6 +602,9 @@ echo "\n".'<div id="wrapper-site">';
 		<div id="wrapper-main">
 
 			<?php
+			// grid above content
+			show_grid($arr, 0);
+		
 			
 			$rows_stories = $pages->getPagesStoryContentPublishAllSorted($id);
 			
@@ -766,7 +769,12 @@ echo "\n".'<div id="wrapper-site">';
 			<?php } ?>
 
 			<div id="wrapper-content" style="float:left;width:<?php echo $content_width;?>%;">
-				
+
+				<?php
+				// grid above content next to sidebar
+				show_grid($arr, 1);
+				?>
+
 				<div id="wrapper-content-inner" style="<?php echo $css_content_width_padding; ?>;">
 				<div id="pages_search_result"></div>
 								
@@ -938,7 +946,7 @@ echo "\n".'<div id="wrapper-site">';
 							echo $selections_content_below;
 						echo "\n".'</div>';
 					}					
-					
+				
 					if($arr['ads']) {
 						echo '<div id="wrapper-ads-row" style="margin:10px 0px;">';
 						echo '</div>';
@@ -947,6 +955,9 @@ echo "\n".'<div id="wrapper-site">';
 					if($calendar_area == 'content') {
 						get_calendar('content', $cal, $id);
 					}
+				
+					// grid below content next to sidebar
+					show_grid($arr, 2);		
 					
 					?>
 										
@@ -1396,131 +1407,17 @@ echo "\n".'<div id="wrapper-site">';
 			echo '</div>';
 		}
 
-		
-	
-		$app = '[{"name":"grid-image","value":"http://www.ramojifilmcity.com/daytour/images-1/sigma-gallery/electus-parrot.jpg"},{"name":"grid-image-y","value":"0"},{"name":"heading","value":"Parrots rules"},{"name":"url","value":"https://www.nationalgeographic.com/science/earth/surface-of-the-earth/mountains/"},{"name":"link","value":"National geographic"},{"name":"grid-content","value":"Characteristic features of parrots include a strong, curved&nbsp;<a title=\\"Beak\\" href=\\"https://en.wikipedia.org/wiki/Beak\\">bill</a>, an upright stance, strong legs, and clawed&nbsp;<a title=\\"Dactyly\\" href=\\"https://en.wikipedia.org/wiki/Dactyly#In_birds\\">zygodactyl</a>&nbsp;feet."},{"name":"css","value":""},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"none"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"2"},{"name":"grid-image","value":"https://www.iucn.org/sites/dev/files/styles/850x500_no_menu_article/public/content/images/2016/tasmania_wilderness-by_nik_lopoukhine_photo_6.jpg?itok=fHx639ly"},{"name":"grid-image-y","value":"0"},{"name":"heading","value":""},{"name":"url","value":"Stories around the world"},{"name":"link","value":""},{"name":"grid-content","value":""},{"name":"css","value":""},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"stories-promoted"},{"name":"grid-dynamic-content-filter","value":"pilsner"},{"name":"grid-dynamic-content-limit","value":"2"},{"name":"grid-image","value":"https://i.pinimg.com/736x/73/e5/6d/73e56d8f5a24906da9e20efd75e18737--amazing-sunsets-beautiful-sunset.jpg"},{"name":"grid-image-y","value":"20"},{"name":"heading","value":"Sunset"},{"name":"url","value":"https://www.allaboutbirds.org"},{"name":"link","value":"Sveriges television"},{"name":"grid-content","value":"Sunset is distinct from&nbsp;<a title=\\"Twilight\\" href=\\"https://en.wikipedia.org/wiki/Twilight\\">twilight</a>, which has three phases, the first being&nbsp;<em>civil</em>&nbsp;twilight, which begins once the Sun has disappeared below the horizon, and continues until it descends to 6 degrees below the horizon; the second phase is&nbsp;<em>nautical</em>&nbsp;twilight, between 6 and 12 degrees below the horizon"},{"name":"css","value":"green"},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"none"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"2"},{"name":"grid-image","value":""},{"name":"grid-image-y","value":"0"},{"name":"heading","value":""},{"name":"url","value":""},{"name":"link","value":""},{"name":"grid-content","value":"<iframe src=\\"https://www.youtube.com/embed/Jfpv4f_1rLA\\" width=\\"320\\" height=\\"240\\" frameborder=\\"0\\" allowfullscreen=\\"allowfullscreen\\"></iframe>\\r\\n<p><br />On 17 October 2012, Dutch broadcaster&nbsp;<a title=\\"TROS\\" href=\\"https://en.wikipedia.org/wiki/TROS\\">TROS</a>&nbsp;selected Anouk to represent the Netherlands at the Eurovision Song Contest 2013.<sup id=\\"cite_ref-2\\" class=\\"reference\\"><a href=\\"https://en.wikipedia.org/wiki/Birds_(Anouk_song)#cite_note-2\\">[2]</a></sup>&nbsp;Anouk selected \\"Birds\\" as the Dutch entry and presented it during a press conference on 11 March 2013.<sup id=\\"cite_ref-3\\" class=\\"reference\\"><a href=\\"https://en.wikipedia.org/wiki/Birds_(Anouk_song)#cite_note-3\\">[3]</a></sup></p>\\r\\n<p>In November 2011, Anouk played a portion of the song during an interview on the Dutch pop/rock radio station&nbsp;<a class=\\"mw-redirect\\" title=\\"3FM\\" href=\\"https://en.wikipedia.org/wiki/3FM\\">3FM</a>.<sup id=\\"cite_ref-Birds2_4-0\\" class=\\"reference\\"><a href=\\"https://en.wikipedia.org/wiki/Birds_(Anouk_song)#cite_note-Birds2-4\\">[4]</a></sup>&nbsp;The&nbsp;<a title=\\"Rules of the Eurovision Song Contest\\" href=\\"https://en.wikipedia.org/wiki/Rules_of_the_Eurovision_Song_Contest\\">rules of the Eurovision Song Contest</a>&nbsp;for 2013 indicate that a song cannot be released prior to 1 September 2012. However, a new clause added for the 2013 contest allows songs, such as in the case of \\"Birds\\", to compete if their previous airing in public would not give them an advantage over the other competing entries.<sup id=\\"cite_ref-2013_rules_5-0\\" class=\\"reference\\"><a href=\\"https://en.wikipedia.org/wiki/Birds_(Anouk_song)#cite_note-2013_rules-5\\">[5]</a></sup>&nbsp;The&nbsp;<a title=\\"European Broadcasting Union\\" href=\\"https://en.wikipedia.org/wiki/European_Broadcasting_Union\\">European Broadcasting Union</a>&nbsp;cleared \\"Birds\\" for the competition under this new rule.<sup id=\\"cite_ref-Birds1_1-1\\" class=\\"reference\\"><a href=\\"https://en.wikipedia.org/wiki/Birds_(Anouk_song)#cite_note-Birds1-1\\">[1]</a></sup></p>\\r\\n<p>The official videoclip of the song was released on 15 May 2013, together with the clips of three other new songs of Anouk.<sup id=\\"cite_ref-6\\" class=\\"reference\\"><a href=\\"https://en.wikipedia.org/wiki/Birds_(Anouk_song)#cite_note-6\\">[6]</a></sup></p>"},{"name":"css","value":""},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"none"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"2"},{"name":"grid-image","value":"https://i.pinimg.com/736x/73/e5/6d/73e56d8f5a24906da9e20efd75e18737--amazing-sunsets-beautiful-sunset.jpg"},{"name":"grid-image-y","value":"0"},{"name":"heading","value":"From another point of view"},{"name":"url","value":"http://cdn.cnn.com/"},{"name":"link","value":"CNN"},{"name":"grid-content","value":"The time of sunset varies throughout the year, and is determined by the viewer\'s position on Earth, specified by longitude and latitude, and elevation. Small daily changes and noticeable semi-annual changes in the timing of sunsets are driven by the axial tilt of Earth,&nbsp;"},{"name":"css","value":"blue"},{"name":"pages_id","value":"1"},{"name":"grid-dynamic-content","value":"none"},{"name":"grid-dynamic-content-filter","value":""},{"name":"grid-dynamic-content-limit","value":"2"}]';
-		$app = $arr['grid_content'];
-		$app_json = json_decode($app);
-		//print_r($app);
-		//print_r2($app_json);
-		//print_r(count($app_json));
-		
-		// json to a multidimensional array
-		$result = array();
-		$index = -1;
-		foreach($app_json as $key=>$val){
-			//echo "<br>";
-			foreach($val as $k=>$v){
-				//echo $v." , ";
-				// first item value is the 'grid-image'
-				if ($v == 'grid-image') {
-					$index++;
-				}
-				$result[$index][] = $v;
-			}
-		}
-
-		$result_copy = $result;
-		//print_r2($result_copy);
-		$counter = 0;
-		// 0: grid-image, 2: heading, 4: url, 6: link, 8: grid-content, 
-		// 10: css, 12: pages_id, 14: grid-dynamic-content, 16: grid-dynamic-content-filter, 18: grid-dynamic-content-limit
-
-		// 0: grid-image, 2: grid-image-y, 4: heading, 6: url, 8: link, 10: grid-content, 
-		// 12: css, 42: pages_id, 16: grid-dynamic-content, 18: grid-dynamic-content-filter, 20: grid-dynamic-content-limit
-
-		$html_grid = "";
-		$header_image_order = $arr['grid_cell_template'];
-		foreach($result as $key => $value) {
-			$header = "";
-			$image = "";
-
-			foreach ($value as $key2 => $value2) {
-				switch ($key2) {
-					case "0":
-					$html_grid .= '<div class="grid-cell '.$result_copy[$counter][13].'">';
-					break;
-					case "1":
-						if(strlen($value2)) {
-							//$background-image-y = strlen($result_copy[$counter][3]) > 1 ? ";background-position-y:'. $result_copy[$counter][3] . '% : "";
-							$background_image_y = strlen($result_copy[$counter][3]) > 1 ? 'background-position-y:'. $result_copy[$counter][3] .'%': '';
-							$image = '<div class="grid-image-crop" style="background-image: url('.$value2.');'.$background_image_y.'"></div>';
-
-						}
-						
-					break;
-					case "5":
-						if(strlen($value2)) {
-							$a_href = strlen($result_copy[$counter][7]) ? $result_copy[$counter][7] : "";
-							$a_start = strlen($a_href) ? '<a href="'.$a_href.'">' : ""; 
-							$a_end = strlen($a_href) ? '</a>' : ""; 
-							$header .= $a_start . '<h2 class="grid-heading">' . $value2 . '</h2>' . $a_end ;
-						}
-						$html_grid .= $header_image_order == 0 ? $header . $image : $image . $header; 
-					break;
-
-					case "11":
-						if(strlen($value2)) {
-							$html_grid .= '<div class="grid-content">' . $value2 . '</div>';
-						}
-						break;
-					case "":
-					break;
-					case "17":
-
-						if ($value2 == "stories-child") {
-							
-							$p_id = (int)$result_copy[$counter][15];
-							$rows_children = $pages->getPagesChildren($p_id);
-
-							if ($rows_children) {
-								$html_grid .= '<ul>';
-								foreach ($rows_children as $row_child) {
-									$html_grid .= '<li><a href="pages.php?pages_id='.$row_child['pages_id'].'">'.$row_child['title'].'</a></li>';
-								}
-								$html_grid .= '</ul>';								
-							}
-						}
-						if ($value2 == "stories-promoted") {
-							
-							$stories_filter = (string)$result_copy[$counter][19];
-							$limit = (int)$result_copy[$counter][21];
-							$rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
-
-							if ($rows_promoted) {
-								
-								foreach ($rows_promoted as $row_promoted) {
-									$html_grid .= '<a href="pages.php?pages_id='.$row_promoted['pages_id'].'"><div class="story">';
-									$html_grid .= '<h5>'.$row_promoted['title'] . '</h5>';
-									$html_grid .= '<p>'.$row_promoted['story_content'] . '</p>';
-									$html_grid .= '</div></a>';
-								}
-												
-							}
-						}
-					break;
-					case "21":
-						$link = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : $result_copy[$counter][7];
-						if (strlen($result_copy[$counter][7])) {
-							$html_grid .= '<div class="grid-split"></div>';
-							$html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][7].'">'.$link.'</a></div>';
-						}
-						$html_grid .= '</div>';
-					break;
-				
-				}
-	
-			}
-			$counter++;
-		}
-
+		// grid below content
+		show_grid($arr, 3);
 
 		?>
 
-		<div id="wrapper-grid">
-			<?php echo $html_grid; ?>
-		</div>
 		
+
+
+
+
+
 		<div id="footer-wrapper">			
 			<?php include_once_customfile('includes/inc.footer.php', $arr, $languages); ?>			
 		</div>
