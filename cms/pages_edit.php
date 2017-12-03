@@ -394,7 +394,7 @@ foreach ( $js_files as $js ): ?>
 
 			var adjustSelectList = getSelectNumber([0,10,20,30,40,50,60,70,80,90,100], 0, "grid-image-y", "", "");
 			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
-			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p><p>Content<br><textarea class=\"tinymce\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
+			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p><p>Content<br><textarea class=\"tinymce-grid\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
 			html += cell + form + "</div>";
 
 			$("div#wrapper-grid").append(html);
@@ -402,7 +402,7 @@ foreach ( $js_files as $js ): ?>
 			tinymce.init({
 				forced_root_block : "", 
 				mode : "specific_textareas",
-				editor_selector : "tinymce",
+				editor_selector : "tinymce-grid",
 				menubar: "",
 				plugins: [
 					"autolink lists link hr anchor pagebreak code image paste stories"
@@ -411,7 +411,7 @@ foreach ( $js_files as $js ): ?>
     			paste_remove_styles: true,
 				extended_valid_elements:'script'
 			});
-			//$('.grid-image-slider-y').slider()
+			
 		});
 		
 		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
@@ -3819,7 +3819,6 @@ if(is_array($check_edit)) {
 		<div class="admin-panel clearfix">
 			<p>
 
-
 				<div style="float:right;width:50%;" class="grid-cell-settings">
 				
 					<h4>Grid cell settings</h4>
@@ -3828,9 +3827,9 @@ if(is_array($check_edit)) {
 						<p>
 							Grid cell template
 							<br>
-							<input type="radio" value="0" name="grid_cell_template" checked="checked"> Image above heading
+							<input type="radio" value="0" name="grid_cell_template" <?php if($arr['grid_cell_template'] == 0) {echo 'checked="checked"';}?>> Image above heading
 							<br>
-							<input type="radio" value="1" name="grid_cell_template"> Heading above image
+							<input type="radio" value="1" name="grid_cell_template" <?php if($arr['grid_cell_template'] == 1) {echo 'checked="checked"';}?>> Heading above image
 						</p>
 
 						<img src="css/images/grid-cell-image-heading.png" class="template">
@@ -3840,7 +3839,7 @@ if(is_array($check_edit)) {
 				
 					<div style="float:left">
 						<p>Grid images height</p>
-						<input id="grid_cell_image_height" type="text" value="140" readonly style="border:1px dotted grey;width:3em">
+						<input id="grid_cell_image_height" type="text" value="<?php echo $arr['grid_cell_image_height']?>" readonly style="border:1px dotted grey;width:3em">
 						<br>
 						<div style="float:left;margin:20px">600px<div id="grid_image_slider_height" style="height:100px;"></div>100px</div>
 
@@ -3853,22 +3852,22 @@ if(is_array($check_edit)) {
 
 					<h4>Grid settings <i class="fa fa-th" aria-hidden="true"></i></h4>
 					<p>
-						<input type="checkbox" name="grid_active" id="grid_active" value="1"> Active
+						<input type="checkbox" name="grid_active" id="grid_active" value="1" <?php if($arr['grid_active'] == 1) {echo 'checked="checked"';}?>> Active
 					</p>
 					<p>
 						Grid area relative to content | article
 						<br>
-						<input type="radio" value="0" name="grid_area" checked="checked"> Above 
+						<input type="radio" value="0" name="grid_area" <?php if($arr['grid_area'] == 0) {echo 'checked="checked"';}?>> Above 
 						<br>
-						<input type="radio" value="1" name="grid_area"> Above content and next to any sidebar
+						<input type="radio" value="1" name="grid_area" <?php if($arr['grid_area'] == 1) {echo 'checked="checked"';}?>> Above content and next to any sidebar
 						<br>
-						<input type="radio" value="2" name="grid_area"> Below content and next to any sidebar
+						<input type="radio" value="2" name="grid_area" <?php if($arr['grid_area'] == 2) {echo 'checked="checked"';}?>> Below content and next to any sidebar
 						<br>
-						<input type="radio" value="3" name="grid_area"> Below
+						<input type="radio" value="3" name="grid_area" <?php if($arr['grid_area'] == 3) {echo 'checked="checked"';}?>> Below
 					</p>
 					<p>
 						Custom CSS class (grid wrapper)<br>
-						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class">
+						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class" value="<?php echo $arr['grid_custom_classes']?>">
 					</p>
 					<p>
 						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
@@ -3887,7 +3886,10 @@ if(is_array($check_edit)) {
 			<form id="gridform"  method="post">
 				
 				<div id="wrapper-grid" class="grid-edit clearfix">
-					
+				<?php
+				$html_grid = get_grid_edit($id, $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);    
+				echo $html_grid;				
+				?>
 				</div>
 				
 			</form>
