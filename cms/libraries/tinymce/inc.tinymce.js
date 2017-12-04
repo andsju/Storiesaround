@@ -1,24 +1,9 @@
 	// editor tinymce start
 
 	tinymce.init({
-		mode : "specific_textareas",
-		editor_selector : "tinymce",
-		theme : "modern",
-		height : "300",
-		menubar: "tools table format view insert edit",
-		entity_encoding: "raw",
-		relative_urls : false,
-		remove_script_host : true,
-		image_dimensions: false,	
 		
-		plugins : "advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table contextmenu directionality emoticons template paste textcolor youtube textcolor",
-		toolbar1: "undo redo | bullist numlist | outdent indent | insertfile | image | forecolor backcolor charmap",
-		image_advtab: true,
+		selector : "textarea.tinymce",
 		content_css : "css/layout_wysiwyg_editor.css?" + new Date().getTime(),
-  image_list: [
-    {title: 'Dog', value: 'mydog.jpg'},
-    {title: 'Cat', value: 'mycat.gif'}
-  ],
 		style_formats: [
 			{title: 'Headings', items: [
 				{title: 'h1', block: 'h1'},
@@ -66,5 +51,21 @@
 		],
 		image_list: "libraries/tinymce/image_list.php"
 	 });
+
+
+	 tinymce.init({
+		
+		selector : "textarea.tinymce-grid",
+		branding: false,
+
+		menu: {
+			edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall'},
+			insert: {title: 'Insert', items: 'link media | template hr'},
+			format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+			tools: {title: 'Tools', items: 'spellchecker code'}
+		  },
+		  toolbar: false
+	 });
+
 
 	// editor tinymce end
