@@ -1,5 +1,5 @@
 <?php
-
+//require_once 'inc.core.php';
 /* Write an image_list for TinyMCE 4 (output is JSON, not an array!) */
 /* Replaces the old external_image_list_url "Example of a PHP-generated image list file" */
 /* Instructions */
@@ -14,7 +14,7 @@
 // 5. Call it with TinyMCE;
 // IMPORTANT: Do not change the file extension to ".js", even if this seems weird to you!
 $testmode = "off";
-$path = "../content/uploads/images/";
+$path = "../../content/uploads/images/";
 $images = Array();
 $counter = 0;
 if ($handle = @opendir($path)) {

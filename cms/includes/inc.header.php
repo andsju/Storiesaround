@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <?php if (!defined('VALID_INCL')) {
     die();
 } ?>
-<html lang="<?php echo $lang; ?>">
+<html lang="<?php echo $language; ?>">
 
 <head>
 
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
     <?php
@@ -48,10 +48,3 @@
     ?>
 
 </head>
-
-<body>
-
-<?php
-// custom body tags
-include_once_customfile('includes/inc.body_tags.php', $arr, $languages);
-?>
