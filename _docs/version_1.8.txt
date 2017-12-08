@@ -1,0 +1,46 @@
+Storiesaround
+
+Remove 
+
+site_feed
+site_feed_interval
+site_limit_stories
+
+
+Banners / Ads
+
+
+
+
+Add
+
+site
+site_template_edit_width  	/ complement to css site width settings
+site_script			/ initial javascript in head tag
+site_ssl			/ http | https
+
+
+pages
+header_array  			/ image and data
+
+html5 semantic elements
+
+
+html structure
+
+now:
+body
+	login-wrapper
+	wrapper-site
+		wrapper-page	
+			wrapper-header
+			wrapper-main
+			footer-wrapper
+
+new:
+body
+	wrapper-login
+	wrapper-header
+	wrapper-page
+	wrapper-footer
+

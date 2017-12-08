@@ -1,6 +1,307 @@
 <?php
 require_once 'inc.core.php';
 
+
+/**
+ *
+ * get rights to view page
+ *
+ * @param int $id
+ * @param $users_id
+ * @param $access
+ * @return boolean $acc_read
+ */
+function get_rights($id, $users_id, $access)
+{
+    $acc_read = false;
+    // check if content can be seen by current user
+    switch ($access) {
+        case 0: // logged in users must have read rights
+            
+            if($users_id) {
+                if(!get_role_CMS('author') == 1) {
+                    
+                    // user rights to this page
+                    $pages_rights = new PagesRights();
+                    $users_rights = $pages_rights->getPagesUsersRights($id, $users_id);
+                    
+                    // groups rights to this page
+                    $groups_rights = $pages_rights->getPagesGroupsRights($id);		
+                    
+                    if($users_rights['rights_read'] == 1) {
+                        $acc_read = true;
+                    } else {
+                        
+                        // groups rights membership
+                        if(get_membership_rights('rights_read', $_SESSION['membership'], $groups_rights)) {
+                            $acc_read = true;
+                        }
+                    }
+                } else {
+                    $acc_read = true;
+                }
+            }
+            break;
+        case 1: // logged in users
+            
+            if (isset($users_id)) {
+                $acc_read = true;            
+            }
+            break;        
+        case 2: // everyone
+            $acc_read = true;    
+        break;
+    }
+    return $acc_read;
+}
+
+
+/**
+ *
+ * get rights to view page
+ *
+ * @param array $rows_widgets
+ * @return array $widgets_css
+ */
+function get_widgets_css($rows_widgets)
+{
+    $widgets_css = null;
+    foreach($rows_widgets as $rows_widget) {
+        foreach($rows_widget as $key => $value) {
+            if($key == 'widgets_css') {
+                if(strpos($value,'css')) {
+                    $widgets_css[] = $value;
+                }
+            }
+        }
+    }
+    return $widgets_css;
+}
+
+/**
+ *
+ * add css themes
+ *
+ * @param array $css_files
+ * @return array $css_files
+ */
+function add_css_themes($css_files)
+{
+    // add css_theme
+    if(file_exists(CMS_ABSPATH .'/content/themes/'.$_SESSION['site_theme'].'/style.css')) {
+        array_push($css_files, CMS_DIR.'/content/themes/'.$_SESSION['site_theme'].'/style.css');
+    }
+
+    // add css jquery-ui theme
+    if(file_exists(CMS_ABSPATH .'/cms/libraries/jquery-ui/theme/'.$_SESSION['site_ui_theme'].'/jquery-ui.css')) {
+        if (($key = array_search(CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', $css_files)) !== false) {
+            unset($css_files[$key]);
+        }
+        array_push($css_files, CMS_DIR.'/cms/libraries/jquery-ui/theme/'.$_SESSION['site_ui_theme'].'/jquery-ui.css');
+    }
+
+    return $css_files;
+}
+
+/**
+ *
+ * add widgets css
+ *
+ * @param array $css_files
+ * @param array $widgets_css
+ * @return array $css_files
+ */
+function add_css_widgets($css_files, $widgets_css)
+{
+    // add required widgets css
+    if(is_array($widgets_css)) {
+        // unique values
+        $widgets_css = array_unique($widgets_css);
+        foreach($widgets_css as $widget_css) {
+            array_push($css_files, CMS_DIR.'/cms/libraries/'.$widget_css);
+        }
+    }
+
+    return $css_files;
+}
+
+
+/**
+ *
+ * add js language files
+ *
+ * @param array $js_files
+ * @return array $js_files
+ */
+function add_js_language_files($js_files)
+{
+    $use_language = isset($_SESSION['language']) ? $_SESSION['language'] : $_SESSION['site_language'];
+    
+    if(isset($use_language)) {
+        switch ($use_language) {
+            case "swedish":
+                $js_files[] = CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.sv.js';
+            break;
+        }
+    }
+
+    return $js_files;    
+}
+
+/**
+ *
+ * set plugin values
+ *
+ * @param int $id
+ */
+function set_plugin_values($id)
+{
+    //if($arr['plugins']) {
+        
+        // main class
+        $pages_plugins = new PagesPlugins();					
+        // get this class name
+        $plugin = $pages_plugins->getPagesPlugins($id);
+        if($plugin) {
+            // only use plugin if active
+            if($plugin['plugins_active'] == 1) {
+                // use class
+                $plugin_class = new $plugin['plugins_title']();
+                
+                // get info
+                $plugin_info = $plugin_class->info();
+    
+                // get plugin css			
+                if(strlen(trim($plugin_info['css']))>0){
+                    array_push($css_files, trim($plugin_info['css']));
+                }
+                // returns an array for which areas should be replaced by plugin
+                $plugin_action = $plugin_class->action($id, $users_id, $_SESSION['token'], $plugin_info['area']);
+                
+                if($plugin_action) {
+                    foreach($plugin_action as $p) {
+                        foreach($p as $key=>$value) {
+                            switch ($key) {
+                                case 'header';
+                                    $plugin_header = $value;
+                                break;
+                                case 'left_sidebar';
+                                    $plugin_left_sidebar = $value;
+                                break;
+                                case 'content';
+                                    $plugin_content = $value;
+                                break;
+                                case 'right_sidebar';
+                                    $plugin_right_sidebar = $value;
+                                break;
+                                case 'footer';
+                                    $plugin_footer = $value;
+                                break;
+                                case 'page';
+                                    $plugin_page = $value;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    //}
+}
+
+
+/**
+ *
+ * set selection values
+ *
+ * @param array $pages_selections
+ * @param array $css_files
+ * @param array $js_files
+ * @param array $pages
+ * @param string $dtz
+ * @param array $selection_area
+ */
+function set_selection_values($pages_selections, $css_files, $js_files, $pages, $dtz, $selection_area)
+{
+    if(is_array($pages_selections)) {
+        $selections = new Selections();
+        $s_rows = $selections->getMultipleSelectionsContent($pages_selections);
+
+        foreach($s_rows as $s_row) {
+            $external_js_files = explode(" ",$s_row['external_js']);
+            foreach($external_js_files as $external_js){
+                if(strlen(trim($external_js))>0){
+                    array_push($js_files, trim(CMS_DIR.$external_js));
+                }
+            }
+            
+            $external_css_files = explode(" ", $s_row['external_css']);
+            
+            foreach($external_css_files as $external_css){
+                if(strlen(trim($external_css)) > 0){
+                    array_push($css_files, trim(CMS_DIR.$external_css));
+                }
+            }
+            $content_html = $s_row['content_html'];
+            $content_code = implode(parse_storiesaround_coded($pages, $dtz, $s_row['content_code'],0));
+            
+            switch($s_row['area']) {
+            
+                case 'header_above':
+                    $selection_area['header_above'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'header':
+                    $selection_area['header'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'header_below':
+                    $selection_area['header_below'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'left_sidebar_top':
+                    $selection_area['left_sidebar_top'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+                            
+                case 'left_sidebar_bottom':
+                    $selection_area['left_sidebar_bottom'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'right_sidebar_top':
+                    $selection_area['right_sidebar_top'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'right_sidebar_bottom':
+                    $selection_area['right_sidebar_bottom'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'content_above':
+                    $selection_area['content_above'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+                
+                case 'content_inside':
+                    $selection_area['content_inside'] .= '<div class="site-selection" style="clear:none;">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'content_below':
+                    $selection_area['content_below'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+
+                case 'footer_above':
+                    $selection_area['footer_above'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+        
+                case 'outer_sidebar':
+                    $selection_area['outer_sidebar'] .= '<div class="site-selection">'.$content_html . $content_code.'</div>';
+                break;
+            }
+        }    
+    
+    }
+    return array($css_files, $js_files, $selection_area);
+}
+
+
 /**
  *
  * get breadcrumb from given id/parent_id
