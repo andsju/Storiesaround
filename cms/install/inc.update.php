@@ -34,5 +34,7 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_cust
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_content", "column_definition" => "longtext DEFAULT '' COMMENT 'json format' AFTER `grid_custom_classes`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_cell_template", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:image top 1:heading top' AFTER `grid_content`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_cell_image_height", "column_definition" => "int(3) unsigned NOT NULL DEFAULT '140' COMMENT '0:image above 1:image below' AFTER `grid_cell_template`");
-
+//20171211
+$sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_wrapper_page_width", "column_definition" => "int(4) unsigned NOT NULL DEFAULT '1280' COMMENT 'template wrapper helper width' AFTER `site_ui_theme`");
+$sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_script", "column_definition" => "varchar(1000) DEFAULT '' COMMENT 'javascript in head tag' AFTER `site_meta_tags`");
 ?>
