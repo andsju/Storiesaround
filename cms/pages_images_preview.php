@@ -455,6 +455,9 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 	
 	if($img) {
 
+		$try = $image->get_optimzed_image($img, $column_width = 1000);
+		echo $try; 
+
 	echo "\n".'<div class="wrapper clearfix" style="margin:0px;">';
 		
 		echo "\n".'<div style="float:left;text-align:right;">';

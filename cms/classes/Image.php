@@ -619,6 +619,35 @@ class Image
         }
     }
 
+/**
+     * @param string path_and_filename
+     * @param int column_width
+     * @return string
+     */
+    public function get_optimzed_image($path_and_filename, $column_width)
+    {
+        if (is_file($_SERVER['DOCUMENT_ROOT'] . $path_and_filename)) {
+
+            $extension = pathinfo($_SERVER['DOCUMENT_ROOT'] . $path_and_filename, PATHINFO_EXTENSION);
+            $ext = strlen($extension);            
+            $pos_underscore = strrpos($path_and_filename, '_') + 1;
+            $pos_dot = strrpos($path_and_filename, '.') + 1;
+            $pre = substr($path_and_filename, 0, $pos_underscore);
+            $sizes = $this->get_image_sizes();
+            rsort($sizes);
+            for ($i = 0; $i < count($sizes); $i++) 
+            {
+                if ($sizes[$i] < $column_width) {
+                    $f = $pre . $sizes[$i-1] .'.'. $extension;
+                    
+                    if (is_file($_SERVER['DOCUMENT_ROOT'] . $f)) {
+                        return $f;                            
+                    } 
+                }
+            }
+            return $path_and_filename;
+        }
+    }
 
 
     /**

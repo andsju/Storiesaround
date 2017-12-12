@@ -2238,9 +2238,9 @@ foreach ( $js_files as $js ): ?>
 		
 		$("#stories_wide_teaser_image_width_slider").slider({
 			value: slider_width_value,
-			min: 40,
-			max: 220,
-			step: 10,
+			min: 10,
+			max: 50,
+			step: 1,
 			slide: function( event, ui ) {
 				$( "#stories_wide_teaser_image_width" ).val( ui.value );
 			}
@@ -3114,11 +3114,10 @@ if(is_array($check_edit)) {
 						<table style="width:100%;" class="edit_pages_stories">
 							<tr>
 								<td style="padding:20px;vertical-align:top;width:33%;">
-								<label for="stories_wide_teaser_image_width">Width:</label><br /> 
-								<div id="stories_wide_teaser_image_width_slider" style="width:200px;float:left;vertical-align:bottom;margin:10px 0 10px; 0;"></div>
+								<label for="stories_wide_teaser_image_width">Width %:</label><br /> 
+								<div id="stories_wide_teaser_image_width_slider" style="width:100px;float:left;vertical-align:bottom;margin:10px 0 10px; 0;"></div>
 								<input type="hidden" id="stories_wide_teaser_image_width_slider_value" value="<?php echo $arr['stories_wide_teaser_image_width']; ?>" />
 								<input type="text" id="stories_wide_teaser_image_width" style="padding:4px;border:1;text-align:right;width:25px;float:left;vertical-align:bottom;margin:4px 0 0 10px;">
-								<div style="float:left;width:100px;">40px</div><div style="float:left;width:100px;text-align:right;">220px</div>
 								</td>
 								<td style="padding:20px;vertical-align:top;width:33%">
 								<label for="stories_wide_teaser_image_align">Align image:<br /> 
