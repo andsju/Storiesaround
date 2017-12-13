@@ -61,7 +61,7 @@ $meta_additional = (strlen($arr['meta_additional'])>0) ? $arr['meta_additional']
 
 // css files, loaded in header.inc.php
 $css_files = array(
-	CMS_DIR.'/cms/css/normalize.css', 
+	//CMS_DIR.'/cms/css/normalize.css', 
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
@@ -193,8 +193,8 @@ if($id == 0) { $icon = '';}
     // sidebar width between 20-33%
     $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
 
-    print_r2("template: ". $arr['template']);    
-    print_r2("Aloha" . $arr['stories_wide_teaser_image_width']);
+    //print_r2("template: ". $arr['template']);    
+    //print_r2($arr);
     switch ($arr['template']) {	
         case 0:
         case 1:
@@ -236,13 +236,15 @@ if($id == 0) { $icon = '';}
         break;					
     }
 
-    print_r2("template: ". $arr['template']);
+
+/*     print_r2("template: ". $arr['template']);
     print_r2("content_percent_width: ". $content_percent_width);
     print_r2("left_sidebar_percent_width: ". $left_sidebar_percent_width);
     print_r2("right_sidebar_percent_width: ". $right_sidebar_percent_width);
     
 
     print_r2($_SESSION);
+ */    
     ?>
 
 

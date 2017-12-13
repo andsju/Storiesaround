@@ -1,7 +1,7 @@
 
     <div id="wrapper-page">
     
-        <div id="wrapper-content" class="column">
+        <div id="wrapper-content" class="column" style="width:<?php echo $content_percent_width;?>%">
         <?php echo $wrapper_content_width; ?>
             <main>
                 <?php print_selection("selection-content-above", $selection_area['content_above']); ?>
@@ -11,7 +11,7 @@
                 <div id="content-edit"></div>
                 <article>
                     <header>
-                        <h1 id="content-title"><?php echo '<h1>'. $arr['title'] .' '.$icon.'</h1>'; ?></h1>
+                        <h1 id="content-title"><?php echo $arr['title'] .' '.$icon; ?></h1>
                         <div id="content-meta"><?php  print_meta($arr['utc_modified'], $dtz, $languages) ?></div>
                     </header>
                     <div id="content-html">        
@@ -29,13 +29,15 @@
                     <?php
                     $cms_dir = CMS_DIR;
                     print_story_events($pages, $languages, $cms_dir, $wrapper_content_width, $arr['stories_event_dates'], $arr['stories_event_dates_filter'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
+                    //print_story_child($pages, $languages, $cms_dir, $id, $wrapper_content_width, $arr['stories_child'], $arr['stories_child_type'], $arr['stories_css_class'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz)
+                    print__story__child($pages, $languages, $cms_dir, $id, $wrapper_content_width, $stories_area = $arr['stories_child_type'], $arr['stories_css_class'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
                     ?>
 
                 </aside>
                 <?php print_selection("selection-content-below", $selection_area['content_below']); ?>
             </main>
         </div>
-        <div id="wrapper-right-sidebar" class="column">
+        <div id="wrapper-right-sidebar" class="column" style="width:<?php echo $right_sidebar_percent_width;?>%">
             <?php echo $wrapper_right_sidebar_width; ?>
             <?php print_selection("selection-right-sidebar-top", $selection_area['right_sidebar_top']); ?>
             <?php

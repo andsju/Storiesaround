@@ -1,128 +1,81 @@
-article, aside, footer, header, nav, section { display: block }
-hml, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Open Sans', sans-serif;
-    font-family: 'Lato', sans-serif;
-    line-height: 1.5em;
-    letter-spacing: 0.02em;
-}
-div { box-sizing: border-box }
+/* START front-end default styles
+use a theme to override settings
+------------------------- 
+-------------------------
+------------------------- */
+
+
+/* body & page
+------------------------- */
+
+hml, body { margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; line-height: 1.5em; letter-spacing: 0.02em; } 
+
+
+
+/* wrappers
+------------------------- */
+#wrapper-user { width: 100%; height: 40px; position: fixed; top: 0; left: 0; z-index: 999; color: white; background-color: black; }
+#wrapper-site-header { width: 100%; position: relative }
+#wrapper-page { width: 1366px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
+#wrapper-top {width: 1366px;margin: 0 auto}
+#wrapper-bottom {width: 1366px;margin: 0 auto}
+#wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0}
+#wrapper-right-sidebar { height: 100%; padding: 0 0 0 20px}
+#wrapper-content { height: 100%; padding: 0 20px 0 0; border-left: 0px solid black; border-right: 1px solid black; }
 #wrapper-user:after, #wrapper-site-header:after, #wrapper-page:after, #wrapper-top:after, #wrapper-bottom:after, article, .clear:after {
     content: "";
     clear: both;
     display: table
 }
 
-#wrapper-user {
-    top: 0;
-    left: 0;
-    position: fixed;
-    width: 100%;
-    height: 40px;
-    z-index: 999;
-    color: white;
-    background-color: black;
-}
+/* site heading
+------------------------- */
+#site-identity { width: 100%; height: 300px; overflow: hidden }
+#site-identity img { width: 100%; height: auto }
 
-#wrapper-site-header {
-    width: 100%;
-    position: relative
-}
+#site-navigation-header { position: absolute; top: 40px; right: 277px; background-color: darkred; border: 1px solid black; }
+#site-navigation-header ul { margin: 0 auto; padding: 0; list-style: none }
+#site-navigation-header ul li { float: left; margin: 0 0 0 10px; }
+#site-navigation-header ul li:hover { background-color: red }
+#site-navigation-header ul li a {display: block; line-height: 2em; padding: 0 20px; font-size: 1.2em; color: white; text-decoration: none }
 
-#site-identity {
-    width: 100%;
-    height: 300px;
-    overflow: hidden
-}
-
-#site-identity img {
-    width: 100%;
-    height: auto
-}
-
-#wrapper-page {
-    width: 1366px;
-    min-height: 100px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-#site-navigation-header {
-    position: absolute;
-    top: 40px;
-    right: 277px;
-    background-color: darkred;
-    border: 1px solid black;
-}
-
-#site-navigation-header ul {
-    margin: 0 auto;
-    padding: 0;
-    list-style: none
-}
-
-#site-navigation-header ul li {
-    float: left;
-    margin: 0 0 0 10px;
-}
-
-#site-navigation-header ul li:hover {
-    background-color: red
-}
-
-#site-navigation-header ul li a {
-    display: block;
-    line-height: 2em;
-    padding: 0 20px;
-    font-size: 1.2em;
-    color: white;
-    text-decoration: none
-}
-
-#wrapper-top {width: 1366px;margin: 0 auto}
-
-#wrapper-bottom {width: 1366px;margin: 0 auto}
-
-#wrapper-left-sidebar {}
-
-#wrapper-right-sidebar {
-    width: 33%;
-    height: 100%;
-    border-right: 0px solid black;
-}
-
-#wrapper-content {
-    width: 67%;
-    height: 100%;
-    padding: 0 20px 0 0;
-    border-left: 0px solid black;
-    border-right: 1px solid black;
-}
-
-.column {
-    float: left
-}
 #site-search { opacity: 0.7 }
 #site-search input,
-#site-search button {
-    padding: 10px;
-    font-size: 1em
-}
-
+#site-search button { padding: 10px; font-size: 1em }
 #site-search:hover,
 #site-search:active,
-#site-search:focus {
-    opacity: 1
-}
-
+#site-search:focus { opacity: 1 }
 #site-search button { background-color: yellowgreen }
 #site-search { position: absolute; bottom: 40px; margin: 0 0 0 277px; z-index: 2; padding: 10px; border: 2px dashed lightgray; }
 #site-name { margin: 0 0 0 277px; }
-#wrapper-right-sidebar { padding: 0 0 0 20px }
-h1 { font-size: 2em; }
+
+/* content
+------------------------- */
+div#content-top {  }
+div#content-breadcrumb {  }
+div#content-links {  }
+div#content-title {  }
+div#content-title h1 {  }
+div#content-meta { font-size:0.8em;padding-bottom:10px; }
+div#content-html { }
+div#content-author { text-align:right;font-style:italic; }
+div#content-social-networking { padding:2px;border:1px dashed #FFF;}
+
+
+h1,h2,h3,h4,h5,h6 { font-weight: normal; margin: 0; }
+h1 { padding-top: 16px; padding-bottom: 0px; font-size: 2.95em;}
+h2 { padding-top: 12px; padding-bottom: 0px; font-size: 2.14em;	}
+h3 { padding-top: 8px; padding-bottom: 0px; font-size: 1.6em; }
+h4 { padding-top: 6px; padding-bottom: 0px; font-size: 1.24em; font-weight: bold;}
+h5 { padding-top: 2px; padding-bottom: 0px; font-size: 1em; font-weight: bold; }
+h6 { padding-top: 1px; padding-bottom: 0px; font-size: 0.83em; font-weight: bold; }
+
+a:link, a:visited { text-decoration: none; color: #0000FF; font-weight : normal; }
+a:link, a:visited { text-decoration: none; color: #0000FF; font-weight : normal; }
+a:hover { color: #000000; text-decoration: underline; }
+a.story:link, a.story:visited { text-decoration: none; color: #000; font-weight : normal; }
+a.story:hover { text-decoration: underline; }
+
 p+p { text-indent: 2em; }
 
 
@@ -131,6 +84,9 @@ changing these can be ... an adventure ....
 ------------------------- 
 -------------------------
 ------------------------- */
+
+article, aside, footer, header, nav, section { display: block }
+
 
 /* overall div box-sizing 
 ------------------------- */
@@ -151,6 +107,11 @@ img.fluid{ max-width:100%; height:auto;}
 ------------------------- */
 .clearfix:before, .clearfix:after { content: ""; display: block; clear: both; }
 
+/* float columns
+------------------------- */
+.column {
+    float: left
+}
 
 
 
@@ -212,12 +173,12 @@ div.grid-link {text-align: center;}
 ------------------------- */
 div#sidebar-promoted-stories {  }
 div#content-stories {  }
-div#content-child-stories {  }
+div#content-child-stories { margin: 20px 0 0 0 }
 div.stories-column { min-height:10px;float:left;overflow:auto; }
 div.stories-column-space{ width:30px;min-height:10px;float:left; }
 div.stories-wrapper { width:100%;padding:0 0 5px 0; }
 div.stories-image-meta { font-size:0.8em;text-align:right;margin-top:-4px;}
-div.stories-meta { margin:0 0 5px 0}
+div.stories-meta { margin:0 0 5px 0; font-size:0.9em}
 .stories-title { padding-top:0px; }
 h3.stories-title { }
 h4.stories-title { font-weight:normal; }
