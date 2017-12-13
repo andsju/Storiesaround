@@ -2159,11 +2159,20 @@ if (isset($_POST['token'])){
 			$title = filter_var(trim($_POST['title']), FILTER_SANITIZE_STRING);
 			$creator = filter_var(trim($_POST['creator']), FILTER_SANITIZE_STRING);
 			$copyright = filter_var(trim($_POST['copyright']), FILTER_SANITIZE_STRING);
-			$tag = filter_var(trim($_POST['tag']), FILTER_SANITIZE_STRING);
+			//$tag = filter_var(trim($_POST['tag']), FILTER_SANITIZE_STRING);
+			$tag = $_POST['tag'];
 			$promote = filter_input(INPUT_POST, 'promote', FILTER_VALIDATE_INT) ? $_POST['promote'] : 0;
 
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			
+			echo "pages_images_id: " . $pages_images_id;
+			echo "caption: " . $caption;
+			echo "alt: ". $alt;
+			echo "title: " . $title;
+			echo "creator: ". $creator;
+			echo "copyright: " . $copyright;
+			echo "tag: ". $tag;
+			echo "promote: ". $promote;
 			$result = $pages->updatePagesImagesMeta($pages_images_id, $caption, $alt, $title, $creator, $copyright, $tag, $promote, $utc_modified);
 			if($result) {
 				$history = new History();

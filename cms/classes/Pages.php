@@ -1924,7 +1924,7 @@ class Pages extends Database
             "SELECT * 
 		FROM
 		(
-		SELECT pages.title AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, NULL AS filename, NULL AS caption, NULL AS copyright, NULL AS story_teaser, NULL AS ratio
+		SELECT pages.title AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, NULL AS filename, NULL AS caption, NULL AS copyright, NULL AS alt, NULL AS story_teaser, NULL AS ratio
 		FROM pages 
 		WHERE pages.parent_id = :pages_id
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
@@ -1932,7 +1932,7 @@ class Pages extends Database
 		AND pages.pages_id NOT IN 
 		( SELECT pages_images.pages_id FROM pages_images )
 		UNION
-		SELECT pages.title AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+		SELECT pages.title AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.alt, pages_images.story_teaser, pages_images.ratio
 		FROM pages 
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.parent_id = :pages_id
@@ -2565,7 +2565,8 @@ class Pages extends Database
 			creator = :creator,
 			copyright = :copyright,
 			tag = :tag,
-			promote = :promote
+			promote = :promote,
+            utc_modified = :utc_modified
 			WHERE pages_images_id = :pages_images_id";
 
             $stmt = $this->db->prepare($sql);

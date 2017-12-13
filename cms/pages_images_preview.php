@@ -124,14 +124,18 @@ include_once 'includes/inc.header_minimal.php';
 			var copyright = $("#copyright").val();
 			var optionTagTexts = [];
 			$("ul#tags li").each(function() { optionTagTexts.push($(this).text()) });
-			var tag = optionTagTexts;			
+			var tag = optionTagTexts.toString();
+			console.log("tag", tag);
 			var promote = $('input:checkbox[name=promote]').is(':checked') ? 1 : 0;
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_image').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_image').hide()",700)},
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
-				data: "action=" + action + "&token=" + token + "&users_id=" + users_id + "&pages_images_id=" + pages_images_id + "&caption=" + caption + "&title=" + title + "&alt=" + alt + "&creator=" + creator + "&copyright=" + copyright + "&tag=" + tag + "&promote=" + promote,
+				data: { 
+					action: action, token: token, pages_images_id: pages_images_id, users_id: users_id, 
+					caption: caption, alt: alt, title: title, creator: creator, copyright: copyright, tag: tag, promote: promote 
+				},
 				success: function(message){
 					ajaxReply(message,'#ajax_status_image');
 				},
