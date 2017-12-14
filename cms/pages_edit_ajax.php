@@ -944,12 +944,12 @@ if (isset($_POST['token'])){
 				case 'save_stories_child':
 
 					$stories_child = $_POST['stories_child'];
-					$stories_child_type = $_POST['stories_child_type'];
+					$stories_child_area = $_POST['stories_child_area'];
 					$stories_css_class = $_POST['stories_css_class'];
 
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
-					$result = $pages->setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_type, $stories_css_class, $utc_modified);
+					$result = $pages->setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_area, $stories_css_class, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'child stories', $users_id, $_SESSION['token'], $utc_modified);

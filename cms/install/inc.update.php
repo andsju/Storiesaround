@@ -37,4 +37,6 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "grid_cell
 //20171211
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_wrapper_page_width", "column_definition" => "int(4) unsigned NOT NULL DEFAULT '1280' COMMENT 'template wrapper helper width' AFTER `site_ui_theme`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_script", "column_definition" => "varchar(1000) DEFAULT '' COMMENT 'javascript in head tag' AFTER `site_meta_tags`");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_child_type");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "stories_child_area", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:none, 1:left sidebar, 2:right sidebar, 3-6:content' AFTER `stories_columns`");
 ?>

@@ -195,6 +195,13 @@ if($id == 0) { $icon = '';}
 
     //print_r2("template: ". $arr['template']);    
     //print_r2($arr);
+
+    // get stories before template renders
+
+    $rows_child = $pages->getPagesStoryContentPublishChild($id);    
+
+
+
     switch ($arr['template']) {	
         case 0:
         case 1:
