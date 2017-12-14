@@ -1164,17 +1164,17 @@ class Pages extends Database
     /**
      * @param int $pages_id
      * @param int $stories_child
-     * @param int $stories_child_type
+     * @param int $stories_child_area
      * @param string $stories_css_class
      * @param string $utc_modified
      * @return bool
      */
-    public function setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_type, $stories_css_class, $utc_modified)
+    public function setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_area, $stories_css_class, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET stories_child = :stories_child,
-			stories_child_type = :stories_child_type,
+			stories_child_area = :stories_child_area,
 			stories_css_class = :stories_css_class,
 			utc_modified = :utc_modified
 			WHERE pages_id = :pages_id";
@@ -1182,7 +1182,7 @@ class Pages extends Database
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":stories_child", $stories_child, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_child_type", $stories_child_type, PDO::PARAM_INT);
+            $stmt->bindParam(":stories_child_area", $stories_child_area, PDO::PARAM_INT);
             $stmt->bindParam(":stories_css_class", $stories_css_class, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
