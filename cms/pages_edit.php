@@ -1253,7 +1253,7 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 			var action = "save_stories_child";
 			var stories_child = $('input:checkbox[name=stories_child]').is(':checked') ? 1 : 0;
-			var stories_child_type = $('#stories_child_type').val();
+			var stories_child_area = $('#stories_child_area').val();
 			var stories_css_class = $("#stories_css_class").val();
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
@@ -1266,7 +1266,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					stories_child: stories_child, stories_child_type: stories_child_type, stories_css_class: stories_css_class,
+					stories_child: stories_child, stories_child_area: stories_child_area, stories_css_class: stories_css_class,
 				},
 				success: function(message){
 					ajaxReply('','#ajax_status_stories_child');
@@ -3166,15 +3166,18 @@ if(is_array($check_edit)) {
 								</td>
 								<td>
 									
-									<label for="stories_child_type">Show stories as:</label><br />
-									<select id="stories_child_type" name="stories_child_type">
-										<option value="1" <?php if($arr['stories_child_type'] == 1) {echo 'selected';}?>>floated boxes - large</option>
-										<option value="2" <?php if($arr['stories_child_type'] == 2) {echo 'selected';}?>>floated boxes - small</option>
-										<option value="3" <?php if($arr['stories_child_type'] == 3) {echo 'selected';}?>>floated boxes - different</option>
-										<option value="4" <?php if($arr['stories_child_type'] == 4) {echo 'selected';}?>>floated boxes - greater difference</option>
-										<option value="5" <?php if($arr['stories_child_type'] == 5) {echo 'selected';}?>>floated boxes - different - random order</option>
-										<option value="6" <?php if($arr['stories_child_type'] == 6) {echo 'selected';}?>>floated boxes - greater difference - random order</option>
-										<option value="7" <?php if($arr['stories_child_type'] == 7) {echo 'selected';}?>>list boxes</option>
+									<label for="stories_child_area">Show stories as:</label><br />
+									<select id="stories_child_area" name="stories_child_area">
+									<option value="0" <?php if($arr['stories_child_area'] == 0) {echo 'selected';}?>>(none)</option>
+										<option value="0"></option>
+										<option value="1" <?php if($arr['stories_child_area'] == 1) {echo 'selected';}?>>left sidebar</option>
+										<option value="2" <?php if($arr['stories_child_area'] == 2) {echo 'selected';}?>>right sidebar</option>
+										<option value="0"></option>
+										<option value="3" <?php if($arr['stories_child_area'] == 3) {echo 'selected';}?>>content | columns | top image teaser</option>
+										<option value="4" <?php if($arr['stories_child_area'] == 4) {echo 'selected';}?>>content | columns | align image teaser</option>
+										<option value="0"></option>
+										<option value="5" <?php if($arr['stories_child_area'] == 5) {echo 'selected';}?>>content | rows | align image teaser</option>
+										<option value="6" <?php if($arr['stories_child_area'] == 6) {echo 'selected';}?>>content | rows | exclude image teaser</option>
 									</select>
 									<p>
 									<label for="stories_css_class">Uniformed CSS class:</label><br />
@@ -3224,11 +3227,15 @@ if(is_array($check_edit)) {
 									<label for="stories_promoted">Show promoted pages in area:</label><br />
 									<select id="stories_promoted_area" name="stories_promoted_area">
 										<option value="0" <?php if($arr['stories_promoted_area'] == 0) {echo 'selected';}?>>(none)</option>
+										<option value="0"></option>
 										<option value="1" <?php if($arr['stories_promoted_area'] == 1) {echo 'selected';}?>>left sidebar</option>
 										<option value="2" <?php if($arr['stories_promoted_area'] == 2) {echo 'selected';}?>>right sidebar</option>
-										<option value="3" <?php if($arr['stories_promoted_area'] == 3) {echo 'selected';}?>>content | floated boxes - small</option>
-										<option value="4" <?php if($arr['stories_promoted_area'] == 4) {echo 'selected';}?>>content | floated boxes - large</option>
-										<option value="5" <?php if($arr['stories_promoted_area'] == 5) {echo 'selected';}?>>content | list boxes</option>
+										<option value="0"></option>
+										<option value="3" <?php if($arr['stories_promoted_area'] == 3) {echo 'selected';}?>>content | columns | small</option>
+										<option value="4" <?php if($arr['stories_promoted_area'] == 4) {echo 'selected';}?>>content | columns | large</option>
+										<option value="0"></option>
+										<option value="5" <?php if($arr['stories_promoted_area'] == 5) {echo 'selected';}?>>content | rows | align image teaser</option>
+										<option value="6" <?php if($arr['stories_promoted_area'] == 6) {echo 'selected';}?>>content | rows | exclude image teaser</option>
 									</select>
 									<p>
 									<label for="stories_filter">Set filter: (tag):</label><br />
