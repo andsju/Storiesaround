@@ -724,12 +724,13 @@ foreach ( $js_files as $js ): ?>
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
 			var setup_template = $('input:radio[name=setup_template]:checked').val();
+			var template_custom = $("#template_custom option:selected").val();
 			$.ajax({
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					setup_template: setup_template
+					setup_template: setup_template, template_custom: template_custom 
 				},
 				success: function(){	
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#setup';
@@ -1254,7 +1255,6 @@ foreach ( $js_files as $js ): ?>
 			var action = "save_stories_child";
 			var stories_child = $('input:checkbox[name=stories_child]').is(':checked') ? 1 : 0;
 			var stories_child_area = $('#stories_child_area').val();
-			var stories_css_class = $("#stories_css_class").val();
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
@@ -1266,7 +1266,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					stories_child: stories_child, stories_child_area: stories_child_area, stories_css_class: stories_css_class,
+					stories_child: stories_child, stories_child_area: stories_child_area
 				},
 				success: function(message){
 					ajaxReply('','#ajax_status_stories_child');
@@ -1278,22 +1278,24 @@ foreach ( $js_files as $js ): ?>
 		$('#btn_stories_settings').click(function(event){
 			event.preventDefault();
 			var action = "save_stories_settings";
+			var stories_equal_height = $('input:checkbox[name=stories_equal_height]').is(':checked') ? 1 : 0;
 			var stories_last_modified = $('input:checkbox[name=stories_last_modified]').is(':checked') ? 1 : 0;
 			var stories_image_copyright = $('input:checkbox[name=stories_image_copyright]').is(':checked') ? 1 : 0;
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
 			var stories_wide_teaser_image_width = $("#stories_wide_teaser_image_width").val();
-			var stories_wide_teaser_image_align = $("#stories_wide_teaser_image_align").val();
+			var stories_wide_teaser_image_align = $('input:radio[name=stories_wide_teaser_image_align]:checked').val();
+			var stories_css_class = $("#stories_css_class").val();
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_stories_modified').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_stories_modified').hide()",700)},
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
-					action: action, token: token, users_id: users_id, pages_id: pages_id,
+					action: action, token: token, users_id: users_id, pages_id: pages_id, stories_equal_height: stories_equal_height,
 					stories_wide_teaser_image_width: stories_wide_teaser_image_width, stories_wide_teaser_image_align: stories_wide_teaser_image_align,
-					stories_last_modified: stories_last_modified, stories_image_copyright: stories_image_copyright
+					stories_last_modified: stories_last_modified, stories_image_copyright: stories_image_copyright, stories_css_class: stories_css_class
 				},
 				success: function(message){
 					ajaxReply('','#ajax_status_stories_settings');
@@ -2509,15 +2511,34 @@ if(is_array($check_edit)) {
 						</p>
 						<span class="toolbar"><button id="link_page_template_setup">Save template</button></span>
 					</td>
-					<td>
+					<td style="padding-bottom:10px;">
 						<div style="float:right;width:100%;height:130px;overflow-y: hidden;overflow:auto;">
-						<div class="page_templates"><input type="radio" name="setup_template" value="0" <?php if($arr['template'] == 0) {echo 'checked';}?>> "Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>			
-						<div class="page_templates"><input type="radio" name="setup_template" value="2" <?php if($arr['template'] == 2) {echo 'checked';}?>> "Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
-						<div class="page_templates"><input type="radio" name="setup_template" value="4" <?php if($arr['template'] == 4) {echo 'checked';}?>> "Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
-						<div class="page_templates"><input type="radio" name="setup_template" value="6" <?php if($arr['template'] == 6) {echo 'checked';}?>> "Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
-						<div class="page_templates"><input type="radio" name="setup_template" value="7" <?php if($arr['template'] == 7) {echo 'checked';}?>> "Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
-						
+							<div class="page_templates"><input type="radio" name="setup_template" value="0" <?php if($arr['template'] == 0) {echo 'checked';}?>> "Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="1" <?php if($arr['template'] == 1) {echo 'checked';}?>> "Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="2" <?php if($arr['template'] == 2) {echo 'checked';}?>> "Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="3" <?php if($arr['template'] == 3) {echo 'checked';}?>> "Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="4" <?php if($arr['template'] == 4) {echo 'checked';}?>> "Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
 						</div>
+						<p>
+						<?php echo $arr['template_custom']?>
+							<input type="radio" name="setup_template" value="5" <?php if($arr['template'] == 5) {echo 'checked';}?>> Custom template <code><?php echo CMS_DIR; ?>/content/templates/:</code>
+							<select id="template_custom">
+							<option value=""></option>
+							<?php	
+							foreach (new DirectoryIterator(CMS_ABSPATH.'/content/templates') as $fileInfo) {
+								if($fileInfo->isDot()) continue;
+								$template = $fileInfo->getFilename();
+								echo '<option value="'.$template.'"';
+									if(isset($arr['template_custom'])) {
+										if($arr['template_custom'] == $template) {
+											echo ' selected';
+										}
+									}
+								echo '>'.$template.'</option>';
+							}
+							?>
+							</select>;
+						</p>
 					<td>
 				</tr>
 			</table>
@@ -3104,53 +3125,69 @@ if(is_array($check_edit)) {
 				<h3>Stories <span class="ui-icon ui-icon-tag" style="display:inline-block;"></span></h3>
 				
 				<div>
-
+					
 					<p>
 						<a href="#add_content" id="link_stories_settings">Settings <span class="ui-icon ui-icon-pencil" style="display:inline-block;"></span></a>
 					</p>				
-					
+	
+
 					<div id="stories_settings" class="edit_joins">
 
-						<table style="width:100%;" class="edit_pages_stories">
+					<p>
+						<input type="checkbox" id="stories_equal_height" name="stories_equal_height" <?php if($arr['stories_equal_height'] == 1) {echo 'checked';}?>> 
+						Display stories in a row at same height 
+					</p>
+					<p>
+						<input type="checkbox" id="stories_last_modified" name="stories_last_modified" <?php if($arr['stories_last_modified'] == 1) {echo 'checked';}?>> 
+						Show when stories are last modified
+					</p>
+					<p>
+						<input type="checkbox" id="stories_image_copyright" name="stories_image_copyright" <?php if($arr['stories_image_copyright'] == 1) {echo 'checked';}?>> 
+						Show image copyright
+					</p>
+					<p>
+						<table style="width:100%;" class="edit_pages_storiess">
 							<tr>
-								<td style="padding:20px;vertical-align:top;width:33%;">
-								<label for="stories_wide_teaser_image_width">Width %:</label><br /> 
-								<div id="stories_wide_teaser_image_width_slider" style="width:100px;float:left;vertical-align:bottom;margin:10px 0 10px; 0;"></div>
-								<input type="hidden" id="stories_wide_teaser_image_width_slider_value" value="<?php echo $arr['stories_wide_teaser_image_width']; ?>" />
-								<input type="text" id="stories_wide_teaser_image_width" style="padding:4px;border:1;text-align:right;width:25px;float:left;vertical-align:bottom;margin:4px 0 0 10px;">
+								<td style="width:20%;">
+									Story image teaser (when applicable)
 								</td>
-								<td style="padding:20px;vertical-align:top;width:33%">
-								<label for="stories_wide_teaser_image_align">Align image:<br /> 
-								<input type="hidden" id="stories_wide_teaser_image_align_slider_value" value="<?php echo $arr['stories_wide_teaser_image_align']; ?>" />
-								<div id="stories_wide_teaser_image_align_slider" style="width:80px;float:left;vertical-align:bottom;margin:10px 0 10px; 0;"></div><br />
-								<div style="float:left;width:40px;">left</div><div style="float:left;width:40px;text-align:right;">right</div>
-								<input type="hidden" id="stories_wide_teaser_image_align">
+								<td style="width:10%">
+									align image:
 								</td>
-								<td>
-								<span class="toolbar"><button id="btn_stories_settings" name="btn_stories_settings" style="margin-left:10px;">Save</button><span class="toolbar">
-								<span id="ajax_spinner_stories_modified" style='display:none'><img src="css/images/spinner.gif"></span>
-								<span id="ajax_status_stories_settings" style='display:none'></span>								
+								<td style="width: 20%">
+									<input type="radio" name="stories_wide_teaser_image_align" value="0" <?php if($arr['stories_wide_teaser_image_align'] == 0) {echo 'checked';}?> style="margin-right:10px;"> left  |  right <input type="radio" name="stories_wide_teaser_image_align" value="1" <?php if($arr['stories_wide_teaser_image_align'] == 1) {echo 'checked';}?> style="margin-left:10px;"> 
+								</td>
+								<td style="width:10%;text-align:right">
+									Width %:
+								</td>
+								<td style="width: 10%">
+									<div id="stories_wide_teaser_image_width_slider" style="width:100%;"></div>
+								</td>
+								<td style="width:25%;padding-left:20px;">
+									<input type="text" id="stories_wide_teaser_image_width" style="width:25px;" disabled>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2" style="padding:20px;vertical-align:top;width:33%">
-								* Settings above applies to <ul><li>Child stories - list boxes</li><li>Selected stories (columns: 1)</li><li>Event stories</ul> Each story must be set to <b>align image left|right</b> &raquo; Story > Story wide > Teaser image settings
-								</td>
-								<td>
-								</td>
-							</tr>
-							
-						</table>
-						<hr />
-						<p>
-							<input type="checkbox" id="stories_last_modified" name="stories_last_modified" <?php if($arr['stories_last_modified'] == 1) {echo 'checked';}?>> 
-							Show when stories are last modified
-						</p>
-						<p>
-							<input type="checkbox" id="stories_image_copyright" name="stories_image_copyright" <?php if($arr['stories_image_copyright'] == 1) {echo 'checked';}?>> 
-							Show image copyright
-						</p>
+						</table>						
+					</p>
+					<p>
+						<label for="stories_css_class">Set stories css class (override):</label><br />
+						<select id="stories_css_class" name="stories_css_class" class="code">
+							<option value=""></option>
+							<?php 
+							get_css_class($css_custom, $input=$arr['stories_css_class']);
+							?>
+						</select>
+					</p>
+					<p>
+						<input type="hidden" id="stories_wide_teaser_image_width_slider_value" value="<?php echo $arr['stories_wide_teaser_image_width']; ?>" />
+						<input type="hidden" id="stories_wide_teaser_image_align_slider_value" value="<?php echo $arr['stories_wide_teaser_image_align']; ?>" />
 						
+
+						<span class="toolbar"><button id="btn_stories_settings" name="btn_stories_settings" style="margin-left:10px;">Save</button><span class="toolbar">
+						<span id="ajax_spinner_stories_modified" style='display:none'><img src="css/images/spinner.gif"></span>
+						<span id="ajax_status_stories_settings" style='display:none'></span>								
+					</p>
+					
 					</div>
 				
 					<p>
@@ -3170,24 +3207,19 @@ if(is_array($check_edit)) {
 									<select id="stories_child_area" name="stories_child_area">
 									<option value="0" <?php if($arr['stories_child_area'] == 0) {echo 'selected';}?>>(none)</option>
 										<option value="0"></option>
-										<option value="1" <?php if($arr['stories_child_area'] == 1) {echo 'selected';}?>>left sidebar</option>
-										<option value="2" <?php if($arr['stories_child_area'] == 2) {echo 'selected';}?>>right sidebar</option>
+										<option value="1" <?php if($arr['stories_child_area'] == 1) {echo 'selected';}?>>left sidebar | top image teaser</option>
+										<option value="2" <?php if($arr['stories_child_area'] == 2) {echo 'selected';}?>>left sidebar | align image teaser to story</option>
 										<option value="0"></option>
-										<option value="3" <?php if($arr['stories_child_area'] == 3) {echo 'selected';}?>>content | columns | top image teaser</option>
-										<option value="4" <?php if($arr['stories_child_area'] == 4) {echo 'selected';}?>>content | columns | align image teaser</option>
+										<option value="3" <?php if($arr['stories_child_area'] == 3) {echo 'selected';}?>>right sidebar | top image teaser</option>
+										<option value="4" <?php if($arr['stories_child_area'] == 4) {echo 'selected';}?>>right sidebar | align image teaser to story</option>
 										<option value="0"></option>
-										<option value="5" <?php if($arr['stories_child_area'] == 5) {echo 'selected';}?>>content | rows | align image teaser</option>
-										<option value="6" <?php if($arr['stories_child_area'] == 6) {echo 'selected';}?>>content | rows | exclude image teaser</option>
+										<option value="5" <?php if($arr['stories_child_area'] == 5) {echo 'selected';}?>>content | columns | top image teaser</option>
+										<option value="6" <?php if($arr['stories_child_area'] == 6) {echo 'selected';}?>>content | columns | align image teaser</option>
+										<option value="0"></option>
+										<option value="7" <?php if($arr['stories_child_area'] == 7) {echo 'selected';}?>>content | rows | align image teaser to title</option>
+										<option value="8" <?php if($arr['stories_child_area'] == 8) {echo 'selected';}?>>content | rows | align image teaser to story</option>										
+										<option value="9" <?php if($arr['stories_child_area'] == 9) {echo 'selected';}?>>content | rows | exclude image teaser</option>
 									</select>
-									<p>
-									<label for="stories_css_class">Uniformed CSS class:</label><br />
-									<select id="stories_css_class" name="stories_css_class" class="code">
-										<option value=""></option>
-										<?php 
-										get_css_class($css_custom, $input=$arr['stories_css_class']);
-										?>
-									</select>
-									</p>
 									
 								</td>
 								<td style="width:15%;" align="right">
@@ -3201,9 +3233,9 @@ if(is_array($check_edit)) {
 								<td width="15%" align="right">
 									<div class="site_layout" class="clearfix">
 										<div class="site_header"></div>
-										<div class="site_sidebar_left"></div>
+										<div class="site_sidebar_target_left">?</div>
 										<div class="site_content_target">?</div>
-										<div class="site_sidebar_right"></div>
+										<div class="site_sidebar_target_right">?</div>
 										<div class="site_footer"></div>
 									</div>
 								</td>
