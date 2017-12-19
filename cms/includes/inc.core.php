@@ -74,8 +74,9 @@ function handle_pdo_exception($script, $e)
     $agent = $_SERVER['HTTP_USER_AGENT'];
 
     $exception = $e->getMessage();
+    $exception_code = $e->getCode();
 
-    $contents = $date . ', ' . $ip . ', ' . $agent . ', ' . $script . ', ' . $exception;
+    $contents = $date . ', ' . $ip . ', ' . $agent . ', ' . $script . ', ' . $exception . ', '. $exception_code;
     $contents .= PHP_EOL;
 
     file_put_contents($file, $contents, FILE_APPEND | LOCK_EX);

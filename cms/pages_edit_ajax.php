@@ -913,9 +913,10 @@ if (isset($_POST['token'])){
 				case 'save_site_templates_setup':
 
 					$template = $_POST['setup_template'];
+					$template_custom = $_POST['template_custom'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 		
-					$result = $pages->updatePagesSetupTemplate($pages_id, $template, $utc_modified);
+					$result = $pages->updatePagesSetupTemplate($pages_id, $template, $template_custom, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'site template', $users_id, $_SESSION['token'], $utc_modified);
@@ -926,13 +927,14 @@ if (isset($_POST['token'])){
 
 				case 'save_stories_settings':
 
+					$stories_equal_height = $_POST['stories_equal_height'];
 					$stories_last_modified = $_POST['stories_last_modified'];
 					$stories_image_copyright = $_POST['stories_image_copyright'];
 					$stories_wide_teaser_image_width = filter_input(INPUT_POST, 'stories_wide_teaser_image_width', FILTER_VALIDATE_INT);
 					$stories_wide_teaser_image_align = filter_input(INPUT_POST, 'stories_wide_teaser_image_align', FILTER_VALIDATE_INT);					
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-
-					$result = $pages->setPagesSetupStoriesSettings($pages_id, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_width, $stories_wide_teaser_image_align, $utc_modified);
+					$stories_css_class = $_POST['stories_css_class'];
+					$result = $pages->setPagesSetupStoriesSettings($pages_id, $stories_equal_height, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_width, $stories_wide_teaser_image_align, $stories_css_class, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'stories_settings', $users_id, $_SESSION['token'], $utc_modified);						
@@ -945,11 +947,9 @@ if (isset($_POST['token'])){
 
 					$stories_child = $_POST['stories_child'];
 					$stories_child_area = $_POST['stories_child_area'];
-					$stories_css_class = $_POST['stories_css_class'];
-
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
-					$result = $pages->setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_area, $stories_css_class, $utc_modified);
+					$result = $pages->setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_area, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'child stories', $users_id, $_SESSION['token'], $utc_modified);

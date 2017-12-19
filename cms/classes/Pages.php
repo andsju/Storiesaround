@@ -1104,17 +1104,19 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesSetupTemplate($pages_id, $template, $utc_modified)
+    public function updatePagesSetupTemplate($pages_id, $template, $template_custom, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET template = :template,
+            template_custom = :template_custom,
 			utc_modified = :utc_modified
 			WHERE pages_id = :pages_id";
 
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":template", $template, PDO::PARAM_INT);
+            $stmt->bindParam(":template_custom", $template_custom, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
@@ -1134,23 +1136,27 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function setPagesSetupStoriesSettings($pages_id, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_width, $stories_wide_teaser_image_align, $utc_modified)
+    public function setPagesSetupStoriesSettings($pages_id, $stories_equal_height, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_width, $stories_wide_teaser_image_align, $stories_css_class, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET stories_last_modified = :stories_last_modified,
+            stories_equal_height = :stories_equal_height,
 			stories_image_copyright = :stories_image_copyright,
 			stories_wide_teaser_image_width = :stories_wide_teaser_image_width, 
-			stories_wide_teaser_image_align = :stories_wide_teaser_image_align,			
+			stories_wide_teaser_image_align = :stories_wide_teaser_image_align,
+            stories_css_class = :stories_css_class,
 			utc_modified = :utc_modified
 			WHERE pages_id = :pages_id";
 
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(":stories_equal_height", $stories_equal_height, PDO::PARAM_INT);
+            $stmt->bindParam(":stories_image_copyright", $stories_image_copyright, PDO::PARAM_INT);
             $stmt->bindParam(":stories_wide_teaser_image_width", $stories_wide_teaser_image_width, PDO::PARAM_INT);
             $stmt->bindParam(":stories_wide_teaser_image_align", $stories_wide_teaser_image_align, PDO::PARAM_INT);
+            $stmt->bindParam(":stories_css_class", $stories_css_class, PDO::PARAM_STR);
             $stmt->bindParam(":stories_last_modified", $stories_last_modified, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_image_copyright", $stories_image_copyright, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
@@ -1169,13 +1175,12 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_area, $stories_css_class, $utc_modified)
+    public function setPagesSetupStoriesChild($pages_id, $stories_child, $stories_child_area, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET stories_child = :stories_child,
 			stories_child_area = :stories_child_area,
-			stories_css_class = :stories_css_class,
 			utc_modified = :utc_modified
 			WHERE pages_id = :pages_id";
 
@@ -1183,7 +1188,6 @@ class Pages extends Database
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":stories_child", $stories_child, PDO::PARAM_INT);
             $stmt->bindParam(":stories_child_area", $stories_child_area, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_css_class", $stories_css_class, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
