@@ -287,7 +287,12 @@ $(document).ready(function() {
 		window.location.href = "http://sunet.se";
 		
 	});	
+	console.log("AAAA");
 	equalheight('div.grid-cell');
+	if ($("#stories_equal_height").val() == 1) {
+		console.log("It is");
+		equalheight('div.stories-cell');		
+	}
 	//replace_image_path('/content/', '/somefolder/content/');
 	
 });

@@ -603,7 +603,7 @@ echo "\n".'<div id="wrapper-site">';
 
 			<?php
 			// grid above content
-			show_grid($arr, 0);
+			print_grid($arr, 0);
 		
 			
 			$rows_stories = $pages->getPagesStoryContentPublishAllSorted($id);
@@ -772,7 +772,7 @@ echo "\n".'<div id="wrapper-site">';
 
 				<?php
 				// grid above content next to sidebar
-				show_grid($arr, 1);
+				print_grid($arr, 1);
 				?>
 
 				<div id="wrapper-content-inner" style="<?php echo $css_content_width_padding; ?>;">
@@ -957,7 +957,7 @@ echo "\n".'<div id="wrapper-site">';
 					}
 				
 					// grid below content next to sidebar
-					show_grid($arr, 2);		
+					print_grid($arr, 2);		
 					
 					?>
 										
@@ -1408,7 +1408,7 @@ echo "\n".'<div id="wrapper-site">';
 		}
 
 		// grid below content
-		show_grid($arr, 3);
+		print_grid($arr, 3);
 
 		?>
 

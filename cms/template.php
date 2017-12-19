@@ -28,6 +28,11 @@ if(isset($id)) {
 //print_r2($request);
 //print_r2($request_parts);
 //print_r($id);
+//print_r2("template: ". $arr['template']);
+//print_r2("content_percent_width: ". $content_percent_width);
+//print_r2("left_sidebar_percent_width: ". $left_sidebar_percent_width);
+//print_r2("right_sidebar_percent_width: ". $right_sidebar_percent_width);
+//print_r2($_SESSION);
 
 // get_start_page
 
@@ -66,6 +71,7 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
     //CMS_DIR.'/cms/css/layout.css',
+    'https://fonts.googleapis.com/css?family=Open+Sans',
     CMS_DIR.'/cms/css/style.css'
 );
 
@@ -91,7 +97,6 @@ $js_files = array(
 
 
 $js_files = add_js_language_files($js_files);
-//print_r2($js_files);
 
 // handle plugins, set each area value to null
 $plugin_header = $plugin_left_sidebar = $plugin_right_sidebar = $plugin_content = $plugin_footer = $plugin_page = null;
@@ -107,7 +112,6 @@ $selection_result = set_selection_values($pages_selections, $css_files, $js_file
 $css_files = $selection_result[0];
 $js_files = $selection_result[1];
 $selection_area = $selection_result[2];
-//print_r2($selection_area);
 
 
 $language = strlen($arr['lang']) > 0 ? $arr['lang'] : $_SESSION['site_lang'];
@@ -117,20 +121,6 @@ $language = strlen($arr['lang']) > 0 ? $arr['lang'] : $_SESSION['site_lang'];
 include_once CMS_ABSPATH .'/cms/includes/inc.header.php';
 
 // banners
-/* 
-<!doctype html>
-<html>
-
-<head>
-
-    <title>Template</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-</head>
- */
 
  // prepare navigation
 $root = get_breadcrumb_path_array($id);	
@@ -141,7 +131,6 @@ $useragent = $_SERVER['HTTP_USER_AGENT'];
 $seo = $_SESSION['site_seo_url'] == 1 ? 1 : 0;
 $icon = $arr['access'] == 2 ? '' : '<span class="ui-icon ui-icon-key" style="display:inline-block;"></span>';
 if($id == 0) { $icon = '';}
-
 
 ?>
 <body>
@@ -160,11 +149,13 @@ if($id == 0) { $icon = '';}
         </div>
         <div id="site-custom">Logga in</div>
         <div id="site-search">
-            <input type="text" name="search" placeholder="Vad söker du?">
-            <button>Sök</button>
+            <input type="text" name="search" placeholder="Vad söker du?" id="pages_s" class="search" value="">
+            <button id="btn_pages_search" class="magnify"><?php echo translate("Search", "site_search", $languages); ?></button>
         </div>
+
+
         <div id="site-identity">
-            <?php echo $arr['header'];?>    
+            <?php echo $arr['header'];?>
             <img src="css/images/1.png">            
         </div>
         <nav id="site-navigation-header">
@@ -179,7 +170,7 @@ if($id == 0) { $icon = '';}
         <?php 
         print_selection("selection-header-below", $selection_area['header_below']); 
         ?>
-        <div id="top-grid"><?php show_grid($arr, 0);?></div>
+        <div id="top-grid"><?php print_grid($arr, 0);?></div>
     </div>
     <!-- run template: sidebar, left-sidebar, right-sidebar, joined sidabars, panorma -->
 
@@ -201,26 +192,23 @@ if($id == 0) { $icon = '';}
     $rows_child = $pages->getPagesStoryContentPublishChild($id);    
 
 
-
+    print_r2($arr['template']);
     switch ($arr['template']) {	
         case 0:
-        case 1:
             // sidebars
             $content_percent_width = 100 - ($sidebar_percent_width * 2); 
             $left_sidebar_percent_width = $right_sidebar_percent_width = $sidebar_percent_width;
             $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
         break;
-        case 2:
-        case 3:
+        case 1:
             // left sidebar
             $content_percent_width = 100 - $sidebar_percent_width;
             $left_sidebar_percent_width = $sidebar_percent_width;
             $right_sidebar_percent_width = 0;
 
         break;
-        case 4:
-        case 5:
+        case 2:
             // right sidebar
             $content_percent_width = 100 - $sidebar_percent_width;
             $right_sidebar_percent_width = $sidebar_percent_width;
@@ -230,35 +218,29 @@ if($id == 0) { $icon = '';}
             $wrapper_left_sidebar_width = 0;
             include 'includes/inc.template_sidebar_content.php';
         break;
-        case 6:
+        case 3:
             // panorama
             $content_percent_width = 100;
             $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
         break;
-        case 7:
+        case 4:
             // sidebars right joined
             $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
             $right_sidebar_percent_width = $sidebar_percent_width;
             $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
         break;					
-    }
-
-
-/*     print_r2("template: ". $arr['template']);
-    print_r2("content_percent_width: ". $content_percent_width);
-    print_r2("left_sidebar_percent_width: ". $left_sidebar_percent_width);
-    print_r2("right_sidebar_percent_width: ". $right_sidebar_percent_width);
-    
-
-    print_r2($_SESSION);
- */    
+        case 5:
+        // custom
+        $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
+        $right_sidebar_percent_width = $sidebar_percent_width;
+        $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
+    break;					
+} 
     ?>
-
-
 
     <div id="wrapper-bottom">
         <div id="bottom-selections"></div>
-        <div id="bottom-grid"><?php show_grid($arr, 3);?></div>
+        <div id="bottom-grid"><?php print_grid($arr, 3);?></div>
     </div>
     <?php print_selection("selection-footer-above", $selection_area['footer_above']); ?>
     <footer id="wrapper-site-footer">
@@ -266,6 +248,18 @@ if($id == 0) { $icon = '';}
         <div id="site-contact"></div>
         <div id="site-rss"></div>
     </footer>
+
+    <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>" />
+    <input type="hidden" name="cms_dir" id="cms_dir" value="<?php echo CMS_DIR;?>" />
+    <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>" />
+    <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>" />
+    
+    <?php
+    $js_files = array_unique($js_files);
+    foreach ( $js_files as $js ) { 
+        echo "\n".'<script src="'.$js.'"></script>';
+    }
+    ?>
 </body>
 
 </html>

@@ -240,7 +240,7 @@ function set_selection_values($pages_selections, $css_files, $js_files, $pages, 
             
             foreach($external_css_files as $external_css){
                 if(strlen(trim($external_css)) > 0){
-                    array_push($css_files, trim(CMS_DIR.$external_css));
+                    array_push($css_files, trim($external_css));
                 }
             }
             $content_html = $s_row['content_html'];
@@ -1390,78 +1390,114 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
         $a_start = $row['story_link'] ? '<a class="stories" href="?id=' . $row['pages_id'] . '">' : '';  
         $a_end = $row['story_link'] ? '</a>' : '';  
         $stories_meta = '<div class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></div>'; 
-        $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
         $teaser_image_class = $stories_wide_teaser_image_align == 0 ? 'float-left' : 'float-right';
-        
-        echo $stories_child_area;
-
 
         switch ($stories_child_area) {
 
-            
-            case 1: // left sidebar
+            case 1: // left sidebar | top image teaser
             break;
 
-            case 2: // right sidebar
+            case 2: // left sidebar | align image teaser to story
+            break;
 
+            case 3: // right sidebar | top image teaser
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width) : '';
                 $html .= '<div class="column" style="width:100%">';
-                $html .= $a_start;
                 $html .= '<div class="stories-content ' . $css_class . '">';
-                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
+                $html .= $a_start;
+                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
+                $html .= $a_end;
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
                 $html .= $story . '</div></div>';
-                $html .= $a_end;
-
-            break;
-
-            case 3: // content | columns | top image teaser
-
-                $html .= '<div class="column" style="width:33%">';
-                $html .= $a_start;
-                $html .= '<div class="stories-content ' . $css_class . '">';
-                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
-                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
-                $html .= $stories_last_modified == 1 ? $stories_meta : '';
-                $html .= $story . '</div></div>';
-                $html .= $a_end;
-
-            break;
-            case 4: // content | columns | align image teaser
-
-                $html .= '<div class="column" style="width:33%">';
-                $html .= $a_start;
-        
-                $html .= '<div class="stories-content ' . $css_class . '">';                
-                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
-                $html .= $stories_last_modified == 1 ? $stories_meta : '';
-                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>' : '';
-                $html .= $story . '</div></div>';
-                $html .= $a_end;
-        
-
-
-            break;
-
-            case 5: // content | rows | align image teaser
-
-                $html .= '<div class="stories-wrapper clear">';
-                $html .= $a_start;
-        
-                $html .= '<div class="stories-content ' . $css_class . '">';
-                if (isset($row['filename'])) {
-                    $teaser_image_class = $stories_wide_teaser_image_align == 0 ? 'float-left' : 'float-right';
-                    $html .= '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>';
-                }
                 
+            break;
+
+            case 4: // right sidebar | align image teaser to story
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
+                $html .= '<div class="column" style="width:100%">';
+                $html .= '<div class="stories-content ' . $css_class . '">';                
+                $html .= $a_start;
+                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';                
+                $html .= $a_end;
+                $html .= $stories_last_modified == 1 ? $stories_meta : '';
+                $html .= $a_start;
+                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
+                $html .= $a_end;
+                $html .= $story . '</div></div>';
+                
+
+            break;
+            
+            case 5: // content | columns | top image teaser
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * 33 / 100) : '';
+                $html .= '<div class="stories-cell ' . $css_class . '">';
+                $html .= $a_start;
+                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
+                $html .= $a_end;
+                $html .= '<div class="stories-content">';
+                $html .= $a_start;
+                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
+                $html .= $a_end;
+                $html .= $stories_last_modified == 1 ? $stories_meta : '';
+                $html .= $story . '</div></div>';
+
+            break;
+            case 6: // content | columns | align image teaser
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * 20 / 100) : '';
+                $html .= '<div class="stories-cell">';
+                $html .= '<div class="stories-content ' . $css_class . '">';                
+                $html .= $a_start;
+                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
+                $html .= $a_end;
+                $html .= $stories_last_modified == 1 ? $stories_meta : '';
+                $html .= $a_start;
+                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>' : '';
+                $html .= $a_end;
+                $html .= $story . '</div></div>';
+                
+        
+            break;
+
+            case 7: // content | rows | align image teaser to title
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
+                $html .= '<div class="stories-wrapper clear">';                
+                $html .= '<div class="stories-content ' . $css_class . '">';
+                $html .= $a_start;
+                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>' : '';
+                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';
+                $html .= $a_end;
+                $html .= $stories_last_modified == 1 ? $stories_meta : '';
+                $html .= $story_wide . '</div></div>';
+                
+
+            break;
+
+            case 8: // content | rows | align image teaser to story
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
+                $html .= '<div class="stories-wrapper clear">';
+                $html .= '<div class="stories-content ' . $css_class . '">';
+                $html .= $a_start;
+                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
+                $html .= $a_end;
+                $html .= $stories_last_modified == 1 ? $stories_meta : '';
+                $html .= $a_start;
+                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>' : '';
+                $html .= $a_end;
+                $html .= $story_wide . '</div></div>';
+                
+
+            break;
+
+            case 9: // content | rows | exclude image teaser
+                $html .= '<div class="stories-wrapper clear">';
+                $html .= $a_start;        
+                $html .= '<div class="stories-content ' . $css_class . '">';
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
                 $html .= $story_wide . '</div></div>';
                 $html .= $a_end;
 
-            break;
-
-            case 5: // content | rows | exclude image teaser
             break;
 
         }
@@ -2501,7 +2537,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
  * @param $area
  * @return html
  */
-function show_grid($arr, $area)
+function print_grid($arr, $area)
 {
     if (!is_array($arr)) {
         return null;
