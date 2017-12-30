@@ -2512,33 +2512,39 @@ if(is_array($check_edit)) {
 						<span class="toolbar"><button id="link_page_template_setup">Save template</button></span>
 					</td>
 					<td style="padding-bottom:10px;">
-						<div style="float:right;width:100%;height:130px;overflow-y: hidden;overflow:auto;">
+						<div style="float:right;width:100%;height:260px;overflow-y: hidden;overflow:auto;">
 							<div class="page_templates"><input type="radio" name="setup_template" value="0" <?php if($arr['template'] == 0) {echo 'checked';}?>> "Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
 							<div class="page_templates"><input type="radio" name="setup_template" value="1" <?php if($arr['template'] == 1) {echo 'checked';}?>> "Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
 							<div class="page_templates"><input type="radio" name="setup_template" value="2" <?php if($arr['template'] == 2) {echo 'checked';}?>> "Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
 							<div class="page_templates"><input type="radio" name="setup_template" value="3" <?php if($arr['template'] == 3) {echo 'checked';}?>> "Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
 							<div class="page_templates"><input type="radio" name="setup_template" value="4" <?php if($arr['template'] == 4) {echo 'checked';}?>> "Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
-						</div>
-						<p>
-						<?php echo $arr['template_custom']?>
-							<input type="radio" name="setup_template" value="5" <?php if($arr['template'] == 5) {echo 'checked';}?>> Custom template <code><?php echo CMS_DIR; ?>/content/templates/:</code>
-							<select id="template_custom">
-							<option value=""></option>
-							<?php	
+							<div class="page_templates"><input type="radio" name="setup_template" value="5" <?php if($arr['template'] == 5) {echo 'checked';}?>> Custom "main"<img src="css/images/template_panorama_custom_main.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="6" <?php if($arr['template'] == 6) {echo 'checked';}?>> Custom "page"<img src="css/images/template_panorama_custom_page.png" style="margin-top:10px;height:75px;"></div>
+												
+							<?php
+							$str = "";	
 							foreach (new DirectoryIterator(CMS_ABSPATH.'/content/templates') as $fileInfo) {
 								if($fileInfo->isDot()) continue;
 								$template = $fileInfo->getFilename();
-								echo '<option value="'.$template.'"';
-									if(isset($arr['template_custom'])) {
-										if($arr['template_custom'] == $template) {
-											echo ' selected';
-										}
+								$str .= '<option value="'.$template.'"';
+								if(isset($arr['template_custom'])) {
+									if($arr['template_custom'] == $template) {
+										$str .= ' selected';
 									}
-								echo '>'.$template.'</option>';
+								}
+								$str .= '>'.$template.'</option>';
 							}
 							?>
-							</select>;
-						</p>
+							<div class="page_templates">
+								Custom file 
+								<p>
+									<code><?php echo CMS_DIR.'/content/templates/'; ?></code>
+								</p>
+								<p>
+									<select id="template_custom"><option></option><?php echo $str;?></select>
+								</p>
+							</div>
+						</div>
 					<td>
 				</tr>
 			</table>
@@ -2635,7 +2641,7 @@ if(is_array($check_edit)) {
 						</div>
 					</td>
 					<td width="25%" align="right">
-					<?php 							
+					<?php 	
 					echo '<div id="box_site_preview_selections" style="width:180px;height:180px;">';
 						echo '<img id="site_preview" src="css/images/template_selection.png">';
 					echo '</div>';
@@ -2646,7 +2652,7 @@ if(is_array($check_edit)) {
 			
 		</div>
 		
-		<div class="admin-panel">
+		<div class="admin-panel hidden">
 		
 			<table border="0" style="width:100%;">
 				<tr>

@@ -132,6 +132,15 @@ $seo = $_SESSION['site_seo_url'] == 1 ? 1 : 0;
 $icon = $arr['access'] == 2 ? '' : '<span class="ui-icon ui-icon-key" style="display:inline-block;"></span>';
 if($id == 0) { $icon = '';}
 
+if ($arr['template'] == 6) {
+    if (is_file(CMS_ABSPATH.'/content/templates/' . $arr['template_custom'])) {
+        include CMS_ABSPATH.'/content/templates/' . $arr['template_custom'];
+    } else {
+        print("File missing....");
+    }
+    die();
+}
+
 ?>
 <body>
     <div id="wrapper-user">
@@ -149,14 +158,13 @@ if($id == 0) { $icon = '';}
         </div>
         <div id="site-custom">Logga in</div>
         <div id="site-search">
-            <input type="text" name="search" placeholder="Vad söker du?" id="pages_s" class="search" value="">
+            <input type="text" name="search" placeholder="Vad söker du?" id="pages_s" class="search" value="" style="z-index:999">
             <button id="btn_pages_search" class="magnify"><?php echo translate("Search", "site_search", $languages); ?></button>
         </div>
 
 
-        <div id="site-identity">
-            <?php echo $arr['header'];?>
-            <img src="css/images/1.png">            
+        <div id="site-header" class="cycle-slideshow">
+            <img src="<?php echo CMS_DIR; ?>/content/uploads/header/<?php echo $arr['header'];?> ">
         </div>
         <nav id="site-navigation-header">
 
@@ -230,12 +238,16 @@ if($id == 0) { $icon = '';}
             $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
         break;					
         case 5:
-        // custom
-        $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
-        $right_sidebar_percent_width = $sidebar_percent_width;
-        $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
-    break;					
-} 
+            // custom
+            $content_percent_width = 100;
+            $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
+            if (is_file(CMS_ABSPATH.'/content/templates/' . $arr['template_custom'])) {
+                include CMS_ABSPATH.'/content/templates/' . $arr['template_custom'];
+            } else {
+                print("File missing....");
+            }
+        break;
+    } 
     ?>
 
     <div id="wrapper-bottom">
@@ -259,6 +271,8 @@ if($id == 0) { $icon = '';}
     foreach ( $js_files as $js ) { 
         echo "\n".'<script src="'.$js.'"></script>';
     }
+
+    include_once 'includes/inc.debug.php';
     ?>
 </body>
 
