@@ -521,6 +521,14 @@ div.site_content_target { width: 52px; height: 44px; float: left; background: ur
 div.site_header:hover, div.site_footer:hover, div.site_content:hover, div.site_content_target:hover, div.site_sidebar_left:hover, div.site_sidebar_target_left:hover, div.site_sidebar_right:hover, div.site_sidebar_target_right:hover { border: 1px solid #000; background: #FFFFFF; }
 
 
+div.site_layout_big { width: 180px; }
+div.site_header_big, div.site_footer_big  { padding:5px;width: 100%; height: 30px; float: left; background: linear-gradient(rgb(205,205,205), rgb(225,225,225)); border: 1px solid #FFF; }
+div.site_content_custom_main { width: 100%; height: 70px;padding:5px; float: left; background: linear-gradient(rgb(205,205,205), rgb(225,225,225)); border: 1px solid #FFF; }
+div.site_content_custom_page { width: 100%; height: 130px;padding:35px 5px 5px 5px; float: left; background: linear-gradient(rgb(205,205,205), rgb(225,225,225)); border: 1px solid #FFF; }
+
+
+
+
 span.sitetree_id { color:grey;}
 
 /* admin style
