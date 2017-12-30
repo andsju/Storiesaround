@@ -1352,7 +1352,7 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
 
 function print__story__child($rows_child, $languages, $cms_dir, $id, $wrapper_content_width, $stories_area, $stories_child_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
 {
-    if (!$rows_child) {return $html;}
+    if (!$rows_child) {return null;}
     if (in_array($stories_child_area, $stories_area)) {
         $html = '<div id="content-child-stories" class="clearfix">';
         $html .= get_box_story_content($rows_child, $languages, $wrapper_content_width, $stories_area, $stories_child_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz);
@@ -2547,7 +2547,7 @@ function print_grid($arr, $area)
     }
 
     if ($arr['grid_area'] == $area) {
-        $html_grid = get_grid($arr['id'], $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);    
+        $html_grid = get_grid($arr['pages_id'], $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);    
         echo $html_grid;
     }
 }
