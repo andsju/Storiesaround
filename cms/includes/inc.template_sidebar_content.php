@@ -30,7 +30,6 @@
                     <?php
                     $cms_dir = CMS_DIR;
                     print_story_events($pages, $languages, $cms_dir, $wrapper_content_width, $arr['stories_event_dates'], $arr['stories_event_dates_filter'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
-                    //print_story_child($pages, $languages, $cms_dir, $id, $wrapper_content_width, $arr['stories_child'], $arr['stories_child_area'], $arr['stories_css_class'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz)
                     print__story__child($rows_child, $languages, $cms_dir, $id, $wrapper_content_width, $stories_area = array(5,6,7,8,9), $arr['stories_child_area'], $arr['stories_css_class'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
                     ?>
 

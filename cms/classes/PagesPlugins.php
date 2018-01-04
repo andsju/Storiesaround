@@ -32,8 +32,8 @@ class PagesPlugins extends Plugins
         if ($result) {
             try {
                 $sql_insert = "INSERT INTO pages_plugins 
-				(pages_id, plugins_id) VALUES
-				(:pages_id, :plugins_id)";
+				(pages_id, plugins_id, utc_modified) VALUES
+				(:pages_id, :plugins_id, :utc_modified)";
 
                 $stmt = $this->db->prepare($sql_insert);
                 $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);

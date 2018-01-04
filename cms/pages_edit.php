@@ -2040,6 +2040,31 @@ foreach ( $js_files as $js ): ?>
 			});
 		});		
 
+
+        $('#btn_browse_directory').click(function (event) {
+            event.preventDefault();
+			var pages_id = $(this).attr("data-dir");
+            var action = "browse_directory";
+			var users_id = $("#users_id").val();
+            var directory = $(this).attr("data-dir");
+            var token = $("#token").val();
+            var loading;
+            $.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_create_folder').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_create_folder').hide()",1000)},
+                type: 'POST',
+                url: 'pages_edit_ajax.php',
+				data: {
+					action: action, token: token, users_id: users_id, pages_id: pages_id, directory: directory
+				 },				
+                success: function (data) {
+                    $("#folder_view").empty().html(data).hide().fadeIn('fast');
+                }
+            });
+        });
+
+		
+
 		$.datepicker.setDefaults($.datepicker.regional['sv']);
 
 		$("#date_start").datepicker({
@@ -2389,7 +2414,7 @@ foreach ( $js_files as $js ): ?>
 		<td style="vertical-align:bottom;width:120px;">
 		<img src="css/images/storiesaround_logotype_black.png" style="width:100px;padding-left:5px;float:left;" alt="Storiesaround logotype" />
 		</td>
-		<td style="padding-top:10px;width:100px;">
+		<td style="padding-top:10px;width:150px;">
 		<img src="css/images/icon_info.png" title="Path: <?php echo '| '. get_breadcrumb($id," &raquo ", 50, $clickable=false) .' |'; ?>" style="padding-right:5px;width:11px;height:11px;" />
 		Editing page:
 		</td>
@@ -2469,6 +2494,7 @@ if(is_array($check_edit)) {
 	<ul>
 		<li><a href="#setup">Setup</a></li>
 		<li><a href="#settings">Settings</a></li>
+		<li><a href="#calendar">Calendar</a></li>
 		<li><a href="#plugins">Plugins</a></li>
 		<li><a href="#images">Images</a></li>
 		<li><a href="#files">Files</a></li>
@@ -2477,9 +2503,9 @@ if(is_array($check_edit)) {
 		<li><a href="#grid">Grid</a></li>
 		<li><a href="#story">Story</a></li>
 		<li><a href="#rss">RSS</a></li>
-		<li><a href="#move">Move</a></li>
-		<li><a href="#rights">Rights</a></li>		
 		<li><a href="#meta">Meta</a></li>
+		<li><a href="#rights">Rights</a></li>		
+		
 		<?php
 		$page_status_icon = '';
 		switch ($arr['status']) {
@@ -2506,10 +2532,10 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;padding-top:10px;">
+					<h4> Page template <i class="fa fa-newspaper-o" aria-hidden="true"></i></h4>
 						<p>
-							<b>Page template</b>
-						</p>
 						<span class="toolbar"><button id="link_page_template_setup">Save template</button></span>
+						</p>
 					</td>
 					<td style="padding-bottom:10px;">
 						<div style="float:right;width:100%;height:260px;overflow-y: hidden;overflow:auto;">
@@ -2556,9 +2582,7 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;">
-						<p>
-							<b>Header image</b>
-						</p>
+						<h4>Header image <i class="fa fa-picture-o" aria-hidden="true"></i></h4>
 						<p>
 							<span class="toolbar"><button id="link_site_header_image">Show images</button></span>
 						</p>
@@ -2566,7 +2590,7 @@ if(is_array($check_edit)) {
 					<td style="vertical-align:top;">
 						<?php
 						$im = strlen($arr['header']) > 0 ? $arr['header'] : 'site_header_image_0.jpg';
-						echo '<pre style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $im .'</pre>';
+						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $im .'</code><p>';
 						$height_scaled = 100;
 						
 						echo '<div style="width="420px;"><img id="site_header_image_chosen" src="'.CMS_DIR .'/content/uploads/header/'.$im.'" style="width:100%;height:auto;border:1px solid #D0D0D0;" /></div>';						
@@ -2621,7 +2645,7 @@ if(is_array($check_edit)) {
 						</p>
 					</td>
 					<td style="vertical-align:top;">					
-						<div style="border:1px dashed #D0D0D0;padding:5px;max-height:150px;overflow:auto;">
+						<div style="border:1px dashed #D0D0D0;padding:5px;max-height:300px;overflow:auto;background-color:lightgrey">
 						<?php
 						$s = explode(",", $arr['selections']);
 						$selections = new Selections();
@@ -2722,9 +2746,9 @@ if(is_array($check_edit)) {
 			<table style="width:100%">
 				<tr>
 					<td style="width:70%">
-						<p>
-							Breadcrumb settings
-						</p>
+						
+						<h4>Breadcrumb <i class="fa fa-paw" aria-hidden="true"></i></h4>
+						
 						<p>
 							<input type="radio" name="breadcrumb" value="0" <?php if($arr['breadcrumb'] == 0) {echo 'checked';}?>> hide  | <input type="radio" name="breadcrumb" value="1" <?php if($arr['breadcrumb'] == 1) {echo 'checked';}?>> show (default) | <input type="radio" name="breadcrumb" value="2" <?php if($arr['breadcrumb'] == 2) {echo 'checked';}?>> show + children (select) | <input type="radio" name="breadcrumb" value="3" <?php if($arr['breadcrumb'] == 3) {echo 'checked';}?>> show + children (ul)
 						</p>
@@ -2747,6 +2771,7 @@ if(is_array($check_edit)) {
 			<table style="width:100%">
 				<tr>
 					<td style="width:70%">
+						<h4>Language <i class="fa fa-globe" aria-hidden="true"></i></h4>
 						<p>
 							Set this page html lang attribute - overrides site settings. 2-letter (ISO 639-1 codes)
 						</p>
@@ -2766,12 +2791,126 @@ if(is_array($check_edit)) {
 
 		</div>
 
+
+		<?php if(get_role_CMS('superadministrator') == 1) { ?>
 		
+			<div class="admin-panel">
+				<h4>Folder <i class="fa fa-folder" aria-hidden="true"></i></h4>
+
+				<?php if (!is_dir(CMS_ABSPATH . '/content/uploads/pages/'. $id)) { ?>
+				<p>
+					Missing upload folder &raquo; &nbsp;
+					<span class="toolbar"><button class="btn_create_upload_folder" id="<?php echo $id; ?>">Create folder</button></span>
+					<span id="ajax_spinner_create_folder" style='display:none'><img src="css/images/spinner.gif"></span>
+					<span id="ajax_status_create_folder" style='display:none'></span>					
+				</p>
+
+				<?php } else { ?>
+
+				<p>
+				<span class="toolbar"><button id="btn_browse_directory" data-dir="<?php echo $id;?>">Browse folder</button></span>'
+					<div id="folder_view" style="border:1px dashed #000;margin:10px;overflow:auto;max-height:600px;padding:10px;" class="ui-black-white">
+				</p>
+
+				<?php } ?>
+			</div>
+	
+		<?php } ?>
+
+
+		<div class="admin-panel">
+		
+			<?php if(get_role_CMS('administrator') == 1) { ?>
+	
+			<table style="width:100%";>
+				<tr>
+					<td style="width:48%; vertical-align:top;">
+					<div>
+						<h4>Page hierarchy <i class="fa fa-sitemap" aria-hidden="true"></i></h4>
+						<p>
+							Attach this page to parent page:&nbsp;<span id="sitetree_selected_name" style="" /></span>
+						</p>
+						<p>
+							<input type="hidden" id="new_parent_id" />
+							<span class="toolbar"><button id="btn_pages_sitetree">Load pages tree</button></span>
+							<span class="toolbar"><button id="btn_new_parent_id" value="btn_new_parent_id">Save</button></span>
+							<span class="ajax_spinner_hierarchy" style="display:none;"><img src="css/images/spinner.gif"></span>
+							<span id="ajax_status_hierarchy" style="display:none;"></span>
+						</p>											
+						<p>
+							<div id="sitetree_select"></div>
+
+						</p>
+						<p>
+							<span class="toolbar"><button id="btn_child_pages">Show child pages</button></span>
+						</p>
+						<div style="border:1px dashed #D0D0D0;background:#FCFCFC;padding:5px;height:100px;overflow:auto;">
+							<div id="child_pages">
+							<span id="ajax_spinner_child_pages" style="display:none;"><img src="css/images/spinner.gif"></span>
+							</div>
+						</div>
+						<br /><br />
+						<p>
+							Removing page from hierarchy can only be done if no children pages are attached.<br /><br />
+							<span class="toolbar"><button id="btn_pages_remove_hierarchy">Remove this page from pages hierarchy</button></span>
+							<span id="ajax_spinner_remove_hierarchy" style="display:none;"><img src="css/images/spinner.gif"></span>
+							<span id="ajax_status_remove_hierarchy" style="display:none;"></span>
+
+						</p>
+						
+					</div>
+					</td>
+					<td style="width:4%; vertical-align:top;">
+					&nbsp;
+					</td>
+					<td style="width:48%; vertical-align:top;">
+					<p>
+					Drag and drop to change position <span id="ajax_result_move"></span>
+					</p>
+					<div id="sortable-wrapper">
+						<div id="sortable_pages">
+							<ul style="padding:0;" class="pages">
+							
+							<?php							
+							// get nodes with same parent_id
+							$nodes = $pages->getPagesNode($arr['parent_id']);
+
+							if(isset($nodes)){
+								foreach($nodes as $node){							
+									$class = ($node['pages_id'] == $arr['pages_id']) ? ' class="active ui-widget-content"' : ' class="ui-widget-content"';
+									echo '<li '.$class.' id="arr_pages_id_'. $node['pages_id'] .'"><span class="ui-icon ui-icon-triangle-2-n-s" style="display:inline-block;cursor:n-resize;margin:0 10px;" title="Move page"></span>'. $node['title'] .'</li>';
+								}
+							}
+							?>
+								
+							</ul>
+						</div>
+					</div>
+
+					</td>
+				</tr>
+			</table>
+			
+			<?php } else { echo 'Administrators can move pages'; } ?>
+		
+		</div>
+	
+
+		
+		
+	
+	</div>
+
+	<div id="calendar">
+	
+
+
 		<div class="admin-panel">
 
 			<table style="width:100%">
 				<tr>
 					<td style="width:40%">
+						<h4>Calendar <i class="fa fa-calendar" aria-hidden="true"></i></h4>
 						<p>
 							<input type="checkbox" name="events" id="events" value="1" <?php if($arr['events'] == 1) {echo 'checked';}?>>
 							include calendar events (if changed save and reload page)
@@ -2876,28 +3015,24 @@ if(is_array($check_edit)) {
 			
 			<?php } ?>
 		</div>
-		
-		<?php if(get_role_CMS('superadministrator') == 1) { ?>
-		
-			<div class="admin-panel">
-				<p>
-					Missing upload folder &raquo; &nbsp;
-					<span class="toolbar"><button class="btn_create_upload_folder" id="<?php echo $id; ?>">Create folder</button></span>
-					<span id="ajax_spinner_create_folder" style='display:none'><img src="css/images/spinner.gif"></span>
-					<span id="ajax_status_create_folder" style='display:none'></span>					
-				</p>
-			</div>
-	
-		<?php } ?>
+
+
+
+
+
+
+
+
 	
 	</div>
 
-	
 	
 	<div id="plugins">
 		
 		<div class="admin-panel">
 			<?php if(get_role_CMS('administrator') == 1) { ?>
+
+			<h4>Plugin <i class="fa fa-puzzle-piece" aria-hidden="true"></i></h4>
 			<p>
 				<input type="checkbox" name="plugins" id="plugins" value="1" <?php if($arr['plugins'] == 1) {echo 'checked';}?>>
 				include plugins 
@@ -2918,6 +3053,7 @@ if(is_array($check_edit)) {
 			<p>
 				<div id="page_plugins">
 				<?php
+
 				if($arr['plugins']) {
 					
 					$pages_plugins = new PagesPlugins();					
@@ -2966,6 +3102,7 @@ if(is_array($check_edit)) {
 	<div id="images">
 	
 		<div class="admin-panel">
+			<h4>Images <i class="fa fa-file-image-o" aria-hidden="true"></i></h4>
 			<p>
 				<a class="colorbox_images" href="pages_images_upload.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>"><span class="toolbar_save_images"><button id="btn_new_images">New images</button></span></a>
 				&nbsp;|&nbsp;
@@ -2977,11 +3114,9 @@ if(is_array($check_edit)) {
 			</p>
 		</div>
 		
-		<div class="admin-content">
-			<p>
-				<div id="page_images"></div>
-			</p>
-		</div>
+		<p>
+			<div id="page_images"></div>
+		</p>
 		
 		<div id="dialog_delete_image" title="Confirmation required">
 		  Delete this image?
@@ -2994,6 +3129,7 @@ if(is_array($check_edit)) {
 	<div id="files">
 	
 		<div class="admin-panel">
+			<h4>Files <i class="fa fa-file" aria-hidden="true"></i></h4>
 			<p>
 				<a class="colorbox_images" href="pages_edit_files.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>"><span class="toolbar_save_images"><button id="btn_new_files">New files</button></span></a>
 				&nbsp;|&nbsp;
@@ -3003,11 +3139,10 @@ if(is_array($check_edit)) {
 			</p>
 		</div>
 		
-		<div class="admin-content">
 		<p>
 			<div id="page_files"></div>
 		</p>
-		</div>
+
 	</div>
 
 
@@ -3026,7 +3161,7 @@ if(is_array($check_edit)) {
 						<?php
 						if($arr['plugins']) {
 							if($plugin) {
-								echo '<td style="text-align:right;"><span style="color:red;background:#ffff99;border:1px solid #000;padding:10px;">'.$plugin_details['info'].'</span></td>';
+								echo '<td style="text-align:right;"><span style="background:#ffff99;border:1px solid #000;padding:10px;">'.$plugin_details['info'].'</span></td>';
 							}
 						}
 						?>
@@ -3486,7 +3621,7 @@ if(is_array($check_edit)) {
 				
 				if($arr['plugins']) {
 					if($plugin) {			
-						echo '<div style="color:red;background:#ffff99;border:1px solid #000;padding:10px;margin:10px;">'.$plugin_details['info'].'</div>';
+						echo '<div style="background:#ffff99;border:1px solid #000;padding:10px;margin:10px;">'.$plugin_details['info'].'</div>';
 					}
 				}
 				
@@ -3948,10 +4083,14 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
+			<h4>Story <i class="fa fa-leaf" aria-hidden="true"></i></h4>
+			<p>
+				How this page may be shown as a story  
+			</p>
 			<table style="width:100%;">
 				<tr>
 					<td style="width:25%;">
-					<label for="tag">Tag page: </label>
+					<label for="tag">Tag page: <i class="fa fa-tags" aria-hidden="true"></i></label>
 					<br />
 					<input type="text" name="tag" id="tag" title="Tag page" style="width:150px;" maxlength="25" />		
 					<span class="toolbar_add"><button id="btn_add_tag" style="margin:0px" type="submit">Add</button></span>
@@ -4128,6 +4267,8 @@ if(is_array($check_edit)) {
 	<div id="rss">
 
 		<div class="admin-panel">
+
+			<h4>RSS <i class="fa fa-leaf" aria-hidden="true"></i></h4>
 		
 			<table>
 				<tr>
@@ -4164,82 +4305,7 @@ if(is_array($check_edit)) {
 	
 	<div id="move">
 	
-		<div class="admin-panel">
 		
-			<?php if(get_role_CMS('administrator') == 1) { ?>
-	
-			<table style="width:100%";>
-				<tr>
-					<td style="width:48%; vertical-align:top;">
-					<div>
-						<p>
-							Attach this page to parent page:&nbsp;<span id="sitetree_selected_name" style="" /></span>
-						</p>
-						<p>
-							<input type="hidden" id="new_parent_id" />
-							<span class="toolbar"><button id="btn_pages_sitetree">Load pages tree</button></span>
-							<span class="toolbar"><button id="btn_new_parent_id" value="btn_new_parent_id">Save</button></span>
-							<span class="ajax_spinner_hierarchy" style="display:none;"><img src="css/images/spinner.gif"></span>
-							<span id="ajax_status_hierarchy" style="display:none;"></span>
-						</p>											
-						<p>
-							<div id="sitetree_select"></div>
-
-						</p>
-						<p>
-							<span class="toolbar"><button id="btn_child_pages">Show child pages</button></span>
-						</p>
-						<div style="border:1px dashed #D0D0D0;background:#FCFCFC;padding:5px;height:100px;overflow:auto;">
-							<div id="child_pages">
-							<span id="ajax_spinner_child_pages" style="display:none;"><img src="css/images/spinner.gif"></span>
-							</div>
-						</div>
-						<br /><br />
-						<p>
-							Removing page from hierarchy can only be done if no children pages are attached.<br /><br />
-							<span class="toolbar"><button id="btn_pages_remove_hierarchy">Remove this page from pages hierarchy</button></span>
-							<span id="ajax_spinner_remove_hierarchy" style="display:none;"><img src="css/images/spinner.gif"></span>
-							<span id="ajax_status_remove_hierarchy" style="display:none;"></span>
-
-						</p>
-						
-					</div>
-					</td>
-					<td style="width:4%; vertical-align:top;">
-					&nbsp;
-					</td>
-					<td style="width:48%; vertical-align:top;">
-					<p>
-					Drag and drop to change position <span id="ajax_result_move"></span>
-					</p>
-					<div id="sortable-wrapper">
-						<div id="sortable_pages">
-							<ul style="padding:0;">
-							
-							<?php							
-							// get nodes with same parent_id
-							$nodes = $pages->getPagesNode($arr['parent_id']);
-
-							if(isset($nodes)){
-								foreach($nodes as $node){							
-									$class = ($node['pages_id'] == $arr['pages_id']) ? ' class="active ui-widget-content"' : ' class="ui-widget-content"';
-									echo '<li '.$class.' id="arr_pages_id_'. $node['pages_id'] .'"><span class="ui-icon ui-icon-triangle-2-n-s" style="display:inline-block;cursor:n-resize;margin:0 10px;" title="Move page"></span>'. $node['title'] .'</li>';
-								}
-							}
-							?>
-								
-							</ul>
-						</div>
-					</div>
-
-					</td>
-				</tr>
-			</table>
-			
-			<?php } else { echo 'Administrators can move pages'; } ?>
-		
-		</div>
-	
 	
 	</div>
 

@@ -218,7 +218,7 @@ div.rss-entry-title { font-size:1.2em; }
 ------------------------- */
 div.site-selection { margin:0;clear:both;}
 div#sortable_selections ul, ul#choose_selections { padding:0;margin:0; list-style:none; }
-ul#choose_selections  li { line-height:2em;margin:5px;padding:5px; }
+ul#choose_selections  li { line-height:2em;margin:5px;padding:5px;  background: linear-gradient( rgb(255,255,255), rgb(245,245,245))}
 
 /* timeago
 ------------------------- */
@@ -499,7 +499,7 @@ ul#tags li { float:left;margin:3px;border-radius:2px;border:1px solid #E0E0E0;pa
 ul#tags li span{vertical-align:top;}
 ul.tags_match { list-style:none;margin:0 0 0 5px;padding:0; } 
  
-.highlight { background-color: #FFFf99;padding:3px; }
+.highlight { background: #FFFf99 !important; padding:3px; }
 a.toggle { font-size:0.9em; }
 
 span.click { color: navy;font-size:1em; background:#F8F8F8;padding:5px;border:1px solid grey;cursor:pointer;}
@@ -541,7 +541,7 @@ div.admin-left-column, div.admin-right-column { width:45%;margin:10px; }
 div.admin-left-column { float:left;}
 div.admin-right-column { float:right;}
 div.admin-heading { width:100%;background: url(images/cms_background_dark.png) #F8F8F8;position:relative;display:table;}
-div.admin-panel { width:100%; margin:0; padding:0; border-bottom:2px solid #ccc; }
+div.admin-panel { width:100%; margin:10px 0; padding:10px 0; border-bottom:2px solid #ccc; }
 /*div.admin-panel { background: #F8F8F8; }*/
 
 
@@ -604,7 +604,7 @@ div.admin-panel checkbox,
 form.admin input, 
 div.admin-area-inner input,
 div.admin-area-inner select,
-select#preview_theme { font-size:1em;padding:4px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;border: 1px solid #cccccc;margin-right:5px;} 
+select#preview_theme { font-size:1em;padding:6px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;border: 1px solid #cccccc;margin:4px 4px 0 0} 
 select#preview_theme { position:absolute; top:140px; right:20px;z-index:999;}
 
 #upload{  
@@ -620,9 +620,10 @@ select#preview_theme { position:absolute; top:140px; right:20px;z-index:999;}
 } 
 
 div.imbox { min-height: 120px; width: 120px; font-size: 0.8em; float: left; }
-ul.thumbs { margin: 0px; padding: 0; } 
-ul.thumbs li { margin: 2px; list-style: none; padding: 5px; line-height: 50px; border:1px dotted #A5A5A5; } 
-ul.files li { margin: 0px; list-style: none; padding: 5px; line-height: 20px; } 
+ul.thumbs { margin: 0px; padding: 0; background:lightgray} 
+ul.thumbs li { list-style: none; padding: 5px; line-height: 50px; border:1px dotted #A5A5A5; background: linear-gradient( rgb(245,245,245), rgb(255,255,255))} 
+ul.files li { list-style: none; padding: 5px; line-height: 20px; background: linear-gradient( rgb(245,245,245), rgb(255,255,255))} 
+ul.pages li { list-style: none; padding: 5px; line-height: 20px; background: linear-gradient( rgb(245,245,245), rgb(255,255,255))} 
 input.thumb_list { margin: 0px 0px 0px 25px;padding:5px; }
 input.tag_list { background:#E8E8E8;padding:5px; }
 
