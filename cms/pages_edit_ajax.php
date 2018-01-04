@@ -9,9 +9,7 @@ $pages = new Pages();
 
 // overall
 if (isset($_POST['token'])){
-
 	if ($_POST['token'] == $_SESSION['token']) {
-	
 		// check client user-agent, prevent session been hijacked
 		if($_SESSION['HTTP_USER_AGENT'] != $_SERVER['HTTP_USER_AGENT']) {
 			die('User agent fail. Please logout and login again.');
@@ -232,8 +230,38 @@ if (isset($_POST['token'])){
 				break;
 					
 
+				case 'browse_directory':
+				
+					$directory = $_POST['directory'];
+					$p = CMS_ABSPATH . '/content/uploads/pages/'. $directory;
+					$p1 = CMS_DIR . '/content/uploads/pages/'. $directory;
+					$html = '<h4 class="admin-heading">'.$p1.'</h4><p><hr></p>';
+					
+					if (is_dir($p)) {
+
+						if ($dh = opendir($p)) {
+							$images_ext = array('jpg','jpeg','gif','png');
+
+							while (($file = readdir($dh)) !== false) {
+								if (!is_dir($p.'/'.$file)) {
+									$ext = pathinfo($p.'/'.$file, PATHINFO_EXTENSION);
+									if(in_array($ext, $images_ext)) {
+										$html .= $file.' ('.round(filesize($p.'/'.$file)/1024,1).' kb)<br /><img src="'.$p1.'/'.$file.'" style="width:100px;height:auto"><br />';
+									} else {
+										$html .= '<pre><a href="'.$directory.'/'.$file.'" target="_blank">'.$file .'</a></pre>';
+									}								
+								}
+							}
+							closedir($dh);
+						}
+					}
+					echo $html;
+				
+				break;
+
+
 				case 'get_child_pages':
-									   
+
 					$childpages_tree = get_pages_tree_sitemap_all($pages_id, $id=$pages_id, $path=get_breadcrumb_path_array($pages_id), $a=false, $a_add_class=false, $seo=false, $href='', $open=true, $depth=1, $show_pages_id = false);		
 					echo $childpages_tree;					
 
@@ -287,11 +315,10 @@ if (isset($_POST['token'])){
 					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
 					$plugins_id = filter_input(INPUT_POST, 'plugins_id', FILTER_VALIDATE_INT) ? $_POST['plugins_id'] : 0;
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-
 					if($pages_id) {
-					
-						$pages_plugins = new PagesPlugins();
 						
+						$pages_plugins = new PagesPlugins();
+						$result = 1;
 						if($plugins_id > 0) {
 							$result = $pages_plugins->setPagesPlugins($pages_id, $plugins_id, $utc_modified);
 						} else {

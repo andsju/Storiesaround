@@ -223,6 +223,26 @@ include_once 'includes/inc.site_active_user_administration.php';
 			});
 		});	
 
+		$('#btn_site_script').click(function(event){
+			event.preventDefault();
+			var action = "save_site_script";
+			var token = $("#token").val();
+			var site_id = $("#site_id").val();			
+			var site_script = $("#site_script").val();
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_site_script').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_site_script').hide()",700)},
+				type: 'POST',
+				url: 'admin_edit_ajax.php',
+				data: { 
+					action: action, token: token, site_id: site_id, site_script: site_script
+				},
+				success: function(message){	
+					ajaxReply(message,'#ajax_status_site_script');
+				},
+			});
+		});
+
 		$('#btn_site_meta').click(function(event){
 			event.preventDefault();
 			var action = "save_site_meta";
@@ -242,7 +262,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 					ajaxReply(message,'#ajax_status_site_meta');
 				},
 			});
-		});			
+		});
 		
 		$('#btn_site_maintenance').click(function(event){
 			event.preventDefault();
@@ -458,7 +478,7 @@ switch($t) {
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="sub-tabs ui-tabs ui-widget" style="float:right;margin-top:22px;padding: 0em;">';
-				get_tab_menu_jquery_ui_look_alike($this_url, array("general","design","content","meta","maintenance","configuration","account","history","log","?"), array("General settings","Design","Content","Meta","Maintenance","Configuration","Account registration","History","Log","?"), "tg", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
+				get_tab_menu_jquery_ui_look_alike($this_url, array("general","design","content","script","meta","maintenance","configuration","account","history","log","?"), array("General settings","Design","Content","Script","Meta","Maintenance","Configuration","Account registration","History","Log","?"), "tg", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
 			echo '</div>';	
 		echo '</div>';
 		
@@ -514,7 +534,22 @@ switch($t) {
 					case 'design':
 						
 						?>
-												
+						
+						
+
+						<div class="admin-panel">
+
+							<h3 class="admin_heading">Site width (helper)</h3>
+							<p class="admin-text">
+								Set this width to match settings in css (widest). Setting is used in repsonsive webdesign to display images in a proper way
+							</p>
+							<label for="site_wrapper_page_width" class="admin-text">Set page wrapper width in pixels</label><br>
+							<input type="text" id="site_wrapper_page_width" name="site_wrapper_page_width" maxlength="4" size="4" value="<?php echo $_SESSION['site_wrapper_page_width']; ?>">
+								
+						</div>
+
+
+
 						<div class="admin-panel">
 
 							<div style="float:right">				
@@ -567,6 +602,7 @@ switch($t) {
 							?>
 							Page template dependency (no sidebar, one sidebar or joined sidebars). Adjust if background color / image / graphic / borders appears close content.
 						</div>
+
 
 
 						<div class="admin-panel">
@@ -886,6 +922,37 @@ switch($t) {
 						<?php
 						break;
 					
+					case 'script':
+						?>
+						
+						<div class="admin-panel">
+							<div style="float:right">						
+								<span id="ajax_spinner_site_script" style='display:none'><img src="css/images/spinner.gif"></span>&nbsp;
+								<span id="ajax_status_site_script" style='display:none'></span>&nbsp;
+								<span class="toolbar_save"><button id="btn_site_script" style="float:right;margin:0px;">Save</button></span>
+							</div>
+						
+							<h3 class="admin_heading">Script in head element</h3>
+							<p class="admin-text">
+								Set initial JavaScript in head element
+							</p>
+							<p>
+								<label for="site_script" class="admin-text">Script (max 1000 characters)</label>
+							</p>
+
+							<textarea name="site_script" id="site_script" style="width:98%;height:200px;"><?php echo $site['site_script']; ?></textarea>
+
+							<?php							
+							?>
+							
+						</div>
+						
+
+						<?php
+						break;
+
+
+
 					case 'meta':
 						?>
 						
