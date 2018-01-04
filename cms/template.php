@@ -101,7 +101,7 @@ $js_files = add_js_language_files($js_files);
 // handle plugins, set each area value to null
 $plugin_header = $plugin_left_sidebar = $plugin_right_sidebar = $plugin_content = $plugin_footer = $plugin_page = null;
 if($arr['plugins']) {
-    set_plugin_values($id);
+    set_plugin_values($id, $users_id, $css_files);
 }
 
 // selections
@@ -273,6 +273,9 @@ if ($arr['template'] == 6) {
     }
 
     include_once 'includes/inc.debug.php';
+    ?>
+    
+
     ?>
 </body>
 

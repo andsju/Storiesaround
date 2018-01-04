@@ -155,7 +155,7 @@ function add_js_language_files($js_files)
  *
  * @param int $id
  */
-function set_plugin_values($id)
+function set_plugin_values($id, $users_id, $css_files)
 {
     //if($arr['plugins']) {
         

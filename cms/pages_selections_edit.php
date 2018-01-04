@@ -219,7 +219,7 @@ if(isset($_GET['token'])){
 							echo '<td>';
 								echo 'Area<br />';
 								echo '<select id="area" class="code">';
-									$values = array("" => "", "Header - above (978px)" => "header_above", "Header (978px replace default)" => "header", "Header - below (978px)" => "header_below", "Left sidebar - top (222px)" => "left_sidebar_top", "Left sidebar - bottom (222px)" => "left_sidebar_bottom", "Right sidebar - top (222px)" => "right_sidebar_top", "Right sidebar - bottom (222px)" => "right_sidebar_bottom", "Content - above (474-978px)" => "content_above", "Content - inside (474-978px)" => "content_inside", "Content - below (474-978px)" => "content_below", "Footer - above (978px)" => "footer_above", "Outer sidebar - top (222px)" => "outer_sidebar");
+									$values = array("" => "", "Header - above" => "header_above", "Header (replace default)" => "header", "Header - below" => "header_below", "Left sidebar - top" => "left_sidebar_top", "Left sidebar - bottom" => "left_sidebar_bottom", "Right sidebar - top" => "right_sidebar_top", "Right sidebar - bottom" => "right_sidebar_bottom", "Content - above" => "content_above", "Content - inside" => "content_inside", "Content - below" => "content_below", "Footer - above" => "footer_above", "Outer sidebar - top (222px)" => "outer_sidebar");
 									foreach($values as $key => $value) {
 										echo '<option value="'.$value.'"';
 										if($row[0]['area'] == $value) {

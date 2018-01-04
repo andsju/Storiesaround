@@ -1,14 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <?php if (!defined('VALID_INCL')) {
-    die('Restricted access');
+    die();
 } ?>
-<html lang="<?php echo $lang; ?>">
+<html lang="<?php echo $language; ?>">
 
 <head>
 
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title><?php echo $page_title; ?></title>
 
     <?php
     //load css files
@@ -25,5 +24,5 @@
 
 </head>
 
-<body style="<?php echo $body_style; ?>" class="cms-edit">
+<body style="<?php echo $body_style; ?>" class="cms_edit">
 

@@ -131,7 +131,25 @@ if (isset($_POST['token'])){
 				}
 				
 			break;
+
+		case 'save_site_script';
+			$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
+			$site_script = $_POST['site_script'];
+			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+			
+			$site = new Site();
+			$result = $site->setSiteScript($site_id, $site_script, $utc_modified);
+			if($result) {
+				$_SESSION['site_script'] = $site_script;
 				
+				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+				$history = new History();
+				$history->setHistory($site_id, 'site_id', 'UPDATE', describe('site script', ''), $_SESSION['users_id'], $_SESSION['token'], $utc_modified);							
+				
+			}
+			
+			break;
+			
 			case 'save_site_meta';
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_meta_tags = $_POST['site_meta_tags'];
