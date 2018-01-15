@@ -10,6 +10,7 @@ if(!get_role_CMS('contributor') == 1) {
 	header('Location: '. $_SESSION['site_domain_url']);	exit;
 }
 
+//print_r2($_SESSION);
 // check $_GET id
 $id = array_key_exists('id', $_GET) ? $_GET['id'] : null;
 if($id == null) { die;}
@@ -79,6 +80,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery.ui.datepicker-sv.js', 
 	CMS_DIR.'/cms/libraries/jquery-plugin-validation/jquery.validate.js',
 	CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
+	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js', 
 	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/js/functions.js',
@@ -255,6 +257,9 @@ foreach ( $js_files as $js ): ?>
 		
 		$( "#pending_widgets" ).sortable({
 		});
+
+		$( "#directory_view_slides" ).sortable({axis: 'y', forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.1});
+		$( "#directory_view_slides" ).disableSelection();
 
 		$( ".toolbar_delete button" ).button({
 			icons: {
@@ -841,23 +846,60 @@ foreach ( $js_files as $js ): ?>
 				success: function(data){	
 					$("#directory_view").empty().html(data).hide().fadeIn('fast');
 					$("#directory_view").css("padding", "10px").css("background", "#fff");
+
+					var filenames = [];
+					var tmp_filename = "";
+					$("#the-slideshow img").each(function() {
+						var filename = $( this ).data("filename");
+						if (filename != tmp_filename) {
+							filenames.push(filename);
+							var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+							$("#directory_view_slides").append(image);
+							tmp_filename = filename;
+						}
+					});
+					console.log("filenames", filenames);
+
+					$("#directory_view img").each(function() {
+						var filename = $( this ).data("filename");
+						//console.log("filename", filename);
+						if (filenames.indexOf(filename) >= 0) {
+							console.log("Exists: ", filename);
+							$(this).next().prop('checked', true);
+							//var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+							//$("#directory_view_slides").append(image);
+						}	
+					});
+
 				},
 			});
 			
 		});
 		
-		$(document).on('click', '#directory_view img', function (e) {
-			var filename = $( this ).data("filename");
-			$('#new_site_header_image').val(filename).hide().fadeIn(500);
-		});
 
 		$('#btn_site_header_setup').click(function(event){
 			event.preventDefault();
 			var action = "save_site_header_setup_image";
-			var new_site_header_image = $("#new_site_header_image").val();
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
+
+			var header_image = [];
+			$("#directory_view_slides div").each(function(){			
+				header_image.push($(this).attr("data-image"));
+			});
+			console.log("header_image", header_image);
+
+			var header_caption = [];
+			$("input[name='header_caption[]'").each(function (){
+				header_caption.push($(this).val());
+			});
+			
+			console.log("header_caption", header_caption);
+			
+
+
+			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_header_image').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_header_image').hide()",700)},
@@ -865,14 +907,71 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					new_site_header_image: new_site_header_image
+					header_image: header_image, header_caption: header_caption
 				},
-				success: function(newdata){									
-					$("#site_header_image_chosen").attr("src", "../content/uploads/header/" + new_site_header_image);
+				success: function(newdata){
 					ajaxReply('','#ajax_status_header_image');
 				},
 			});
+			
 		});
+
+
+
+		$("#directory_view").delegate( ".image_mark", "click", function() {
+			var filename = $(this).attr("data-file");
+
+			//var image = '<img data-image=\"'+filename+'\" src=\"../content/uploads/header/'+ filename + '\" class="fluid">';
+			var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+			console.log("Aloha");
+			var isFile = false;
+			$("#directory_view_slides div").each(function(){
+				img = $(this).attr("data-image");
+				if(img == filename) {
+					isFile = true;
+				}
+				// console.log(img); 
+			});
+
+
+			$("#directory_view input").each(function(){
+				var checked = $(this).is(':checked') ? 1 : 0;
+				var filename = $(this).attr("data-file");
+				console.log(checked);
+				if(checked == 0) {
+					$("#directory_view_slides div").each(function(){
+						console.log($(this).attr("data-image"));
+						if (filename == $(this).attr("data-image")) {
+							$(this).remove();
+						}
+					})
+				} 
+			});
+
+			if (!isFile) {
+				$("#directory_view_slides").append(image);
+			}
+
+
+		});		
+
+		$("#directory_view_slides img").sortable({
+			placeholder: "ui-state-highlight",
+			axis: 'y',
+			opacity: 0.6, 
+			cursor: 'move', 
+			update: function() {
+				/*
+				var token = $("#token").val();
+				var pages_id = $("#pages_id").val();
+				var order = $(this).sortable("serialize") + "&action=update_pages_position&token=" + token + "&pages_id=" + pages_id;
+					$.post("pages_edit_ajax.php", order, function(message){
+					ajaxReply(message,'#ajax_result_move');
+				});
+				*/
+			}				
+		});
+		
 
 		$('#btn_site_ads').click(function(event){
 			event.preventDefault();
@@ -1804,7 +1903,9 @@ foreach ( $js_files as $js ): ?>
 					action: action, token: token, users_id: users_id, pages_id: pages_id
 				},
 				success: function(newdata){	
-					$("#sitetree_select").empty().append(newdata).hide().fadeIn('fast');
+					console.log(newdata);
+					//$("#sitetree_select").html(newdata);
+					$("#sitetree_select").empty().html(newdata).hide().fadeIn('fast');
 				},
 			});
 		});
@@ -2237,12 +2338,12 @@ foreach ( $js_files as $js ): ?>
 			var optionTexts = [];
 			$("ul#tags li").each(function() { optionTexts.push($(this).text()) });
 			if(optionTexts.indexOf(tag) == -1) {
-				$('ul#tags').append('<li>'+tag+'<span class="ui-icon ui-icon-close" style="display:inline-block;"></span></li>');
+				$('ul#tags').append('<li>'+tag+'<i class="fa fa-trash-o" aria-hidden="true"></i></li>');
 			}
 			$("#tag").val('');
 		});
 		
-		$("ul#tags").delegate( "span", "click", function() {
+		$("ul#tags").delegate( "i", "click", function() {
 			$(this).parent().remove();
 		});		
 
@@ -2495,7 +2596,7 @@ if(is_array($check_edit)) {
 		<li><a href="#setup">Setup</a></li>
 		<li><a href="#settings">Settings</a></li>
 		<li><a href="#calendar">Calendar</a></li>
-		<li><a href="#plugins">Plugins</a></li>
+		<li><a href="#plugins">Plugin</a></li>
 		<li><a href="#images">Images</a></li>
 		<li><a href="#files">Files</a></li>
 		<li><a href="#content_editor">Content</a></li>		
@@ -2532,7 +2633,7 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;padding-top:10px;">
-					<h4> Page template <i class="fa fa-newspaper-o" aria-hidden="true"></i></h4>
+					<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Page template</h4>
 						<p>
 						<span class="toolbar"><button id="link_page_template_setup">Save template</button></span>
 						</p>
@@ -2571,6 +2672,10 @@ if(is_array($check_edit)) {
 								</p>
 							</div>
 						</div>
+						<div class="page_templates_info">
+							Custom page is required in order to show content from <b>Calendar and Plugin<b>
+						</div>
+						
 					<td>
 				</tr>
 			</table>
@@ -2582,18 +2687,26 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;">
-						<h4>Header image <i class="fa fa-picture-o" aria-hidden="true"></i></h4>
+						<h4><i class="fa fa-picture-o" aria-hidden="true"></i> Header image</h4>
 						<p>
 							<span class="toolbar"><button id="link_site_header_image">Show images</button></span>
 						</p>
 					</td>
 					<td style="vertical-align:top;">
 						<?php
-						$im = strlen($arr['header']) > 0 ? $arr['header'] : 'site_header_image_0.jpg';
-						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $im .'</code><p>';
+						$header_image = json_decode($arr['header_image']);
+
+						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';
 						$height_scaled = 100;
 						
-						echo '<div style="width="420px;"><img id="site_header_image_chosen" src="'.CMS_DIR .'/content/uploads/header/'.$im.'" style="width:100%;height:auto;border:1px solid #D0D0D0;" /></div>';						
+						echo '<div class="cycle-slideshow" id="the-slideshow">';
+						if (count($header_image)) {
+							foreach($header_image as $image) {
+								echo '<img data-filename="'.$image.'" data-cycle-timeout="7000" id="site_header_image_chosen" src="'.CMS_DIR .'/content/uploads/header/'.$image.'" style="width:100%;height:auto;border:1px solid #D0D0D0;" />';
+							}
+						}
+						echo '</div>';
+						
 						?>
 					</td>
 					<td width="25%" align="right">
@@ -2605,20 +2718,34 @@ if(is_array($check_edit)) {
 					</td>
 				</tr>
 				<tr>
-					<td>&nbsp;
-					</td>
 					<td>
+						<p>
+						<input type="checkbox" id="header_slideshow_caption"> Show caption
+						</p>
+						<p>
+						<select id="header_slideshow_effect">
+							<option value="0">disolve</option>
+						</select> Slideshow effect
+						</p>
+						<p>
+						<select id="header_slideshow_time">
+							<option value="0">0</option>
+						</select> Slideshow time
+						</p>
+					</td>
+					<td style="vertical-align:top">
 	
 					
-					<input type="text" name="new_site_header_image" id="new_site_header_image" value="<?php echo $im; ?>" style="margin-bottom:10px;width:400px;" class="code" />
-					<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save image</button></span>
+					<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save image(s)</button></span>
 					<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
 					<span id="ajax_status_header_image" style="display:none;"></span>
 
-					<div id="directory_view" style="max-height:400px;overflow:auto;"></div>
+					
+					<div id="directory_view_slides" style="max-height:400px;"></div>
 					
 					</td>
-					<td>&nbsp;
+					<td style="vertical-align:top;float:right">&nbsp;
+					<div id="directory_view" style="max-height:400px;overflow:auto;"></div>
 					</td>
 				</tr>
 			</table>
@@ -2747,7 +2874,7 @@ if(is_array($check_edit)) {
 				<tr>
 					<td style="width:70%">
 						
-						<h4>Breadcrumb <i class="fa fa-paw" aria-hidden="true"></i></h4>
+						<h4><i class="fa fa-paw" aria-hidden="true"></i> Breadcrumb</h4>
 						
 						<p>
 							<input type="radio" name="breadcrumb" value="0" <?php if($arr['breadcrumb'] == 0) {echo 'checked';}?>> hide  | <input type="radio" name="breadcrumb" value="1" <?php if($arr['breadcrumb'] == 1) {echo 'checked';}?>> show (default) | <input type="radio" name="breadcrumb" value="2" <?php if($arr['breadcrumb'] == 2) {echo 'checked';}?>> show + children (select) | <input type="radio" name="breadcrumb" value="3" <?php if($arr['breadcrumb'] == 3) {echo 'checked';}?>> show + children (ul)
@@ -2771,7 +2898,7 @@ if(is_array($check_edit)) {
 			<table style="width:100%">
 				<tr>
 					<td style="width:70%">
-						<h4>Language <i class="fa fa-globe" aria-hidden="true"></i></h4>
+						<h4><i class="fa fa-globe" aria-hidden="true"></i> Language</h4>
 						<p>
 							Set this page html lang attribute - overrides site settings. 2-letter (ISO 639-1 codes)
 						</p>
@@ -2795,7 +2922,8 @@ if(is_array($check_edit)) {
 		<?php if(get_role_CMS('superadministrator') == 1) { ?>
 		
 			<div class="admin-panel">
-				<h4>Folder <i class="fa fa-folder" aria-hidden="true"></i></h4>
+
+				<h4><i class="fa fa-folder" aria-hidden="true"></i> Folder</h4>
 
 				<?php if (!is_dir(CMS_ABSPATH . '/content/uploads/pages/'. $id)) { ?>
 				<p>
@@ -2808,8 +2936,9 @@ if(is_array($check_edit)) {
 				<?php } else { ?>
 
 				<p>
-				<span class="toolbar"><button id="btn_browse_directory" data-dir="<?php echo $id;?>">Browse folder</button></span>'
+				<span class="toolbar"><button id="btn_browse_directory" data-dir="<?php echo $id;?>">Browse folder</button></span>
 					<div id="folder_view" style="border:1px dashed #000;margin:10px;overflow:auto;max-height:600px;padding:10px;" class="ui-black-white">
+					</div>
 				</p>
 
 				<?php } ?>
@@ -2826,7 +2955,7 @@ if(is_array($check_edit)) {
 				<tr>
 					<td style="width:48%; vertical-align:top;">
 					<div>
-						<h4>Page hierarchy <i class="fa fa-sitemap" aria-hidden="true"></i></h4>
+						<h4><i class="fa fa-sitemap" aria-hidden="true"></i> Page hierarchy</h4>
 						<p>
 							Attach this page to parent page:&nbsp;<span id="sitetree_selected_name" style="" /></span>
 						</p>
@@ -2910,7 +3039,7 @@ if(is_array($check_edit)) {
 			<table style="width:100%">
 				<tr>
 					<td style="width:40%">
-						<h4>Calendar <i class="fa fa-calendar" aria-hidden="true"></i></h4>
+						<h4><i class="fa fa-calendar" aria-hidden="true"></i> Calendar</h4>
 						<p>
 							<input type="checkbox" name="events" id="events" value="1" <?php if($arr['events'] == 1) {echo 'checked';}?>>
 							include calendar events (if changed save and reload page)
@@ -3016,14 +3145,6 @@ if(is_array($check_edit)) {
 			<?php } ?>
 		</div>
 
-
-
-
-
-
-
-
-	
 	</div>
 
 	
@@ -3032,7 +3153,7 @@ if(is_array($check_edit)) {
 		<div class="admin-panel">
 			<?php if(get_role_CMS('administrator') == 1) { ?>
 
-			<h4>Plugin <i class="fa fa-puzzle-piece" aria-hidden="true"></i></h4>
+			<h4><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Plugin</h4>
 			<p>
 				<input type="checkbox" name="plugins" id="plugins" value="1" <?php if($arr['plugins'] == 1) {echo 'checked';}?>>
 				include plugins 
@@ -3102,7 +3223,7 @@ if(is_array($check_edit)) {
 	<div id="images">
 	
 		<div class="admin-panel">
-			<h4>Images <i class="fa fa-file-image-o" aria-hidden="true"></i></h4>
+			<h4><i class="fa fa-file-image-o" aria-hidden="true"></i> Images</h4>
 			<p>
 				<a class="colorbox_images" href="pages_images_upload.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>"><span class="toolbar_save_images"><button id="btn_new_images">New images</button></span></a>
 				&nbsp;|&nbsp;
@@ -3129,7 +3250,7 @@ if(is_array($check_edit)) {
 	<div id="files">
 	
 		<div class="admin-panel">
-			<h4>Files <i class="fa fa-file" aria-hidden="true"></i></h4>
+			<h4><i class="fa fa-file" aria-hidden="true"></i> Files</h4>
 			<p>
 				<a class="colorbox_images" href="pages_edit_files.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>"><span class="toolbar_save_images"><button id="btn_new_files">New files</button></span></a>
 				&nbsp;|&nbsp;
@@ -3169,61 +3290,69 @@ if(is_array($check_edit)) {
 				</table>
 			</p>
 			<?php
-			//set wrapper-content width and editor width
-			
+
+			$content_percent_width = 100;						
+			// sidebar width between 20-33%
+			$sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
 			$class_editor = $wysiwyg_editor['css-class'];
-			$textarea_style = "width:100%;";
-			
+
 			switch ($arr['template']) {
 				case 0:
-					$content_width = "474"; // sidebars
-					$textarea_style = "width:474px;";
+					// sidebars
+					$content_percent_width = 100 - ($sidebar_percent_width * 2); 
+					$css_content_width = 'width:'.$content_percent_width.'%;';
 					break;
 				case 1:
-					$content_width = "326"; // sidebars
-					$textarea_style = "width:326px;";
-					break;
+					// left sidebar
+					$content_percent_width = 100 - $sidebar_percent_width;
+					$css_content_width = 'width:'.$content_percent_width.'%;';
 				case 2:
-				case 4:
-					$content_width = "726"; // left or right sidebar
-					$textarea_style = "width:726px;";
+					// right sidebar
+					$content_percent_width = 100 - $sidebar_percent_width;
+					$css_content_width = 'width:'.$content_percent_width.'%;';
 					break;
+				
 				case 3:
-				case 5:
-				case 7:
-					$content_width = "652"; // left or right sidebar
-					$textarea_style = "width:652px;";
+					// panorama
+					$content_percent_width = 100; 
+					$css_content_width = 'width:'.$content_percent_width.'%;';
 					break;
+				case 4:
+		            // sidebars right joined
+        		    $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
+					$css_content_width = 'width:'.$content_percent_width.'%;';
+					break;
+				case 5:
 				case 6:
-					$content_width = "978"; // panorama	
-					$textarea_style = "width:978px;";
+					// custom
+					$content_percent_width = 100;
+					$css_content_width = 'width:'.$content_percent_width.'%;';
 					break;
 			}
 			
 			if(!isset($_SESSION['site_wysiwyg'])) {
-				$textarea_style = "width:100%;height:400px;";
 				$class_editor = null;
 				$_SESSION['site_wysiwyg'] = "";
 			}
 			
 			?>
-			<label for="pages_title">Title: </label>
-			<br />
-			<input type="text" name="pages_title" id="pages_title" title="Enter title" style="width:460px;font-size:2.14em;padding:5px;" maxlength="100" value="<?php if(isset($arr['title'])){echo $arr['title'];}?>" />
-			<div style="padding-top:10px;">			
-			</div>
-			<label for="content">Content: </label>
-			<br />
-			<div style="<?php echo $textarea_style; ?>">
-			<textarea name="content" id="content" class="<?php echo $class_editor; ?>" style="<?php echo $textarea_style; ?>"><?php echo $arr['content'];?></textarea>
-			</div>
-
 			<p>
-				<?php echo '<span style="font-style:italic;font-size:0.8em;">template width in pixels: '. $content_width .'</span>'; ?>
+				<label for="pages_title">Title: </label>
+				<br />
+				<input type="text" name="pages_title" id="pages_title" title="Enter title" style="font-size:2.14em;<?php echo $css_content_width; ?>" maxlength="100" value="<?php if(isset($arr['title'])){echo $arr['title'];}?>" />
 			</p>
-			<label for="content_author">Content author and contact:</label>
-			<br />
-			<input type="text" name="content_author" id="content_author" title="Enter content author and contact" style="width:460px;" maxlength="100" value="<?php if(isset($arr['content_author'])){echo $arr['content_author'];}?>" />
+			<p>
+				<label for="content">Content: </label>
+				<br />
+				<div>
+					<textarea name="content" id="content" class="<?php echo $class_editor; ?>" style="<?php echo $css_content_width; ?>"><?php echo $arr['content'];?></textarea>
+				</div>
+			</p>
+			<p>
+				<label for="content_author">Content author and contact:</label>
+				<br />
+				<input type="text" name="content_author" id="content_author" title="Enter content author and contact" style="width:460px;" maxlength="100" value="<?php if(isset($arr['content_author'])){echo $arr['content_author'];}?>" />
+			</p>
 			<div style="padding-top:10px;">
 				<input type="checkbox" id="title_hide" name="title_hide" <?php if($arr['title_hide'] == 1) {echo 'checked="checked"';}?>> Hide page title (title can manually be added inside content)
 			</div>
@@ -3236,6 +3365,9 @@ if(is_array($check_edit)) {
 						<td width="300px"><span class="ajax_status_content" style='display:none'></span></td>
 					</tr>
 				</table>
+			</p>
+			<p>
+				<?php echo '<span style="font-style:italic;font-size:0.8em;">Calculated width: '. round($content_percent_width * $_SESSION['site_wrapper_page_width'] / 100) .'px (approximately)</span>'; ?>
 			</p>
 		
 		</div>
@@ -3625,50 +3757,41 @@ if(is_array($check_edit)) {
 					}
 				}
 				
-				// use template settings				
-				$css_content_width = $css_left_sidebar_width = $css_right_sidebar_width = '';
-
-				$column_space_edit = 'width:0%';
-
+				$column_space_edit = 'width:2%;';
 				switch ($arr['template']) {	
-					case 0: 
-						$content_width = 474; // sidebars
-						$css_content_width = 'width:50%;'; 
-						$left_sidebar_width = $right_sidebar_width = 252;
-						$css_left_sidebar_width = $css_right_sidebar_width = 'width:23%;';
-						$column_space_edit = 'width:2%;';
+					case 0:
+						// sidebars 
+						$sidebar_percent_width  = $sidebar_percent_width - 2;
+						$css_left_sidebar_width = $css_right_sidebar_width = "width:" . $sidebar_percent_width  . "%";						
 						break;
 					case 1:
+						// left sidebar
 					case 2:
+						// right sidebar
+						$sidebar_percent_width  = $sidebar_percent_width - 2;
+						$css_left_sidebar_width = $css_right_sidebar_width = 'width:'.$sidebar_percent_width.'%;';
+						break;			
 					case 3:
+						// panorama
+						break;
 					case 4:
-					case 5:  
-						$content_width = 474; // left sidebar | right sidebar | old sidebar big version
-						$css_content_width = 'width:70%;'; 
-						$left_sidebar_width = $right_sidebar_width = 252;
-						$css_left_sidebar_width = $css_right_sidebar_width = 'width:27%;';
-						$column_space_edit = 'width:3%;';
+						// joined sidebars
+						$content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
+						$right_sidebar_width = $sidebar_percent_width;
+						$left_sidebar_width = $right_sidebar_width * 0.67;
+						$right_sidebar_width = $right_sidebar_width - 2;
+						$left_sidebar_width = $left_sidebar_width - 2;
+						$css_left_sidebar_width = 'width:'.$left_sidebar_width.'%;';
+						$css_right_sidebar_width = 'width:'.$right_sidebar_width.'%;';
 						break;
-					case 6: 
-						$content_width = 474; // panorama
-						$css_content_width = 'width:100%;'; 
-						$left_sidebar_width = $right_sidebar_width = 252;
-						$css_left_sidebar_width = $css_right_sidebar_width = 'width:0%;';
-						$column_space_edit = 'width:0%;';
-						break;
-					case 7: 
-						$content_width = 474; // joined sidebars
-						$css_content_width = 'width:60%;'; 
-						$left_sidebar_width = $right_sidebar_width = 252;
-						$css_left_sidebar_width = 'width:15%;';
-						$css_right_sidebar_width = 'width:21%;';
-						$column_space_edit = 'width:2%;';
-						break;
-				}				
+						case 5:
+						case 6:
+							// custom
+							break;
+				}
 
 
-
-				if($arr['template'] == 0 || $arr['template'] == 1 || $arr['template'] == 2 || $arr['template'] == 3) { ?>
+				if($arr['template'] == 0 || $arr['template'] == 1) { ?>
 			
 					<div class="sidebar_wrapper_edit" style="<?php echo $css_left_sidebar_width;?>">
 
@@ -3725,7 +3848,7 @@ if(is_array($check_edit)) {
 						<div class="column_description ui-state-disabled">content - selected stories</div>
 					</div>
 					
-					<div class="area_space_edit""></div>
+					<div class="area_space_edit"></div>
 					
 					<?php
 
@@ -3733,7 +3856,10 @@ if(is_array($check_edit)) {
 					switch ($arr['template']) {	
 						case 0:
 						case 1:
-						case 7:
+						case 2:
+						case 4:
+						case 5:
+						case 6:
 					
 							switch ($arr['stories_columns']) {				
 								case 1:
@@ -3744,43 +3870,9 @@ if(is_array($check_edit)) {
 								break;
 								case 2:
 									?>
-									<div id="A" class="column" style="width:47.5%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:5%;"></div>
-									<div id="B" class="column" style="width:47.5%;"><?php get_box_content($rows, "B"); ?></div>
-									<?php
-									$str_cols_out_of_range = "CDEF";
-								break;
-								case 3:
-									?>
-									<div id="A" class="column" style="width:30%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:5%;"></div>
-									<div id="B" class="column" style="width:30%;"><?php get_box_content($rows, "B"); ?></div>
-									<div class="column_space_edit" style="width:5%;"></div>
-									<div id="C" class="column" style="width:30%;"><?php get_box_content($rows, "C"); ?></div>							
-									<?php
-									$str_cols_out_of_range = "DEF";
-								break;
-								default:
-								break;
-							}
-						break;
-						
-						case 2:
-						case 3:
-						case 4:
-						case 5:
-							switch ($arr['stories_columns']) {				
-								case 1:
-									?>
-									<div id="A" class="column" style="width:100%;"><?php get_box_content($rows, "A"); ?></div>
-									<?php
-									$str_cols_out_of_range = "BCDEF";
-								break;
-								case 2:
-									?>
-									<div id="A" class="column" style="width:48.5%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:3%;"></div>
-									<div id="B" class="column" style="width:48.5%;"><?php get_box_content($rows, "B"); ?></div>
+									<div id="A" class="column" style="width:49%;"><?php get_box_content($rows, "A"); ?></div>
+									<div class="column_space_edit" style="width:2%;"></div>
+									<div id="B" class="column" style="width:49%;"><?php get_box_content($rows, "B"); ?></div>
 									<?php
 									$str_cols_out_of_range = "CDEF";
 								break;
@@ -3798,9 +3890,9 @@ if(is_array($check_edit)) {
 								break;
 							}
 						break;
-
-						case 6:
-
+						
+						case 3:
+							
 							switch ($arr['stories_columns']) {				
 								case 1:
 									?>
@@ -3886,7 +3978,7 @@ if(is_array($check_edit)) {
 
 
 				<?php
-				if($arr['template'] == 7 ) { ?>
+				if($arr['template'] == 4 ) { ?>
 			
 					<div class="column_space_edit" style="<?php echo $column_space_edit;?>"></div>
 					
@@ -3920,7 +4012,7 @@ if(is_array($check_edit)) {
 
 				<?php 
 				// use template settings
-				if($arr['template'] == 0 || $arr['template'] == 1 || $arr['template'] == 4 || $arr['template'] == 5 || $arr['template'] == 7) { ?>
+				if($arr['template'] == 0 || $arr['template'] == 2 || $arr['template'] == 4 ) { ?>
 
 					<div class="column_space_edit" style="<?php echo $column_space_edit;?>"></div>
 					<div class="sidebar_wrapper_edit" style="<?php echo $css_right_sidebar_width;?>">
@@ -4029,7 +4121,7 @@ if(is_array($check_edit)) {
 
 				<div style="float:left" class="grid-settings">
 
-					<h4>Grid settings <i class="fa fa-th" aria-hidden="true"></i></h4>
+					<h4><i class="fa fa-th" aria-hidden="true"></i> Grid settings</h4>
 					<p>
 						<input type="checkbox" name="grid_active" id="grid_active" value="1" <?php if($arr['grid_active'] == 1) {echo 'checked="checked"';}?>> Active
 					</p>
@@ -4083,14 +4175,14 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
-			<h4>Story <i class="fa fa-leaf" aria-hidden="true"></i></h4>
+			<h4><i class="fa fa-leaf" aria-hidden="true"></i> Story</h4>
 			<p>
 				How this page may be shown as a story  
 			</p>
 			<table style="width:100%;">
 				<tr>
 					<td style="width:25%;">
-					<label for="tag">Tag page: <i class="fa fa-tags" aria-hidden="true"></i></label>
+					<label for="tag"><i class="fa fa-tags" aria-hidden="true"></i> Tag page:</label>
 					<br />
 					<input type="text" name="tag" id="tag" title="Tag page" style="width:150px;" maxlength="25" />		
 					<span class="toolbar_add"><button id="btn_add_tag" style="margin:0px" type="submit">Add</button></span>
@@ -4103,7 +4195,7 @@ if(is_array($check_edit)) {
 					if(isset($arr['tag']) && strlen($arr['tag']) >0) {
 						$tags = explode(",", $arr['tag']);
 						foreach ($tags as $tag){
-							echo '<li>'.$tag.'<span class="ui-icon ui-icon-close" style="display:inline-block;"></span></li>';
+							echo '<li>'.$tag.'<i class="fa fa-trash-o" aria-hidden="true"></i></li>';
 						}
 					}
 					?>
@@ -4268,7 +4360,7 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
-			<h4>RSS <i class="fa fa-leaf" aria-hidden="true"></i></h4>
+			<h4><i class="fa fa-leaf" aria-hidden="true"></i> RSS</h4>
 		
 			<table>
 				<tr>

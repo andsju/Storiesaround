@@ -1,7 +1,5 @@
 <!doctype html>
-<?php if (!defined('VALID_INCL')) {
-    die();
-} ?>
+<?php if (!defined('VALID_INCL')) { die(); } ?>
 <html lang="<?php echo $language; ?>">
 
 <head>
@@ -44,7 +42,7 @@
     echo "\n";
 
     // custom head tags
-    include_once_customfile('includes/inc.head_tags.php', $arr, $languages);
+    include_once_customfile('includes/inc.head_elements.php', $arr, $languages);
     ?>
 
 </head>
