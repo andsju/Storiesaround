@@ -12,6 +12,12 @@ if (LIVE == false || $debug == true) {
     echo 'PHP_SELF: ' . $_SERVER['PHP_SELF'] . "<br />";
     echo "\n" . 'SCRIPT_NAME: ' . $_SERVER['SCRIPT_NAME'] . "<br />";
     echo "\n" . 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'] . "<br />";
+    echo "\n" . 'QUERY_STRING: '. $_SERVER['QUERY_STRING'] . "<br />";
+    if (isset($_GET)) {
+        echo "\n" . 'GET: ';
+        print_r($_GET);
+    }
+    
     echo "\n" . 'SERVER_NAME: ' . $_SERVER['SERVER_NAME'] . "<br />";
     echo "\n" . 'HTTP_HOST: ' . $_SERVER['HTTP_HOST'] . "<br />";
     echo "\n" . 'REMOTE_ADDR: ' . $_SERVER['REMOTE_ADDR'] . "<br />";

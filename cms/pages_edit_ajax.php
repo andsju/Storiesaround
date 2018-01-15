@@ -909,10 +909,11 @@ if (isset($_POST['token'])){
 				
 				case 'save_site_header_setup_image':
 					
-					$header_image = $_POST['new_site_header_image'];
+					$header_image = json_encode($_POST['header_image']);
+					$header_caption = json_encode($_POST['header_caption']);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $utc_modified);
+					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('site header image', $header_image), $users_id, $_SESSION['token'], $utc_modified);
@@ -1717,7 +1718,7 @@ if (isset($_POST['token'])){
 								
 									$ext = pathinfo($dir.'/'.$file, PATHINFO_EXTENSION);
 									if(in_array($ext, $images_ext)) {
-										echo '<div class="code">'.$file.'</div><img src="../content/uploads/header/'. $file .'" data-filename="'.$file.'" width="420px" style="margin-bottom:10px;" />';
+										echo '<div class="code" style="position:relative"><img alt="'.$file.'" src="../content/uploads/header/'. $file .'" data-filename="'.$file.'" width="150px" style="margin-bottom:10px;" /><input type="checkbox" class="image_mark" data-file="'.$file.'" style="position:absolute;top:2px;left:2px;transform:scale(2);"></div>';
 									}
 								}
 							}

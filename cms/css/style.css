@@ -39,6 +39,8 @@ hml, body { margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; line-he
 #site-navigation-header ul li:hover { background-color: red }
 #site-navigation-header ul li a {display: block; line-height: 2em; padding: 0 20px; font-size: 1.2em; color: white; text-decoration: none }
 
+div#site-navigation-mobile-wrapper {float:left;width:100%;min-height:10px;}
+
 #site-search { position: absolute; bottom: 40px; margin: 0 0 0 277px; z-index: 999; padding: 10px; border: 2px dashed lightgray; opacity: 0.7}
 #site-search input,
 #site-search button { padding: 10px; font-size: 1em }
@@ -118,8 +120,8 @@ img.fluid{ max-width:100%; height:auto;}
 ------------------------- */
 
 ul#user_navigation { margin: 0; padding: 0; list-style: none; }
-ul#user_navigation li { float: left; display: inline; font-size: 1em; padding: 7px; }
-ul#user_navigation li:hover { background: #000; }
+ul#user_navigation li { float: left; display: inline; font-size: 1em; padding: 2px 7px; }
+
 ul#user_navigation span { margin-right: 5px; }
 ul#user_navigation a { padding: 3px; color: #FFF; text-decoration: none; border: 1px solid black; }
 ul#user_navigation a:hover { background: #333; border: 1px solid #777777; }
@@ -129,7 +131,7 @@ li.dropdown ul li a { color: green; display: block; padding: 5px; }
 li.dropdown ul li:hover { background: #333333; }
 li.dropdown ul li a:hover { background: #333333 !important; color: #FFF !important }
 li.toolbar-icons { margin-top: 5px }
-
+#user_navigation  span.ui-icon { background-image: url(../libraries/jquery-ui/images/ui-icons_ffffff_256x240.png); }
 
 
 /* grid front*/
@@ -241,3 +243,4 @@ div.stories-event-meta { }
 .p-columns-2 { -webkit-column-count: 2; -moz-column-count: 2; column-count: 2; -webkit-column-gap: 30px; -moz-column-gap: 30px; column-gap: 30px; } 
 .p-columns-3 { -webkit-column-count: 3; -moz-column-count: 3; column-count: 3; -webkit-column-gap: 30px; -moz-column-gap: 30px; column-gap: 30px; } 
 .dropcap:first-letter { float: left; font-size: 5em; font-weight: normal; font-family: Georgia, Garamond, Times, serif; line-height: .8em; margin-right: 5px; padding: 2px; }
+

@@ -43,11 +43,13 @@ $users_id = (isset($_SESSION['users_id'])) ? $_SESSION['users_id'] : null;
 $arr = $pages->getPagesContent($id);
 //print_r2($arr);
 
+$sample = false;
+if ($arr == null && isset($_GET['sample'])) {
+    $arr = get_sample_data();
+}
 
 $acc_read = get_rights($id, $users_id, $arr['access']);
 //print_r2("acc_read: ". $acc_read);
-
-// might be sample
 
 // get this page widgets
 $pages_widgets = new PagesWidgets();
@@ -143,37 +145,35 @@ if ($arr['template'] == 6) {
 
 ?>
 <body>
+    <?php print_noscript($languages) ?>
+    
     <div id="wrapper-user">
         <div id="user-toolbar"><?php include 'includes/inc.site_active_user2.php';?></div>
     </div>
 
     <?php 
-    print_selection("selection-header-above", $selection_area['header_above']); 
+    print_selection("selection-header-above", $selection_area['header_above']);
     ?>
 
     <header id="wrapper-site-header">
-        <div id="site-name">
-            <h1><?php echo $arr['title']?></h1>
-            <img src="css/images/GF_logotype_1rad.png" style="width:400px">
-        </div>
-        <div id="site-custom">Logga in</div>
-        <div id="site-search">
-            <input type="text" name="search" placeholder="Vad söker du?" id="pages_s" class="search" value="" style="z-index:999">
-            <button id="btn_pages_search" class="magnify"><?php echo translate("Search", "site_search", $languages); ?></button>
-        </div>
 
-
-        <div id="site-header" class="cycle-slideshow">
-            <img src="<?php echo CMS_DIR; ?>/content/uploads/header/<?php echo $arr['header'];?> ">
-        </div>
+        <?php
+        if (strlen($selection_area['header'])) {
+            print_selection("selection-header-above", $selection_area['header']);
+        } else {
+            include_once_customfile('includes/inc.site_header.php', $arr, $languages); 
+        }
+        ?>
+        
         <nav id="site-navigation-header">
-
             <?php
-            print_menu($pages, $id, $seo, $href, $open);
+            print_mobile_menu($pages, $id, $seo, $href);
+            print_menu($pages, $id, $seo, $href, $open, $sample);
             ?>
-
         </nav>
+        
     </header>
+
     <div id="wrapper-top">
         <?php 
         print_selection("selection-header-below", $selection_area['header_below']); 
@@ -249,16 +249,19 @@ if ($arr['template'] == 6) {
         break;
     } 
     ?>
-
+    
     <div id="wrapper-bottom">
         <div id="bottom-selections"></div>
         <div id="bottom-grid"><?php print_grid($arr, 3);?></div>
     </div>
+
     <?php print_selection("selection-footer-above", $selection_area['footer_above']); ?>
+
     <footer id="wrapper-site-footer">
         <div id="site-about"></div>
         <div id="site-contact"></div>
         <div id="site-rss"></div>
+        <?php include_once_customfile('includes/inc.footer.php', $arr, $languages); ?>			
     </footer>
 
     <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>" />
@@ -271,12 +274,10 @@ if ($arr['template'] == 6) {
     foreach ( $js_files as $js ) { 
         echo "\n".'<script src="'.$js.'"></script>';
     }
-
-    include_once 'includes/inc.debug.php';
     ?>
+
+    <?php include_once 'includes/inc.debug.php'; ?>
     
-
-    ?>
 </body>
 
 </html>

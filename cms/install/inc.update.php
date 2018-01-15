@@ -41,4 +41,6 @@ $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "stories_child_area", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:none, 1:left sidebar, 2:right sidebar, 3-6:content' AFTER `stories_columns`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "stories_equal_height", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:no, 1:yes' AFTER `stories_css_class`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "template_custom", "column_definition" => "varchar(100) DEFAULT '' COMMENT 'custom template' AFTER `template`");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "header", "col_name_new" => "header_image", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'Set static header image' AFTER `tag`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'header image caption' AFTER `header_image`");
 ?>
