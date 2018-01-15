@@ -336,7 +336,7 @@ function print_selection($div_id, $selection_area)
  * @param boolean open
  * @return mixed|string
  */
-function print_menu($pages, $id, $seo, $href, $open)
+function print_menu($pages, $id, $seo, $href, $open, $sample)
 {
     if(!$_SESSION['site_navigation_horizontal'] == 0) {
         echo "\n".'<div id="site-navigation-root">';
@@ -354,11 +354,11 @@ function print_menu($pages, $id, $seo, $href, $open)
             
             }
             
-            /*
+            
             if($sample == true) {							
-                $html = get_sample_navigation_root($sample_data_templates);
+                $html .= get_sample_navigation_root($sample_data_templates);
             }
-            */
+            
             echo $html;
         echo "\n".'</div>';
     }
@@ -455,7 +455,8 @@ function get_breadcrumb($parent_id, $delimiter, $trunc_length, $clickable)
 
         // use seo pages_id_link if set
         if (strlen($row['pages_id_link']) > 0) {
-            $crumb = ($clickable == 1) ? '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
+            //$crumb = ($clickable == 1) ? '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
+            $crumb = ($clickable == 1) ? '<a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
         } else {
             $crumb = ($clickable == 1) ? '<a href="' . $_SERVER['PHP_SELF'] . '?id=' . $row['pages_id'] . '">' . $r . '</a>' : $r;
         }
@@ -616,7 +617,8 @@ function get_pages_tree_sitemap($parent_id = 0, $id, $array_path, $a = true, $a_
 
                 $a_class = strlen($a_add_class) > 0 ? $a_add_class : "";
                 if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                    echo '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
+                    //echo '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
+                    echo '<a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
                 } else {
                     echo '<a href="' . $href . '?id=' . $row['pages_id'] . '" class="' . $class . '">';
                 }
@@ -670,7 +672,8 @@ function get_pages_tree_menu($parent_id = 0, $id, $array_path, $seo, $href, $dep
             $counter = $counter + 1;
             echo str_repeat("\t", $depth);
             if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                echo '<li><a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
+                //echo '<li><a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
+                echo '<li><a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '">';
             } else {
                 echo '<li><a href="' . $href . '?id=' . $row['pages_id'] . '">';
             }
@@ -725,7 +728,8 @@ function get_pages_tree_sitemap_all($parent_id = 0, $id, $array_path, $a = true,
             if ($a) {
                 $a_class = strlen($a_add_class) > 0 ? $a_add_class : "";
                 if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                    echo '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
+                    //echo '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
+                    echo '<a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
                 } else {
                     echo '<a href="' . $href . '?id=' . $row['pages_id'] . '" class="' . $a_class . '">';
                 }
@@ -1761,6 +1765,39 @@ function get_box_story_content_child_floats($rows, $content_width, $box_layout, 
     }
 }
 
+function get_sample_data() 
+{
+    // allow templates and sample views if logged in user has CMS role as contributor and above
+    if(isset($_SESSION['role_CMS'])) {
+        if($_SESSION['role_CMS'] >= 2) {
+            if(isset($_GET['sample'])) {
+                $sample = true;                
+                $sample_data_templates = get_sample_links();
+                $arr = get_sample_array();
+                switch($_GET['sample']) {
+                    case 1:
+                        $arr['template'] = 1;
+                    break;
+                    case 2:
+                        $arr['template'] = 2;
+                    break;
+                    case 3:
+                        $arr['template'] = 4;
+                    break;
+                    case 4:
+                        $arr['template'] = 7;
+                    break;
+                    case 5:
+                        $arr['template'] = 8;
+                    break;
+                }
+                return $arr;
+            }
+        }
+    }    
+}
+
+
 /**
  * template links used to show sample page
  *
@@ -1899,8 +1936,21 @@ function get_sample_array()
     $arr['stories_promoted'] = 1;
     $arr['title_tag'] = $arr['meta_keywords'] = $arr['meta_description'] = $arr['meta_robots'] = $arr['meta_additional'] = $arr['plugins'] = $arr['selections'] = $arr['lang'] = $arr['ads'] = $arr['events']
         = $arr['ads'] = $arr['stories_limit'] = $arr['stories_promoted_area'] = $arr['stories_wide_teaser_image_align'] = $arr['stories_wide_teaser_image_width'] = $arr['stories_last_modified'] = $arr['access']
-        = $arr['content_author'] = $arr['stories_event_dates'] = $arr['stories_columns'] = $arr['stories_child'] = "";
-
+        = $arr['content_author'] = $arr['stories_event_dates'] = $arr['stories_columns'] = $arr['stories_child'] 
+        = $arr['header']
+        = $arr['breadcrumb']
+        = $arr['utc_modified']
+        = $arr['stories_event_dates_filter']
+        = $arr['stories_child_area']
+        = $arr['stories_css_class']
+        = $arr['stories_image_copyright']
+        = $arr['stories_filter']
+        = $arr['stories_child_area']
+        = $arr['stories_css_class']
+        = $arr['stories_image_copyright']
+        = $arr['stories_filter']
+        = $arr['stories_equal_height'] = "";
+    $arr['grid_active'] = null;
     return $arr;
 }
 
@@ -2552,6 +2602,31 @@ function print_grid($arr, $area)
     }
 }
 
+
+function print_mobile_menu($pages, $id, $seo, $href) 
+{
+    if ($_SESSION['layoutType'] == "mobile") {
+        echo '<div id="site-navigation-mobile-wrapper">';
+            echo '<div class="mobile-buttons"></div><div class="menu-button"></div>';               
+                echo '<nav id="site-navigation-mobile">';
+                $seo = $_SESSION['site_seo_url'] == 1 ? 1 : 0;
+                $open = true;
+                $parent_id = 0;
+                get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo, $href, $open, $depth=0, $show_pages_id = false);									
+        echo '</div>';
+    }
+}
+
+
+function print_noscript($languages)
+{
+    $html = '<noscript>';
+    $html .= '<div class="noscript_message">';
+    $html .= translate("JavaScript is not enabled, current settings in your browser prevents functionality", "noscript", $languages);
+    $html .= '</div>';
+    $html .= '</noscript>';
+    echo $html;
+}
 
 
 /**

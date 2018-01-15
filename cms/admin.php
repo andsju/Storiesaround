@@ -59,7 +59,7 @@ $meta_keywords = $meta_description = $meta_robots = $meta_additional = $meta_aut
 
 // include header
 $page_title = 'Storiesaround - administration';
-$body_style = "width:1190px;max-width:100% !important;margin-top:50px;";
+$body_style = "width:1250px;max-width:100% !important;margin-top:50px;";
 include_once 'includes/inc.header_admin.php';
 
 // add toolbar
@@ -151,6 +151,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var action = "save_site_design";
 			var token = $("#token").val();
 			var site_id = $("#site_id").val();
+			var site_wrapper_page_width = $("#site_wrapper_page_width").val();
 			var site_theme = $("#site_theme option:selected").val();
 			var site_ui_theme = $("#site_ui_theme option:selected").val();
 			var site_title_position = $("#site_title_position option:selected").val();
@@ -165,7 +166,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 				type: 'POST',
 				url: 'admin_edit_ajax.php',				
 				data: { 
-					action: action, token: token, site_id: site_id, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
+					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
 					site_template_sidebar_width: site_template_sidebar_width, site_template_sidebar_width: site_template_sidebar_width, site_title_position: site_title_position, 
 					site_navigation_horizontal: site_navigation_horizontal, site_navigation_vertical: site_navigation_vertical, site_navigation_vertical_sidebar: site_navigation_vertical_sidebar
 				},
@@ -691,7 +692,7 @@ switch($t) {
 										Customize (listed) files.  Existing file in directory <i>"../includes_replace/"</i> will <strong>override default file.</strong>
 										</p>
 										<p>
-										Copy file from directory <i>"cms/includes/[name of file]"</i>&nbsp;&nbsp;&raquo; and paste into &raquo;&nbsp;&nbsp;<i>"content/includes/[name of file]"</i>										
+										Copy file from directory <i>"cms/includes/[name of file]"</i>&nbsp;&nbsp;&raquo; and paste into &raquo;&nbsp;&nbsp;<i>"content/includes/[name of file]"</i>
 										</p>
 										<label for="site_theme" class="admin-text">Customize</label><br />
 
@@ -715,7 +716,7 @@ switch($t) {
 										</p>
 										</td>
 										<td style="text-align:right;vertical-align:top;width:20%;">
-										<pre>inc.site_navigation_top.php<br />inc.site_header.php<br />inc.head_tags.php<br />inc.body_tags.php<br />inc.footer.php</pre>
+										<pre>inc.site_header.php<br />inc.head_elements.php<br />inc.body_elements.php<br />inc.footer.php</pre>
 										</td>
 									</tr>
 								</table>								
@@ -940,7 +941,7 @@ switch($t) {
 								<label for="site_script" class="admin-text">Script (max 1000 characters)</label>
 							</p>
 
-							<textarea name="site_script" id="site_script" style="width:98%;height:200px;"><?php echo $site['site_script']; ?></textarea>
+							<textarea name="site_script" id="site_script" style="width:98%;height:200px;" class="code"><?php echo $site['site_script']; ?></textarea>
 
 							<?php							
 							?>

@@ -52,6 +52,7 @@ if (isset($_POST['token'])){
 			case 'save_site_design';
 
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
+				$site_wrapper_page_width = filter_input(INPUT_POST, 'site_wrapper_page_width', FILTER_VALIDATE_INT);
 				$site_theme = filter_var(trim($_POST['site_theme']), FILTER_SANITIZE_STRING);
 				$site_ui_theme = filter_var(trim($_POST['site_ui_theme']), FILTER_SANITIZE_STRING);
 				$site_template_content_padding = filter_input(INPUT_POST, 'site_template_content_padding', FILTER_VALIDATE_INT);
@@ -63,9 +64,10 @@ if (isset($_POST['token'])){
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
-				$result = $site->setSiteDesign($site_id, $site_theme, $site_ui_theme, $site_template_sidebar_width, $site_template_content_padding, $site_title_position, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
+				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_sidebar_width, $site_template_content_padding, $site_title_position, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
 				if($result) {
 					$_SESSION['site_theme'] = $site_theme;
+					$_SESSION['site_wrapper_page_width'] = $site_wrapper_page_width;
 					$_SESSION['site_ui_theme'] = $site_ui_theme;
 					$_SESSION['site_template_sidebar_width'] = $site_template_sidebar_width;
 					$_SESSION['site_template_content_padding'] = $site_template_content_padding;
