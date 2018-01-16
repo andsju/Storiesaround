@@ -911,9 +911,13 @@ if (isset($_POST['token'])){
 					
 					$header_image = json_encode($_POST['header_image']);
 					$header_caption = json_encode($_POST['header_caption']);
+					//$header_caption_show = filter_input(INPUT_POST, 'header_caption_show', FILTER_VALIDATE_INT) ? $_POST['header_caption_show'] : 0;
+					//$header_image_timeout = filter_input(INPUT_POST, 'header_image_timeout', FILTER_VALIDATE_INT) ? $_POST['header_image_timeout'] : 10000;
+					$header_caption_show = $_POST['header_caption_show'];
+					$header_image_timeout = $_POST['header_image_timeout'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $utc_modified);
+					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_show, $header_image_timeout, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('site header image', $header_image), $users_id, $_SESSION['token'], $utc_modified);

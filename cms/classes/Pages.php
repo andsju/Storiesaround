@@ -1052,13 +1052,15 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $utc_modified)
+    public function updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_show, $header_image_timeout, $utc_modified)
     {
         try {
-            $stmt = $this->db->prepare("UPDATE pages SET header_image =:header_image, header_caption =:header_caption, utc_modified = :utc_modified WHERE pages_id =:pages_id");
+            $stmt = $this->db->prepare("UPDATE pages SET header_image =:header_image, header_caption =:header_caption, header_caption_show =:header_caption_show, header_image_timeout =:header_image_timeout, utc_modified = :utc_modified WHERE pages_id =:pages_id");
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":header_image", $header_image, PDO::PARAM_STR);
             $stmt->bindParam(":header_caption", $header_caption, PDO::PARAM_STR);
+            $stmt->bindParam(":header_caption_show", $header_caption_show, PDO::PARAM_INT);
+            $stmt->bindParam(":header_image_timeout", $header_image_timeout, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
