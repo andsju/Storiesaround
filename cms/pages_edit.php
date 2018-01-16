@@ -844,16 +844,21 @@ foreach ( $js_files as $js ): ?>
 					action: action, token: token, users_id: users_id, pages_id: pages_id
 				},
 				success: function(data){	
-					$("#directory_view").empty().html(data).hide().fadeIn('fast');
+					$("#directory_view").empty().show().html(data).hide().fadeIn('fast');
+					$("<p><b>Select image(s)</b></p>").insertBefore($("#directory_view"));
+					$("#directory_view_slides").empty().show();
+					$("<p><b>Current images</b></p>").insertBefore($("#directory_view_slides"));
+					$("#header_options").show();
 					$("#directory_view").css("padding", "10px").css("background", "#fff");
-
+					//$("#directory_view").show();
 					var filenames = [];
 					var tmp_filename = "";
-					$("#the-slideshow img").each(function() {
+					$("#site-header-edit img").each(function() {
 						var filename = $( this ).data("filename");
+						var caption = $( this ).attr("alt");
 						if (filename != tmp_filename) {
 							filenames.push(filename);
-							var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+							var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\" value=\"'+caption+'\"></div>';
 							$("#directory_view_slides").append(image);
 							tmp_filename = filename;
 						}
@@ -895,10 +900,11 @@ foreach ( $js_files as $js ): ?>
 				header_caption.push($(this).val());
 			});
 			
-			console.log("header_caption", header_caption);
-			
+			var header_image_timeout = $("#header_image_timeout").val();
+			var header_caption_show = $('input:checkbox[name=header_caption_show]').is(':checked') ? 1 : 0;
 
-
+			console.log("header_image_timeout", header_image_timeout);
+			console.log("header_caption_show", header_caption_show);
 			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_header_image').show()},
@@ -907,7 +913,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					header_image: header_image, header_caption: header_caption
+					header_image: header_image, header_caption: header_caption, header_caption_show: header_caption_show, header_image_timeout: header_image_timeout
 				},
 				success: function(newdata){
 					ajaxReply('','#ajax_status_header_image');
@@ -2508,7 +2514,7 @@ foreach ( $js_files as $js ): ?>
 <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>" />
 <input type="hidden" id="users_id" name="users_id" value="<?php echo $_SESSION['users_id']; ?>">
 <input type="hidden" id="parent_id" name="parent_id" value="<?php echo $arr['parent_id']; ?>">
-<input type="hidden" id="site_header_image" name="site_header_image" value="<?php echo $arr['header']; ?>">
+<input type="hidden" id="site_header_image" name="site_header_image" value="<?php echo $arr['header_image']; ?>">
 
 <table style="width:100%;">
 	<tr>
@@ -2690,23 +2696,30 @@ if(is_array($check_edit)) {
 						<h4><i class="fa fa-picture-o" aria-hidden="true"></i> Header image</h4>
 						<p>
 							<span class="toolbar"><button id="link_site_header_image">Show images</button></span>
+							
 						</p>
 					</td>
 					<td style="vertical-align:top;">
 						<?php
 						$header_image = json_decode($arr['header_image']);
+						$header_caption = json_decode($arr['header_caption']);
 
 						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';
 						$height_scaled = 100;
 						
-						echo '<div class="cycle-slideshow" id="the-slideshow">';
+						echo '<div class="cycle-slideshow" id="site-header-edit" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-edit-alt-caption">';
+						$n = 0;
 						if (count($header_image)) {
 							foreach($header_image as $image) {
-								echo '<img data-filename="'.$image.'" data-cycle-timeout="7000" id="site_header_image_chosen" src="'.CMS_DIR .'/content/uploads/header/'.$image.'" style="width:100%;height:auto;border:1px solid #D0D0D0;" />';
+								$caption = $arr['header_caption_show'] == 1 ? $header_caption[$n] : "";
+								echo '<img alt="'.$caption.'" data-filename="'.$image.'" data-cycle-timeout="'.$arr['header_image_timeout'].'" id="site_header_image_chosen" src="'.CMS_DIR .'/content/uploads/header/'.$image.'" style="width:100%;height:auto;border:1px solid #D0D0D0;" />';
+								$n++;
 							}
 						}
 						echo '</div>';
+						echo '<div id="site-header-edit-alt-caption"></div>';
 						
+					
 						?>
 					</td>
 					<td width="25%" align="right">
@@ -2718,34 +2731,41 @@ if(is_array($check_edit)) {
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<p>
-						<input type="checkbox" id="header_slideshow_caption"> Show caption
-						</p>
-						<p>
-						<select id="header_slideshow_effect">
-							<option value="0">disolve</option>
-						</select> Slideshow effect
-						</p>
-						<p>
-						<select id="header_slideshow_time">
-							<option value="0">0</option>
-						</select> Slideshow time
-						</p>
+					<td style="vertical-align:top;">
+						<div id="directory_view" style="max-height:400px;overflow:auto;display:none"></div>
 					</td>
 					<td style="vertical-align:top">
-	
 					
+					<div id="header_options" style="display:none">
+					<p>
+						<input type="checkbox" name="header_caption_show" <?php if ($arr['header_caption_show'] == 1) { echo ' checked';}?> value="1"> Show caption
+					</p>
+					<p>
+						<select id="header_image_timeout">
+						<?php 
+						$timeouts = array(8000, 10000, 12000, 15000, 20000);						
+						foreach ($timeouts as $timeout) {
+							$sec = $timeout / 1000;
+							echo '<option value="'.$timeout.'"';
+							if ($arr['header_image_timeout'] == $timeout) {
+								echo ' selected';
+							}
+							echo '>'.$sec.' sec</option>';
+						}
+						?>
+						</select> Slideshow timeout
+					</p>
+					<p>
 					<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save image(s)</button></span>
 					<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
 					<span id="ajax_status_header_image" style="display:none;"></span>
-
-					
-					<div id="directory_view_slides" style="max-height:400px;"></div>
+					</p>
+					</div>
+					<div id="directory_view_slides" style="max-height:400px;display:none"></div>
 					
 					</td>
 					<td style="vertical-align:top;float:right">&nbsp;
-					<div id="directory_view" style="max-height:400px;overflow:auto;"></div>
+					
 					</td>
 				</tr>
 			</table>
