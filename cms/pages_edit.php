@@ -814,7 +814,6 @@ foreach ( $js_files as $js ): ?>
 			});
 		});
 
-
 		$(".ads_area").change(function() {					
 			var value = $('input:radio[name=ads]:checked').val();
 			var img = (value == 0) ? 'css/images/area_ads_none.png' : 'css/images/area_ads.png';
@@ -827,9 +826,7 @@ foreach ( $js_files as $js ): ?>
 			$("#area_ads_overlay").toggle();
 		});	
 
-		$("#link_site_header_image").click(function(event){
-			$("#new_site_image").toggle();
-			
+		$("#btn_site_header_image").click(function(event){			
 			event.preventDefault();
 			var pages_id = $("#pages_id").val();
 			var users_id = $("#users_id").val();
@@ -845,12 +842,10 @@ foreach ( $js_files as $js ): ?>
 				},
 				success: function(data){	
 					$("#directory_view").empty().show().html(data).hide().fadeIn('fast');
-					$("<p><b>Select image(s)</b></p>").insertBefore($("#directory_view"));
+					$("#directory_view").append("<p><b>Select images</b></p>");
 					$("#directory_view_slides").empty().show();
-					$("<p><b>Current images</b></p>").insertBefore($("#directory_view_slides"));
 					$("#header_options").show();
 					$("#directory_view").css("padding", "10px").css("background", "#fff");
-					//$("#directory_view").show();
 					var filenames = [];
 					var tmp_filename = "";
 					$("#site-header-edit img").each(function() {
@@ -863,25 +858,18 @@ foreach ( $js_files as $js ): ?>
 							tmp_filename = filename;
 						}
 					});
-					console.log("filenames", filenames);
 
 					$("#directory_view img").each(function() {
 						var filename = $( this ).data("filename");
-						//console.log("filename", filename);
 						if (filenames.indexOf(filename) >= 0) {
-							console.log("Exists: ", filename);
 							$(this).next().prop('checked', true);
-							//var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
-							//$("#directory_view_slides").append(image);
 						}	
 					});
-
 				},
 			});
 			
 		});
 		
-
 		$('#btn_site_header_setup').click(function(event){
 			event.preventDefault();
 			var action = "save_site_header_setup_image";
@@ -892,8 +880,8 @@ foreach ( $js_files as $js ): ?>
 			var header_image = [];
 			$("#directory_view_slides div").each(function(){			
 				header_image.push($(this).attr("data-image"));
+				
 			});
-			console.log("header_image", header_image);
 
 			var header_caption = [];
 			$("input[name='header_caption[]'").each(function (){
@@ -902,9 +890,6 @@ foreach ( $js_files as $js ): ?>
 			
 			var header_image_timeout = $("#header_image_timeout").val();
 			var header_caption_show = $('input:checkbox[name=header_caption_show]').is(':checked') ? 1 : 0;
-
-			console.log("header_image_timeout", header_image_timeout);
-			console.log("header_caption_show", header_caption_show);
 			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_header_image').show()},
@@ -917,36 +902,31 @@ foreach ( $js_files as $js ): ?>
 				},
 				success: function(newdata){
 					ajaxReply('','#ajax_status_header_image');
+					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#setup';
+					location.reload(true);
+					
 				},
 			});
 			
 		});
 
 
-
 		$("#directory_view").delegate( ".image_mark", "click", function() {
 			var filename = $(this).attr("data-file");
-
-			//var image = '<img data-image=\"'+filename+'\" src=\"../content/uploads/header/'+ filename + '\" class="fluid">';
 			var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
-			console.log("Aloha");
 			var isFile = false;
 			$("#directory_view_slides div").each(function(){
 				img = $(this).attr("data-image");
 				if(img == filename) {
 					isFile = true;
 				}
-				// console.log(img); 
 			});
-
 
 			$("#directory_view input").each(function(){
 				var checked = $(this).is(':checked') ? 1 : 0;
 				var filename = $(this).attr("data-file");
-				console.log(checked);
 				if(checked == 0) {
 					$("#directory_view_slides div").each(function(){
-						console.log($(this).attr("data-image"));
 						if (filename == $(this).attr("data-image")) {
 							$(this).remove();
 						}
@@ -958,26 +938,7 @@ foreach ( $js_files as $js ): ?>
 				$("#directory_view_slides").append(image);
 			}
 
-
 		});		
-
-		$("#directory_view_slides img").sortable({
-			placeholder: "ui-state-highlight",
-			axis: 'y',
-			opacity: 0.6, 
-			cursor: 'move', 
-			update: function() {
-				/*
-				var token = $("#token").val();
-				var pages_id = $("#pages_id").val();
-				var order = $(this).sortable("serialize") + "&action=update_pages_position&token=" + token + "&pages_id=" + pages_id;
-					$.post("pages_edit_ajax.php", order, function(message){
-					ajaxReply(message,'#ajax_result_move');
-				});
-				*/
-			}				
-		});
-		
 
 		$('#btn_site_ads').click(function(event){
 			event.preventDefault();
@@ -2695,7 +2656,7 @@ if(is_array($check_edit)) {
 					<td width="25%" style="vertical-align:top;">
 						<h4><i class="fa fa-picture-o" aria-hidden="true"></i> Header image</h4>
 						<p>
-							<span class="toolbar"><button id="link_site_header_image">Show images</button></span>
+							<span class="toolbar"><button id="btn_site_header_image">Show selectable images</button></span>
 							
 						</p>
 					</td>
@@ -2703,10 +2664,7 @@ if(is_array($check_edit)) {
 						<?php
 						$header_image = json_decode($arr['header_image']);
 						$header_caption = json_decode($arr['header_caption']);
-
-						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';
-						$height_scaled = 100;
-						
+						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';						
 						echo '<div class="cycle-slideshow" id="site-header-edit" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-edit-alt-caption">';
 						$n = 0;
 						if (count($header_image)) {
@@ -2718,8 +2676,6 @@ if(is_array($check_edit)) {
 						}
 						echo '</div>';
 						echo '<div id="site-header-edit-alt-caption"></div>';
-						
-					
 						?>
 					</td>
 					<td width="25%" align="right">
@@ -2756,7 +2712,7 @@ if(is_array($check_edit)) {
 						</select> Slideshow timeout
 					</p>
 					<p>
-					<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save image(s)</button></span>
+					<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
 					<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
 					<span id="ajax_status_header_image" style="display:none;"></span>
 					</p>
@@ -4331,21 +4287,25 @@ if(is_array($check_edit)) {
 		
 			<table>
 				<tr>
-					<td style="vertical-align:top;width:25%;">
-					<h4>Story:</h4> 138px &laquo;&nbsp;&raquo; 306px
-					<br />
-					<div>
-					<textarea name="story_content" id="story_content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['story_content'];?></textarea>
-					</div>
+					<td style="vertical-align:top;width:30%;">
+						<h4>Story</h4> 
+						<p>
+							<i>&lt= 33% of page width<i>
+						</p>
+						<div>
+							<textarea name="story_content" id="story_content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['story_content'];?></textarea>
+						</div>
 					</td>
-					<td style="width:5%">&nbsp;
+					<td>&nbsp;
 					</td>
 					<td style="vertical-align:top;width:70%;">
-					<h4>Story wide:</h4> 474px &laquo;&nbsp;&raquo; 726px
-					<br />
-					<div>
-					<textarea name="story_wide_content" id="story_wide_content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['story_wide_content'];?></textarea>
-					</div>
+						<h4>Story wide:</h4>
+						<p>
+							<i>&gt;  50% of page width<i>
+						</p>
+						<div>
+							<textarea name="story_wide_content" id="story_wide_content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['story_wide_content'];?></textarea>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -4357,7 +4317,7 @@ if(is_array($check_edit)) {
 					
 					<td style="padding-left:5px;vertical-align:top;">
 						<div style="float:left;">
-							Teaser image settings -> story 474px-726px  
+							Teaser image settings -> story wide  
 							<br /><input type="radio" name="story_wide_teaser_image" id="story_wide_teaser_image" value="0" <?php if($arr['story_wide_teaser_image'] == 0) {echo 'checked';}?>> exclude
 							<br /><input type="radio" name="story_wide_teaser_image" id="story_wide_teaser_image" value="1" <?php if($arr['story_wide_teaser_image'] == 1) {echo 'checked';}?>> include full size above story
 							<br /><input type="radio" name="story_wide_teaser_image" id="story_wide_teaser_image" value="2" <?php if($arr['story_wide_teaser_image'] == 2) {echo 'checked';}?>> align image left|right (set size and alignment in the page that shows stories)
@@ -4381,34 +4341,25 @@ if(is_array($check_edit)) {
 		<div class="admin-panel">
 
 			<h4><i class="fa fa-leaf" aria-hidden="true"></i> RSS</h4>
-		
-			<table>
-				<tr>
-					<td>
-					<p>
-					<span style="font-size:2.14em;padding:5px;"><?php if(isset($arr['title'])){echo $arr['title'];}?></span>
-					</p>
-					<div style="padding:5px;">
-					RSS description</br />
-					<textarea name="rss_description" id="rss_description" style="width:800px;min-height:100px;"><?php echo $arr['rss_description'];?></textarea>
-					</div>
-					</td>
-				</tr>
-				<tr>
-					<td style="padding-top:5px;">
-					<div style="padding:5px;">
-					<input type="checkbox" name="rss_promote" id="rss_promote" value="1" <?php if($arr['rss_promote'] == 1) {echo 'checked';}?>>
-					include in RSS feeds | <img src="../cms/css/images/feed-icon-14x14.png"> <i>published pages, public access</i>
-					<p>
+
+			<p>
+				<span style="font-size:2.14em;padding:5px;"><?php if(isset($arr['title'])){echo $arr['title'];}?></span>
+			</p>
+			<div style="padding:5px;">
+				RSS description</br />
+				<textarea name="rss_description" id="rss_description" style="width:90%;min-height:100px;"><?php echo $arr['rss_description'];?></textarea>
+			</div>
+
+			<div style="padding:5px;">
+				<input type="checkbox" name="rss_promote" id="rss_promote" value="1" <?php if($arr['rss_promote'] == 1) {echo 'checked';}?>>
+				include in RSS feeds | <img src="../cms/css/images/feed-icon-14x14.png"> <i>published pages, public access</i>
+				<p>
 					<span class="toolbar"><button class="content_save">Save</button></span>
 					<span class="ajax_spinner_content" style='display:none'><img src="css/images/spinner.gif"></span>
 					<span class="ajax_status_content" style='display:none'></span>
-					</p>
-					<a href="rss_preview.php?id=<?php echo $arr['pages_id']; ?>" target="_blank">preview</a>
-					</div>
-					</td>
-				</tr>
-			</table>
+				</p>
+				<a href="rss_preview.php?id=<?php echo $arr['pages_id']; ?>" target="_blank">preview</a>
+			</div>
 
 		</div>
 	
@@ -4436,11 +4387,11 @@ if(is_array($check_edit)) {
 			$users_rights = $pages_rights->getPagesUsersRightsMeta($id, $users_id);
 			$groups_rights = $pages_rights->getPagesGroupsRightsMeta($id);
 			?>
-			<p>
-			<table>
+			
+			<table style="width:100%">
 				<tr>
 					<td>
-						<input id="users_find" name="users_find" value="<?php if(isset($_REQUEST['users_find'])) {echo $_REQUEST['users_find']; } ?>"  style="min-width:300px;" />
+						<input id="users_find" name="users_find" value="<?php if(isset($_REQUEST['users_find'])) {echo $_REQUEST['users_find']; } ?>"  style="width:300px;" />
 						<input type="hidden" id="pid" /><span class="toolbar_add"><button id="btn_add_users_rights">Add user</button></span>
 					</td>
 					<td>
@@ -4453,7 +4404,7 @@ if(is_array($check_edit)) {
 					</td>
 				</tr>
 			</table>
-			</p>
+			
 			<p>
 			
 				<?php
@@ -4547,12 +4498,12 @@ if(is_array($check_edit)) {
 			<p>
 				<label for="meta_description">Meta descripton: </label>
 				<br />
-				<input type="text" name="meta_description" id="meta_description" title="Enter meta description" style="width:900px;" maxlength="200" value="<?php if(isset($arr['meta_description'])){echo $arr['meta_description'];}?>" />
+				<input type="text" name="meta_description" id="meta_description" title="Enter meta description" style="width:90%;" maxlength="200" value="<?php if(isset($arr['meta_description'])){echo $arr['meta_description'];}?>" />
 			</p>
 			<p>
 				<label for="meta_keywords">Meta keywords: </label>
 				<br />
-				<input type="text" name="meta_keywords" id="meta_keywords" title="Enter meta keywords" style="width:900px;" maxlength="200" value="<?php if(isset($arr['meta_keywords'])){echo $arr['meta_keywords'];}?>" />
+				<input type="text" name="meta_keywords" id="meta_keywords" title="Enter meta keywords" style="width:90%;" maxlength="200" value="<?php if(isset($arr['meta_keywords'])){echo $arr['meta_keywords'];}?>" />
 				<span class="toolbar_gear"><button id="suggest_meta_keywords" title="Get words from title and story, reload page if words from story doesn't show.">Suggest</button></span>
 				<span id="ajax_spinner_meta_keywords" style='display:none'><img src="css/images/spinner.gif"></span>
 				<span id="ajax_status_meta_keywords" style='display:none'></span>			
@@ -4560,7 +4511,7 @@ if(is_array($check_edit)) {
 			<p>
 				<label for="meta_additional">Meta additional tags (max 255 characters)</label>
 				<br />
-				<textarea id="meta_additional" id="meta_additional" style="width:900px;height:100px;"><?php if(isset($arr['meta_additional'])){echo htmlspecialchars(stripcslashes($arr['meta_additional']));}?></textarea>
+				<textarea id="meta_additional" id="meta_additional" style="width:90%;height:100px;"><?php if(isset($arr['meta_additional'])){echo htmlspecialchars(stripcslashes($arr['meta_additional']));}?></textarea>
 			</p>	
 			<p>
 			<label for="meta_robots">Meta robots (if not set default action taken: index, follow): </label>
