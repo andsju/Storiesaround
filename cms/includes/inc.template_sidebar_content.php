@@ -43,7 +43,9 @@
             <?php
             if($_SESSION['site_navigation_vertical_sidebar'] == 0) {
                 echo '<nav id="nav-site-navigation-vertical">';
-                get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo, $href, $open, $depth=0, $show_pages_id = false);									
+                if (!isset($_GET['sample'])) {
+                    get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo, $href, $open, $depth=0, $show_pages_id = false);
+                }
                 echo '</nav>';
             }
             ?>

@@ -814,18 +814,6 @@ foreach ( $js_files as $js ): ?>
 			});
 		});
 
-		$(".ads_area").change(function() {					
-			var value = $('input:radio[name=ads]:checked').val();
-			var img = (value == 0) ? 'css/images/area_ads_none.png' : 'css/images/area_ads.png';
-			$("#box_site_preview_ads").empty().append("<img src='" + img + "'>").hide().fadeIn('fast');
-		});	
-
-		$("#checkbox_area_ads_overlay").click(function() {
-			var img = $(this).is(":checked") ? 'css/images/area_ads_overlay.png' : 'css/images/area_ads.png';
-			$("#box_site_preview_ads").empty().append("<img src='" + img + "'>").hide().fadeIn('fast');
-			$("#area_ads_overlay").toggle();
-		});	
-
 		$("#btn_site_header_image").click(function(event){			
 			event.preventDefault();
 			var pages_id = $("#pages_id").val();
@@ -940,30 +928,6 @@ foreach ( $js_files as $js ): ?>
 
 		});		
 
-		$('#btn_site_ads').click(function(event){
-			event.preventDefault();
-			var action = "save_site_ads";
-			var ads = $('input:radio[name=ads]:checked').val();
-			var ads_limit = $("#ads_limit option:selected").val();
-			var ads_filter = $("#ads_filter").val();
-			var token = $("#token").val();
-			var users_id = $("#users_id").val();
-			var pages_id = $("#pages_id").val();
-			$.ajax({
-				beforeSend: function() { loading = $('#ajax_spinner_ads').show()},
-				complete: function(){ loading = setTimeout("$('#ajax_spinner_ads').hide()",700)},
-				type: 'POST',
-				url: 'pages_edit_ajax.php',
-				data: { 
-					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					ads: ads, ads_limit: ads_limit, ads_filter: ads_filter
-				},
-				success: function(message){	
-					ajaxReply(message,'#ajax_status_ads');
-				},
-			});
-		});
-		
 		$('#btn_site_selections').click(function(event){
 			event.preventDefault();
 			var action = "save_site_selections";
@@ -2733,7 +2697,7 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;">
-						<b>Show selections</b>
+						<h4><i class="fa fa-tasks" aria-hidden="true"></i> Selections</h4>
 						<p style="margin-top:10px;">
 							<span class="toolbar"><button id="btn_site_selections" value="btn_site_selections">Save selections</button></span>
 							<span id="ajax_spinner_selections" style='display:none'><img src="css/images/spinner.gif"></span>
@@ -2779,63 +2743,6 @@ if(is_array($check_edit)) {
 			
 		</div>
 		
-		<div class="admin-panel hidden">
-		
-			<table border="0" style="width:100%;">
-				<tr>
-					<td width="25%" style="vertical-align:top;">
-					
-					<b>Show ads</b>
-					<p style="margin-top:10px;">
-					<input type="radio" class="ads_area" name="ads" id="ads" value="0" <?php if($arr['ads']==0){echo 'checked';}?>>&nbsp;none				
-					<br /><input type="radio" class="ads_area" name="ads" id="ads" value="1" <?php if($arr['ads']==1){echo 'checked';}?>>&nbsp;some
-					<br /><input type="radio" class="ads_area" name="ads" id="ads" value="2" <?php if($arr['ads']==2){echo 'checked';}?>>&nbsp;...
-					<br /><input type="radio" class="ads_area" name="ads" id="ads" value="3" <?php if($arr['ads']==3){echo 'checked';}?>>&nbsp;all
-					</p>
-					<p style="margin-top:10px;">
-						<span class="toolbar"><button id="btn_site_ads" value="btn_site_ads">Save ads settings</button></span>				
-						<span id="ajax_spinner_ads" style='display:none'><img src="css/images/spinner.gif"></span>
-						<br /><span id="ajax_status_ads" style='display:none'></span>
-					</p>
-					</td>
-					<td style="vertical-align:top;">
-					<p>
-						<select id="ads_limit" name="ads_limit">
-							<?php
-							$selected = isset($arr['ads_limit']) ? $arr['ads_limit'] : 5;
-							for ($i = 1; $i <= 10; $i++) {
-								?>
-								<option value="<?php echo $i; ?>" <?php if($selected==$i) {echo ' selected=selected';} ?>><?php echo $i;?></option>
-								<?php
-							}						
-							?>
-						</select> Limit numbers of banners in this page
-					</p>
-					<p>
-						Set filter (if not set all active and published banners will be shown in this page):
-						<input id="ads_filter" value="<?php echo $arr['ads_filter']; ?>">
-						<br /><br />
-						Ads are randomly selected.					
-					</p>
-					</td>
-					
-					<td width="25%" align="right">
-					<?php 			
-					$img = ($arr['ads']==0) ? 'css/images/area_ads_none.png' : 'css/images/area_ads.png';
-					
-					echo '<div id="box_site_preview_ads" style="width:180px;height:180px;">';
-					echo '<div id="area_ads_overlay" style="display:none;">';
-						echo '<div style="position:absolute;margin:0px;z-index:1000;background:url(css/images/area_ads_overlay.png) #fff;width:180px;height:180px;"></div>';
-					echo '</div>';
-					echo '<img id="site_preview" src="'. $img .'">';
-					echo '</div>';				
-					?>
-					
-					</td>
-				</tr>
-			</table>
-			
-		</div>
 	
 	</div>
 
@@ -4531,93 +4438,131 @@ if(is_array($check_edit)) {
 		
 		
 	<div id="publish">	
-		
+	
 		<div class="admin-panel">
-			<p>
-			<div style="float:right;text-align:right;padding:3px;">
-				<span style="">Page status:</span>&nbsp;
-				<select name="status" id="status" style="font-weight:bold;padding:5px;border:1px dotted #000;width:150px;" disabled="disabled">
-					<option value="1" <?php if($arr['status']==1) { echo ' selected=selected';} ?>>draft</option>
-					<option value="2" <?php if($arr['status']==2) { echo ' selected=selected';} ?>>published</option>
-					<option value="3" <?php if($arr['status']==3) { echo ' selected=selected';} ?>>archived</option>
-					<option value="4" <?php if($arr['status']==4) { echo ' selected=selected';} ?>>pending</option>
-					<option value="5" <?php if($arr['status']==5) { echo ' selected=selected';} ?>>trash</option>
-				</select>
-			</div>
-		
-			Page can be viewed by<br />
-			<input type="radio" name="access" id="access" value="0" <?php if($arr['access'] == 0) {echo 'checked';}?>> logged in users with rights to read
-			<br />
-			<input type="radio" name="access" id="access" value="1" <?php if($arr['access'] == 1) {echo 'checked';}?>> logged in users
-			<br />
-			<input type="radio" name="access" id="access" value="2" <?php if($arr['access'] == 2) {echo 'checked';}?>> everyone (public access)
-			</p>
+
+			<span style="">Page status:</span><br>
+			<select name="status" id="status" style="font-weight:bold;padding:5px;border:1px dotted #000;width:150px;" disabled="disabled">
+				<option value="1" <?php if($arr['status']==1) { echo ' selected=selected';} ?>>draft</option>
+				<option value="2" <?php if($arr['status']==2) { echo ' selected=selected';} ?>>published</option>
+				<option value="3" <?php if($arr['status']==3) { echo ' selected=selected';} ?>>archived</option>
+				<option value="4" <?php if($arr['status']==4) { echo ' selected=selected';} ?>>pending</option>
+				<option value="5" <?php if($arr['status']==5) { echo ' selected=selected';} ?>>trash</option>
+			</select>
+			
 		</div>
 
+		<div class="admin-panel">
+			<div class="clearfix">
+				<div class="publish-step">
+					<h4>Step 1</h4>
+				</div>
+				<div class="publish-step">
+					<h4><i class="fa fa-user-secret" aria-hidden="true"></i> Page visibilty</h4>
+					
+					<input type="radio" name="access" id="access" value="0" <?php if($arr['access'] == 0) {echo 'checked';}?>> logged in users with rights to read
+					<br />
+					<input type="radio" name="access" id="access" value="1" <?php if($arr['access'] == 1) {echo 'checked';}?>> logged in users
+					<br />
+					<input type="radio" name="access" id="access" value="2" <?php if($arr['access'] == 2) {echo 'checked';}?>> everyone (public access)
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="admin-panel">
+			
+			<div class="clearfix">
+				<div class="publish-step">
+					<h4>Step 2</h4>
+				</div>
+				<div class="publish-step">
+					<h4><i class="fa fa-check-square-o" aria-hidden="true"></i> Friendly URL</h4>
+
+					<label for="pages_id_link">Friendly URL, use following title based link: </label>
+					<br />
+					<input type="text" name="pages_id_link" id="pages_id_link" title="Enter id link" size="50" maxlength="100" value="<?php if(isset($arr['pages_id_link'])){echo $arr['pages_id_link'];}?>" />
+					
+					<span class="toolbar_gear"><button id="seo_link">Suggest</button></span>
+					<span class="toolbar"><button id="btn_save_seo_link">Save friendly URL</button></span>
+					<span id="ajax_spinner_seo_link" style='display:none'><img src="css/images/spinner.gif"></span>
+					<span id="ajax_status_seo_link" style='display:none'></span>
+					<p>
+					<input type="checkbox" id="stopwords" name="stopwords" checked="checked"> Reduce common words 
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="admin-panel">
+		
+			<div class="clearfix">
+				<div class="publish-step">
+					<h4>Step 3</h4>
+				</div>
+				<div class="publish-step">
+
+					<h4><i class="fa fa-play" aria-hidden="true"></i> Publish</h4>
+
+					<p>
+						<?php
+						$date_start = ($arr['utc_start_publish']>'2000-01-01 00:00') ? new DateTime(utc_dtz($arr['utc_start_publish'], $dtz, 'Y-m-d H:i:s')) : new DateTime(get_utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s'));
+						$date_end = ($arr['utc_end_publish']>'2000-01-01 00:00') ? new DateTime(utc_dtz($arr['utc_end_publish'], $dtz, 'Y-m-d H:i:s')) : null;
+						?>
+						
+						<label for="date_start">Start publish:</label><br />
+						<input type="text" id="date_start" title="yyyy-mm-dd" value="<?php if($date_start) {echo $date_start->format('Y-m-d');} ?>">
+						<input type="text" id="time_start" size="5" maxlength="5" title="add hours and minutes hh:mm" value="<?php if($date_start) {echo $date_start->format('H:i');} ?>">
+					</p>
+					<p>
+						<label for="date_end">End publish: (if set)</label><br />
+						<input type="text" id="date_end" value="<?php if($date_end) {echo $date_end->format('Y-m-d');} ?>">
+						<input type="text" id="time_end" size="5" maxlength="5" title="add hours and minutes hh:mm" value="<?php if($date_end) {echo $date_end->format('H:i');} ?>">
+					</p>
+
+
+					<?php if(get_role_CMS('author') == 1) { ?>
+						<div style="padding-top:10px;">
+							<span class="toolbar_publish"><button class="btn_pages_publish" id="<?php echo $id;?>" style="border:3px solid black">Publish</button></span>
+							<span id="ajax_spinner_publish" style="display:none;"><img src="css/images/spinner.gif"></span>
+							<span id="ajax_status_publish" style="display:none;"></span>
+						</div>
+					<?php } else { ?>
+						<p>
+							<i>Contact someone with rights to publish this page: </i><span class="toolbar"><button class="btn_pages_pending" id="<?php echo $id;?>">Ready to publish (pending)</button></span>
+						</p>
+					<?php } ?>
+				
+				</div>
+
+			</div>
+			
+		</div>
 		<div class="admin-panel">
 			<label for="pages_id_link">Title tag in head (leave field empty to use default -> page title): </label>
 			<br />
 			<input type="text" name="title_tag" id="title_tag" title="Override default title tag" size="50" maxlength="100" value="<?php if(isset($arr['title_tag'])){echo $arr['title_tag'];}?>" />
 		</div>
-		
-		<div class="admin-panel">
-			<label for="pages_id_link">Friendly URL, use following title based link: </label>
-			<br />
-			<input type="text" name="pages_id_link" id="pages_id_link" title="Enter id link" size="50" maxlength="100" value="<?php if(isset($arr['pages_id_link'])){echo $arr['pages_id_link'];}?>" />
-			<input type="checkbox" id="stopwords" name="stopwords" checked="checked"> Reduce common words 
-			<span class="toolbar_gear"><button id="seo_link">Suggest</button></span>
-			<span class="toolbar"><button id="btn_save_seo_link">Save friendly URL</button></span>
-			<span id="ajax_spinner_seo_link" style='display:none'><img src="css/images/spinner.gif"></span>
-			<span id="ajax_status_seo_link" style='display:none'></span>
-		</div>
-		
-		<div class="admin-panel">
-		
-			<div style="float:right;overflow:auto;max-height:120px;width:500px;border:3px dotted #FFF;padding:5px;">
 
-				Site publish guideline:
-				<p>
-					<i>
-					<?php 
-					if(isset($_SESSION['site_publish_guideline'])) {
-						echo nl2br($_SESSION['site_publish_guideline']);
-					}					
-					?>
-					</i>
-				</p>
+		
 
-			</div>		
-			
+		<div class="admin-panel">
+			Site publish guideline:
 			<p>
-				<?php
-				$date_start = ($arr['utc_start_publish']>'2000-01-01 00:00') ? new DateTime(utc_dtz($arr['utc_start_publish'], $dtz, 'Y-m-d H:i:s')) : new DateTime(get_utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s'));
-				$date_end = ($arr['utc_end_publish']>'2000-01-01 00:00') ? new DateTime(utc_dtz($arr['utc_end_publish'], $dtz, 'Y-m-d H:i:s')) : null;
+			<div style="border:3px dotted #FFF;padding:20px;">
+				<i>
+				<?php 
+				if(isset($_SESSION['site_publish_guideline'])) {
+					echo nl2br($_SESSION['site_publish_guideline']);
+				}					
 				?>
-				
-				<label for="date_start">Start publish:</label><br />
-				<input type="text" id="date_start" title="yyyy-mm-dd" value="<?php if($date_start) {echo $date_start->format('Y-m-d');} ?>">
-				<input type="text" id="time_start" size="5" maxlength="5" title="add hours and minutes hh:mm" value="<?php if($date_start) {echo $date_start->format('H:i');} ?>">
-			</p>
-			<p>
-				<label for="date_end">End publish: (if set)</label><br />
-				<input type="text" id="date_end" value="<?php if($date_end) {echo $date_end->format('Y-m-d');} ?>">
-				<input type="text" id="time_end" size="5" maxlength="5" title="add hours and minutes hh:mm" value="<?php if($date_end) {echo $date_end->format('H:i');} ?>">
-			</p>
-			
-			<?php if(get_role_CMS('author') == 1) { ?>
-				<div style="padding-top:10px;">
-					<span class="toolbar_publish"><button class="btn_pages_publish" id="<?php echo $id;?>">Publish</button></span>
-					<span id="ajax_spinner_publish" style="display:none;"><img src="css/images/spinner.gif"></span>
-					<span id="ajax_status_publish" style="display:none;"></span>
+				</i>
 				</div>
-			<?php } else { ?>
-				<p>
-					<i>Contact someone with rights to publish this page: </i><span class="toolbar"><button class="btn_pages_pending" id="<?php echo $id;?>">Ready to publish (pending)</button></span>
-				</p>
-			<?php } ?>
-			
+			</p>
 		</div>
-		
+
+
+
 		<div class="admin-panel">
 
 			<div style="float:right;overflow:auto;height:400px;">

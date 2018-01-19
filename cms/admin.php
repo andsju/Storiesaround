@@ -436,9 +436,10 @@ include_once 'includes/inc.site_active_user_administration.php';
 
 
 <?php
-echo '<img src="css/images/storiesaround_logotype_black.png" alt="Storiesaround logotype" style="width:120px;float:right;"/>';
-// build tab menu
 
+// build tab menu
+echo '<div class="admin-tabs-level-1">';
+echo '<img src="css/images/storiesaround_logotype_black.png" alt="Storiesaround logotype" style="width:120px;float:right;"/>';
 echo '<div class="sub-tabs ui-tabs ui-widget" style="float:left;">';
 get_tab_menu_jquery_ui_look_alike($_SERVER["PHP_SELF"], array("dashboard","site","files"), array("Dashboard","Site","Files"), "t", "", null, $ui_ul_add_class="ui-two", $ui_a_add_class="");
 echo '</div>';
@@ -448,7 +449,7 @@ get_tab_menu_jquery_ui_look_alike($_SERVER["PHP_SELF"], array("users","groups"),
 echo '</div>';
 
 echo '<div class="sub-tabs ui-tabs ui-widget ui-corner-all" style="float:left;">';
-get_tab_menu_jquery_ui_look_alike($_SERVER["PHP_SELF"], array("pages","selections","calendars","banners"), array("Pages","Selections","Calendars","Banners"), "t", "", null, $ui_ul_add_class="ui-two", $ui_a_add_class="");
+get_tab_menu_jquery_ui_look_alike($_SERVER["PHP_SELF"], array("pages","selections","calendars"), array("Pages","Selections","Calendars"), "t", "", null, $ui_ul_add_class="ui-two", $ui_a_add_class="");
 echo '</div>';
 
 echo '<div class="sub-tabs ui-tabs ui-widget ui-corner-all" style="float:left;">';
@@ -458,7 +459,7 @@ echo '</div>';
 echo '<div class="sub-tabs ui-tabs ui-widget ui-corner-all" style="float:left;">';
 get_tab_menu_jquery_ui_look_alike($_SERVER["PHP_SELF"], array("updates"), array("Updates"), "t", "", null, $ui_ul_add_class="ui-two" ,$ui_a_add_class="");
 echo '</div>';
-
+echo '</div>';
 
 $t = (isset($_GET['t'])) ? $_GET['t'] : null;
 
@@ -1506,7 +1507,7 @@ switch($t) {
 					?>
 					<p>
 						Pages are designed through templates and markup language. 
-						They are also containers for selections, banners, widgets and more. 
+						They are also containers for selections, widgets and more. 
 						A minor version of a page is called a story. These stories can be pushed to other pages. 
 						A page is connected (default) to a hierarchy tree.
 					</p>
@@ -1781,55 +1782,6 @@ switch($t) {
 		echo '</div>';
 
 		break;
-
-		
-	case 'banners':
-	
-		echo '<div class="admin-heading">';
-			echo '<div class="float">';
-				echo '<div class="cms-ui-icons cms-ui-banners"></div>';
-				echo '<div class="float">';
-					echo '<a href="'.CMS_HOME.'/help/'.$t.'" target="_blank" title="How to - '.$t.'"><h1 class="admin-heading" style="color:#FFF;">Banners</h1></a>';
-				echo '</div>';
-			echo '</div>';
-			echo '<div class="sub-tabs ui-tabs ui-widget" style="float:right;margin-top:22px;padding: 0em;">';
-				get_tab_menu_jquery_ui_look_alike($this_url, array("add","find","?"), array("Add banner","Find banner","?"), "tb", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
-			echo '</div>';	
-		echo '</div>';
-
-		
-		if(!get_role_CMS('administrator') == 1) {
-			die;
-		}
-
-		echo '<div class="admin-area-outer ui-widget ui-widget-content">';
-			echo '<div class="admin-area-inner">';
-		
-			$tb = (isset($_GET['tb'])) ? $_GET['tb'] : null;
-			
-			switch($tb) {		
-				case 'add':
-					include 'includes/inc.banners_add.php';
-				break;		
-				case 'find':
-					include 'includes/inc.banners_find.php';
-				break;
-					
-				default:
-					?>
-					<p>
-						Banners are randomly selected (default) in each area. It is possible to set filter options.
-					</p>
-					<img src="css/images/area_ads.png" style="padding-left:20px;" />
-					<?php
-				break;
-			}			
-		
-			echo '</div>';
-		echo '</div>';
-
-		break;
-
 
 
 	case 'calendars':

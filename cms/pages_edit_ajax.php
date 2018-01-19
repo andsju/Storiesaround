@@ -182,22 +182,6 @@ if (isset($_POST['token'])){
 					
 				break;
 					
-					
-				case 'save_site_ads':
-					$pages_id = $_POST['pages_id'];
-					$ads = $_POST['ads'];
-					$ads_limit = $_POST['ads_limit'];
-					$ads_filter = $_POST['ads_filter'];
-					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-
-					$result = $pages->setPagesAds($pages_id, $ads, $ads_limit, $ads_filter, $utc_modified);
-					if($result) {
-						$history = new History();
-						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'site ads', $users_id, $_SESSION['token'], $utc_modified);
-					}
-
-				break;
-
 				
 				case 'sitetree_select_list':
 					
