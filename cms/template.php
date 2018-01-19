@@ -200,7 +200,6 @@ if ($arr['template'] == 6) {
     $rows_child = $pages->getPagesStoryContentPublishChild($id);    
 
 
-    print_r2($arr['template']);
     switch ($arr['template']) {	
         case 0:
             // sidebars

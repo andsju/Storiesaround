@@ -1937,7 +1937,7 @@ function get_sample_array()
     $arr['title_tag'] = $arr['meta_keywords'] = $arr['meta_description'] = $arr['meta_robots'] = $arr['meta_additional'] = $arr['plugins'] = $arr['selections'] = $arr['lang'] = $arr['ads'] = $arr['events']
         = $arr['ads'] = $arr['stories_limit'] = $arr['stories_promoted_area'] = $arr['stories_wide_teaser_image_align'] = $arr['stories_wide_teaser_image_width'] = $arr['stories_last_modified'] = $arr['access']
         = $arr['content_author'] = $arr['stories_event_dates'] = $arr['stories_columns'] = $arr['stories_child'] 
-        = $arr['header']
+        = $arr['header_caption']
         = $arr['breadcrumb']
         = $arr['utc_modified']
         = $arr['stories_event_dates_filter']
@@ -1951,6 +1951,9 @@ function get_sample_array()
         = $arr['stories_filter']
         = $arr['stories_equal_height'] = "";
     $arr['grid_active'] = null;
+    $arr['header_image'] = json_encode(['site_header_image_0.jpg']);
+    
+
     return $arr;
 }
 
