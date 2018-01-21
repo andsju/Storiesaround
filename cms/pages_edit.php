@@ -609,14 +609,55 @@ foreach ( $js_files as $js ): ?>
 			equalheight('div.grid-cell');
 		});
 
-	
+		$("#btnGridExport").click(function(event) {
+			event.preventDefault();
+			var grid_content = JSON.stringify($("#gridform").serializeArray());
+			grid_content = stringEscape(grid_content);
+			$("#grid_json").val(grid_content).fadeIn(700);
+		});
+
+		$("#btnGridImport").click(function(event) {
+			event.preventDefault();
+			$("#grid_json").fadeIn(700);
+			$("#btnGridImportSave").fadeIn(700);
+		});
+
+		$("#btnGridImportSave").click(function(event) {
+			event.preventDefault();
+			var grid_content = $("#grid_json").val();
+			grid_content = stringEscape(grid_content);
+			var action = "save_grid";
+			var token = $("#token").val();
+			var users_id = $("#users_id").val();
+			var pages_id = $("#pages_id").val();
+			var grid_active = $('input:checkbox[name=grid_active]').is(':checked') ? 1 : 0;
+			var grid_custom_classes = $("#grid_custom_classes").val();
+			var grid_cell_image_height = $("#grid_cell_image_height").val();
+			var grid_area = $('input:radio[name=grid_area]:checked').val();
+			var grid_cell_template = $('input:radio[name=grid_cell_template]:checked').val();
+
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_grid').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_grid').hide()",700)},
+				type: 'POST',
+				url: 'pages_edit_ajax.php',
+				data: { 
+					action: action, token: token, users_id: users_id, pages_id: pages_id,
+					grid_content: grid_content, grid_active: grid_active, grid_area: grid_area, 
+					grid_cell_template: grid_cell_template, grid_custom_classes: grid_custom_classes,
+					grid_cell_image_height: grid_cell_image_height
+				},
+				success: function(message){	
+					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#setup';
+					location.reload(true);
+				}
+			});
+		});
+
 		$("#btnSaveGrid").click(function(event) {
 			event.preventDefault();
 			var grid_content = JSON.stringify($("#gridform").serializeArray());
-			// escape quotes
 			grid_content = stringEscape(grid_content);
-			console.log(grid_content);
-
 			var action = "save_grid";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
@@ -642,8 +683,6 @@ foreach ( $js_files as $js ): ?>
 					ajaxReply(message,'#ajax_status_grid');
 				},
 			});
-
-
 		});
 
 		function stringEscape(s) {
@@ -2638,8 +2677,9 @@ if(is_array($check_edit)) {
 								$n++;
 							}
 						}
-						echo '</div>';
 						echo '<div id="site-header-edit-alt-caption"></div>';
+						echo '</div>';
+						
 						?>
 					</td>
 					<td width="25%" align="right">
@@ -4029,6 +4069,14 @@ if(is_array($check_edit)) {
 						<span id="ajax_spinner_grid" style='display:none'><img src="css/images/spinner.gif"></span>
 						<span id="ajax_status_grid" style='display:none'></span>
 					</p>
+					<div style="background-color:rgb(200,200,200);padding:10px;border:1px dashed black">
+						<span class="toolbar"><button name="btnGridExport" id="btnGridExport">Export content</button></span>
+						<span class="toolbar"><button name="btnGridImport" id="btnGridImport">Import content</button></span>
+						<span class="toolbar"><button name="btnGridImportSave" id="btnGridImportSave" style="display:none">Save import (reload page)</button></span>
+						<br>
+						<textarea id="grid_json" style="width:90%;display:none"></textarea>
+					</div>
+					
 				</div>
 
 
@@ -4590,6 +4638,8 @@ if(is_array($check_edit)) {
 </div>
 
 <?php include_once 'includes/inc.footer_cms.php'; ?>
-
+<?php
+print_r(ini_get('post_max_size'));
+?>
 </body>
 </html>

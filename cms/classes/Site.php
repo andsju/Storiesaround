@@ -194,6 +194,7 @@ class Site extends Database
      * @param int $site_id
      * @param string $site_theme
      * @param string $site_ui_theme
+     * @param string $site_template_default
      * @param string $site_template_sidebar_width
      * @param int $site_template_content_padding
      * @param int $site_title_position
@@ -203,14 +204,15 @@ class Site extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_sidebar_width, $site_template_content_padding, $site_title_position, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified)
+    public function setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_title_position, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified)
     {
         try {
             $sql = "UPDATE site
 			SET site_theme = :site_theme,
             site_wrapper_page_width = :site_wrapper_page_width,
 			site_ui_theme = :site_ui_theme,
-			site_template_sidebar_width = :site_template_sidebar_width,
+			site_template_default = :site_template_default,
+            site_template_sidebar_width = :site_template_sidebar_width,
 			site_template_content_padding = :site_template_content_padding,
 			site_title_position = :site_title_position,
 			site_navigation_horizontal = :site_navigation_horizontal,
@@ -223,7 +225,8 @@ class Site extends Database
             $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
             $stmt->bindParam(":site_wrapper_page_width", $site_wrapper_page_width, PDO::PARAM_INT);
             $stmt->bindParam(":site_theme", $site_theme, PDO::PARAM_STR);
-            $stmt->bindParam(":site_ui_theme", $site_ui_theme, PDO::PARAM_STR);
+            $stmt->bindParam(":site_ui_theme", $site_ui_theme, PDO::PARAM_STR);            
+            $stmt->bindParam(":site_template_default", $site_template_default, PDO::PARAM_INT);
             $stmt->bindParam(":site_template_sidebar_width", $site_template_sidebar_width, PDO::PARAM_INT);
             $stmt->bindParam(":site_template_content_padding", $site_template_content_padding, PDO::PARAM_INT);
             $stmt->bindParam(":site_title_position", $site_title_position, PDO::PARAM_INT);

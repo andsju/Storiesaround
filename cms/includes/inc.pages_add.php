@@ -10,18 +10,7 @@ if (!defined('VALID_INCL')) {
 
         var loading;
         $(document).delegate("a.colorbox_edit_reload", "click", function (event) {
-            event.preventDefault();
-
-            $(".colorbox_edit_reload").colorbox({
-                open: true,
-                width: "1260px",
-                height: "96%",
-                transition: "none",
-                iframe: true,
-                onClosed: function () {
-                    location.reload(true);
-                }
-            });
+            location.reload(true)
         });
 
         $('#btn_add_toplevel_page').click(function (event) {
@@ -45,7 +34,7 @@ if (!defined('VALID_INCL')) {
                     data: "action=" + action + "&token=" + token + "&users_id=" + users_id + "&title_toplevel_page=" + title_toplevel_page,
                     success: function (newdata) {
                         ajaxReply('', '#new_toplevel_page');
-                        $('<a href=pages_edit.php?id=' + newdata + ' class="colorbox_edit_reload"> Page created &raquo; click to edit <b>' + title_toplevel_page + '</b> <span class="ui-icon ui-icon-pencil" title="edit" style="display:inline-block;vertical-align:text-bottom;"></span></a>').hide().fadeIn('fast').insertAfter("#new_toplevel_page");
+                        $('<a href=pages_edit.php?id=' + newdata + ' class="colorbox_edit_reload" target="_blank"> Page created &raquo; click to edit <b>' + title_toplevel_page + '</b> <span class="ui-icon ui-icon-pencil" title="edit" style="display:inline-block;vertical-align:text-bottom;"></span></a>').hide().fadeIn('fast').insertAfter("#new_toplevel_page");
                         $('#btn_add_toplevel_page').attr('disabled', 'disabled');
                         $('#title_toplevel_page').val('');
                     }
