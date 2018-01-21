@@ -45,4 +45,6 @@ $sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "header
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'header image caption' AFTER `header_image`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_show", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'show header image caption' AFTER `header_caption`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_image_timeout", "column_definition" => "int(5) unsigned NOT NULL DEFAULT '10000' COMMENT 'header image timeout' AFTER `header_caption_show`");
+$sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_template_default", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT 'default page template' AFTER `site_wrapper_page_width`");
+
 ?>

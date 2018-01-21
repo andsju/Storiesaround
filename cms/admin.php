@@ -155,6 +155,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var site_theme = $("#site_theme option:selected").val();
 			var site_ui_theme = $("#site_ui_theme option:selected").val();
 			var site_title_position = $("#site_title_position option:selected").val();
+			var site_template_default = $('input:radio[name=site_template_default]:checked').val();
 			var site_template_content_padding = $("#site_template_content_padding option:selected").val();
 			var site_template_sidebar_width = $("#site_template_sidebar_width").val();
 			var site_navigation_horizontal = $("#site_navigation_horizontal").val();
@@ -167,7 +168,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 				url: 'admin_edit_ajax.php',				
 				data: { 
 					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
-					site_template_sidebar_width: site_template_sidebar_width, site_template_sidebar_width: site_template_sidebar_width, site_title_position: site_title_position, 
+					site_template_sidebar_width: site_template_sidebar_width, site_template_default: site_template_default, site_template_sidebar_width: site_template_sidebar_width, site_title_position: site_title_position, 
 					site_navigation_horizontal: site_navigation_horizontal, site_navigation_vertical: site_navigation_vertical, site_navigation_vertical_sidebar: site_navigation_vertical_sidebar
 				},
 				success: function(message){	
@@ -733,7 +734,11 @@ switch($t) {
 								<tr>
 									<td width="25%" style="vertical-align:top;padding-right:50px;">
 										
-										<h3 class="admin_heading">Page templates settings</h3>
+										<h3 class="admin_heading">Page template settings</h3>
+										<p>
+											Set default template &raquo;
+										</p>
+
 										<p>
 											Set value for sidebar width (if sidebar exists in choosen template). Applies to <b>all pages in this site</b>.
 										</p>
@@ -744,14 +749,14 @@ switch($t) {
 										
 									</td>
 									<td>
-										<div style="box-sizing:border-box;width:100%;padding:0 20px;height:170px;overflow-y: hidden;overflow:auto;background:#FCFCFC;border: 1px dashed #D0D0D0;">
-
-												<div class="page_templates">"Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>			
-												<div class="page_templates">"Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
-												<div class="page_templates">"Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
-												<div class="page_templates">"Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
-												<div class="page_templates">"Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
-
+										<div style="box-sizing:border-box;width:100%;padding:0 20px;height:280px;overflow-y: hidden;overflow:auto;background:#FCFCFC;border: 1px dashed #D0D0D0;">
+											<div class="page_templates"><input type="radio" name="site_template_default" value="0" <?php if($site['site_template_default'] == 0) {echo 'checked';}?>> "Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="1" <?php if($site['site_template_default'] == 1) {echo 'checked';}?>> "Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="2" <?php if($site['site_template_default'] == 2) {echo 'checked';}?>> "Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="3" <?php if($site['site_template_default'] == 3) {echo 'checked';}?>> "Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="4" <?php if($site['site_template_default'] == 4) {echo 'checked';}?>> "Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="5" <?php if($site['site_template_default'] == 5) {echo 'checked';}?>> Custom "main"<img src="css/images/template_panorama_custom_main.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="6" <?php if($site['site_template_default'] == 6) {echo 'checked';}?>> Custom "page"<img src="css/images/template_panorama_custom_page.png" style="margin-top:10px;height:75px;"></div>
 										</div>
 
 									<td>
