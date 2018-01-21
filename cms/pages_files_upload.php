@@ -4,11 +4,8 @@
 include_once 'includes/inc.core.php';
 
 if(isset($_REQUEST['token'])){
-	// only accept $_POST from this §_SESSION['token']
 	if ($_REQUEST['token'] == $_SESSION['token']) {
-
 		
-		// Flatten a multidimensional array to one dimension
 		function flatten_array_values(array $a, $utf8_encode=false) {
 			$ret_array = array();
 			foreach(new RecursiveIteratorIterator(new RecursiveArrayIterator($a)) as $k=>$v){
@@ -17,7 +14,6 @@ if(isset($_REQUEST['token'])){
 			return $ret_array;
 		}
 
-		// Flatten a multidimensional array to one dimension
 		function flatten_array_keys(array $a, $utf8_encode=false) {
 			$ret_array = array();
 			foreach(new RecursiveIteratorIterator(new RecursiveArrayIterator($a)) as $k=>$v){
@@ -116,14 +112,16 @@ if(isset($_REQUEST['token'])){
 			}
 			
 			private function toBytes($str){
-				$val = trim($str);
-				$last = strtolower($str[strlen($str)-1]);
-				switch($last) {
-					case 'g': $val *= 1024*1024*1024;
-					case 'm': $val *= 1024*1024;
-					case 'k': $val *= 1024;        
+				$unit = strtolower($str[strlen($str)-1]);
+				$size = substr($str, 0, -1);
+				
+				switch($unit) {
+					case 'g': $size *= 1024*1024*1024;
+					case 'm': $size *= 1024*1024;
+					case 'k': $size *= 1024;        
 				}
-				return $val;
+				
+				return $size;
 			}
 			
 			/**

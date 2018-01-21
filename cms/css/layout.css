@@ -31,7 +31,7 @@ div#site-slogan-heading { font-weight:normal; font-size:20px;float:left;}
 a#site-name-heading { text-decoration:none; color:#000;}
 #site-navigation-top-box1, #site-navigation-top-box2 {float:left;}
 #site-navigation-top-box2 {text-align:right;}
-
+div#site-header-edit-alt-caption {position: absolute;top:10px;right:10px;padding:5px;background: black;color:white;z-index:100;}
 /* content
 ------------------------- */
 div#wrapper-header, #wrapper-ads-top, #wrapper-main, #wrapper-footer { width: 100%; }
@@ -528,8 +528,8 @@ span.sitetree_id { color:grey;}
 
 /* admin style
 ------------------------- */
-h1.admin-heading { font-weight:normal; }
-h2.admin-heading , h3.admin-heading, h4.admin-heading , h5.admin-heading , h6.admin-heading  { font-weight:normal; }
+h1.admin-heading { }
+h2.admin-heading , h3.admin-heading, h4.admin-heading , h5.admin-heading , h6.admin-heading  {  }
 
 div.admin-content { width:100%;}
 div.admin-left-column, div.admin-right-column { width:45%;margin:10px; }
@@ -801,6 +801,7 @@ div.grid-link {text-align: center;}
 	div#site-heading { }
 	div#footer-wrapper  div { float: inherit !important;}
 	
+
 	div.stories-column {float:left;width:100% !important;}
 	div.stories-wrapper:after  {content: ""; display: table; clear: both;}
 	div.stories-content img {float:left; width:33%; margin:0 20px 0 0;}

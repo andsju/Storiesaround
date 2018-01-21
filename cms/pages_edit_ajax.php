@@ -107,7 +107,6 @@ if (isset($_POST['token'])){
 					$meta_keywords = filter_var(trim($_POST['meta_keywords']), FILTER_SANITIZE_STRING);
 					$meta_description = filter_var(trim($_POST['meta_description']), FILTER_SANITIZE_STRING);
 					$meta_robots = $_POST['meta_robots'];
-					//$meta_additional = $_POST['meta_additional'];
 					$meta_additional = filter_var(trim($_POST['meta_additional']), FILTER_SANITIZE_MAGIC_QUOTES);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
@@ -2175,7 +2174,6 @@ if (isset($_POST['token'])){
 			$title = filter_var(trim($_POST['title']), FILTER_SANITIZE_STRING);
 			$creator = filter_var(trim($_POST['creator']), FILTER_SANITIZE_STRING);
 			$copyright = filter_var(trim($_POST['copyright']), FILTER_SANITIZE_STRING);
-			//$tag = filter_var(trim($_POST['tag']), FILTER_SANITIZE_STRING);
 			$tag = $_POST['tag'];
 			$promote = filter_input(INPUT_POST, 'promote', FILTER_VALIDATE_INT) ? $_POST['promote'] : 0;
 
@@ -2207,7 +2205,7 @@ if (isset($_POST['token'])){
 			$position = 10;
 			$access= 0;
 			$status = 1;
-			$template = 0;
+			$template = is_numeric($_SESSION['site_template_default']) ? $_SESSION['site_template_default'] : 0;
 			$title = filter_var(trim($_POST['title_toplevel_page']), FILTER_SANITIZE_STRING);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			
@@ -2226,30 +2224,35 @@ if (isset($_POST['token'])){
 			$history = new History();
 			$history->setHistory($lastInsertId, 'pages_id', 'INSERT', 'new page', $users_id, $_SESSION['token'], $utc_modified);	
 			echo $lastInsertId;
-		
 		}
 				
 		if ($action == 'pages_add_child_page') { 
 		
 			if ($parent_id = filter_input(INPUT_POST, 'pages_parent_id', FILTER_VALIDATE_INT)) { 
+			
 				// default
-				$parent = 0;
+				$template = is_numeric($_SESSION['site_template_default']) ? $_SESSION['site_template_default'] : 0;
 				$position = 10;
 				$access = 0;
 				$status = 1;
+				$parent = 0;
 				$title = filter_var(trim($_POST['title_child_page']), FILTER_SANITIZE_STRING);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 				// get parent page common settings as template
 				$meta_additional = $meta_robots = $tag = $ads_filter = $stories_filter = $selections = null;
-				$header = $template = $ads = $ads_limit = $stories_columns = 0;
-				
+				$header_caption_show = $template = $ads = $ads_limit = $stories_columns = 0;
+				$header_image = $header_caption = json_encode(array());
+
 				$r = $pages->getPagesAsTemplate($parent_id);
 				if($r) {
+
 					$meta_additional = $r['meta_additional'];
 					$meta_robots = $r['meta_robots'];
 					$tag = $r['tag'];
-					$header = $r['header'];
+					$header_image = $r['header_image'];
+					$header_caption = $r['header_caption'];
+					$header_caption_show = $r['header_caption_show'];					
 					$template = $r['template'];
 					$ads = $r['ads'];
 					$ads_limit = $r['ads_limit'];
@@ -2257,33 +2260,26 @@ if (isset($_POST['token'])){
 					$stories_columns = $r['stories_columns'];
 					$stories_filter = $r['stories_filter'];
 					$selections = $r['selections'];
-				}
-
-				
-				// use class update
-				$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $ads_filter, $stories_filter, $selections, $header, $template, $ads, $ads_limit, $stories_columns);
-				
-				// create folder
-				if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
-					mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);
-				}
+	
+					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $ads_filter, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $ads, $ads_limit, $stories_columns);
 					
-				// update parent page width existing child
-				$parent = 1;
-				$pages_id = $parent_id;
-				$pages->updatePagesIsParent($pages_id, $parent);
-				
-				// set users rights - read, edit, create
-				$rights = new PagesRights();
-				// insert into pages_rights, skip check existing posts since its just created
-				$result = $rights->setPagesUsersRightsNewReadEditCreate($lastInsertId, $users_id);
-				
-				if($result) {
-					$history = new History();
-					$history->setHistory($lastInsertId, 'pages_id', 'INSERT', 'new page', $users_id, $_SESSION['token'], $utc_modified);
+					if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
+						mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);
+					}
+					
+					$parent = 1;
+					$pages_id = $parent_id;
+					$pages->updatePagesIsParent($pages_id, $parent);
+					$rights = new PagesRights();
+					$result = $rights->setPagesUsersRightsNewReadEditCreate($lastInsertId, $users_id);
+					
+					if($result) {
+						$history = new History();
+						$history->setHistory($lastInsertId, 'pages_id', 'INSERT', 'new page', $users_id, $_SESSION['token'], $utc_modified);
+					}
+					
+					echo $lastInsertId;	
 				}
-				
-				echo $lastInsertId;
 			}
 		}
 		
