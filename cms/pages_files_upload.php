@@ -173,7 +173,8 @@ if(isset($_REQUEST['token'])){
 			}    
 		}
 
-		// list of valid extensions, ex. array("jpeg", "xml", "bmp")
+		/
+		/ list of valid extensions, ex. array("jpeg", "xml", "bmp")
 		$allowedExtensions = array();
 		// max file size in bytes
 		$sizeLimit = 10 * 1024 * 1024;

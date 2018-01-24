@@ -57,7 +57,6 @@ if (isset($_POST['token'])){
 				$site_ui_theme = filter_var(trim($_POST['site_ui_theme']), FILTER_SANITIZE_STRING);
 				$site_template_default = filter_input(INPUT_POST, 'site_template_default', FILTER_VALIDATE_INT);
 				$site_template_content_padding = filter_input(INPUT_POST, 'site_template_content_padding', FILTER_VALIDATE_INT);
-				$site_title_position = filter_input(INPUT_POST, 'site_title_position', FILTER_VALIDATE_INT);				
 				$site_template_sidebar_width = filter_input(INPUT_POST, 'site_template_sidebar_width', FILTER_VALIDATE_INT);
 				$site_navigation_horizontal = filter_input(INPUT_POST, 'site_navigation_horizontal', FILTER_VALIDATE_INT);
 				$site_navigation_vertical = filter_input(INPUT_POST, 'site_navigation_vertical', FILTER_VALIDATE_INT);
@@ -65,7 +64,7 @@ if (isset($_POST['token'])){
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
-				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_title_position, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
+				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
 				if($result) {
 					$_SESSION['site_theme'] = $site_theme;
 					$_SESSION['site_wrapper_page_width'] = $site_wrapper_page_width;
@@ -73,7 +72,6 @@ if (isset($_POST['token'])){
 					$_SESSION['site_template_default'] = $site_template_default;
 					$_SESSION['site_template_sidebar_width'] = $site_template_sidebar_width;
 					$_SESSION['site_template_content_padding'] = $site_template_content_padding;
-					$_SESSION['site_title_position'] = $site_title_position;
 					$_SESSION['site_navigation_horizontal'] = $site_navigation_horizontal;
 					$_SESSION['site_navigation_vertical'] = $site_navigation_vertical;
 					$_SESSION['site_navigation_vertical_sidebar'] = $site_navigation_vertical_sidebar;
@@ -112,22 +110,18 @@ if (isset($_POST['token'])){
 				
 			case 'save_site_content';
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
+				$site_header_image = filter_var(trim($_POST['site_header_image']), FILTER_SANITIZE_STRING);
+				$site_404 = $_POST['site_404'];
 				$site_rss_description = filter_var(trim($_POST['site_rss_description']), FILTER_SANITIZE_STRING);
 				$site_publish_guideline = filter_var(trim($_POST['site_publish_guideline']), FILTER_SANITIZE_STRING);
-				$site_limit_stories = filter_input(INPUT_POST, 'site_limit_stories', FILTER_VALIDATE_INT);
-				$site_feed = filter_var(trim($_POST['site_feed']), FILTER_SANITIZE_STRING);
-				$site_feed_interval = filter_var(trim($_POST['site_feed_interval']), FILTER_VALIDATE_INT);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
-				$result = $site->setSiteContent($site_id, $site_rss_description, $site_publish_guideline, $site_limit_stories, $site_feed, $site_feed_interval, $utc_modified);
+				$result = $site->setSiteContent($site_id, $site_header_image, $site_404, $site_rss_description, $site_publish_guideline, $utc_modified);
 				if($result) {
 					$_SESSION['site_rss_description'] = $site_rss_description;
-					$_SESSION['site_publish_guideline'] = $site_publish_guideline;
-					$_SESSION['site_limit_stories'] = $site_limit_stories;
-					$_SESSION['site_feed'] = $site_feed;
-					$_SESSION['site_feed_interval'] = $site_feed_interval;
-					
+					$_SESSION['site_header_image'] = $site_header_image;
+					$_SESSION['site_publish_guideline'] = $site_publish_guideline;					
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$history = new History();
 					$history->setHistory($site_id, 'site_id', 'UPDATE', 'site content publishing', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);							
@@ -209,7 +203,6 @@ if (isset($_POST['token'])){
 				$site_seo_url = filter_input(INPUT_POST, 'site_seo_url', FILTER_VALIDATE_INT);
 				$site_autosave = filter_input(INPUT_POST, 'site_autosave', FILTER_VALIDATE_INT);
 				$site_autosave = ($site_autosave >= 30 && $site_autosave <= 600) ? $site_autosave * 1000 : 120000;
-				$site_flash_version = filter_input(INPUT_POST, 'site_flash_version', FILTER_SANITIZE_STRING);
 				$site_mail_method = filter_input(INPUT_POST, 'site_mail_method', FILTER_VALIDATE_INT);
 				$site_smtp_server = filter_var(trim($_POST['site_smtp_server']), FILTER_SANITIZE_STRING);
 				$site_smtp_port = filter_input(INPUT_POST, 'site_smtp_port', FILTER_VALIDATE_INT);
@@ -220,7 +213,7 @@ if (isset($_POST['token'])){
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
-				$result = $site->setSiteConfiguration($site_id, $site_country, $site_language, $site_lang, $site_timezone, $site_dateformat, $site_timeformat, $site_firstdayofweek, $site_wysiwyg, $site_seo_url, $site_autosave, $site_flash_version, $site_mail_method, $site_smtp_server, $site_smtp_port, $site_smtp_username, $site_smtp_password, $site_smtp_authentication, $site_smtp_debug, $utc_modified);
+				$result = $site->setSiteConfiguration($site_id, $site_country, $site_language, $site_lang, $site_timezone, $site_dateformat, $site_timeformat, $site_firstdayofweek, $site_wysiwyg, $site_seo_url, $site_autosave, $site_mail_method, $site_smtp_server, $site_smtp_port, $site_smtp_username, $site_smtp_password, $site_smtp_authentication, $site_smtp_debug, $utc_modified);
 				if($result) {
 					$_SESSION['site_country'] = $site_country;
 					$_SESSION['site_language'] = $site_language;
@@ -232,7 +225,6 @@ if (isset($_POST['token'])){
 					$_SESSION['site_wysiwyg'] = $site_wysiwyg;
 					$_SESSION['site_seo_url'] = $site_seo_url;
 					$_SESSION['site_autosave'] = $site_autosave;
-					$_SESSION['site_flash_version'] = $site_flash_version;					
 					$_SESSION['site_mail_method'] = $site_mail_method;
 					$_SESSION['site_smtp_server'] = $site_smtp_server;
 					$_SESSION['site_smtp_port'] = $site_smtp_port;
@@ -402,6 +394,27 @@ if (isset($_POST['token'])){
 				echo $log; 
 				
 			break;
+
+
+			case 'header_files';
+
+				$directory = $_POST['directory'];
+				$html = "";
+				if (is_dir(CMS_ABSPATH . '/'. $directory)) {
+					if ($dh = opendir(CMS_ABSPATH .'/'. $directory)) {
+						while (($file = readdir($dh)) !== false) {
+							if (!is_dir(CMS_ABSPATH .'/'. $directory.'/'.$file)) {
+								$html .= '<img src="'.CMS_DIR.$directory.$file.'" data-image="'.$file.'" class="header_image">';
+							}
+						}
+						closedir($dh);
+					}
+				}
+				echo $html;
+				
+
+			break;
+
 
 
 			case 'files';

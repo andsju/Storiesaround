@@ -540,6 +540,7 @@ div.admin-panel { width:100%; margin:0; padding:10px 0; border-bottom:2px solid 
 /*div.admin-panel { background: #F8F8F8; }*/
 
 
+div#dir_header_view img {width:250px; height:auto; margin:10px;}
 
 div.admin-panel-ruler { width:100%; padding:10px; background: #F8F8F8;  border:1px solid #ccc; }
 div.admin-content { width:96%; background: #FFF; padding:10px; border:1px dashed #ccc;margin:10px; }
@@ -637,6 +638,7 @@ span.small { font-size: 0.93em; }
 
 .pre { white-space: pre; font-family: monospace; }
 
+
 .hide { display:none; }
 .code-highlight { background:#fff; padding:4px; margin:4px; border:1px solid grey; letter-spacing:1px}
 
@@ -712,6 +714,8 @@ div.grid-tools .fa:hover {color: rgb(205,205,205)}
 div#grid-settings input[type="radio"] {margin-left:0}
 div.grid-cell-settings img.template {margin:10px;}
 
+div#grid_json_clipboard_link {margin-top:5px;text-align: right}
+
 /* grid custom class*/
 div.grid-cell.blue div.grid-link {border-bottom:3px solid blue} 
 div.grid-cell.green div.grid-link {border-top:2px solid green} 
@@ -758,6 +762,9 @@ div.grid-link {text-align: center;}
 
 
 .noscript_message { background-color: rgb(255,255,0); padding:20px; font-size:1em;}
+
+
+
 
 /* END back-end styles
 ------------------------- 

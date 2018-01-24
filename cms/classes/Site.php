@@ -197,14 +197,13 @@ class Site extends Database
      * @param string $site_template_default
      * @param string $site_template_sidebar_width
      * @param int $site_template_content_padding
-     * @param int $site_title_position
      * @param int $site_navigation_horizontal
      * @param int $site_navigation_vertical
      * @param int $site_navigation_vertical_sidebar
      * @param string $utc_modified
      * @return bool
      */
-    public function setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_title_position, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified)
+    public function setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified)
     {
         try {
             $sql = "UPDATE site
@@ -214,7 +213,6 @@ class Site extends Database
 			site_template_default = :site_template_default,
             site_template_sidebar_width = :site_template_sidebar_width,
 			site_template_content_padding = :site_template_content_padding,
-			site_title_position = :site_title_position,
 			site_navigation_horizontal = :site_navigation_horizontal,
 			site_navigation_vertical = :site_navigation_vertical,
 			site_navigation_vertical_sidebar = :site_navigation_vertical_sidebar,
@@ -229,7 +227,6 @@ class Site extends Database
             $stmt->bindParam(":site_template_default", $site_template_default, PDO::PARAM_INT);
             $stmt->bindParam(":site_template_sidebar_width", $site_template_sidebar_width, PDO::PARAM_INT);
             $stmt->bindParam(":site_template_content_padding", $site_template_content_padding, PDO::PARAM_INT);
-            $stmt->bindParam(":site_title_position", $site_title_position, PDO::PARAM_INT);
             $stmt->bindParam(":site_navigation_horizontal", $site_navigation_horizontal, PDO::PARAM_INT);
             $stmt->bindParam(":site_navigation_vertical", $site_navigation_vertical, PDO::PARAM_INT);
             $stmt->bindParam(":site_navigation_vertical_sidebar", $site_navigation_vertical_sidebar, PDO::PARAM_INT);
@@ -280,31 +277,26 @@ class Site extends Database
      * @param int $site_id
      * @param string $site_rss_description
      * @param string $site_publish_guideline
-     * @param int $site_limit_stories
-     * @param string $site_feed
-     * @param int $site_feed_interval
      * @param string $utc_modified
      * @return bool
      */
-    public function setSiteContent($site_id, $site_rss_description, $site_publish_guideline, $site_limit_stories, $site_feed, $site_feed_interval, $utc_modified)
+    public function setSiteContent($site_id, $site_header_image, $site_404, $site_rss_description, $site_publish_guideline, $utc_modified)
     {
         try {
             $sql = "UPDATE site
 			SET site_rss_description = :site_rss_description,
+            site_header_image = :site_header_image,
+            site_404 = :site_404,
 			site_publish_guideline = :site_publish_guideline,
-			site_limit_stories = :site_limit_stories,
-			site_feed = :site_feed,
-			site_feed_interval = :site_feed_interval,
 			utc_modified = :utc_modified
 			WHERE site_id = :site_id";
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
+            $stmt->bindParam(":site_header_image", $site_header_image, PDO::PARAM_STR);
+            $stmt->bindParam(":site_404", $site_404, PDO::PARAM_STR);
             $stmt->bindParam(":site_rss_description", $site_rss_description, PDO::PARAM_STR);
             $stmt->bindParam(":site_publish_guideline", $site_publish_guideline, PDO::PARAM_STR);
-            $stmt->bindParam(":site_limit_stories", $site_limit_stories, PDO::PARAM_INT);
-            $stmt->bindParam(":site_feed", $site_feed, PDO::PARAM_STR);
-            $stmt->bindParam(":site_feed_interval", $site_feed_interval, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
@@ -412,7 +404,6 @@ class Site extends Database
      * @param string $site_wysiwyg
      * @param int $site_seo_url
      * @param int $site_autosave
-     * @param string $site_flash_version
      * @param int $site_mail_method
      * @param string $site_smtp_server
      * @param int $site_smtp_port
@@ -423,7 +414,7 @@ class Site extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function setSiteConfiguration($site_id, $site_country, $site_language, $site_lang, $site_timezone, $site_dateformat, $site_timeformat, $site_firstdayofweek, $site_wysiwyg, $site_seo_url, $site_autosave, $site_flash_version, $site_mail_method, $site_smtp_server, $site_smtp_port, $site_smtp_username, $site_smtp_password, $site_smtp_authentication, $site_smtp_debug, $utc_modified)
+    public function setSiteConfiguration($site_id, $site_country, $site_language, $site_lang, $site_timezone, $site_dateformat, $site_timeformat, $site_firstdayofweek, $site_wysiwyg, $site_seo_url, $site_autosave, $site_mail_method, $site_smtp_server, $site_smtp_port, $site_smtp_username, $site_smtp_password, $site_smtp_authentication, $site_smtp_debug, $utc_modified)
     {
         try {
             $sql = "UPDATE site
@@ -437,7 +428,6 @@ class Site extends Database
 			site_wysiwyg = :site_wysiwyg,
 			site_seo_url = :site_seo_url,
 			site_autosave = :site_autosave, 
-			site_flash_version = :site_flash_version,
 			site_mail_method = :site_mail_method,
 			site_smtp_server = :site_smtp_server,
 			site_smtp_port = :site_smtp_port,
@@ -460,7 +450,6 @@ class Site extends Database
             $stmt->bindParam(":site_wysiwyg", $site_wysiwyg, PDO::PARAM_STR);
             $stmt->bindParam(":site_seo_url", $site_seo_url, PDO::PARAM_INT);
             $stmt->bindParam(":site_autosave", $site_autosave, PDO::PARAM_INT);
-            $stmt->bindParam(":site_flash_version", $site_flash_version, PDO::PARAM_STR);
             $stmt->bindParam(":site_mail_method", $site_mail_method, PDO::PARAM_INT);
             $stmt->bindParam(":site_smtp_server", $site_smtp_server, PDO::PARAM_STR);
             $stmt->bindParam(":site_smtp_port", $site_smtp_port, PDO::PARAM_INT);

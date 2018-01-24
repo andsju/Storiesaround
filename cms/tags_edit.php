@@ -206,25 +206,7 @@ if(!get_role_CMS('editor') == 1) {header('Location: index.php'); die;}
 				//print_r2($rows);
 			}
 			if(!count($rows)) { echo 'not found';}
-			
-			$rows = null;
-			
-			$banners = new Banners();
-			$rows = $banners->getBannersSearch($tag);
-			echo '<h4 class="admin-heading">Banners</h4>';
-			
-			if(isset($rows)) {
-				echo count($rows);
-				echo '<input type="hidden" id="tags_banners" value="'.count($rows).'">';
-				echo '<ul class="tags_match">';
-				foreach($rows as $row) {
-					echo '<li>'.$row['name'].' (id: '.$row['banners_id'].')</li>';
-				}
-				echo '</ul>';
-				//	print_r2($rows);
-			}
-			if(!count($rows)) { echo 'not found';}
-			
+						
 			$rows = null;
 			
 		}
