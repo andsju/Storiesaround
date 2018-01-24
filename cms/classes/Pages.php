@@ -17,7 +17,6 @@ class Pages extends Database
         parent::__construct();
     }
 
-
     /**
      * @param string $title
      * @param int $parent_id
@@ -65,24 +64,21 @@ class Pages extends Database
      * @param string $meta_additional
      * @param string $meta_robots
      * @param string $tag
-     * @param string $ads_filter
      * @param string $stories_filter
      * @param string $selections
      * @param string $header_image
      * @param string $header_caption
      * @param string $header_caption_show
      * @param int $template
-     * @param int $ads
-     * @param $ads_limit
      * @param int $stories_columns
      * @return integer
      */
-    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $ads_filter, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $ads, $ads_limit, $stories_columns)
+    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns)
     {
         try {
             $sql_insert = "INSERT INTO pages 
-			(title, parent_id, parent, position, access, status, utc_modified, meta_additional, meta_robots, tag, ads_filter, stories_filter, selections, header_image, header_caption, header_caption_show, template, ads, ads_limit, stories_columns) VALUES
-			(:title, :parent_id, :parent, :position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :ads_filter, :stories_filter, :selections, :header_image, :header_caption, :header_caption_show, :template, :ads, :ads_limit, :stories_columns)";
+			(title, parent_id, parent, position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_show, template, stories_columns) VALUES
+			(:title, :parent_id, :parent, :position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_show, :template, :stories_columns)";
 
             $stmt = $this->db->prepare($sql_insert);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -95,15 +91,12 @@ class Pages extends Database
             $stmt->bindParam(':meta_additional', $meta_additional, PDO::PARAM_STR);
             $stmt->bindParam(':meta_robots', $meta_robots, PDO::PARAM_STR);
             $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
-            $stmt->bindParam(':ads_filter', $ads_filter, PDO::PARAM_STR);
             $stmt->bindParam(':stories_filter', $stories_filter, PDO::PARAM_STR);
             $stmt->bindParam(':selections', $selections, PDO::PARAM_STR);
             $stmt->bindParam(':header_image', $header_image, PDO::PARAM_STR);
             $stmt->bindParam(':header_caption', $header_caption, PDO::PARAM_STR);
             $stmt->bindParam(':header_caption_show', $header_caption_show, PDO::PARAM_INT);
             $stmt->bindParam(':template', $template, PDO::PARAM_INT);
-            $stmt->bindParam(':ads', $ads, PDO::PARAM_INT);
-            $stmt->bindParam(':ads_limit', $ads_limit, PDO::PARAM_INT);
             $stmt->bindParam(':stories_columns', $stories_columns, PDO::PARAM_INT);
             $stmt->execute();
             return $this->db->lastInsertId('pages_id');
@@ -318,43 +311,6 @@ class Pages extends Database
             return false;
         }
     }
-
-
-
-
-
-    /**
-     * @param int $pages_id
-     * @param int $ads
-     * @param int $ads_limit
-     * @param string $ads_filter
-     * @param string $utc_modified
-     * @return bool
-     */
-    public function setPagesAds($pages_id, $ads, $ads_limit, $ads_filter, $utc_modified)
-    {
-        try {
-            $sql_update = "UPDATE pages
-			SET ads = :ads,
-			ads_limit = :ads_limit,
-			ads_filter = :ads_filter,
-			utc_modified = :utc_modified
-			WHERE pages_id = :pages_id";
-
-            $stmt = $this->db->prepare($sql_update);
-            $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
-            $stmt->bindParam(":ads", $ads, PDO::PARAM_STR);
-            $stmt->bindParam(":ads_limit", $ads_limit, PDO::PARAM_INT);
-            $stmt->bindParam(":ads_filter", $ads_filter, PDO::PARAM_STR);
-            $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
-            return $stmt->execute();
-
-        } catch (PDOException $e) {
-            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
-            return false;
-        }
-    }
-
 
     /**
      * @param int $pages_id
@@ -1078,24 +1034,21 @@ class Pages extends Database
     /**
      * @param int $pages_id
      * @param int comments
-     * @param int $ads
      * @param int $stories_columns
      * @return bool
      */
-    public function updatePagesSetupSiteContent($pages_id, $comments, $ads, $stories_columns)
+    public function updatePagesSetupSiteContent($pages_id, $comments, $stories_columns)
     {
         try {
             $sql_update = "UPDATE pages
 			SET comments = :comments,
-			stories_columns = :stories_columns,
-			ads = :ads
+			stories_columns = :stories_columns
 			WHERE pages_id = :pages_id";
 
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":comments", $comments, PDO::PARAM_INT);
             $stmt->bindParam(":stories_columns", $stories_columns, PDO::PARAM_INT);
-            $stmt->bindParam(":ads", $ads, PDO::PARAM_INT);
             return $stmt->execute();
 
         } catch (PDOException $e) {
@@ -2319,7 +2272,7 @@ class Pages extends Database
     public function getPagesAsTemplate($id)
     {
         $rows = null;
-        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_show, template, ads, ads_limit, ads_filter, stories_columns, stories_filter, selections
+        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_show, template, stories_columns, stories_filter, selections
 		FROM pages 
 		WHERE pages_id = :pages_id";
 

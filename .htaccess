@@ -25,6 +25,7 @@ RewriteRule .* - [L]
 
 # rewrite rule handle friendly urls
 RewriteRule ^pages/(.*)$ cms/pages.php/$1 [L]
+RewriteRule ^view/(.*)$ cms/pages.php/$1 [L]
 
 # handle requests not referring directly to files 
 RewriteCond %{REQUEST_FILENAME} !-f

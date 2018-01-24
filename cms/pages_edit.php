@@ -613,13 +613,20 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 			var grid_content = JSON.stringify($("#gridform").serializeArray());
 			grid_content = stringEscape(grid_content);
-			$("#grid_json").val(grid_content).fadeIn(700);
+			$("#grid_json").val(grid_content).fadeIn(300);
+			$("#grid_json_clipboard").fadeIn(300);
 		});
+
+		$("#grid_json_clipboard").click(function(){
+			$("#grid_json").select();
+			document.execCommand('copy');
+		});
+
 
 		$("#btnGridImport").click(function(event) {
 			event.preventDefault();
 			$("#grid_json").fadeIn(700);
-			$("#btnGridImportSave").fadeIn(700);
+			$("#btnGridImportSave").fadeIn(300);
 		});
 
 		$("#btnGridImportSave").click(function(event) {
@@ -4073,8 +4080,11 @@ if(is_array($check_edit)) {
 						<span class="toolbar"><button name="btnGridExport" id="btnGridExport">Export content</button></span>
 						<span class="toolbar"><button name="btnGridImport" id="btnGridImport">Import content</button></span>
 						<span class="toolbar"><button name="btnGridImportSave" id="btnGridImportSave" style="display:none">Save import (reload page)</button></span>
-						<br>
-						<textarea id="grid_json" style="width:90%;display:none"></textarea>
+
+						<textarea id="grid_json" style="width:95%;display:none"></textarea>
+						<div id="grid_json_clipboard_link">
+							<a href="#" id="grid_json_clipboard" class="hidden">Copy to clipboard</a>
+						</div>
 					</div>
 					
 				</div>
