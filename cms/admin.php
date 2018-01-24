@@ -52,7 +52,11 @@ if (is_array($wysiwyg_editor)) {
 	if(file_exists(CMS_ABSPATH .'/cms/libraries/'.$wysiwyg_editor['include_js_file'])) {
 		array_push($js_files, CMS_DIR.'/cms/libraries/'.$wysiwyg_editor['include_js_file']);
 	}
+	if(file_exists(CMS_ABSPATH .'/cms/libraries/'.$wysiwyg_editor['include_js_script'])) {
+		array_push($js_files, CMS_DIR.'/cms/libraries/'.$wysiwyg_editor['include_js_script']);
+	}
 }
+
 
 // meta tags
 $meta_keywords = $meta_description = $meta_robots = $meta_additional = $meta_author = null;
@@ -154,7 +158,6 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var site_wrapper_page_width = $("#site_wrapper_page_width").val();
 			var site_theme = $("#site_theme option:selected").val();
 			var site_ui_theme = $("#site_ui_theme option:selected").val();
-			var site_title_position = $("#site_title_position option:selected").val();
 			var site_template_default = $('input:radio[name=site_template_default]:checked').val();
 			var site_template_content_padding = $("#site_template_content_padding option:selected").val();
 			var site_template_sidebar_width = $("#site_template_sidebar_width").val();
@@ -168,7 +171,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 				url: 'admin_edit_ajax.php',				
 				data: { 
 					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
-					site_template_sidebar_width: site_template_sidebar_width, site_template_default: site_template_default, site_template_sidebar_width: site_template_sidebar_width, site_title_position: site_title_position, 
+					site_template_sidebar_width: site_template_sidebar_width, site_template_default: site_template_default, site_template_sidebar_width: site_template_sidebar_width,  
 					site_navigation_horizontal: site_navigation_horizontal, site_navigation_vertical: site_navigation_vertical, site_navigation_vertical_sidebar: site_navigation_vertical_sidebar
 				},
 				success: function(message){	
@@ -205,11 +208,13 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var action = "save_site_content";
 			var token = $("#token").val();
 			var site_id = $("#site_id").val();
+			var site_header_image = $("#site_header_image").val();
+			var site_404 = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'site_404');
 			var site_rss_description = $("#site_rss_description").val();
 			var site_publish_guideline = $("#site_publish_guideline").val();
-			var site_limit_stories = $("#site_limit_stories").val();
-			var site_feed = $("#site_feed option:selected").val();
-			var site_feed_interval = $("#site_feed_interval option:selected").val();
+			console.log("site_header_image", site_header_image);
+			console.log("site_404", site_404);
+			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_site_content').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_site_content').hide()",700)},
@@ -217,12 +222,13 @@ include_once 'includes/inc.site_active_user_administration.php';
 				url: 'admin_edit_ajax.php',
 				data: { 
 					action: action, token: token, site_id: site_id, site_rss_description: site_rss_description,
-					site_publish_guideline: site_publish_guideline, site_limit_stories: site_limit_stories, site_feed: site_feed, site_feed_interval: site_feed_interval
+					site_header_image: site_header_image, site_404: site_404, site_publish_guideline: site_publish_guideline
 				},
 				success: function(message){	
 					ajaxReply(message,'#ajax_status_site_content');
 				},
 			});
+			
 		});	
 
 		$('#btn_site_script').click(function(event){
@@ -325,7 +331,6 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var site_wysiwyg = $("#site_wysiwyg").val();
 			var site_autosave = $("#site_autosave").val();
 			var site_seo_url = $('input:checkbox[name=site_seo_url]').is(':checked') ? 1 : 0;
-			var site_flash_version = $("#site_flash_version").val();
 			var site_mail_method = $("#site_mail_method").val();
 			var site_smtp_server = $("#site_smtp_server").val();
 			var site_smtp_port = $("#site_smtp_port").val();
@@ -341,7 +346,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 				data: { 
 					action: action, token: token, site_id: site_id, 
 					site_country: site_country, site_language: site_language, site_lang: site_lang, site_timezone: site_timezone, site_dateformat: site_dateformat,
-					site_timeformat: site_timeformat, site_firstdayofweek: site_firstdayofweek, site_wysiwyg: site_wysiwyg, site_autosave: site_autosave, site_seo_url: site_seo_url, site_flash_version: site_flash_version,
+					site_timeformat: site_timeformat, site_firstdayofweek: site_firstdayofweek, site_wysiwyg: site_wysiwyg, site_autosave: site_autosave, site_seo_url: site_seo_url,
 					site_mail_method: site_mail_method, site_smtp_server: site_smtp_server, site_smtp_port: site_smtp_port, site_smtp_username: site_smtp_username, 
 					site_smtp_password: site_smtp_password, site_smtp_authentication: site_smtp_authentication, site_smtp_debug: site_smtp_debug
 				},
@@ -429,8 +434,32 @@ include_once 'includes/inc.site_active_user_administration.php';
 				$( "#site_template_sidebar_width" ).val( ui.value );
 			}
 		});
+
 		$( "#site_template_sidebar_width" ).val( $( "#sidebar_slider" ).slider( "value" ) );
 		
+		$("#dir_header_view").delegate(".header_image", "click", function() {
+			var image = $(this).attr("data-image");
+			$("#site_header_image").val(image);
+
+		});
+
+		$("#dir_header_show").click(function (event) {
+			event.preventDefault();
+            var action = "header_files";
+            var directory = "/content/uploads/header/";
+            var token = $("#token").val();
+			
+            $.ajax({
+                type: 'POST',
+                url: 'admin_edit_ajax.php',
+                data: "action=" + action + "&token=" + token + "&directory=" + directory,
+                success: function (data) {
+                    $("#dir_header_view").empty().html(data).hide().fadeIn('fast');
+				}
+			});
+			$("#dir_header_view_info").show();
+		});
+
 	});
 </script>
 
@@ -670,20 +699,6 @@ switch($t) {
 
 						
 						<div class="admin-panel">
-							<h3 class="admin_heading">Site title position</h3>
-							<p class="admin-text">
-								<label for="site_title_position" class="admin-text">Site title position</label><br />
-								<select name="site_title_position" id="site_title_position">
-									<option value="0" <?php if($_SESSION['site_title_position'] == 0) {echo ' selected';} ?>>Position above header image</option>
-									<option value="1" <?php if($_SESSION['site_title_position'] == 1) {echo ' selected';} ?>>Position along with header image</option>
-									<option value="2" <?php if($_SESSION['site_title_position'] == 2) {echo ' selected';} ?>>Position below header image</option>
-								</select>
-								<i> set site title position</i>
-							</p>
-						</div>
-
-						
-						<div class="admin-panel">
 
 							<h3 class="admin_heading">Header - Footer</h3>
 							<p>
@@ -781,85 +796,34 @@ switch($t) {
 
 						
 					case 'content':
+						
+					
 						?>
 						
-						<div class="admin-panel">
-
-							<div style="float:right">
+						<div style="float:right">
 								<span id="ajax_spinner_site_content" style='display:none'><img src="css/images/spinner.gif"></span>&nbsp;
 								<span id="ajax_status_site_content" style='display:none'></span>&nbsp;
 								<span class="toolbar_save"><button id="btn_site_content" style="float:right;margin:0px;">Save</button></span>
 							</div>
-							<h3 class="admin_heading">Content options</h3>
-							<p class="admin-text">
-								A page can be configured to show content from other pages or calendars. Options available at site level: 
-							<p>
 
-							<table>
-								<tr>
-									<td>
-									<label for="site_feed" class="admin-text">Feed from source: </label>
-									<br />
-									<?php						
-									$periods = array("Promoted stories" => "stories","Event stories" => "stories_events","Calendar coming events" => "events","Randomize promoted stories / event stories / calendar events" => "random");
-									$news_list = '<select id="site_feed">';
-										$news_list .= '<option value=""></option>';
-										foreach($periods as $key => $value) {
-											$news_list .= '<option value="'.$value.'"';
-											if($value==$site['site_feed']) {
-												$news_list .= ' selected=selected';
-											}
-											$news_list .= '>'.$key.'</option>';
-										}
-										$news_list .= '</select>';
-									echo $news_list;
-									echo '<i> shown in tag site-feed (header)</i>';
-									?>
-									</td>
-									<td style="padding-left:50px;">
-									<label for="site_feed_interval" class="admin-text">Swap feed</label>
-									<br />
-									<?php
-									echo '<select id="site_feed_interval">';
-										echo '<option value="5000">5000</option>';
-										for($i=10000;$i<=60000;$i=$i+5000) {
-											echo '<option value="'.$i.'"';
-											if($i==$site['site_feed_interval']) {
-												echo ' selected=selected';
-											}
-											echo '>'.$i.'</option>';
-										}
-										echo '</select>';
-									echo '<i> interval in milliseconds:</i>';
-									?>
-									</td>
-								</tr>
-							</table>
+						<div class="admin-panel">
+							<h3 class="admin_heading">Default header image</h3>
+							<span class="toolbar"><button id="dir_header_show">Show selectable images</button></span>
+							<p id="dir_header_view_info" class="hidden">	
+							Click image to select
+							</p>
+							<div id="dir_header_view" style="max-height:400px;overflow:auto;display:none"></div>
+							<input type="text" id="site_header_image" value="<?php echo $site['site_header_image'] ?>">
 						</div>
 
 						<div class="admin-panel">
-							<h3 class="admin_heading">Promoted stories</h3>
-							<p class="admin-text">
-								<label for="site_limit_stories" class="admin-text">Limit number</label><br />
-								<select name="site_limit_stories" id="site_limit_stories">
-									<?php
-									for ($i = 0; $i <= 25; $i++) {
-										echo '<option value="'.$i.'"';
-										if(isset($_SESSION['site_limit_stories'])) {
-											if($_SESSION['site_limit_stories'] == $i) {
-												echo ' selected';
-											}
-										}
-										echo '>'.$i.'</option>';
-									}
-									
-									?>
-								</select>
-								<i> limit number of promoted stories</i>
-							</p>
+							<h3 class="admin_heading">404 content</h3>
+							<div>
+								<textarea name="site_404" id="site_404" class="<?php echo $wysiwyg_editor['css-class']; ?>" style=""><?php echo $site['site_404'] ?></textarea>
+							</div>
 
-							
 						</div>
+
 						<div class="admin-panel">
 							<h3 class="admin_heading">RSS from this site</h3>
 							<?php
@@ -873,7 +837,7 @@ switch($t) {
 							<p class="admin-text">
 								<label for="site_publish_guideline" class="admin-text">Site publish guideline: </label>
 								<br />
-								<textarea name="site_publish_guideline" id="site_publish_guideline" title="Enter site publish guideline" class="admin-text" style="width:600px;height:100px;"><?php echo $site['site_publish_guideline'];?></textarea>
+								<textarea name="site_publish_guideline" id="site_publish_guideline" title="Enter site publish guideline" class="admin-text" style="width:90%;height:100px;"><?php echo $site['site_publish_guideline'];?></textarea>
 							</p>
 						
 						</div>
@@ -901,7 +865,7 @@ switch($t) {
 							<p class="admin-text">
 								<label for="site_maintenance_message" class="admin-text">Site maintenance message</label>
 								<br />
-								<textarea name="site_maintenance_message" id="site_maintenance_message" title="Enter site maintenance message" class="admin-text" style="width:600px;height:100px;"><?php echo $site['site_maintenance_message'];?></textarea>
+								<textarea name="site_maintenance_message" id="site_maintenance_message" title="Enter site maintenance message" class="admin-text" style="width:90%;height:100px;"><?php echo $site['site_maintenance_message'];?></textarea>
 							</p>
 							<p class="admin-text">
 								<label for="site_error_mode" class="admin-text">Site error mode</label><br />
@@ -1148,16 +1112,6 @@ switch($t) {
 							
 						</div>
 							
-						<div class="admin-panel">
-						
-							<h3 class="admin_heading">Flash version</h3>
-							<p>
-							<?php
-							get_input_text("site_flash_version", "Set required Flash version", "admin-text", "width:100px;", "100", $site['site_flash_version'], "version in string value like '11.9' (used in cms)");
-							?>
-							</p>
-							
-						</div>
 						
 						<div class="admin-panel">
 						
@@ -1244,7 +1198,7 @@ switch($t) {
 						<p class="admin-text">
 							<label for="site_account_welcome_message" class="admin-text">Site account welcome message</label>
 							<br />
-							<textarea name="site_account_welcome_message" id="site_account_welcome_message" title="Enter site account welcome message" class="admin-text" style="width:600px;height:100px;"><?php echo $site['site_account_welcome_message'];?></textarea>
+							<textarea name="site_account_welcome_message" id="site_account_welcome_message" title="Enter site account welcome message" class="admin-text" style="width:90%;height:100px;"><?php echo $site['site_account_welcome_message'];?></textarea>
 						</p>
 					
 						<?php

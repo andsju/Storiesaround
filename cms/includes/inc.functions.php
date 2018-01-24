@@ -586,6 +586,18 @@ function print_r2($val)
     echo '</pre>';
 }
 
+/**
+ * @param $val
+ */
+function print_r3($text, $val)
+{
+    echo '<div class="debug">' . $text . '</div>';    
+    echo '<pre class="debug">';
+    print_r($val);
+    echo '</pre>';
+    echo '<hr>';
+}
+
 
 /**
  * function to check if a value exists in a multidimensional array, returns key integer

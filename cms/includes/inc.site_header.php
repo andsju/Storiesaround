@@ -39,6 +39,10 @@ if (count($header_image)) {
 <?php
 	$n++;
 	}
+} else {
+?>
+	<img src="<?php echo CMS_DIR; ?>/content/uploads/header/<?php echo $_SESSION['site_header_image']; ?>" alt="">
+<?php
 }
 ?>
 </div>

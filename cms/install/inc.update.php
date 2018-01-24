@@ -46,5 +46,16 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_ca
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_show", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'show header image caption' AFTER `header_caption`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_image_timeout", "column_definition" => "int(5) unsigned NOT NULL DEFAULT '10000' COMMENT 'header image timeout' AFTER `header_caption_show`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_template_default", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT 'default page template' AFTER `site_wrapper_page_width`");
-
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads_limit");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads_filter");
+//$sqls[] = "DROP INDEX pages_index ON pages";
+//$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, grid_content, story_content, story_wide_content, tag)";
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_feed");
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_feed_interval");
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_limit_stories");
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_flash_version");
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_title_position");
+$sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_header_image", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'default header image' AFTER `site_navigation_vertical_sidebar`");
+$sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_404", "column_definition" => "text DEFAULT '' COMMENT '404 page not found' AFTER `site_header_image`");
 ?>

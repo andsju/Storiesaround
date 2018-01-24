@@ -10,6 +10,7 @@ use a theme to override settings
 
 hml, body { margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; line-height: 1.5em; letter-spacing: 0.02em; } 
 
+div#page404 {margin:0 auto; width:200px;height:200px;padding:20px;border:3px solid red;text-align: center;border-radius: 100px;}
 
 
 /* wrappers
@@ -17,6 +18,7 @@ hml, body { margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; line-he
 #wrapper-user { width: 100%; height: 40px; position: fixed; top: 0; left: 0; z-index: 999; color: white; background-color: black; }
 #wrapper-site-header { width: 100%; position: relative }
 #wrapper-page { width: 1366px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
+body {margin-top:100px;}
 #wrapper-top {width: 1366px;margin: 0 auto}
 #wrapper-bottom {width: 1366px;margin: 0 auto}
 #wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0}
@@ -120,7 +122,7 @@ img.fluid{ max-width:100%; height:auto;}
 ------------------------- */
 
 ul#user_navigation { margin: 0; padding: 0; list-style: none; }
-ul#user_navigation li { float: left; display: inline; font-size: 1em; padding: 2px 7px; }
+ul#user_navigation li { float: left; font-size: 1em; padding: 2px 7px; }
 
 ul#user_navigation span { margin-right: 5px; }
 ul#user_navigation a { padding: 3px; color: #FFF; text-decoration: none; border: 1px solid black; }
@@ -244,3 +246,5 @@ div.stories-event-meta { }
 .p-columns-3 { -webkit-column-count: 3; -moz-column-count: 3; column-count: 3; -webkit-column-gap: 30px; -moz-column-gap: 30px; column-gap: 30px; } 
 .dropcap:first-letter { float: left; font-size: 5em; font-weight: normal; font-family: Georgia, Garamond, Times, serif; line-height: .8em; margin-right: 5px; padding: 2px; }
 
+div.debug {font-family: monospace; margin:0; background:lightgray}
+pre.debug {font-family: monospace; margin:0}

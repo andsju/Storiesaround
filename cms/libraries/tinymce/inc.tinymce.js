@@ -3,6 +3,7 @@
 	tinymce.init({
 		
 		selector : "textarea.tinymce",
+		autoresize_max_height: 900,
 		content_css : "css/layout_wysiwyg_editor.css?" + new Date().getTime(),
 		// emoticons
 		//plugins : "advlist anchor autolink charmap code contextmenu fullscreen directionality hr image imagetools insertdatetime link lists media nonbreaking pagebreak paste preview save searchreplace table template textcolor visualblocks visualchars wordcount youtube",

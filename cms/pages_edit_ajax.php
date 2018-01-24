@@ -912,10 +912,9 @@ if (isset($_POST['token'])){
 				case 'save_site_content_setup':
 
 					$comments = $_POST['comments'];
-					$ads = $_POST['ads'];
 					$stories_columns = $_POST['stories_columns'];
 
-					$result = $pages->updatePagesSetupSiteContent($pages_id, $comments, $ads, $stories_columns);
+					$result = $pages->updatePagesSetupSiteContent($pages_id, $comments,$stories_columns);
 					if($result) {
 						$history = new History();
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -2240,8 +2239,8 @@ if (isset($_POST['token'])){
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 				// get parent page common settings as template
-				$meta_additional = $meta_robots = $tag = $ads_filter = $stories_filter = $selections = null;
-				$header_caption_show = $template = $ads = $ads_limit = $stories_columns = 0;
+				$meta_additional = $meta_robots = $tag = $stories_filter = $selections = null;
+				$header_caption_show = $template = $stories_columns = 0;
 				$header_image = $header_caption = json_encode(array());
 
 				$r = $pages->getPagesAsTemplate($parent_id);
@@ -2254,14 +2253,11 @@ if (isset($_POST['token'])){
 					$header_caption = $r['header_caption'];
 					$header_caption_show = $r['header_caption_show'];					
 					$template = $r['template'];
-					$ads = $r['ads'];
-					$ads_limit = $r['ads_limit'];
-					$ads_filter = $r['ads_filter'];
 					$stories_columns = $r['stories_columns'];
 					$stories_filter = $r['stories_filter'];
 					$selections = $r['selections'];
 	
-					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $ads_filter, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $ads, $ads_limit, $stories_columns);
+					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns);
 					
 					if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
 						mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);
