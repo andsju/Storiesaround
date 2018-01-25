@@ -10,11 +10,8 @@ if($_SESSION['site_maintenance'] == 1 && $_SESSION['role_CMS'] < 4) { header('Lo
 $request = substr($_SERVER['REQUEST_URI'], strlen(CMS_DIR.'/'));
 $request_parts = explode('/', $request);
 
-// $request_parts now holds: [0] htaccess rewrite folder, [1] seo title 
-//$id = array_key_exists('id', $_GET) ? $_GET['id'] : $request_parts[1];
+// $request_parts now holds: [0] htaccess rewrite folder, [1] seo title (or script name)
 $id = array_key_exists('id', $_GET) ? $_GET['id'] : $request_parts[1];
-
-print_r3("id request", $id);
 
 // initiate class
 $pages = new Pages();
@@ -30,18 +27,18 @@ if(isset($id)) {
     } else {
         $id = null;
     }
-    print_r3("id ok, next step database", $id);
 }
 
 // no $id and request parts exists ->  show 404 error and default content from site ...
-
 // no $id and no request parts -> get default startpage 
-
 // $id but no published page exists in database - > get default startpage 
-
 // $id and published page exists in database - > show page
 
+// default
 $arr = null;
+
+//access page as known or unknown user to get page content
+$users_id = (isset($_SESSION['users_id'])) ? $_SESSION['users_id'] : null;
 
 
 function getStartPage() {
@@ -49,53 +46,70 @@ function getStartPage() {
     // just installed Storiesaround
     if ($_SESSION['site_domain_url'] == CMS_URL) {
         print_r2("please set a startpage in site_domain_url");
+    } else {
+        header('Location: '. $_SESSION['site_domain_url']);
+        exit;            
     }
 }
 
-$msg404 = "";
-$arr = null;
+function getPagesContentDefault($page404, $acc_read) {
 
-if ($id == null && count($request_parts)) {
-    print_r3("AA", $arr);
-    $msg404 = get404();
-} elseif ($id == null) {
-    print_r3("BB", $arr);
-    $arr = getStartPage();
-    header('Location: '. $_SESSION['site_domain_url']);
-    exit;
-} else {
-    $arr = $pages->getPagesContent($id);
-    if (!$arr) {
-        $msg404 = get404();
+    if (!$page404) {
+        return getStartPage();
     }
+    $site = new Site();
+    $arr = $site->getSiteColumnNames("pages");
+    $arr['template'] = $_SESSION['site_template_default']; 
+    $arr['content'] = "";
+    $arr['content'] .= $acc_read ? "" : getAccessMsg();
+    $arr['content'] .= $page404 ? get404() : "";
+    $arr['meta_robots'] = "noindex, nofollow";
+    return $arr;
 }
-
-//print_r3("arr", $arr);
 
 function get404() {
     return "<div id='page404'><h1>404</h1><p>The page cannot be found!</p></div>" . $_SESSION['site_404'];
 }
 
-/*
-if ($id == null) {
-    if ($_SESSION['site_domain_url'] == CMS_URL) {
-        print_r2("please set a startpage in site_domain_url");
-    } else {
-        get404();
-    }
-
-    print_r2($_SESSION['site_domain_url']);
-    print_r2(CMS_URL);
+function getAccessMsg() {
+    $msg = "Some information on this page can only be shown if you are logged in as a user";
+    return $msg;
 }
-*/
-// get_start_page
 
-//access page as known or unknown user to get page content
-$users_id = (isset($_SESSION['users_id'])) ? $_SESSION['users_id'] : null;
 
-// get page content
-//$arr = $pages->getPagesContent($id);
-//print_r2($arr);
+if ($id == null && count($request_parts)) {
+
+    // pages.php
+    // pages.php?iddds
+    // pages/lorem-ipsum
+    // pages/lorem-ipsum<script>alert()</script>
+
+    $pattern = '/^(?=^.{1,128}$)([a-z-])*$/';
+    $page404 = preg_match($pattern, $request_parts[1]) ? true : false;
+    $arr = getPagesContentDefault($page404, $acc_read=true);
+
+} elseif ($id == null) {
+    header('Location: '. $_SESSION['site_domain_url']);
+    exit;
+} else {
+    $arr = $pages->getPagesContent($id);
+    
+    // page found
+    if ($arr) {
+        $acc_read = get_rights($id, $users_id, $arr['access']);
+        
+        // no access
+        if (!$acc_read) {            
+            $arr = getPagesContentDefault($page404=true, $acc_read);
+        }
+    
+    } else {
+
+        // not a page -> get start page
+        header('Location: '. $_SESSION['site_domain_url']);
+        exit;
+    }
+}
 
 $sample = false;
 /*
@@ -108,8 +122,6 @@ if ($arr == null && isset($_GET['sample'])) {
 }
 */
 
-$acc_read = get_rights($id, $users_id, $arr['access']);
-//print_r2("acc_read: ". $acc_read);
 
 // get this page widgets
 $pages_widgets = new PagesWidgets();
@@ -133,6 +145,7 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
     //CMS_DIR.'/cms/css/layout.css',
+    CMS_DIR.'/cms/libraries/font-awesome/css/font-awesome.min.css',
     'https://fonts.googleapis.com/css?family=Open+Sans',
     CMS_DIR.'/cms/css/style.css'
 );
@@ -182,7 +195,7 @@ $language = strlen($arr['lang']) > 0 ? $arr['lang'] : $_SESSION['site_lang'];
 
 include_once CMS_ABSPATH .'/cms/includes/inc.header.php';
 
-// banners
+
 
  // prepare navigation
 $root = get_breadcrumb_path_array($id);	
@@ -206,11 +219,11 @@ if ($arr['template'] == 6) {
 ?>
 <body>
     <?php print_noscript($languages) ?>
-    
+    <?php if ($users_id) {?>
     <div id="wrapper-user">
         <div id="user-toolbar"><?php include 'includes/inc.site_active_user2.php';?></div>
     </div>
-
+    <?php }?>
     <?php 
     print_selection("selection-header-above", $selection_area['header_above']);
     ?>
@@ -244,7 +257,6 @@ if ($arr['template'] == 6) {
 
     <?php
 
-    echo $msg404;
     // handle template, set wrapper-content width
     $content_percent_width = 100;
     

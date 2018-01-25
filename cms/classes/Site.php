@@ -34,6 +34,24 @@ class Site extends Database
     /**
      * @return array
      */
+    public function getSiteColumnNames($table)
+    {
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = :table";  
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':table', $table, PDO::PARAM_STR);
+        $stmt->execute();
+        $output = array();
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $output[$row['COLUMN_NAME']] = null;
+        }
+        return $output;         
+    }
+
+
+    /**
+     * @return array
+     */
     public function getSiteColumns()
     {
         $sql = "SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name='site'";
@@ -42,7 +60,6 @@ class Site extends Database
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
     /**
      * @return array
