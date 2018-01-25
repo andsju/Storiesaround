@@ -300,6 +300,11 @@ $(document).ready(function() {
 
 function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	var logged_in = document.querySelector("#user-toolbar");
+	if (logged_in) {
+		$("body").css("margin-top", "80px");
+	}
+
 	if (w <= 767) {	
 		var cms_dir = $("#cms_dir").val();
 
@@ -313,7 +318,6 @@ function addMobileMenu() {
 		$("#site-navigation-mobile").show();
 		$(".flexnav").flexNav({ 'animationSpeed' : 0});
 
-		var logged_in = document.querySelector("#user_navigation");
 		if (logged_in) {
 			$("#site-navigation-mobile-wrapper").css("margin-top", "40px");
 			$("#search_site").css("margin-top", "30px");
