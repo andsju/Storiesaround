@@ -3,6 +3,7 @@
 <div id="site-navigation-identity">
 	<a id="site-name-link" href="<?php echo $_SESSION['site_domain_url']; ?>">
 		<h1 id="site-name"><?php echo $_SESSION['site_name']; ?></h1>
+		<img src="../content/themes/mountain/images/GF_logotype_1rad.png">
 	</a>
 	<?php if(isset($_SESSION['site_slogan'])) { ?>
 	<div id="site-slogan-heading"><?php echo $_SESSION['site_slogan']; ?></div>
@@ -10,12 +11,12 @@
 </div>
 
 <div id="site-navigation-cms">
-	<?php echo date("Y-m-d"); ?> | 
-	<?php if(isset($_SESSION['site_domain_url'])) { ?>
-		<a href="<?php echo $_SESSION['site_domain_url']; ?>" class="std"><?php echo translate("Start", "site_start_page", $languages); ?></a> | 
-	<?php } ?>
+	<?php echo date("Y-m-d"); ?> 
 	<?php if (!isset($_SESSION['users_id'])) { ?>
-		<a href="<?php echo CMS_DIR; ?>/cms/login.php"><?php echo translate("Login", "site_login", $languages); ?></a>
+		<a href="<?php echo CMS_DIR; ?>/cms/login.php"><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="cms-link"><?php echo translate("Login", "site_login", $languages); ?></span></a>
+	<?php } ?>
+	<?php if(isset($_SESSION['site_domain_url'])) { ?>
+		<a href="<?php echo $_SESSION['site_domain_url']; ?>"><i class="fa fa-home" aria-hidden="true"></i> <span class="cms-link"><?php echo translate("Start", "site_start_page", $languages); ?></span></a>
 	<?php } ?>
 </div>
 
@@ -46,4 +47,4 @@ if (count($header_image)) {
 }
 ?>
 </div>
-<div id="site-header-alt-caption"></div>;
+<div id="site-header-alt-caption"></div>

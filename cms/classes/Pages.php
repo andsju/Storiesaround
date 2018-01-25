@@ -388,6 +388,20 @@ class Pages extends Database
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getPagesSchema()
+    {
+        $sql = "SHOW CREATE TABLE pages";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
     /**
      * @param int $id
      * @return mixed
@@ -596,23 +610,24 @@ class Pages extends Database
         $contents = implode(' AND content LIKE ', $query_parts);
         $story_contents = implode(' AND story_content LIKE ', $query_parts);
         $story_wide_contents = implode(' AND story_wide_content LIKE ', $query_parts);
+        $grid_content = implode(' AND grid_content LIKE ', $query_parts);
         $tags = implode(' AND tag LIKE ', $query_parts);
 
         $ws = implode(' ', $words);
         $ws = trim($ws);
 
         $sql = "SELECT pages_id, title, content, tag, status, access, parent, utc_start_publish, utc_end_publish, utc_modified,  
-		MATCH(title,content,story_content,story_wide_content,tag) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
+		MATCH(title,content,story_content,story_wide_content,grid_content,tag) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
 		FROM pages 
 		WHERE 
-		( MATCH(title,content,story_content,story_wide_content,tag) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
+		( MATCH(title,content,story_content,story_wide_content,grid_content,tag) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
 			OR title LIKE {$titles}
 			OR content LIKE {$contents} 
 			OR story_content LIKE {$story_contents} 
 			OR story_wide_content LIKE {$story_wide_contents} 
+            OR grid_content LIKE {$grid_content} 
 			OR tag LIKE {$tags} 
-		)
-		";
+		)";
 
         if ($status > 0) {
             $sql .= " AND status = $status ";

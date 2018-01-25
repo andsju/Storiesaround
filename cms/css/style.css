@@ -17,8 +17,8 @@ div#page404 {margin:0 auto; width:200px;height:200px;padding:20px;border:3px sol
 ------------------------- */
 #wrapper-user { width: 100%; height: 40px; position: fixed; top: 0; left: 0; z-index: 999; color: white; background-color: black; }
 #wrapper-site-header { width: 100%; position: relative }
-#wrapper-page { width: 1366px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
-body {margin-top:100px;}
+#wrapper-page { width: 1366px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
+body {margin-top:50px;}
 #wrapper-top {width: 1366px;margin: 0 auto}
 #wrapper-bottom {width: 1366px;margin: 0 auto}
 #wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0}
@@ -35,15 +35,17 @@ body {margin-top:100px;}
 #site-header { width: 100%; height: 360px; overflow: hidden }
 #site-header img { width: 100%; height: auto }
 #site-header-alt-caption {  }
-#site-navigation-header { position: absolute; top: 40px; right: 277px; background-color: darkred; border: 1px solid black; }
+a#site-name-link h1 {display: none}
+a#site-name-link img {width: 400px; height: auto; margin-left:250px;}
+#site-navigation-header { position: absolute; top: 50px; right: 277px;  }
 #site-navigation-header ul { margin: 0 auto; padding: 0; list-style: none }
-#site-navigation-header ul li { float: left; margin: 0 0 0 10px; }
-#site-navigation-header ul li:hover { background-color: red }
-#site-navigation-header ul li a {display: block; line-height: 2em; padding: 0 20px; font-size: 1.2em; color: white; text-decoration: none }
-
+#site-navigation-header ul li { float: left; margin: 0 0 0 10px; border-right:1px solid black;}
+#site-navigation-header ul li:hover { background-color: lightblue }
+#site-navigation-header ul li a {display: block; padding: 0 20px; font-size: 1em; color:black; text-decoration: none }
+div#site-navigation-cms {position: absolute; top:0;right:277px}
 div#site-navigation-mobile-wrapper {float:left;width:100%;min-height:10px;}
 
-#site-search { position: absolute; bottom: 40px; margin: 0 0 0 277px; z-index: 999; padding: 10px; border: 2px dashed lightgray; opacity: 0.7}
+#site-search { position: absolute; bottom: 25px; margin: 0 0 0 277px; z-index: 999; padding: 10px; border: 2px dashed lightgray; opacity: 0.8}
 #site-search input,
 #site-search button { padding: 10px; font-size: 1em }
 #site-search:hover,
@@ -248,3 +250,6 @@ div.stories-event-meta { }
 
 div.debug {font-family: monospace; margin:0; background:lightgray}
 pre.debug {font-family: monospace; margin:0}
+
+div#site-navigation-cms span.cms-link {display: none;}
+div#site-navigation-cms a {color: black; padding:10px;}
