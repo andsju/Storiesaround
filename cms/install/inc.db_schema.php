@@ -504,4 +504,18 @@ CREATE TABLE IF NOT EXISTS `widgets` (
 //$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, story_content, story_wide_content, tag)";
 //$sqls[] = "ALTER TABLE users ADD FULLTEXT INDEX users_index (first_name, last_name, email, user_name)";
 
+//`calendar_categories`
+$sql_tables[] = 
+"
+CREATE TABLE IF NOT EXISTS `pages_categories` (
+  `pages_categories_id` int(3) NOT NULL AUTO_INCREMENT,
+  `category` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `position` int(3) NOT NULL DEFAULT '0',
+  `utc_created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `utc_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`pages_categories_id`)
+) $charset_collate;
+";
+
+
 ?>

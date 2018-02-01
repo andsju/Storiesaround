@@ -1115,42 +1115,29 @@ foreach ( $js_files as $js ): ?>
 				},
 			});
 		});
-
-		$('#btn_breadcrumb').click(function(event){
-			event.preventDefault();
-			var pages_id = $("#pages_id").val();
-			var action = "pages_breadcrumb";
-			var token = $("#token").val();
-			var users_id = $("#users_id").val();
-			var breadcrumb = $('input:radio[name=breadcrumb]:checked').val();
-			$.ajax({
-				beforeSend: function() { loading = $('#ajax_spinner_breadcrumb').show()},
-				complete: function(){ loading = setTimeout("$('#ajax_spinner_breadcrumb').hide()",1000)},
-				type: 'POST',
-				url: 'pages_edit_ajax.php',
-				data: { 
-					action: action, token: token, users_id: users_id, pages_id: pages_id, breadcrumb: breadcrumb
-				},
-				success: function(message){	
-					ajaxReply(message,'#ajax_status_breadcrumb');					
-				}
-			});
-		});
 		
-		$('#btn_html_lang').click(function(event){
+		$('#btn_settings').click(function(event){
 			event.preventDefault();
 			var pages_id = $("#pages_id").val();
-			var action = "pages_html_lang";
+			var action = "pages_settings";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var lang = $("#lang").val();
+			var search_field_area = $("#search_field_area option:selected").val();
+			var breadcrumb = $('input:radio[name=breadcrumb]:checked').val();
+			var category = $("#category option:selected").text();
+			var category_position = $("#category option:selected").val();
+			console.log("category", category);
+			console.log("category_position", category_position);
+			console.log("search_field_area", search_field_area);
 			$.ajax({
-				beforeSend: function() { loading = $('#ajax_spinner_html_lang').show()},
-				complete: function(){ loading = setTimeout("$('#ajax_spinner_html_lang').hide()",1000)},
+				beforeSend: function() { loading = $('#ajax_spinner_settings').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_settings').hide()",1000)},
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
-					action: action, token: token, users_id: users_id, pages_id: pages_id, lang: lang
+					action: action, token: token, users_id: users_id, pages_id: pages_id, 
+					lang: lang, search_field_area: search_field_area, category: category, category_position: category_position, breadcrumb: breadcrumb
 				},
 				success: function(message){	
 					ajaxReply(message,'#ajax_status_html_lang');
@@ -1551,8 +1538,6 @@ foreach ( $js_files as $js ): ?>
 		$('#btn_story_save').click(function(event){
 			event.preventDefault();
 			var story_content = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'story_content');
-			var story_wide_content = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'story_wide_content');
-
 			var action = "pages_story";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();			
@@ -1581,7 +1566,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id, story_content: story_content, 
-					story_wide_content: story_wide_content, tag: tag, story_custom_title: story_custom_title, 
+					tag: tag, story_custom_title: story_custom_title, 
 					story_custom_title_value: story_custom_title_value, story_css_class: story_css_class, 
 					story_wide_teaser_image: story_wide_teaser_image, story_promote: story_promote, story_link: story_link, 
 					story_event: story_event, story_event_datetime: story_event_datetime 
@@ -2798,36 +2783,17 @@ if(is_array($check_edit)) {
 	<div id="settings">	
 		
 		<div class="admin-panel">
-			<?php if(get_role_CMS('administrator') == 1) { ?>
 			
 			<table style="width:100%">
 				<tr>
 					<td style="width:70%">
-						
+
 						<h4><i class="fa fa-paw" aria-hidden="true"></i> Breadcrumb</h4>
 						
 						<p>
 							<input type="radio" name="breadcrumb" value="0" <?php if($arr['breadcrumb'] == 0) {echo 'checked';}?>> hide  | <input type="radio" name="breadcrumb" value="1" <?php if($arr['breadcrumb'] == 1) {echo 'checked';}?>> show (default) | <input type="radio" name="breadcrumb" value="2" <?php if($arr['breadcrumb'] == 2) {echo 'checked';}?>> show + children (select) | <input type="radio" name="breadcrumb" value="3" <?php if($arr['breadcrumb'] == 3) {echo 'checked';}?>> show + children (ul)
 						</p>
-					</td>
-					<td style="vertical-align:bottom;text-align:right;">
-						<p>
-							<span class="toolbar"><button id="btn_breadcrumb">Save</button></span>
-							<span id="ajax_spinner_breadcrumb" style='display:none'><img src="css/images/spinner.gif"></span>
-							<span id="ajax_status_breadcrumb" style='display:none'></span>
-						</p>
-					</td>
-				</tr>
-			</table>
-			<?php } else { echo 'Administrators can handle settings in this area'; } ?>
-
-		</div>
-
-		<div class="admin-panel">
-			
-			<table style="width:100%">
-				<tr>
-					<td style="width:70%">
+					
 						<h4><i class="fa fa-globe" aria-hidden="true"></i> Language</h4>
 						<p>
 							Set this page html lang attribute - overrides site settings. 2-letter (ISO 639-1 codes)
@@ -2835,19 +2801,60 @@ if(is_array($check_edit)) {
 						<p>
 							<input type="text" size="2" name="lang" id="lang" value="<?php echo $arr['lang']; ?>" />
 						</p>
+
+						<h4><i class="fa fa-search" aria-hidden="true"></i> Search field</h4>
+						<p>
+							Specify search field area
+						</p>
+
+						<p>
+							<select id="search_field_area">
+							<?php
+							$search_fields = [0 => "none", 1 => "header", 2 => "page"];						
+							if ($search_fields) {
+								foreach ($search_fields as $key => $value) {
+									$selected = $key == $arr['search_field_area'] ? " selected" : "";
+									echo '<option value="'.$key.'"'.$selected.'>'.$value.'</option>';
+								}
+							}
+							?>
+							</select>
+						</p>
+
+						<h4><i class="fa fa-tag" aria-hidden="true"></i> Category</h4>
+						<p>
+							Specify a page category  
+						</p>
+						<p>
+							<select id="category">
+								<option value=""></option>
+							<?php
+							$categories = new PagesCategories();
+							$row_categories = $categories->getPagesCategoriesNamed();
+							$row_categories = flatt_array($row_categories);
+							
+							if ($row_categories) {
+								foreach ($row_categories as $key => $value) {
+									$selected = $key == $arr['category_position'] ? " selected" : "";
+									echo '<option value="'.$key.'"'.$selected.'>'.$value.'</option>';
+								}
+							}
+							?>
+							</select>
+						</p>
+												
 					</td>
 					<td style="vertical-align:bottom;text-align:right;">
 						<p>
-							<span class="toolbar"><button id="btn_html_lang">Save</button></span>
-							<span id="ajax_spinner_html_lang" style='display:none'><img src="css/images/spinner.gif"></span>
-							<span id="ajax_status_html_lang" style='display:none'></span>
+							<span class="toolbar"><button id="btn_settings">Save</button></span>
+							<span id="ajax_spinner_settings" style='display:none'><img src="css/images/spinner.gif"></span>
+							<span id="ajax_status_settings" style='display:none'></span>
 						</p>
 					</td>
 				</tr>
 			</table>
 
 		</div>
-
 
 		<?php if(get_role_CMS('superadministrator') == 1) { ?>
 		
@@ -4252,7 +4259,7 @@ if(is_array($check_edit)) {
 		
 			<table>
 				<tr>
-					<td style="vertical-align:top;width:30%;">
+					<td style="vertical-align:top;width:35%;">
 						<h4>Story</h4> 
 						<p>
 							<i>&lt= 33% of page width<i>
@@ -4261,31 +4268,20 @@ if(is_array($check_edit)) {
 							<textarea name="story_content" id="story_content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['story_content'];?></textarea>
 						</div>
 					</td>
-					<td>&nbsp;
+					<td style="width:5%;">
 					</td>
-					<td style="vertical-align:top;width:70%;">
+					<td style="vertical-align:top;width:60%;">
 						<h4>Story wide:</h4>
 						<p>
-							<i>&gt;  50% of page width<i>
+							<i>&gt;  33% of page width<i>
 						</p>
 						<div>
-							<textarea name="story_wide_content" id="story_wide_content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['story_wide_content'];?></textarea>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td style="padding:10px;vertical-align:top;">
-					&nbsp;
-					</td>
-					<td style="padding:10px;vertical-align:top;">&nbsp;
-					</td>
-					
-					<td style="padding-left:5px;vertical-align:top;">
 						<div style="float:left;">
 							Teaser image settings -> story wide  
 							<br /><input type="radio" name="story_wide_teaser_image" id="story_wide_teaser_image" value="0" <?php if($arr['story_wide_teaser_image'] == 0) {echo 'checked';}?>> exclude
 							<br /><input type="radio" name="story_wide_teaser_image" id="story_wide_teaser_image" value="1" <?php if($arr['story_wide_teaser_image'] == 1) {echo 'checked';}?>> include full size above story
 							<br /><input type="radio" name="story_wide_teaser_image" id="story_wide_teaser_image" value="2" <?php if($arr['story_wide_teaser_image'] == 2) {echo 'checked';}?>> align image left|right (set size and alignment in the page that shows stories)
+						</div>
 						</div>
 					</td>
 				</tr>

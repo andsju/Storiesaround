@@ -45,14 +45,20 @@ a#site-name-link img {width: 400px; height: auto; margin-left:250px;}
 div#site-navigation-cms {position: absolute; top:0;right:277px}
 div#site-navigation-mobile-wrapper {float:left;width:100%;min-height:10px;}
 
-#site-search { position: absolute; bottom: 25px; margin: 0 0 0 277px; z-index: 999; padding: 10px; border: 2px dashed lightgray; opacity: 0.8}
-#site-search input,
-#site-search button { padding: 10px; font-size: 1em }
-#site-search:hover,
-#site-search:active,
-#site-search:focus { opacity: 1 }
-#site-search button { background-color: yellowgreen }
 #site-name { margin: 0 0 0 277px; }
+
+#site-search { position: absolute; top: 25px; margin: 0 0 0 277px;  padding: 10px;  }
+#site-search input {}
+#site-search button { padding: 5px; font-size: 1em }
+#site-search label {position: absolute; left:20px; top:20px; font-size:1.4em}
+#site-search span img {position: absolute; right:90px; top:25px; font-size:1.4em}
+
+#site-search-page { padding: 10px; position: relative; background-color:bisque}
+#site-search-page input {width:400px; padding: 15px 15px 15px 40px; font-size: 1em}
+#site-search-page button { background-color: yellowgreen; padding: 15px; font-size: 1em }
+#site-search-page label {position: absolute; left:20px; top:20px; font-size:1.4em}
+#site-search-page span img {position: absolute; right:90px; top:25px; font-size:1.4em}
+
 
 /* content
 ------------------------- */
@@ -92,6 +98,7 @@ changing these can be ... an adventure ....
 
 article, aside, footer, header, nav, section { display: block }
 
+aside#content-bottom-widgets { clear: both }
 
 /* overall div box-sizing 
 ------------------------- */
@@ -253,3 +260,19 @@ pre.debug {font-family: monospace; margin:0}
 
 div#site-navigation-cms span.cms-link {display: none;}
 div#site-navigation-cms a {color: black; padding:10px;}
+
+
+ul.ui-autocomplete {padding: 10px}
+ul.ui-autocomplete li {color:navy}
+ul li.ui-autocomplete-category {font-weight: bold; margin:25px 0 0 5px;}
+.ui-menu-item-wrapper:hover {color:black !important }
+.ui-menu-item-wrapper:active {color:black !important }
+
+.ui-state-active,
+.ui-widget-content .ui-state-active {
+	border: 0px;
+	background: #ffffff;
+	font-weight: normal;
+    color: navy;
+    margin: 0;
+}

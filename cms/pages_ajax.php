@@ -31,6 +31,16 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 				
 			break;
 			
+			case 'pages_search_extended2':
+				$s = isset($_POST['s']) ? trim($_POST['s']) : "";	
+
+				//echo $s;
+				//write_debug($s);
+				$rows = $pages->getPagesSearchWordsRelevance2($s, 2);
+				echo json_encode($rows);
+				//echo $rows;
+			break;
+			
 			case 'pages_search_extended':
 
 				
@@ -288,9 +298,8 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 
 				if ($pages_widgets_id = filter_input(INPUT_GET, 'pages_widgets_id', FILTER_VALIDATE_INT)) { 
 					$tag = isset($_GET['tag']) ? filter_var(trim($_GET['tag']), FILTER_SANITIZE_STRING) : '';
-
+					$width = intval($_GET['width']);
 					$rows = $pages->getPagesImagesSlideshowFeed($pages_widgets_id, $tag);
-					
 					if($rows) {
 											
 						$image = new Image();
@@ -298,9 +307,8 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 
 							// biggest possible							
 							$filename_and_path = CMS_DIR.'/content/uploads/pages/'. $value['pages_id'] .'/'. $value['filename'];							
-							$filename = $image->get_max_image2($filename_and_path, $return='filename');						
+							$filename = $image->get_optimzed_image($filename_and_path, $width);
 							$rows[$key]['filename'] = $filename; 
-
 						}						
 
 						echo json_encode($rows);

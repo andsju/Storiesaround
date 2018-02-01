@@ -1432,7 +1432,7 @@ switch($t) {
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="sub-tabs ui-tabs ui-widget" style="float:right;margin-top:22px;padding: 0em;">';
-				get_tab_menu_jquery_ui_look_alike($this_url, array("add","find","sitetree","tags","?"), array("Add page","Find page","Sitetree","Tags","?"), "tp", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
+				get_tab_menu_jquery_ui_look_alike($this_url, array("add","find","sitetree","categories","tags","?"), array("Add page","Find page","Sitetree","Category","Tags","?"), "tp", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
 			echo '</div>';	
 		echo '</div>';
 
@@ -1458,6 +1458,9 @@ switch($t) {
 					break;
 				case 'sitetree':
 					include 'includes/inc.pages_sitetree.php';
+					break;
+				case 'categories':
+					include 'includes/inc.pages_categories.php';
 					break;
 				case 'tags':
 					include 'includes/inc.tags.php';

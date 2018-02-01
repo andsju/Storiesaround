@@ -1,8 +1,26 @@
-/*
-jquery behaviours and functions
-*/
+
+
 $(document).ready(function() {
-	
+
+	var language = $("#site_language").val();
+	var lang = 0;
+	switch(language) {
+		case "english" :
+			lang = 0;
+		break;
+		case "swedish" :
+			lang = 1;
+		break;
+		default :
+			lang = 0;
+		break;
+	}
+	const l = lang;
+	var languages = [];
+	languages["Search"] = ["Search", "Sök"];
+	languages["search_page"] = ["Search page", "Sök sida"];
+	languages["search_page_not_found"] = ["No pages found", "Ingen sida hittades"];		
+
 	var menu = "#menu";
 	var position = {my: "left top", at: "left bottom"};
 	$(menu).hide().menu({
@@ -84,6 +102,10 @@ $(document).ready(function() {
 			
 	jQuery("abbr.timeago").timeago();
 	
+
+	
+
+
 	$('#btn_pages_search').click(function(event){
 		event.preventDefault();
 		var action = "pages_search_extended";
@@ -103,6 +125,103 @@ $(document).ready(function() {
 			},
 		});
 	});
+
+	$.widget( "custom.catcomplete", $.ui.autocomplete, {
+		_create: function() {
+		  this._super();
+		  this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+		},
+		_renderMenu: function( ul, items ) {
+		  var that = this,
+			currentCategory = "";
+		  $.each( items, function( index, item ) {
+			var li;
+			if ( item.category != currentCategory ) {
+			
+			  ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+			  currentCategory = item.category;
+			}
+			li = that._renderItemData( ul, item );
+			if ( item.category ) {
+			  li.attr( "aria-label", item.category + " : " + item.label );
+			}
+		  });
+		}
+	  });	
+
+	$("#pages_s").catcomplete({
+		minLength: 2,
+		delay: 300,
+		source: function (request, response) {
+
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_search').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_search').hide()", 500)},
+				type: "post",
+				url: "pages_ajax.php",
+				dataType: "json",
+				data: {
+					action: "pages_search_extended2",
+					token: $("#token").val(),
+					s: request.term
+				},
+				success: function (data) {
+					data = data.length > 0 ? data : [{title: languages["search_page_not_found"][lang], category: "", pages_id: "0"}];
+
+					response($.map(data, function (item) {						
+						return {
+							label: item.title,
+							category: item.category,
+							id: item.pages_id
+						}
+					}));
+				}
+			});
+		},
+		select: function (event, ui) {
+			console.log(ui);
+			$("input#pid").val(ui.item.id)
+		}
+	});
+
+	$("#search-page").catcomplete({
+		minLength: 2,
+		delay: 300,
+		source: function (request, response) {
+
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_search').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_search').hide()", 500)},
+				type: "post",
+				url: "pages_ajax.php",
+				dataType: "json",
+				data: {
+					action: "pages_search_extended2",
+					token: $("#token").val(),
+					s: request.term
+				},
+				success: function (data) {
+					data = data.length > 0 ? data : [{title: languages["search_page_not_found"][lang], category: "", pages_id: "0"}];
+
+					response($.map(data, function (item) {						
+						return {
+							label: item.title,
+							category: item.category,
+							id: item.pages_id
+						}
+					}));
+				}
+			});
+		},
+		select: function (event, ui) {
+			console.log(ui);
+			$("input#pid").val(ui.item.id)
+		}
+	});
+
+	
+
+
 	
 	$("body").on("click", "#btn_pages_search_again", function(event){
 		event.preventDefault();
@@ -260,11 +379,7 @@ $(document).ready(function() {
 	});
 	
 	
-
 	
-	
-	
-	setTimeout(delay_swap_site_feed, 3000);
 	setInterval(online, 60000);
 	
 	$(window).resize(addMobileMenu());  	
@@ -287,10 +402,8 @@ $(document).ready(function() {
 		window.location.href = "http://sunet.se";
 		
 	});	
-	console.log("AAAA");
 	equalheight('div.grid-cell');
 	if ($("#stories_equal_height").val() == 1) {
-		console.log("It is");
 		equalheight('div.stories-cell');		
 	}
 	//replace_image_path('/content/', '/somefolder/content/');
@@ -335,38 +448,6 @@ function refresh() {
 function get_random_int(min,max) {
 	return Math.floor(Math.random()*(max-min+1)+min);
 }		
-
-function swap_site_feed(newdata) {
-	if(newdata.length) {
-		var data = jQuery.parseJSON(newdata);		
-		$i = get_random_int(0,data.length-1);		
-		$('#site-feed').fadeTo('fast', 0.5, function() {
-			$(this).html("<div id='site-feed-inner'><a href="+data[$i].link+"><div><h5>"+data[$i].title+"</h5><p>"+data[$i].content+"</p></a></div>");
-		}).fadeTo('fast', 1);
-	}
-}
-
-function delay_swap_site_feed() {
-	var action = "site_feed";
-	var token = $("#token").val();
-	var pages_id = $("#pages_id").val();
-	var cms_dir = $("#cms_dir").val();
-	var ajax_url = cms_dir +'/cms/pages_ajax.php';
-	if (pages_id > 0) {
-		$.ajax({				
-			type: 'POST',
-			url: ajax_url,
-			data: "action=" + action + "&token=" + token + "&pages_id=" + pages_id,
-			success: function(newdata){	
-				swap_site_feed(newdata);
-				var ajax_swap_site_feed = 5000;
-				setInterval( function() { swap_site_feed(newdata); }, ajax_swap_site_feed);					
-			},
-		});
-		
-	}
-
-}
 
 function calendar_preview(id) {
 	var cms_dir = $("#cms_dir").val();

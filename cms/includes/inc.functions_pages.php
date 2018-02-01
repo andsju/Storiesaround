@@ -391,7 +391,6 @@ function print_breadcrumb($id, $breadcrumb_settings)
 }
 
 
-
 /**
  *
  * print meta
@@ -411,6 +410,46 @@ function print_meta($utc_modified, $dtz, $languages)
         // echo '<div id="ajax_status_history" style="display:none;"></div>';
     }
 }
+
+
+/**
+ *
+ * print site search field area header
+ *
+ * @param array languages
+ * @return mixed|string
+ */
+function print_search_field_area_header($languages)
+{
+    $html = '<div id="site-search-header">';
+    $html .= '<label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>'; 
+    $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
+    $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
+    $html .= '<input type="hidden" id="pid" value="0">';
+    $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
+    $html .= '</div>';
+    echo $html;
+}
+
+/**
+ *
+ * print site search field area page
+ *
+ * @param array languages
+ * @return mixed|string
+ */
+function print_search_field_area_page($languages)
+{
+    $html = '<div id="site-search-page">';
+    $html .= '<label for="search-page"><i class="fa fa-search" aria-hidden="true"></i></label>'; 
+    $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
+    $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
+    $html .= '<input type="hidden" id="pid" value="0">';
+    $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
+    $html .= '</div>';
+    echo $html;
+}
+
 
 /**
  *
@@ -1001,7 +1040,6 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                 $pages_id = $row['pages_id'];
                 $css_class = (strlen($row['story_css_class']) > 0) ? $row['story_css_class'] : '';
                 $story = $row['story_content'];
-                $story_wide = $row['story_wide_content'];
                 $story_wide_teaser_image = $row['story_wide_teaser_image'];
                 $utc = $row['utc_modified'];
                 $date = get_utc_dtz($utc, $dtz, 'Y-m-d H:i');
@@ -1079,7 +1117,7 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                                 if ($stories_last_modified == 1) {
                                     echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
                                 }
-                                echo $story_wide;
+                                echo $story;
                                 echo '</div>';
                                 break;
                             case 1:
@@ -1095,7 +1133,7 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                                 if ($stories_last_modified == 1) {
                                     echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
                                 }
-                                echo $story_wide;
+                                echo $story;
                                 echo '</div>';
                                 break;
                             case 2:
@@ -1113,7 +1151,7 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                                 if (isset($row['filename'])) {
                                     echo '<img src="' . $img . '" style="width:' . $stories_wide_teaser_image_width . 'px;height:auto;" class="' . $teaser_image_class . '" alt="' . $caption . '" />';
                                 }
-                                echo $story_wide;
+                                echo $story;
                                 echo '</div>';
                                 echo '<div style="clear:both"></div>';
                                 echo '</div>';
@@ -1134,7 +1172,7 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                                 if ($stories_last_modified == 1) {
                                     echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
                                 }
-                                echo $story_wide;
+                                echo $story;
                                 echo '</div>';
                                 break;
                             case 1:
@@ -1150,7 +1188,7 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                                 if ($stories_last_modified == 1) {
                                     echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
                                 }
-                                echo $story_wide;
+                                echo $story;
                                 echo '</div>';
                                 break;
                             case 2:
@@ -1167,7 +1205,7 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                                 if ($stories_last_modified == 1) {
                                     echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
                                 }
-                                echo $story_wide;
+                                echo $story;
                                 echo '<div style="clear:both"></div>';
                                 echo '</div>';
 
@@ -1276,7 +1314,6 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
         $ratio = $row['ratio'];
         $css_class = (strlen($row['story_css_class']) > 0) ? $row['story_css_class'] : '';
         $story = $row['story_content'];
-        $story_wide = $row['story_wide_content'];
         $story_wide_teaser_image = $row['story_wide_teaser_image'];
         $caption = isset($row['filename']) ? $row['caption'] : '';
         $utc = $row['story_event_date'];
@@ -1311,7 +1348,7 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
                 if ($stories_last_modified == 1) {
                     $html .= $stories_event_meta;
                 }
-                $html .= $story_wide . '</div>';
+                $html .= $story . '</div>';
                 break;
             case 1:
                 $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $column_width) : '';
@@ -1325,7 +1362,7 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
                 if ($stories_last_modified == 1) {
                     $html .= $stories_event_meta;
                 }
-                $html .= $story_wide . '</div>';
+                $html .= $story . '</div>';
                 break;
             case 2:
                 $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $column_width * $stories_wide_teaser_image_width / 100) : '';                
@@ -1337,7 +1374,7 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
                 if ($title == 0) {
                     $html .= '<h3 class="stories-title">' . $title_value . '</h3>';
                 }
-                $html .= $story_wide . '</div>';
+                $html .= $story . '</div>';
                 if ($stories_last_modified == 1) {
                     $html .= $stories_event_meta;
                 }
@@ -1384,7 +1421,6 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
         $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
         $date = get_utc_dtz($row['utc_modified'], $dtz, 'Y-m-d H:i');
         $story = $row['story_content'];
-        $story_wide = $row['story_wide_content'];
         $story_wide_teaser_image = $row['story_wide_teaser_image'];
         $caption = $row['caption'];
         $alt = $row['alt'];
@@ -1472,7 +1508,7 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';
                 $html .= $a_end;
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
-                $html .= $story_wide . '</div></div>';
+                $html .= $story . '</div></div>';
                 
 
             break;
@@ -1488,7 +1524,7 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
                 $html .= $a_start;
                 $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>' : '';
                 $html .= $a_end;
-                $html .= $story_wide . '</div></div>';
+                $html .= $story . '</div></div>';
                 
 
             break;
@@ -1499,7 +1535,7 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
                 $html .= '<div class="stories-content ' . $css_class . '">';
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
-                $html .= $story_wide . '</div></div>';
+                $html .= $story . '</div></div>';
                 $html .= $a_end;
 
             break;
@@ -1549,7 +1585,6 @@ function get_box_story_content_child($rows, $wrapper_content_width, $css_class_u
             $utc = $row['utc_modified'];
             $date = get_utc_dtz($utc, $dtz, 'Y-m-d H:i');
             $story = $row['story_content'];
-            $story_wide = $row['story_wide_content'];
             $story_wide_teaser_image = $row['story_wide_teaser_image'];
             $caption = $row['caption'];
             $css_class = (strlen($row['story_css_class']) > 0) ? $row['story_css_class'] : '';
@@ -1574,7 +1609,7 @@ function get_box_story_content_child($rows, $wrapper_content_width, $css_class_u
             if ($title == 0) {
                 $html .= '<h3 class="stories-title">' . $title_value . '</h3>';
             }
-            $html .= $story_wide . '</div>';
+            $html .= $story . '</div>';
             if ($stories_last_modified == 1) {
                 $html .= $stories_event_meta;
             }
@@ -1687,7 +1722,6 @@ function get_box_story_content_child_floats($rows, $content_width, $box_layout, 
             $title = $row['story_custom_title'];
             $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
             $story = $row['story_content'];
-            $story_wide = $row['story_wide_content'];
             $story_wide_teaser_image = $row['story_wide_teaser_image'];
             $ratio = $row['ratio'];
             $caption = $row['caption'];
