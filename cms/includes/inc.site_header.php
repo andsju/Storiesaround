@@ -20,10 +20,12 @@
 	<?php } ?>
 </div>
 
-<div id="site-search">
-    <input type="text" name="search" placeholder="Vad söker du?" id="pages_s" class="search" value="" style="z-index:999">
-    <button id="btn_pages_search" class="magnify"><?php echo translate("Search", "site_search", $languages); ?></button>
-</div>
+<?php
+	if ($arr['search_field_area'] == 1) {
+		print_search_field_area_header($languages);
+	}
+	
+?>
 
 
 

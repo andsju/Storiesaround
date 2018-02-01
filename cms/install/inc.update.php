@@ -50,7 +50,7 @@ $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads_limit");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads_filter");
 //$sqls[] = "DROP INDEX pages_index ON pages";
-//$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, grid_content, story_content, story_wide_content, tag)";
+//$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, grid_content, story_content, tag, pages_id_link)";
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_feed");
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_feed_interval");
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_limit_stories");
@@ -58,4 +58,9 @@ $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_flas
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_title_position");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_header_image", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'default header image' AFTER `site_navigation_vertical_sidebar`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_404", "column_definition" => "text DEFAULT '' COMMENT '404 page not found' AFTER `site_header_image`");
+// CREATE TABLE IF NOT EXISTS `pages_categories`
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "category", "column_definition" => "varchar(50) DEFAULT '' COMMENT 'page category' AFTER `lang`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "category_position", "column_definition" => "int(2) DEFAULT '99' COMMENT 'page category position' AFTER `lang`");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "story_wide_content");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "search_field_area", "column_definition" => "tinyint(1) DEFAULT '0' COMMENT '0: none, 1:header, 2:page' AFTER `breadcrumb`");
 ?>

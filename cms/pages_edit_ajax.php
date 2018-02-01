@@ -1403,29 +1403,19 @@ if (isset($_POST['token'])){
 					echo $str;
 
 				break;
-
 				
-				case 'pages_breadcrumb':
 					
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-					$breadcrumb = filter_input(INPUT_POST, 'breadcrumb', FILTER_VALIDATE_INT) ? $_POST['breadcrumb'] : 0;
-					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					
-					$result = $pages->setPagesBreadcrumb($pages_id, $breadcrumb, $utc_modified);
-					if($result) {
-						$history = new History();
-						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'breadcrumb', $users_id, $_SESSION['token'], $utc_modified);
-					}
-					
-				break;
-					
-				case 'pages_html_lang':
+				case 'pages_settings':
 					
 					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
 					$lang = filter_var(trim($_POST['lang']), FILTER_SANITIZE_STRING);
+					$search_field_area = $_POST['search_field_area'];
+					$category = filter_var(trim($_POST['category']), FILTER_SANITIZE_STRING);
+					$category_position = $_POST['category_position'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+					$breadcrumb = filter_input(INPUT_POST, 'breadcrumb', FILTER_VALIDATE_INT) ? $_POST['breadcrumb'] : 0;
 					
-					$result = $pages->setPagesHtmlLang($pages_id, $lang, $utc_modified);
+					$result = $pages->setPagesSettings($pages_id, $breadcrumb, $lang, $search_field_area, $category, $category_position, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'lang', $users_id, $_SESSION['token'], $utc_modified);
@@ -1437,7 +1427,6 @@ if (isset($_POST['token'])){
 				case 'pages_story':
 					
 					$story_content = trim($_POST['story_content']);
-					$story_wide_content = trim($_POST['story_wide_content']);
 					$tag = isset($_POST['tag']) ? implode(",", $_POST['tag']) : "";
 					$story_css_class = trim($_POST['story_css_class']);
 					$story_custom_title = filter_input(INPUT_POST, 'story_custom_title', FILTER_VALIDATE_INT) ? $_POST['story_custom_title'] : 0;
@@ -1449,7 +1438,7 @@ if (isset($_POST['token'])){
 					$story_event_date = isValidDateTime($_POST["story_event_datetime"]) ? date("Y-m-d H:i:s", strtotime($_POST["story_event_datetime"])) : null; 
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					$result = $pages->setPagesStory($pages_id, $story_content, $story_wide_content, $tag, $story_promote, $story_link, $story_event, $story_event_date, $story_css_class, $story_custom_title, $story_custom_title_value, $story_wide_teaser_image, $utc_modified);
+					$result = $pages->setPagesStory($pages_id, $story_content, $tag, $story_promote, $story_link, $story_event, $story_event_date, $story_css_class, $story_custom_title, $story_custom_title_value, $story_wide_teaser_image, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'story', $users_id, $_SESSION['token'], $utc_modified);
@@ -1469,13 +1458,11 @@ if (isset($_POST['token'])){
 						$ratio = $result['ratio'];
 						$css_class = strlen($result['story_css_class'])>0 ? $result['story_css_class'] : 'stories-content';
 						$story = $result['story_content'];
-						$story_wide = $result['story_wide_content'];
-						$story_wide_teaser_image = $result['story_wide_teaser_image'];
 						$utc = new DateTime($result['utc_start_publish']);
 						$date = $utc->format('Y-m-d H:i');
 						$caption = isset($result['filename']) ? $result['caption'] : '';
 						
-						function preview_story($w, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide, $story_wide_teaser_image, $caption, $date, $stories_last_modified) {
+						function preview_story($w, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified) {
 
 							$title_value = isset($title) ? $title_value : null;
 							echo '<div style="float:left;margin:20px;"<span style="font-size:0.8em;">'.$w.'px</span>';
@@ -1544,7 +1531,7 @@ if (isset($_POST['token'])){
 												if($stories_last_modified == 1) {
 													echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="'.$date.'">Published: '.$date.'</abbr></span></div>';
 												}
-												echo $story_wide;
+												echo $story;
 												echo '</div></a>';
 											break;
 											case 1:
@@ -1557,31 +1544,31 @@ if (isset($_POST['token'])){
 												if($stories_last_modified == 1) {
 													echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="'.$date.'">Published: '.$date.'</abbr></span></div>';
 												}
-												echo '<div class="stories-content">'.$story_wide.'</div>';
+												echo '<div class="stories-content">'.$story.'</div>';
 												echo '</div></a>';
 											break;
 											case 2:
 												
 												// 80px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=80, $teaser_image_align='right');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='right');
 												// 120px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=120, $teaser_image_align='right');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='right');
 												// 160px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=160, $teaser_image_align='right');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='right');
 												// 200px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=200, $teaser_image_align='right');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='right');
 												
 											break;
 											case 3:
 
 												// 80px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=80, $teaser_image_align='left');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='left');
 												// 120px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=120, $teaser_image_align='left');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='left');
 												// 160px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=160, $teaser_image_align='left');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='left');
 												// 200px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=200, $teaser_image_align='left');
+												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='left');
 											
 											break;
 											
@@ -1598,7 +1585,7 @@ if (isset($_POST['token'])){
 												if($stories_last_modified == 1) {
 													echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="'.$date.'">Published: '.$date.'</abbr></span></div>';
 												}
-												echo $story_wide;
+												echo $story;
 												echo '</div>';											
 											break;
 											case 1:
@@ -1610,31 +1597,31 @@ if (isset($_POST['token'])){
 												if($stories_last_modified == 1) {
 													echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="'.$date.'">Published: '.$date.'</abbr></span></div>';
 												}
-												echo '<div class="stories-content">'.$story_wide.'</div>';
+												echo '<div class="stories-content">'.$story.'</div>';
 												echo '</div></a>';
 											break;
 											case 2:
 
 												// 80px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=80, $teaser_image_align='right');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='right');
 												// 120px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=120, $teaser_image_align='right');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='right');
 												// 160px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=160, $teaser_image_align='right');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='right');
 												// 200px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=200, $teaser_image_align='right');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='right');
 												
 											break;
 											case 3:
 
 												// 80px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=80, $teaser_image_align='left');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='left');
 												// 120px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=120, $teaser_image_align='left');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='left');
 												// 160px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=160, $teaser_image_align='left');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='left');
 												// 200px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width=200, $teaser_image_align='left');
+												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='left');
 												
 											break;
 											
@@ -1679,11 +1666,11 @@ if (isset($_POST['token'])){
 						}
 
 						
-						preview_story(138, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(222, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(306, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(474, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(726, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(138, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(222, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(306, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(474, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(726, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
 						echo '<div style="clear:both"></div>';
 					}
 					
@@ -2278,7 +2265,60 @@ if (isset($_POST['token'])){
 				}
 			}
 		}
+
 		
+		if ($action == 'pages_category_add') { 
+			
+			$category = filter_var(trim($_POST['category']), FILTER_SANITIZE_STRING);
+			$position = filter_input(INPUT_POST, 'position', FILTER_VALIDATE_INT);
+			$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+			$pages_category = new PagesCategories();
+
+			// check existing tags
+			$result = $pages_category->getPagesCategoriesSearch($category);
+			if($result) { 
+				echo 'exists';
+				die();
+			}
+
+			$lastInsertId = $pages_category->setPagesCategoriesNew($category, $position, $utc_created);
+			if($lastInsertId) {
+				echo $lastInsertId;
+				$history = new History();
+				$history->setHistory($lastInsertId, 'pages_categories_id', 'INSERT', $category, $users_id, $_SESSION['token'], $utc_created);
+			}
+		}
+		
+		if ($action == 'pages_category_save') { 
+			
+			$pages_categories_id = filter_input(INPUT_POST, 'pages_categories_id', FILTER_VALIDATE_INT);
+			$position = filter_input(INPUT_POST, 'position', FILTER_VALIDATE_INT);
+			$category = filter_var(trim($_POST['category']), FILTER_SANITIZE_STRING);
+			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+			$pages_category = new PagesCategories();
+			
+
+			$result = $pages_category->setPagesCategoriesUpdate($pages_categories_id, $category, $position, $utc_modified);
+			if ($result) {
+				$history = new History();
+				$history->setHistory($pages_categories_id, 'pages_categories_id', 'UPDATE', $pages_categories_id, $users_id, $_SESSION['token'], $utc_modified);
+			}
+		}
+
+		if ($action == 'pages_category_delete') { 
+			
+			$pages_categories_id = filter_input(INPUT_POST, 'pages_categories_id', FILTER_VALIDATE_INT);
+			$pages_category = new PagesCategories();
+
+			$result = $pages_category->setPagesCategoriesDelete($pages_categories_id);
+			if ($result) {
+				echo "ok";
+				$history = new History();
+				$history->setHistory($pages_categories_id, 'pages_categories_id', 'DELETE', $pages_categories_id, $users_id, $_SESSION['token'], $utc_created);
+			}
+		}
+
+
 		if ($action == 'pages_add_tag') { 
 			
 			$tag = filter_var(trim($_POST['tag']), FILTER_SANITIZE_STRING);

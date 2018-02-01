@@ -25,7 +25,9 @@
                     </footer>
                 </article>
                 <div id="content-bottom-grid"><?php print_grid($arr, 2);?></div>
-                <aside id="content-bottom-widgets"></aside>
+                <aside id="content-bottom-widgets">
+                    <?php if($rows_widgets){ show_widgets_content($rows_widgets, "widgets_content", $wrapper_content_width);} ?>
+                </aside>
                 <aside id="content-bottom-stories">
                     <?php
                     $cms_dir = CMS_DIR;
