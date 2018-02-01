@@ -146,13 +146,13 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
     //CMS_DIR.'/cms/css/layout.css',
     CMS_DIR.'/cms/libraries/font-awesome/css/font-awesome.min.css',
-    'https://fonts.googleapis.com/css?family=Open+Sans',
-    CMS_DIR.'/cms/css/style.css'
+    'https://fonts.googleapis.com/css?family=Open+Sans'
+    
 );
 
 $css_files = add_css_themes($css_files);
 $css_files = add_css_widgets($css_files, $widgets_css);
-//print_r2($css_files);
+array_push($css_files, CMS_DIR.'/cms/css/style.css');
 
 // load javascript files, loads before footer.inc.php
 $js_files = array(
@@ -248,7 +248,10 @@ if ($arr['template'] == 6) {
     </header>
 
     <div id="wrapper-top">
-        <?php 
+        <?php
+        if ($arr['search_field_area'] == 2) {
+            print_search_field_area_page($languages);
+        }
         print_selection("selection-header-below", $selection_area['header_below']); 
         ?>
         <div id="top-grid"><?php print_grid($arr, 0);?></div>
@@ -337,10 +340,11 @@ if ($arr['template'] == 6) {
         <?php include_once_customfile('includes/inc.footer.php', $arr, $languages); ?>			
     </footer>
 
-    <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>" />
-    <input type="hidden" name="cms_dir" id="cms_dir" value="<?php echo CMS_DIR;?>" />
-    <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>" />
-    <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>" />
+    <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>">
+    <input type="hidden" name="cms_dir" id="cms_dir" value="<?php echo CMS_DIR;?>">
+    <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>">
+    <input type="hidden" name="site_language" id="site_language" value="<?php echo $_SESSION['site_language'];?>">
+    <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
     
     <?php
     $js_files = array_unique($js_files);

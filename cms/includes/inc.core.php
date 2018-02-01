@@ -116,6 +116,20 @@ function my_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     }
 }
 
+/* handle error
+-------------------------------------------------- */
+function write_debug($s)
+{
+
+    $file = CMS_ABSPATH . '/log/php_debug.txt';
+    // new message
+    $contents = $s ."\r\n";
+
+    file_put_contents($file, $contents, FILE_APPEND | LOCK_EX);
+
+}
+
+
 // use error handler
 set_error_handler('my_error_handler');
 

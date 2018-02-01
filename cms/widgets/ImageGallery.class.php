@@ -57,8 +57,6 @@ class ImageGallery extends Widgets {
 		// return objects in an associative array
 		$objects = json_decode($action, true);
 		$defaults = json_decode($this->default_objects(), true);
-		// use full image when open gallery
-		$w = ($width==474) ? 726 : 726;
 		$transition = isset($objects['transition']) ? $objects['transition'] : $defaults['transition'];
 		$slideshow = isset($objects['slideshow']) ? $objects['slideshow'] : $defaults['slideshow'];
 		$slideshowspeed = isset($objects['slideshowspeed']) ? $objects['slideshowspeed'] : $defaults['slideshowspeed'];
@@ -74,8 +72,8 @@ class ImageGallery extends Widgets {
 				var tag = "<?php echo $tag; ?>";
 				var cms_dir = "<?php echo $_SESSION['CMS_DIR']; ?>";
 				var photo = "<?php echo $this->transl("Photo:"); ?>";
-				
-				$.getJSON(cms_dir+"/cms/pages_ajax.php?action=widget_images&pages_widgets_id="+id+"&token="+token+"&tag="+tag+"", function(data){
+				var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+				$.getJSON(cms_dir+"/cms/pages_ajax.php?action=widget_images&pages_widgets_id="+id+"&token="+token+"&tag="+tag+"&width="+width+"", function(data){
 
 					$.each(data, function(i,item){
 						var input = item.filename;
@@ -86,20 +84,16 @@ class ImageGallery extends Widgets {
 						var alt_text = alt_text.length > 0 ? alt_text : '';					
 						var alt_rights = item.copyright.length > 0 ? '('+item.copyright+')' : '';
 						var alt_rights = item.creator.length > 0 ? photo+' '+item.creator : alt_rights;
-						var alt = alt_rights.length > 0 && alt_text.length > 0 ? alt_text +' / '+alt_rights : alt_text;
-						
+						var alt = alt_rights.length > 0 && alt_text.length > 0 ? alt_text +' / '+alt_rights : alt_text;						
 						var $container = "slideshow_<?php echo $pages_widgets_id; ?>";
-						input = input.replace("_100.", "_<?php echo $w; ?>.");
-						var img_path = cms_dir+'/content/uploads/pages/'+page+'/' +input;			
-						var img_height = Math.round(<?php echo $w; ?>*item.ratio);
 						var a_class =  'gallery_<?php echo $pages_widgets_id; ?>';
 
-						$("<a>"+caption+"</a>").attr("href", img_path).attr("class", a_class).attr("title", title).attr("alt", alt).appendTo("#gallery_container_<?php echo $pages_widgets_id; ?>").wrap("<p></p>");
+						$("<a>"+caption+"</a>").attr("href", input).attr("class", a_class).attr("title", title).attr("alt", alt).appendTo("#gallery_container_<?php echo $pages_widgets_id; ?>").wrap("<p></p>");
 						
 						// first image - append teaser image
 						if(i==0) {
 							var a_class =  'gallery_open_<?php echo $pages_widgets_id; ?>';
-							$("<img />").attr("src", img_path).css({"width":"100%","height":"auto"}).attr("alt", alt).attr("title", title).appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>").wrap("<a href=# class="+a_class+"></a>");
+							$("<img />").attr("src", input).css({"width":"100%","height":"auto"}).attr("alt", alt).attr("title", title).appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>").wrap("<a href=# class="+a_class+"></a>");
 							if(caption.length > 0) {
 								$("<span>"+caption+"</span>").appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>");
 							}
@@ -113,7 +107,7 @@ class ImageGallery extends Widgets {
 					$('a.gallery_<?php echo $pages_widgets_id; ?>').colorbox({rel:'gallery_<?php echo $pages_widgets_id; ?>'});
 
 					// open gallery
-					var $gallery = $('a.gallery_<?php echo $pages_widgets_id; ?>').colorbox({rel:'gallery_<?php echo $pages_widgets_id; ?>', transition:"<?php echo $transition; ?>", slideshow:<?php echo $slideshow; ?>, slideshowSpeed:<?php echo $slideshowspeed; ?>});
+					var $gallery = $('a.gallery_<?php echo $pages_widgets_id; ?>').colorbox({rel:'gallery_<?php echo $pages_widgets_id; ?>', width: width+"px", transition:"<?php echo $transition; ?>", slideshow:<?php echo $slideshow; ?>, slideshowSpeed:<?php echo $slideshowspeed; ?>});
 					$("a.gallery_open_<?php echo $pages_widgets_id; ?>").click(function(e){
 						e.preventDefault();
 						$gallery.eq(0).click();
