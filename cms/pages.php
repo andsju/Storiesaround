@@ -40,12 +40,11 @@ $arr = null;
 //access page as known or unknown user to get page content
 $users_id = (isset($_SESSION['users_id'])) ? $_SESSION['users_id'] : null;
 
-
 function getStartPage() {
     
     // just installed Storiesaround
     if ($_SESSION['site_domain_url'] == CMS_URL) {
-        print_r2("please set a startpage in site_domain_url");
+        //print_r2("please set a startpage in site_domain_url");
     } else {
         header('Location: '. $_SESSION['site_domain_url']);
         exit;            
@@ -249,14 +248,34 @@ if ($arr['template'] == 6) {
 
     <div id="wrapper-top">
         <?php
+        
+        if ($arr == null) {
+            $hint[0] = "<h1>Welcome to CMS Storiesaround</h1>";
+            $hint[1] = "<p>If this is a new installation, please follow these instructions:</p>";
+            $hint[2] = "<ul>";
+            $hint[3] = $users_id == null ? "<li><a href='login.php' target='_blank'>Login</a></li>" : "";
+            $hint[4] = "<li><a href='admin.php?t=pages&tp=add' target='_blank'>Create</a> a page</li>";
+            $hint[5] = "<li>Publish the page</li>"; 
+            $hint[6] = "<li>Set the new page as startpage, and save as <a href='admin.php?t=site&tg=settings' target='_blank'>Site domain url</a></li>";
+            $hint[7] = "</ul>";
+            $hint[8] = "<p><a href='admin.php' target='_blank'>For more settings go to admin.php</a></p>";
+            for ($i = 0; $i < count($hint); $i++) {
+                echo $hint[$i];
+            }
+                            
+        }
         if ($arr['search_field_area'] == 2) {
             print_search_field_area_page($languages);
         }
+        ?>
+        <div id="pages_search_result" class="hidden"></div>
+        <input type="hidden" id="pages_search_result_start" value="0">
+        <button id="btn-site-search-page-more" style="display:none" class="btn-link">Show more +</button>
+        <?php
         print_selection("selection-header-below", $selection_area['header_below']); 
         ?>
         <div id="top-grid"><?php print_grid($arr, 0);?></div>
     </div>
-    <!-- run template: sidebar, left-sidebar, right-sidebar, joined sidabars, panorma -->
 
     <?php
 
@@ -269,13 +288,8 @@ if ($arr['template'] == 6) {
     // sidebar width between 20-33%
     $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
 
-    //print_r2("template: ". $arr['template']);    
-    //print_r2($arr);
-
     // get stories before template renders
-
-    $rows_child = $pages->getPagesStoryContentPublishChild($id);    
-
+    $rows_child = $pages->getPagesStoryContentPublishChild($id); 
 
     switch ($arr['template']) {	
         case 0:
@@ -354,7 +368,11 @@ if ($arr['template'] == 6) {
     ?>
 
     <?php include_once 'includes/inc.debug.php'; ?>
+
+    <?php
     
+    print_r2($request_parts);
+    ?>
 </body>
 
 </html>

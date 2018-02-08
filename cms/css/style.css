@@ -53,11 +53,34 @@ div#site-navigation-mobile-wrapper {float:left;width:100%;min-height:10px;}
 #site-search label {position: absolute; left:20px; top:20px; font-size:1.4em}
 #site-search span img {position: absolute; right:90px; top:25px; font-size:1.4em}
 
-#site-search-page { padding: 10px; position: relative; background-color:bisque}
-#site-search-page input {width:400px; padding: 15px 15px 15px 40px; font-size: 1em}
+#site-search-page { margin: 20px 0; padding: 10px; position: relative; background-color:#e0e0e0}
+#site-search-page input[type=text] {width:400px; padding: 15px 15px 15px 40px; font-size: 1em}
+#site-search-page input[type=checkbox] {margin-left:20px; transform: scale(1.5)}
 #site-search-page button { background-color: yellowgreen; padding: 15px; font-size: 1em }
 #site-search-page label {position: absolute; left:20px; top:20px; font-size:1.4em}
-#site-search-page span img {position: absolute; right:90px; top:25px; font-size:1.4em}
+#site-search-page span img {position: absolute; left:430px; top:25px; font-size:1.4em}
+a.search h3 {color:navy; padding-bottom:0}
+a.search + p {margin:0.8em 0 1.5em 0}
+.search-word {background-color: #006400}
+.btn-link{
+    border:none;
+    outline:none;
+    background:none;
+    cursor:pointer;
+    color:#0000EE;
+    padding:0;
+    text-decoration:underline;
+    font-family:inherit;
+    font-size:inherit;
+  }
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
 
 
 /* content
@@ -265,7 +288,7 @@ div#site-navigation-cms a {color: black; padding:10px;}
 ul.ui-autocomplete {padding: 10px}
 ul.ui-autocomplete li {color:navy}
 ul li.ui-autocomplete-category {font-weight: bold; margin:25px 0 0 5px;}
-.ui-menu-item-wrapper:hover {color:black !important }
+.ui-menu-item-wrapper:hover {color:navy !important; }
 .ui-menu-item-wrapper:active {color:black !important }
 
 .ui-state-active,

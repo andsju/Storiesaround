@@ -3,7 +3,6 @@
     
         <div id="wrapper-content" class="column" style="width:<?php echo $content_percent_width;?>%">
         <?php echo $wrapper_content_width; ?>
-        <div id="pages_search_result"></div>
             <main>
                 <?php print_selection("selection-content-above", $selection_area['content_above']); ?>
                 <div id="content-top-selections"></div>
@@ -46,7 +45,7 @@
             if($_SESSION['site_navigation_vertical_sidebar'] == 0) {
                 echo '<nav id="nav-site-navigation-vertical">';
                 if (!isset($_GET['sample'])) {
-                    get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo, $href, $open, $depth=0, $show_pages_id = false);
+                    get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo=true, $href, $open, $depth=0, $show_pages_id = false);
                 }
                 echo '</nav>';
             }

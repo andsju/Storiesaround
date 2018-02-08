@@ -5,12 +5,15 @@ include_once 'includes/inc.functions_pages.php';
 
 $pages = new Pages();
 
+write_debug("A");
 // overall
 if (isset($_POST['token']) || isset($_GET['token'])){
+	write_debug("B");
 	// only accept this $_SESSION['token']
 	$req =  isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
 	
 	if ($req == $_SESSION['token'])  {
+		write_debug("C");
 
 		$action = filter_var(trim($_REQUEST['action']), FILTER_SANITIZE_STRING);
 		
@@ -31,17 +34,51 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 				
 			break;
 			
-			case 'pages_search_extended2':
-				$s = isset($_POST['s']) ? trim($_POST['s']) : "";	
-
-				//echo $s;
-				//write_debug($s);
-				$rows = $pages->getPagesSearchWordsRelevance2($s, 2);
+			case 'pages_search_extended_summary':
+				$s = isset($_POST['s']) ? trim($_POST['s']) : "";
+				$pages_id = isset($_POST['pages_id']) ? trim($_POST['pages_id']) : 0;
+				$limit_tree = isset($_POST['limit_tree']) ? $_POST['limit_tree'] : 0;
+				$rows = $pages->getPagesSearchWordsRelevanceSummary($s, $status=2, $pages_id, $limit_tree);
 				echo json_encode($rows);
-				//echo $rows;
 			break;
 			
+
 			case 'pages_search_extended':
+				$s = isset($_POST['s']) ? trim($_POST['s']) : "";	
+				$pages_id = isset($_POST['pages_id']) ? trim($_POST['pages_id']) : 0;
+				$limit_tree = isset($_POST['limit_tree']) ? $_POST['limit_tree'] : 0;
+				$limit_start = intval($_POST['limit_start']);
+				$limit = 10;
+				$rows_total = $pages->getPagesSearchWordsRelevanceCount($s, $status=2, $pages_id, $limit_tree);
+				$rows = $pages->getPagesSearchWordsRelevance($s, 2, $pages_id, $limit_tree, $limit_start, $limit);
+
+				$a = explode(" ", $s);
+				$html = "";
+				$element_last_result = '<span id="search-end"></span>'; 
+				if($rows) {
+					$html .= '<div class="search-result">'.translate("Show results for ", "site_show_results_for", $languages).' <strong>'.$s.'</strong></p><input type="hidden" id="search_results_total" value="'.$rows_total[0]['total'].'"></div>';
+					$counter = $limit_start + 1;
+					foreach($rows as $row) {
+						//$heading = isValidString($a[0], 'characters') ? highlight($row['title'], $a) : $row['title'];
+						$html .= '<div>';
+						$html .= '<a href="pages.php?id='.$row['pages_id'].'" class="search"><h3>'.$row['title'].'</h3></a>';
+						$text = substr(strip_tags($row['content']),0,300);
+						$text = substr($text,0,strrpos($text," ")) . ' ...';
+						//$text_highlighted = isValidString($a[0], 'characters') ? highlight($text, $a) : $text;
+						$html .= '<p>'.$text.'</p>';
+						$html .= '</div>';
+						$counter++;
+					}
+				} else {
+					$html .= '<div class="search-result">'.translate("No results for ", "site_no_results_for", $languages).' <strong>'.$s.'</strong></p></div>';
+				}
+				echo $html;
+
+
+			break;
+			
+
+			case 'pages_search_extended_old':
 
 				
 				$s = isset($_POST['pages_s']) ? trim($_POST['pages_s']) : "";	

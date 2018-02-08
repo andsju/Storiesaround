@@ -510,7 +510,7 @@ switch($t) {
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="sub-tabs ui-tabs ui-widget" style="float:right;margin-top:22px;padding: 0em;">';
-				get_tab_menu_jquery_ui_look_alike($this_url, array("general","design","content","script","meta","maintenance","configuration","account","history","log","?"), array("General settings","Design","Content","Script","Meta","Maintenance","Configuration","Account registration","History","Log","?"), "tg", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
+				get_tab_menu_jquery_ui_look_alike($this_url, array("settings","design","content","script","meta","maintenance","configuration","account","history","log","?"), array("Settings","Design","Content","Script","Meta","Maintenance","Configuration","Account registration","History","Log","?"), "tg", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
 			echo '</div>';	
 		echo '</div>';
 		
@@ -536,7 +536,7 @@ switch($t) {
 				
 				switch($tg) {
 				
-					case 'general':
+					case 'settings':
 						?>
 						
 						<div class="admin-panel">

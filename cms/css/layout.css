@@ -32,6 +32,12 @@ a#site-name-heading { text-decoration:none; color:#000;}
 #site-navigation-top-box1, #site-navigation-top-box2 {float:left;}
 #site-navigation-top-box2 {text-align:right;}
 div#site-header-edit-alt-caption {position: absolute;top:10px;right:10px;padding:5px;background: black;color:white;z-index:100;}
+
+
+.ui-datepicker {max-width: 300px !important;  }
+.ui-datepicker table {font-size: 1em !important }
+
+
 /* content
 ------------------------- */
 div#wrapper-header, #wrapper-ads-top, #wrapper-main, #wrapper-footer { width: 100%; }

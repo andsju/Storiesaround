@@ -3,7 +3,6 @@
 //--------------------------------------------------
 require_once 'includes/inc.core.php';
 
-
 if (isset($_SESSION['login_tries'])) {
 	if ($_SESSION['login_tries'] >= 7) {
 		echo translate("You have tried to login more than 7 times. Consider to reset / re-send your password. You need to restart your browser in order to login in", "login_restart_browser", $languages);
@@ -32,7 +31,6 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 					$method = "getUsersLoginUsername";
 				}
 				
-				// password
 				$passw = $_POST['passw'];
 				// passwords are simple decoded in javascript using javascript function enc() bitwise XOR
 				// decode using last 2 numbers in string
@@ -41,21 +39,16 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 				
 				$users = new Users();
 				
-				// return array of rows
 				if ($result = $users->$method($email_username)) {
 				
-					// check password
-					$p = new PasswordHash(8, false);
 					
-					if ($p->CheckPassword($passw, $result['pass_hash'])) {  
-
+					if (password_verify($passw, $result['pass_hash'])) {
 
 						if (isset($result['activation_code'])) {
 							// user must activate account
 							echo translate("Account must be activated before you can log in. Re-send registration mail", "registration_message_activation", $languages);
 							echo '<a href="register_help.php?x='.$email_username.'&token='.$_SESSION['token'].'" target="_blank">&raquo;&raquo;&raquo;</a>';
 						} else {
-
 
 							// if site maintenance mode - only allow superadministrators to login
 							if(isset($_SESSION['site_maintenance'])) {
@@ -95,8 +88,7 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 							$utc_lastvisit = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 							$users->setUsersLastvisit($result['users_id'], $utc_lastvisit, $_SESSION['token']);
 							
-							echo 'ok';
-							
+							echo 'ok';		
 						}
 						
 						
@@ -115,20 +107,15 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 								echo '(7)';
 							}	
 						}
-					}
-					
+					}	
 					
 				} else {
 					// user not found
 					echo translate("Wrong password or username", "login_fail", $languages);
 					
 				}
-				
-				
 	
 			break;
-
-	
 		}
 	}
 }
@@ -154,9 +141,8 @@ if ($email1 = filter_input(INPUT_POST, 'email1', FILTER_SANITIZE_STRING)) {
 				// check if we have a user
 				if ($result = $users->getUsersLoginEmail($email1)) {
 								
-					$pass = rand_string(8);
-					$p = new PasswordHash(8, false);
-					$pass_hash = $p->HashPassword($pass); 			
+					$password = rand_string(8);
+					$pass_hash = password_hash($password, PASSWORD_DEFAULT);
 					$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					if($r = $users->setUsersResetPassword($email1, $pass_hash)) {

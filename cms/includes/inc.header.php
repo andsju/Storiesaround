@@ -3,7 +3,6 @@
 <html lang="<?php echo $language; ?>">
 
 <head>
-    <?php echo $_SESSION['site_script']; ?>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
