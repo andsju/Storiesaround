@@ -339,8 +339,7 @@ $status = isset($_POST['status']) ? $_POST['status'] : 0;
 
 
 <?php
-
-$row_pages = $pages->getPagesSearchWordsRelevance($search, $status);
+$row_pages = $pages->getPagesSearchWordsRelevance($search, $status=0, $pages_id=0, $limit_tree=0, $limit_start=0, $limit=1000);
 
 if (!$form) {
     if (count($row_pages) > 100) {

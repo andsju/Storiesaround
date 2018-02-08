@@ -24,9 +24,7 @@
 	if ($arr['search_field_area'] == 1) {
 		print_search_field_area_header($languages);
 	}
-	
 ?>
-
 
 
 <div id="site-header" class="cycle-slideshow" data-cycle-timeout="<?php echo $arr['header_image_timeout']; ?>" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-alt-caption">

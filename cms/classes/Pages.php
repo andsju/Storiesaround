@@ -134,14 +134,20 @@ class Pages extends Database
      * @param string $datetime_end
      * @param string $utc_modified
      * @return bool
-     */
-    public function setPagesPublish($pages_id, $status, $access, $title_tag, $datetime_start, $datetime_end, $utc_modified)
+     *                 
+     * public function setPagesPublish($pages_id, $status, $access, $title_tag, $datetime_start, $datetime_end, $utc_modified)
+    */
+    public function setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET status = :status,
 			access = :access,
 			title_tag = :title_tag,
+            title = :pages_title,
+            content = :content,
+            content_author = :content_author,
+            pages_id_link = :pages_id_link, 
 			utc_start_publish = :utc_start_publish,
 			utc_end_publish = :utc_end_publish,
 			utc_modified = :utc_modified
@@ -152,6 +158,10 @@ class Pages extends Database
             $stmt->bindParam(":status", $status, PDO::PARAM_INT);
             $stmt->bindParam(":access", $access, PDO::PARAM_INT);
             $stmt->bindParam(":title_tag", $title_tag, PDO::PARAM_STR);
+            $stmt->bindParam(":content", $content, PDO::PARAM_STR);
+            $stmt->bindParam(":content_author", $content_author, PDO::PARAM_STR);
+            $stmt->bindParam(":pages_title", $pages_title, PDO::PARAM_STR);
+            $stmt->bindParam(":pages_id_link", $pages_id_link, PDO::PARAM_STR);
             $stmt->bindParam(":utc_start_publish", $datetime_start, PDO::PARAM_STR);
             $stmt->bindParam(":utc_end_publish", $datetime_end, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
@@ -510,7 +520,7 @@ class Pages extends Database
         $sql = "SELECT pages_id, title, status  
 		FROM pages 
 		WHERE title LIKE :search
-		LIMIT 50";
+		LIMIT 100";
 
         // apply percentages to search string
         $search = "%" . $search . "%";
@@ -587,16 +597,23 @@ class Pages extends Database
     }
 
 
+    
+
     /**
      * @param string $search
      * @param int $status
+     * @param int $pages_id
+     * @param int $limit_tree
+     * @param int $limit_start
+     * @param int $limit
      * @return array
      */
-    public function getPagesSearchWordsRelevance($search, $status)
+    public function getPagesSearchWordsRelevance($search, $status, $pages_id, $limit_tree, $limit_start, $limit)
     {
         $query_parts = array();
         $words = preg_replace('/\s+/', ' ', $search);
         $words = explode(" ", $words);
+        $limit_start = $limit_start;
         foreach ($words as $word) {
             $query_parts[] = "'%" . $word . "%'";
         }
@@ -605,48 +622,55 @@ class Pages extends Database
         $story_contents = implode(' AND story_content LIKE ', $query_parts);
         $grid_content = implode(' AND grid_content LIKE ', $query_parts);
         $tags = implode(' AND tag LIKE ', $query_parts);
+        $pages_id_links = implode(' AND pages_id_link LIKE ', $query_parts);
 
         $ws = implode(' ', $words);
         $ws = trim($ws);
 
         $sql = "SELECT pages_id, title, content, category, tag, status, access, parent, utc_start_publish, utc_end_publish, utc_modified,  
-		MATCH(title,content,story_content,grid_content,tag) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
+		MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
 		FROM pages 
 		WHERE 
-		( MATCH(title,content,story_content,grid_content,tag) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
+		( MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
 			OR title LIKE {$titles}
 			OR content LIKE {$contents} 
 			OR story_content LIKE {$story_contents} 
             OR grid_content LIKE {$grid_content} 
 			OR tag LIKE {$tags} 
+            OR pages_id_link LIKE {$pages_id_links} 
 		)";
 
         if ($status > 0) {
             $sql .= " AND status = $status ";
         }
+        if ($limit_tree > 0) {
+            $sql .= " AND parent_id = $pages_id ";
+        }
 
         $sql .= " ORDER BY ";
+        $sql .= " category_position ASC, ";
         $sql .= " title LIKE {$titles} DESC, ";
         $sql .= " relevance DESC, ";
         $sql .= " tag LIKE {$tags} DESC ";
-        $sql .= " LIMIT 1000";
-
+        $sql .= " LIMIT $limit_start, $limit";
+        write_debug($sql);
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':search', $search, PDO::PARAM_STR);
-        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);                
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
 
-
     /**
      * @param string $search
      * @param int $status
+     * @param int $pages_id
+     * @param int $limit_tree
      * @return array
      */
-    public function getPagesSearchWordsRelevance2($search, $status)
+    public function getPagesSearchWordsRelevanceSummary($search, $status, $pages_id, $limit_tree)
     {
         $query_parts = array();
         $words = preg_replace('/\s+/', ' ', $search);
@@ -680,6 +704,9 @@ class Pages extends Database
         if ($status > 0) {
             $sql .= " AND status = $status ";
         }
+        if ($limit_tree > 0) {
+            $sql .= " AND parent_id = $pages_id ";
+        }
 
         $sql .= " ORDER BY ";
         $sql .= " category_position ASC, ";        
@@ -697,6 +724,58 @@ class Pages extends Database
     
     }
 
+    /**
+     * @param string $search
+     * @param int $status
+     * @param int $pages_id
+     * @param int $limit_tree
+     * @return array
+     */
+    public function getPagesSearchWordsRelevanceCount($search, $status, $pages_id, $limit_tree)
+    {
+        $query_parts = array();
+        $words = preg_replace('/\s+/', ' ', $search);
+        $words = explode(" ", $words);
+        foreach ($words as $word) {
+            $query_parts[] = "'%" . $word . "%'";
+        }
+        $titles = implode(' AND title LIKE ', $query_parts);
+        $contents = implode(' AND content LIKE ', $query_parts);
+        $story_contents = implode(' AND story_content LIKE ', $query_parts);
+        $grid_content = implode(' AND grid_content LIKE ', $query_parts);
+        $tags = implode(' AND tag LIKE ', $query_parts);
+        $pages_id_links = implode(' AND pages_id_link LIKE ', $query_parts);
+
+        $ws = implode(' ', $words);
+        $ws = trim($ws);
+
+        $sql = "SELECT COUNT(*) as total,  
+		MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
+		FROM pages 
+		WHERE 
+		( MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
+			OR title LIKE {$titles}
+			OR content LIKE {$contents} 
+			OR story_content LIKE {$story_contents} 
+            OR grid_content LIKE {$grid_content} 
+			OR tag LIKE {$tags} 
+            OR pages_id_link LIKE {$pages_id_links} 
+		)";
+
+        if ($status > 0) {
+            $sql .= " AND status = $status ";
+        }
+        if ($limit_tree > 0) {
+            $sql .= " AND parent_id = $pages_id ";
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+                
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
 

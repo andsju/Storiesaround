@@ -46,6 +46,7 @@ function set_seo_title($input, $replace=null, $remove_stopwords=true, $stopwords
 $seo = trim(strtolower($seo));	
 	//keep alfanumerics and dash
 	$seo = preg_replace('/[^a-zA-Z0-9-\s]/', '', $seo);
+	$seo = preg_replace('/-+/', '-', $seo);
 
 	return $seo;	
 }

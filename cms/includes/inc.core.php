@@ -51,6 +51,9 @@ $_SESSION['CMS_URL'] = CMS_URL;
 // CMS ROOT
 define('ROOT', realpath(dirname(__FILE__)) . '/');
 
+// CMS protocol
+$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+define('CMS_PROTOCOL', $protocol);
 
 /* CMS
 -------------------------------------------------- */
@@ -210,9 +213,9 @@ if (!isset($_SESSION['site_id'])) {
         $excl = array('site_smtp_server', 'site_smtp_port', 'site_smtp_username', 'site_smtp_password', 'site_smtp_authentication', 'utc_modified', 'site_maintenance_message', 'site_error_mode', 'site_history_max');
         foreach ($site as $key => $value) {
             if (!in_array($key, $excl)) {
-                if (strlen($value) > 0) {
+                //if (strlen($value) > 0) {
                     $_SESSION[$key] = $value;
-                }
+                //}
             }
         }
         // $_SESSION['site_domain'] must be set to avoid error logs
