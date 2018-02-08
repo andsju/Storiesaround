@@ -19,7 +19,10 @@ $(document).ready(function() {
 	var languages = [];
 	languages["Search"] = ["Search", "Sök"];
 	languages["search_page"] = ["Search page", "Sök sida"];
-	languages["search_page_not_found"] = ["No pages found", "Ingen sida hittades"];		
+	languages["search_page_not_found"] = ["No pages found", "Ingen sida hittades"];
+	languages["search_page_click_search"] = ["Click Search button to se all matches", "Klicka Sök för att se alla träffar"];
+
+	var limit_page_result = 10;
 
 	var menu = "#menu";
 	var position = {my: "left top", at: "left bottom"};
@@ -101,10 +104,6 @@ $(document).ready(function() {
 	});
 			
 	jQuery("abbr.timeago").timeago();
-	
-
-	
-
 
 	$('#btn_pages_search').click(function(event){
 		event.preventDefault();
@@ -134,10 +133,11 @@ $(document).ready(function() {
 		_renderMenu: function( ul, items ) {
 		  var that = this,
 			currentCategory = "";
+			var max = 8;
+			var count = 0;
 		  $.each( items, function( index, item ) {
 			var li;
 			if ( item.category != currentCategory ) {
-			
 			  ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
 			  currentCategory = item.category;
 			}
@@ -145,105 +145,136 @@ $(document).ready(function() {
 			if ( item.category ) {
 			  li.attr( "aria-label", item.category + " : " + item.label );
 			}
+			if (count > max) {
+				ul.append( "<li class='ui-autocomplete-category'>"+ languages["search_page_click_search"][lang] +" ("+ items.length + ")</li>" );
+				return false;
+			}
+			count++;
 		  });
 		}
-	  });	
-
-	$("#pages_s").catcomplete({
-		minLength: 2,
-		delay: 300,
-		source: function (request, response) {
-
-			$.ajax({
-				beforeSend: function() { loading = $('#ajax_spinner_search').show()},
-				complete: function(){ loading = setTimeout("$('#ajax_spinner_search').hide()", 500)},
-				type: "post",
-				url: "pages_ajax.php",
-				dataType: "json",
-				data: {
-					action: "pages_search_extended2",
-					token: $("#token").val(),
-					s: request.term
-				},
-				success: function (data) {
-					data = data.length > 0 ? data : [{title: languages["search_page_not_found"][lang], category: "", pages_id: "0"}];
-
-					response($.map(data, function (item) {						
-						return {
-							label: item.title,
-							category: item.category,
-							id: item.pages_id
-						}
-					}));
-				}
-			});
-		},
-		select: function (event, ui) {
-			console.log(ui);
-			$("input#pid").val(ui.item.id)
-		}
-	});
+	});	
 
 	$("#search-page").catcomplete({
 		minLength: 2,
-		delay: 300,
+		delay: 200,
 		source: function (request, response) {
-
+			var cms_dir = $("#cms_dir").val();
+			var ajax_url = cms_dir +'/cms/pages_ajax.php';
+			var limit_tree = $('input:checkbox[name=search-page-limit-tree]').is(':checked') ? 1 : 0;
+			var pages_id = $("#pages_id").val();
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_search').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_search').hide()", 500)},
-				type: "post",
-				url: "pages_ajax.php",
+				type: "POST",
+				url: ajax_url,
 				dataType: "json",
 				data: {
-					action: "pages_search_extended2",
+					action: "pages_search_extended_summary",
 					token: $("#token").val(),
+					pages_id: pages_id,
+					limit_tree: limit_tree,
 					s: request.term
 				},
 				success: function (data) {
 					data = data.length > 0 ? data : [{title: languages["search_page_not_found"][lang], category: "", pages_id: "0"}];
-
-					response($.map(data, function (item) {						
+					response($.map(data, function (item, index) {						
 						return {
 							label: item.title,
 							category: item.category,
-							id: item.pages_id
+							id: item.pages_id,
+							index: item.length
 						}
 					}));
 				}
 			});
 		},
 		select: function (event, ui) {
-			console.log(ui);
 			$("input#pid").val(ui.item.id)
 		}
 	});
 
-	
-
-
-	
-	$("body").on("click", "#btn_pages_search_again", function(event){
-		event.preventDefault();
-		var action = "pages_search_extended";
-		var token = $("#token").val();
-		var pages_s_again = $("#pages_s_again").val();
+	$("#btn-site-search-page").click(function() {
+		var pid = $("#pid").val();
+		var search = $("#search-page").val();
 		var cms_dir = $("#cms_dir").val();
 		var ajax_url = cms_dir +'/cms/pages_ajax.php';
-		var again = "true";
-		
-		$.ajax({
-			beforeSend: function() { loading = $('#ajax_spinner_pages_search').show()},
-			complete: function(){ loading = setTimeout("$('#ajax_spinner_pages_search').hide()",700)},
-			type: 'POST',
-			url: ajax_url,
-			data: "action=" + action + "&token=" + token + "&pages_s_again=" + pages_s_again + "&again=" + again,
-			success: function(newdata){
-				$("#pages_search_result").empty().append(newdata).hide().fadeIn('fast');
-			},
-		});
+		var limit_tree = $('input:checkbox[name=search-page-limit-tree]').is(':checked') ? 1 : 0;
+		var pages_id = $("#pages_id").val();
+
+		if (pid > 0) {
+			window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages.php?id=" + pid;
+		} else {
+
+			if (pages_id > 0) {
+				var limit_start = 0;
+				var action = "pages_search_extended";
+				var token = $("#token").val();
+				$.ajax({
+					beforeSend: function() { loading = $('#ajax_spinner_pages_search').show()},
+					complete: function(){ loading = setTimeout("$('#ajax_spinner_pages_search').hide()",700)},
+					type: 'POST',
+					url: ajax_url,
+					dataType: "text",
+					data: {
+						action: action,
+						token: token,
+						pages_id: pages_id,
+						limit_tree: limit_tree,
+						limit_start: limit_start,
+						s: search
+					},
+					success: function(data){
+						$("#pages_search_result").empty().show().append(data);
+						var total = parseInt($("#search_results_total").val());
+						if (total > limit_start + 10) {
+							$("#btn-site-search-page-more").show();
+						}
+						$("#pages_search_result_start").val(limit_start + 10);
+					}
+				});
+			}
+		}
 	});
 	
+
+	$("#btn-site-search-page-more").click(function() {
+
+		var search = $("#search-page").val();
+		var cms_dir = $("#cms_dir").val();
+		var ajax_url = cms_dir +'/cms/pages_ajax.php';
+		var limit_tree = $('input:checkbox[name=search-page-limit-tree]').is(':checked') ? 1 : 0;
+		var pages_id = $("#pages_id").val();
+
+		if (pages_id > 0) {
+			var limit_start = parseInt($("#pages_search_result_start").val());
+			var action = "pages_search_extended";
+			var token = $("#token").val();
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_pages_search').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_pages_search').hide()",700)},
+				type: 'POST',
+				url: ajax_url,
+				dataType: "text",
+				data: {
+					action: action,
+					token: token,
+					pages_id: pages_id,
+					limit_tree: limit_tree,
+					limit_start: limit_start,
+					s: search
+				},
+				success: function(data){
+					$("#pages_search_result").append(data);
+					var total = parseInt($("#search_results_total").val());
+					if (total < limit_start + 10) {
+						$("#btn-site-search-page-more").hide();
+					}
+					$("#pages_search_result_start").val(limit_start + 10);
+				}
+			});
+		}
+	});
+
 	$( ".toolbar button" ).button({
 	});
 	
@@ -414,9 +445,6 @@ $(document).ready(function() {
 function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
-	if (logged_in) {
-		$("body").css("margin-top", "80px");
-	}
 
 	if (w <= 767) {	
 		var cms_dir = $("#cms_dir").val();

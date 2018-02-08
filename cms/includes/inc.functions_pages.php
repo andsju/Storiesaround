@@ -342,7 +342,7 @@ function print_menu($pages, $id, $seo, $href, $open, $sample)
         echo "\n".'<div id="site-navigation-root">';
             $html = '';
             if($_SESSION['site_navigation_horizontal'] == 1) {
-                $html = $pages->getPagesRoot(get_breadcrumb_path_array($id), $seo, 'template.php');
+                $html = $pages->getPagesRoot(get_breadcrumb_path_array($id), $seo, 'pages.php');
             }
             if($_SESSION['site_navigation_horizontal'] == 2) {
     
@@ -423,7 +423,7 @@ function print_search_field_area_header($languages)
 {
     $html = '<div id="site-search-header">';
     $html .= '<label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>'; 
-    $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
+    $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
     $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
@@ -443,9 +443,10 @@ function print_search_field_area_page($languages)
     $html = '<div id="site-search-page">';
     $html .= '<label for="search-page"><i class="fa fa-search" aria-hidden="true"></i></label>'; 
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
-    $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
+    $html .= '<span id="ajax_spinner_search" style="display:none"><img src="'.CMS_DIR.'/cms/css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
     $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
+    $html .= '<input type="checkbox" name="search-page-limit-tree" id="search-page-limit-tree"> '. translate("Search", "site_search_limit", $languages);
     $html .= '</div>';
     echo $html;
 }
@@ -493,11 +494,10 @@ function get_breadcrumb($parent_id, $delimiter, $trunc_length, $clickable)
         }
 
         // use seo pages_id_link if set
-        if (strlen($row['pages_id_link']) > 0) {
-            //$crumb = ($clickable == 1) ? '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
-            $crumb = ($clickable == 1) ? '<a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
+        if (strlen($row['pages_id_link']) > 0) {            
+            $crumb = ($clickable == 1) ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
         } else {
-            $crumb = ($clickable == 1) ? '<a href="' . $_SERVER['PHP_SELF'] . '?id=' . $row['pages_id'] . '">' . $r . '</a>' : $r;
+            $crumb = ($clickable == 1) ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/cms/pages.php?id=' . $row['pages_id'] . '">' . $r . '</a>' : $r;
         }
 
         if ($row['parent_id'] == 0) {
@@ -656,8 +656,7 @@ function get_pages_tree_sitemap($parent_id = 0, $id, $array_path, $a = true, $a_
 
                 $a_class = strlen($a_add_class) > 0 ? $a_add_class : "";
                 if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                    //echo '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
-                    echo '<a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
+                    echo '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
                 } else {
                     echo '<a href="' . $href . '?id=' . $row['pages_id'] . '" class="' . $class . '">';
                 }
@@ -711,8 +710,7 @@ function get_pages_tree_menu($parent_id = 0, $id, $array_path, $seo, $href, $dep
             $counter = $counter + 1;
             echo str_repeat("\t", $depth);
             if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                //echo '<li><a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
-                echo '<li><a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '">';
+                echo '<li><a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
             } else {
                 echo '<li><a href="' . $href . '?id=' . $row['pages_id'] . '">';
             }
@@ -767,8 +765,7 @@ function get_pages_tree_sitemap_all($parent_id = 0, $id, $array_path, $a = true,
             if ($a) {
                 $a_class = strlen($a_add_class) > 0 ? $a_add_class : "";
                 if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                    //echo '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
-                    echo '<a href="' . $_SESSION['site_domain_url'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
+                    echo '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
                 } else {
                     echo '<a href="' . $href . '?id=' . $row['pages_id'] . '" class="' . $a_class . '">';
                 }
@@ -2518,6 +2515,8 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
     // json to a multidimensional array
     $result = array();
     $index = -1;
+
+    if (!is_array($grid_content_json)) {return;}
     foreach($grid_content_json as $key=>$val){
         foreach($val as $k=>$v){
             // first item value 'grid-image'

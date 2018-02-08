@@ -1202,14 +1202,18 @@ if (isset($_POST['token'])){
 
 				case 'pages_publish':
 					
+					$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT) ? $_POST['access'] : 0;
+					$title_tag = filter_var(trim($_POST['title_tag']), FILTER_SANITIZE_STRING);					
+					$pages_title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_STRING);
+					$content = trim($_POST['content']);
+					$content_author = trim($_POST['content_author']);
+					$pages_id_link = filter_var(trim($_POST['pages_id_link']), FILTER_SANITIZE_STRING);
 					$datetime_start = isValidDateTime($_POST["datetime_start"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_start"])) : null; 
 					$datetime_end = isValidDateTime($_POST["datetime_end"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_end"])) : null;
-					$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT) ? $_POST['access'] : 0;
-					$title_tag = filter_var(trim($_POST['title_tag']), FILTER_SANITIZE_STRING);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					if($status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT)) {			
-						$result = $pages->setPagesPublish($pages_id, $status, $access, $title_tag, $datetime_start, $datetime_end, $utc_modified);
+						$result = $pages->setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified);
 						if($result) {
 							$history = new History();
 							$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'publish', $users_id, $_SESSION['token'], $utc_modified);
@@ -1820,6 +1824,7 @@ if (isset($_POST['token'])){
 				$limit = filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT) ? $_POST['dynamicContentLimit'] : 0;
 				//echo "$stories_filter: ". $stories_filter;
 				//echo "$limit:" . $limit;
+				$rows = array();
 				switch ($dynamic_content) {
 					case "stories-promoted":
 						$rows = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);

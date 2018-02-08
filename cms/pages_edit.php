@@ -483,10 +483,11 @@ foreach ( $js_files as $js ): ?>
 			css = form.find("input[name=css]")[0].value;
 			pages_id = form.find("input[name=pages_id]")[0];
 			image_position_y = form.find("select[name=grid-image-y]").val();
-
+			
 			$(form.find("span.reply_fail")).each( function(i) {
 				$(this).remove();
 			});
+			
 
 			if (!validateThis(url, "url")) {
 				showValidation(form.find("input[name=url]").parent(), form.find("input[name=url]")[0], " * check URL");
@@ -543,6 +544,7 @@ foreach ( $js_files as $js ): ?>
 			var pages_id = $("#pages_id").val();
 
 			var dynamicBox = $(this).parent().siblings("div.grid-dynamic"); 
+			
 			$.ajax({	
 				beforeSend: function() { loading = $('#ajax_spinner_grid').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_grid').hide()",500)},
@@ -556,10 +558,14 @@ foreach ( $js_files as $js ): ?>
 					ajaxReply('','#ajax_status_stories_child');
 					var html = dynamicContent == "stories-child" ? "<ul>" : "";
 					if (result.length) {
+						console.log("result", result);
+						
 						$.each(JSON.parse(result), function(index, object) {
+							
 							html += dynamicContent == "stories-child" ? "<li>" : "<div>";
 							$.each(object, function(key, value) {
 								//console.log("key : "+key+" ; value : "+value);
+								
 								if (dynamicContent == "stories-promoted") {
 									if (key == 'title') {
 										html += "<h5>"+value+"</h5>";
@@ -591,11 +597,12 @@ foreach ( $js_files as $js ): ?>
 										html += "<div>"+value+"</div>";
 									}
 								}
+								
 							});
 							html += dynamicContent == "stories-child" ? "</li>" : "</div>";
-
+							
 						});
-
+						
 						html += dynamicContent == "stories-child" ? "</ul>" : "";
 
 						dynamicBox.html(html);
@@ -604,7 +611,7 @@ foreach ( $js_files as $js ): ?>
 					
 				}
 			});
-
+			
 			$(this).parent().parent().children("div.grid-form").hide();
 			equalheight('div.grid-cell');
 		});
@@ -664,7 +671,9 @@ foreach ( $js_files as $js ): ?>
 		$("#btnSaveGrid").click(function(event) {
 			event.preventDefault();
 			var grid_content = JSON.stringify($("#gridform").serializeArray());
-			grid_content = stringEscape(grid_content);
+			console.log(grid_content);
+			//grid_content = stringEscape(grid_content);
+			console.log(grid_content);
 			var action = "save_grid";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
@@ -807,9 +816,10 @@ foreach ( $js_files as $js ): ?>
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
 					pages_title: pages_title, stopwords: stopwords
 				},
-				success: function(message){	
-					$('#pages_id_link').val(message);
-				},
+				success: function(data) {
+					var data = /[a-z]/.test(data) == true ? data : "link-" + data;
+					$('#pages_id_link').val(data);
+				}
 			});
 		});
 
@@ -1946,6 +1956,12 @@ foreach ( $js_files as $js ): ?>
 			var users_id = $("#users_id").val();
 			var access = $('input:radio[name=access]:checked').val();
 			var title_tag = $("#title_tag").val();
+
+			var content = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'content');
+			var pages_title = $("#pages_title").val();
+			var pages_id_link = $("#pages_id_link").val();
+			var content_author = $("#content_author").val();
+
 			var date_start = $("#date_start").val() ? $("#date_start").val() : null;
 			var time_start = $("#time_start").val() ? $("#time_start").val() +':00' : '00:00:00';
 			var datetime_start = (date_start==null) ?  null : date_start +' '+ time_start;
@@ -1958,8 +1974,9 @@ foreach ( $js_files as $js ): ?>
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
-					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					status: status, title_tag: title_tag, access: access, datetime_start: datetime_start, datetime_end: datetime_end, 
+					action: action, token: token, users_id: users_id, pages_id: pages_id, status: status, title_tag: title_tag, access: access, 
+					content: content, content_author: content_author, pages_title: pages_title, pages_id_link: pages_id_link, 
+					datetime_start: datetime_start, datetime_end: datetime_end
 				},
 				success: function(message){	
 					$("#status").empty().append("<option>Published</option>").removeClass("ui-state-error").addClass("ui-state-highlight").hide().fadeIn('fast');
@@ -3682,6 +3699,11 @@ if(is_array($check_edit)) {
 
 		<!-- outer div -->
 		<div style="width:100%;">
+
+			<!-- inner div -->
+			<div style="width:100%;margin:0px auto; background-color:yellow">
+				selections
+			</div>		
 		
 			<!-- inner div -->
 			<div style="width:100%;margin:0px auto;">

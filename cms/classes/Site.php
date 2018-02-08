@@ -95,15 +95,17 @@ class Site extends Database
      * @param string $site_copyright
      * @param string $site_theme
      * @param string $site_language
+     * @param string site_timezone
+     * @param string site_wysiwyg
      * @param string $utc_modified
      * @return string
      */
-    public function setSiteInstall($site_name, $site_domain_url, $site_domain, $site_email, $site_copyright, $site_theme, $site_language, $utc_modified)
+    public function setSiteInstall($site_name, $site_domain_url, $site_domain, $site_email, $site_copyright, $site_language, $site_timezone, $site_wysiwyg, $site_theme, $site_ui_theme, $site_header_image, $utc_modified)
     {
         try {
             $sql = "INSERT INTO site 
-			(site_name, site_domain_url, site_domain, site_email, site_copyright, site_theme, site_language, utc_modified) VALUES
-			(:site_name, :site_domain_url, :site_domain, :site_email, :site_copyright, :site_theme, :site_language, :utc_modified)";
+			(site_name, site_domain_url, site_domain, site_email, site_copyright, site_language, site_timezone, site_wysiwyg, site_theme, site_ui_theme, site_header_image, utc_modified) VALUES
+			(:site_name, :site_domain_url, :site_domain, :site_email, :site_copyright, :site_language, :site_timezone, :site_wysiwyg, :site_theme, :site_ui_theme, :site_header_image, :utc_modified)";
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':site_name', $site_name, PDO::PARAM_STR);
@@ -112,7 +114,11 @@ class Site extends Database
             $stmt->bindParam(':site_email', $site_email, PDO::PARAM_STR);
             $stmt->bindParam(':site_copyright', $site_copyright, PDO::PARAM_STR);
             $stmt->bindParam(':site_theme', $site_theme, PDO::PARAM_STR);
+            $stmt->bindParam(':site_ui_theme', $site_ui_theme, PDO::PARAM_STR);
+            $stmt->bindParam(':site_header_image', $site_header_image, PDO::PARAM_STR);
             $stmt->bindParam(':site_language', $site_language, PDO::PARAM_STR);
+            $stmt->bindParam(':site_timezone', $site_timezone, PDO::PARAM_STR);
+            $stmt->bindParam(':site_wysiwyg', $site_wysiwyg, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             $stmt->execute();
             return $this->db->lastInsertId('site_id');
