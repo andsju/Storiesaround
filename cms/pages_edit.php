@@ -398,8 +398,8 @@ foreach ( $js_files as $js ): ?>
 			cell += tool;
 
 			var adjustSelectList = getSelectNumber([0,10,20,30,40,50,60,70,80,90,100], 0, "grid-image-y", "", "");
-			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
-			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p><p>Content<br><textarea class=\"tinymce-grid\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
+			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-video hidden\"></div><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
+			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p><p>Video<br><input type=\"text\" name=\"video\" maxlength=\"100\"></p><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p><p>Content<br><textarea class=\"tinymce-grid\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
 			html += cell + form + "</div>";
 
 			$("div#wrapper-grid").append(html);
@@ -439,6 +439,8 @@ foreach ( $js_files as $js ): ?>
 
 		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-pencil-square-o", "click", function(event) {
 			event.preventDefault();
+			console.log("ppp");
+			console.log($(this).parent().parent().children());
 			$(this).parent().parent().children("div.grid-form").show();
 			equalheight('div.grid-cell');
 		});
@@ -475,9 +477,10 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 
 			var form = $(this).parent().parent().children("div.grid-form");
-			var image, heading, url, url1, url2, link, css, pages_id;
+			var image, heading, video, url, url1, url2, link, css, pages_id;
 			image = form.find("input[name=grid-image]")[0].value;
 			heading = form.find("input[name=heading]")[0].value;
+			video = form.find("input[name=video]")[0].value;
 			url = form.find("input[name=url]")[0].value;
 			link = form.find("input[name=link]")[0].value;
 			css = form.find("input[name=css]")[0].value;
@@ -518,6 +521,11 @@ foreach ( $js_files as $js ): ?>
 			headingPreview.text(heading);
 			if(heading.length) {
 				headingPreview.removeClass("hidden");					
+			}
+			var videoPreview = $(this).parent().siblings("div.grid-video");
+			videoPreview.text("Click 'Save grid' button and reload page to preview video: " +video);
+			if(video.length) {
+				videoPreview.removeClass("hidden");		
 			}
 			var contentPreview = $(this).parent().siblings("div.grid-content");
 			contentPreview.html(content);
@@ -614,6 +622,8 @@ foreach ( $js_files as $js ): ?>
 			
 			$(this).parent().parent().children("div.grid-form").hide();
 			equalheight('div.grid-cell');
+
+			$("#btnSaveGrid").addClass("button-attention");
 		});
 
 		$("#btnGridExport").click(function(event) {
@@ -697,6 +707,7 @@ foreach ( $js_files as $js ): ?>
 				},
 				success: function(message){	
 					ajaxReply(message,'#ajax_status_grid');
+					$("#btnSaveGrid").removeClass("button-attention");
 				},
 			});
 		});

@@ -2375,8 +2375,8 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
 
     //print_r2($result);
 
-    // 0: grid-image, 2: grid-image-y, 4: heading, 6: url, 8: link, 10: grid-content, 
-    // 12: css, 42: pages_id, 16: grid-dynamic-content, 18: grid-dynamic-content-filter, 20: grid-dynamic-content-limit
+    // 0: grid-image, 2: grid-image-y, 4: heading, 6: video, 8: url, 10: link, 12: grid-content, 
+    // 14: css, 16: pages_id, 18: grid-dynamic-content, 20: grid-dynamic-content-filter, 22: grid-dynamic-content-limit
     //$html_grid = '<div id="wrapper-grid" class="'.$grid_custom_classes.' clearfix">';
     $html_grid = "";
     foreach($result as $key => $value) {
@@ -2386,40 +2386,47 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
         foreach ($value as $key2 => $value2) {
             switch ($key2) {
                 case "0":
-                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][13].'">';
+                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][15].'">';
                 $html_grid .= '<div class="grid-tools"><i class="fa fa-floppy-o" aria-hidden="true"></i><br><i class="fa fa-pencil-square-o" aria-hidden="true"></i><br><i class="fa fa-arrow-left" aria-hidden="true"></i><br><i class="fa fa-arrow-right" aria-hidden="true"></i><br><i class="fa fa-trash-o fa-2x"></i></div>';
                 break;
                 case "1":
                     //if(strlen($value2)) {
                         
                         $background_image_y = strlen($result_copy[$counter][3]) > 1 ? 'background-position-y:'. $result_copy[$counter][3] .'%': '';
-                        $image = '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$value2.');'.$background_image_y.'"></div>';
+                        $image = strlen($value2) ? '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$value2.');'.$background_image_y.'"></div>' : "";
                     //}
                     
                 break;
                 case "5":
                     //if(strlen($value2)) {
-                        $a_href = strlen($result_copy[$counter][7]) ? $result_copy[$counter][7] : "";
+                        $a_href = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : "";
                         $a_start = ""; 
                         $a_end = ""; 
                         $header .= $a_start . '<h2 class="grid-heading">' . $value2 . '</h2>' . $a_end ;
                     //}
                     $html_grid .= $grid_cell_template == 0 ? $image . $header : $header . $image; 
                 break;
+                case "7":
+                        
+                        $video = getVideoEmbed($value2);
+                        $html_grid .= '<div class="grid-video">' .$video . '</div>';
+                    break;
+                case "":
+                break;
 
-                case "11":
+                case "13":
                     //if(strlen($value2)) {
                         $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
                     //}
                     break;
                 case "":
                 break;
-                case "17":
+                case "19":
 
                     $html_grid .= '<div class="grid-dynamic hidden">';
                     if ($value2 == "stories-child") {
                         
-                        $p_id = (int)$result_copy[$counter][15];
+                        $p_id = (int)$result_copy[$counter][17];
                         $rows_children = $pages->getPagesChildren($p_id);
 
                         if ($rows_children) {
@@ -2432,8 +2439,8 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     }
                     if ($value2 == "stories-promoted") {
                         
-                        $stories_filter = (string)$result_copy[$counter][19];
-                        $limit = (int)$result_copy[$counter][21];
+                        $stories_filter = (string)$result_copy[$counter][21];
+                        $limit = (int)$result_copy[$counter][23];
                         $rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
 
                         if ($rows_promoted) {
@@ -2450,10 +2457,10 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     $html_grid .= '</div>';
                 break;
                 case "21":
-                    $link = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : $result_copy[$counter][7];
+                    $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
                     //if (strlen($result_copy[$counter][7])) {
                         $html_grid .= '<div class="grid-split"></div>';
-                        $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][7].'">'.$link.'</a></div>';
+                        $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
                     //}
 
 
@@ -2478,7 +2485,7 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     $dynamic .= '<p>Limit promoted stories</p>';
                     $dynamic .= get_select_number(array(0,1,2,3,4,5,6,7,8,9), 1, "grid-dynamic-content-limit", "", "");
 
-                    $html_grid .= '<div class="grid-form"><p>Image<br><input type="text" name="grid-image" maxlength="255" value="'.$result_copy[$counter][1].'"></p><p>Adjust image (background-position-y %): '.$adjustSelectList.'</p><p>Heading<br><input type="text" name="heading" maxlength="100" value="'.$result_copy[$counter][5].'"></p><p>URL<br><input type="text" name="url" maxlength="255" value="'.$result_copy[$counter][7].'"></p><p>Link title<br><input type="text" name="link" maxlength="50" value="'.$result_copy[$counter][9].'"></p><p>Content<br><textarea class="tinymce-grid" name="grid-content">'.$result_copy[$counter][11].'</textarea></p><p>Custom css class<br><input type="text" name="css" maxlength="100" value="'.$result_copy[$counter][13].'"><input type="hidden" name="pages_id" value="+pages_id+"></p><p>Toggle <a class="toggle" href="#dynamic">dynamic content</a></p>'.$dynamic.'</div>';
+                    $html_grid .= '<div class="grid-form hidden"><p>Image<br><input type="text" name="grid-image" maxlength="255" value="'.$result_copy[$counter][1].'"></p><p>Adjust image (background-position-y %): '.$adjustSelectList.'</p><p>Heading<br><input type="text" name="heading" maxlength="100" value="'.$result_copy[$counter][5].'"></p><p>Video<br><input type="text" name="video" maxlength="100" value="'.$result_copy[$counter][7].'"></p><p>URL<br><input type="text" name="url" maxlength="255" value="'.$result_copy[$counter][9].'"></p><p>Link title<br><input type="text" name="link" maxlength="50" value="'.$result_copy[$counter][11].'"></p><p>Content<br><textarea class="tinymce-grid" name="grid-content">'.$result_copy[$counter][13].'</textarea></p><p>Custom css class<br><input type="text" name="css" maxlength="100" value="'.$result_copy[$counter][15].'"><input type="hidden" name="pages_id" value="'.$result_copy[$counter][15].'"></p><p>Toggle <a class="toggle" href="#dynamic">dynamic content</a></p>'.$dynamic.'</div>';
 
 
                     $html_grid .= '</div></div>';
@@ -2497,6 +2504,21 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
     return $html_grid;
 }
 
+
+function getVideoEmbed($video) {
+
+    $int = strrpos($video, "/");
+    $video_id = substr($video,  $int - strlen($video) + 1);
+    $iframe = "";
+    if (strpos($video, "vimeo")) {
+        $iframe = '<iframe src="https://player.vimeo.com/video/'.$video_id.'?title=0&byline=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+    }
+    if (strpos($video, "youtu")) {
+        $iframe = '<iframe src="https://www.youtube.com/embed/'.$video_id.'" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>';
+    }
+
+    return $iframe;
+}
 
 
 /**
@@ -2529,9 +2551,9 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
 
     $result_copy = $result;
     $counter = 0;
+    // 0: grid-image, 2: grid-image-y, 4: heading, 6: video, 8: url, 10: link, 12: grid-content, 
+    // 14: css, 16: pages_id, 18: grid-dynamic-content, 20: grid-dynamic-content-filter, 22: grid-dynamic-content-limit
 
-    // 0: grid-image, 2: grid-image-y, 4: heading, 6: url, 8: link, 10: grid-content, 
-    // 12: css, 42: pages_id, 16: grid-dynamic-content, 18: grid-dynamic-content-filter, 20: grid-dynamic-content-limit
     $html_grid = '<div id="wrapper-grid" class="'.$grid_custom_classes.' clearfix">';
     foreach($result as $key => $value) {
         $header = "";
@@ -2552,26 +2574,32 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                 break;
                 case "5":
                     if(strlen($value2)) {
-                        $a_href = strlen($result_copy[$counter][7]) ? $result_copy[$counter][7] : "";
+                        $a_href = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : "";
                         $a_start = strlen($a_href) ? '<a href="'.$a_href.'">' : ""; 
                         $a_end = strlen($a_href) ? '</a>' : ""; 
                         $header .= $a_start . '<h2 class="grid-heading">' . $value2 . '</h2>' . $a_end ;
                     }
                     $html_grid .= $grid_cell_template == 0 ? $image . $header : $header . $image; 
                 break;
+                case "7":
+                    $video = getVideoEmbed($value2);
+                    $html_grid .= '<div class="grid-video">' .$video . '</div>';
+                    break;
 
                 case "11":
                     if(strlen($value2)) {
                         $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
                     }
                     break;
-                case "":
-                break;
+                case "13":
+                        $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
+                
+                    break;
                 case "17":
 
                     if ($value2 == "stories-child") {
                         
-                        $p_id = (int)$result_copy[$counter][15];
+                        $p_id = (int)$result_copy[$counter][17];
                         $rows_children = $pages->getPagesChildren($p_id);
 
                         if ($rows_children) {
@@ -2584,7 +2612,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                     }
                     if ($value2 == "stories-promoted") {
                         
-                        $stories_filter = (string)$result_copy[$counter][19];
+                        $stories_filter = (string)$result_copy[$counter][21];
                         $limit = (int)$result_copy[$counter][21];
                         $rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
 
@@ -2601,10 +2629,10 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                     }
                 break;
                 case "21":
-                    $link = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : $result_copy[$counter][7];
-                    if (strlen($result_copy[$counter][7])) {
+                    $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
+                    if (strlen($result_copy[$counter][9])) {
                         $html_grid .= '<div class="grid-split"></div>';
-                        $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][7].'">'.$link.'</a></div>';
+                        $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
                     }
                     $html_grid .= '</div>';
                 break;
