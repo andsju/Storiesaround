@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `grid_custom_classes` varchar(50) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'custom css',
   `grid_content` longtext COLLATE utf8_unicode_ci COMMENT 'json format',
   `grid_cell_template` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0:image top 1:heading top',
-  `grid_cell_image_height` int(3) UNSIGNED NOT NULL DEFAULT '140' COMMENT '0:image above 1:image below',
+  `grid_cell_image_height` int(3) UNSIGNED NOT NULL DEFAULT '140' COMMENT 'height in px',
   `folder` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'uploaded content, (default folder:pages_id)',
   `tag` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'tag keywords to match filter criteria',
   `header_image` varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'Set static header image',

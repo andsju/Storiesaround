@@ -11,7 +11,7 @@
 </div>
 
 <div id="site-navigation-cms">
-	<?php echo date("Y-m-d"); ?> 
+	<a href="<?php echo CMS_DIR; ?>/pages/sok"><i class="fa fa-search" aria-hidden="true"></i></a>
 	<?php if (!isset($_SESSION['users_id'])) { ?>
 		<a href="<?php echo CMS_DIR; ?>/cms/login.php"><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="cms-link"><?php echo translate("Login", "site_login", $languages); ?></span></a>
 	<?php } ?>
@@ -25,7 +25,6 @@
 		print_search_field_area_header($languages);
 	}
 ?>
-
 
 <div id="site-header" class="cycle-slideshow" data-cycle-timeout="<?php echo $arr['header_image_timeout']; ?>" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-alt-caption">
 <?php

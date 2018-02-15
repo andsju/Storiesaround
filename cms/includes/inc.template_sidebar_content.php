@@ -8,13 +8,16 @@
                 <div id="content-top-selections"></div>
                 <div id="content-top-grid"><?php print_grid($arr, 1);?></div>
                 <div id="content-breadcrumb"><?php print_breadcrumb($id, $arr['breadcrumb']); ?></div>
-                <div id="content-edit"></div>
                 <article>
+                    <?php if ($arr['title_hide'] == 0) { ?>
                     <header>
                         <h1 id="content-title"><?php echo $arr['title'] .' '.$icon; ?></h1>
                         <div id="content-meta"><?php  print_meta($arr['utc_modified'], $dtz, $languages) ?></div>
                     </header>
+                    <?php } ?>
                     <div id="content-html">        
+                        <?php if ($arr['search_field_area'] == 3) { print_search_field_area_page($languages); } ?>
+                        <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
                         <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>
                         <?php echo $arr['content'];?>
                     </div>

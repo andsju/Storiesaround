@@ -404,19 +404,7 @@ foreach ( $js_files as $js ): ?>
 
 			$("div#wrapper-grid").append(html);
 
-			tinymce.init({
-				forced_root_block : "", 
-				mode : "specific_textareas",
-				editor_selector : "tinymce-grid",
-				menubar: "",
-				plugins: [
-					"autolink lists link hr anchor pagebreak code image paste stories"
-				],
-				toolbar: "undo redo bold italic link code image removeformat stories",
-    			paste_remove_styles: true,
-				extended_valid_elements:'script'
-			});
-			
+			activateEditor("tinymce");
 		});
 		
 		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
@@ -442,6 +430,7 @@ foreach ( $js_files as $js ): ?>
 			console.log("ppp");
 			console.log($(this).parent().parent().children());
 			$(this).parent().parent().children("div.grid-form").show();
+			activateEditor("tinymce");
 			equalheight('div.grid-cell');
 		});
 
@@ -566,13 +555,11 @@ foreach ( $js_files as $js ): ?>
 					ajaxReply('','#ajax_status_stories_child');
 					var html = dynamicContent == "stories-child" ? "<ul>" : "";
 					if (result.length) {
-						console.log("result", result);
 						
 						$.each(JSON.parse(result), function(index, object) {
 							
 							html += dynamicContent == "stories-child" ? "<li>" : "<div>";
 							$.each(object, function(key, value) {
-								//console.log("key : "+key+" ; value : "+value);
 								
 								if (dynamicContent == "stories-promoted") {
 									if (key == 'title') {
@@ -727,7 +714,7 @@ foreach ( $js_files as $js ): ?>
 
 		$( "#grid_image_slider_height" ).slider({
 			orientation: "vertical",
-			value: 140,
+			value: 100,
 			min: 100,
 			max: 400,
 			step: 20,
@@ -741,6 +728,24 @@ foreach ( $js_files as $js ): ?>
 			}
 
     	});
+
+
+
+		// window resize
+		$(window).resize(function() {
+
+			var $videos = $(".grid-video iframe");
+			var $fluidEl = $(".grid-video");
+			var newWidth = $fluidEl.width();
+			$videos.each(function() {
+				$(this)
+				.width(newWidth)
+				.height(newWidth * $(this).data('ratio'));
+			});
+			equalheight('div.grid-cell');
+		}).resize();
+
+
 
 
 		////////////////////////////
@@ -2309,14 +2314,13 @@ foreach ( $js_files as $js ): ?>
 			location.reload(true);	
 		});
 		
-		$("#tabs_edit").tabs({			
+		$("#tabs_edit").tabs({ active: window.location.hash.substr(1)
 		});
 
 		$('.btn_reload').click(function(event){
 			event.preventDefault();
-			var active = $( "#tabs_edit" ).tabs( "option", "active" );
-			var activeTabID = $("#tabs_edit ul li a").eq(active).attr('id');			
-			window.location.hash = activeTabID;
+            curTabIndex = $('.ui-tabs-active').index();
+			window.location.hash = curTabIndex;
 			window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href += window.location.hash;
 			window.location.reload(true);
 		});
@@ -2389,6 +2393,24 @@ foreach ( $js_files as $js ): ?>
 		}
 	}
 	?>
+
+	function activateEditor(editor) {
+		if (editor == "tinymce") {
+			tinymce.init({
+				forced_root_block : "", 
+				mode : "specific_textareas",
+				editor_selector : "tinymce-grid",
+				menubar: "",
+				image_advtab: true,
+				plugins: [
+					"autolink lists link hr anchor pagebreak code image paste stories"
+				],
+				toolbar: "undo redo bold italic link code image removeformat stories",
+				paste_remove_styles: true,
+				extended_valid_elements:'script'
+			});
+		}
+	}
 	
 	function page_preview(id) {
 		var w = screen.width-50;
@@ -2586,9 +2608,9 @@ if(is_array($check_edit)) {
 		<li><a href="#setup">Setup</a></li>
 		<li><a href="#settings">Settings</a></li>
 		<li><a href="#calendar">Calendar</a></li>
-		<li><a href="#plugins">Plugin</a></li>
-		<li><a href="#images">Images</a></li>
+		<li><a href="#plugins">Plugin</a></li>		
 		<li><a href="#files">Files</a></li>
+		<li><a href="#images">Images</a></li>
 		<li><a href="#content_editor">Content</a></li>		
 		<li><a href="#add_content">Additional content</a></li>		
 		<li><a href="#grid">Grid</a></li>
@@ -2838,7 +2860,7 @@ if(is_array($check_edit)) {
 						<p>
 							<select id="search_field_area">
 							<?php
-							$search_fields = [0 => "none", 1 => "header", 2 => "page"];						
+							$search_fields = [0 => "none", 1 => "header", 2 => "page top", 3 => "page content"];						
 							if ($search_fields) {
 								foreach ($search_fields as $key => $value) {
 									$selected = $key == $arr['search_field_area'] ? " selected" : "";
@@ -4060,9 +4082,49 @@ if(is_array($check_edit)) {
 		<div class="admin-panel clearfix">
 			<p>
 
-				<div style="float:right;width:50%;" class="grid-cell-settings">
+				<div style="float:left;width:50%" class="grid-settings">
+
+					<h4><i class="fa fa-th" aria-hidden="true"></i> Grid settings</h4>
+					<p>
+						<input type="checkbox" name="grid_active" id="grid_active" value="1" <?php if($arr['grid_active'] == 1) {echo 'checked="checked"';}?>> Active
+					</p>
+					<p>
+						Grid area relative to content | article
+						<br>
+						<input type="radio" value="0" name="grid_area" <?php if($arr['grid_area'] == 0) {echo 'checked="checked"';}?>> Above 
+						<br>
+						<input type="radio" value="1" name="grid_area" <?php if($arr['grid_area'] == 1) {echo 'checked="checked"';}?>> Above content and next to any sidebar
+						<br>
+						<input type="radio" value="2" name="grid_area" <?php if($arr['grid_area'] == 2) {echo 'checked="checked"';}?>> Below content and next to any sidebar
+						<br>
+						<input type="radio" value="3" name="grid_area" <?php if($arr['grid_area'] == 3) {echo 'checked="checked"';}?>> Below
+					</p>
+					<p style="margin-top:40px">
+						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
+						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
+						<span id="ajax_spinner_grid" style='display:none'><img src="css/images/spinner.gif"></span>
+						<span id="ajax_status_grid" style='display:none'></span>
+					</p>
+					<div style="background-color:rgb(200,200,200);padding:10px;border:1px dashed black">
+						<span class="toolbar"><button name="btnGridExport" id="btnGridExport">Export content</button></span>
+						<span class="toolbar"><button name="btnGridImport" id="btnGridImport">Import content</button></span>
+						<span class="toolbar"><button name="btnGridImportSave" id="btnGridImportSave" style="display:none">Save import (reload page)</button></span>
+
+						<textarea id="grid_json" style="width:95%;display:none"></textarea>
+						<div id="grid_json_clipboard_link">
+							<a href="#" id="grid_json_clipboard" class="hidden">Copy to clipboard</a>
+						</div>
+					</div>
+					
+				</div>
+
+				<div style="float:left;width:45%;margin-left:5%" class="grid-cell-settings">
 				
 					<h4>Grid cell settings</h4>
+					<p>
+						Custom CSS class (grid wrapper)<br>
+						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class" value="<?php echo $arr['grid_custom_classes']?>">
+					</p>
 
 					<div style="float:left">
 						<p>
@@ -4082,51 +4144,11 @@ if(is_array($check_edit)) {
 						<p>Grid images height</p>
 						<input id="grid_cell_image_height" type="text" value="<?php echo $arr['grid_cell_image_height']?>" readonly style="border:1px dotted grey;width:3em">
 						<br>
-						<div style="float:left;margin:20px">600px<div id="grid_image_slider_height" style="height:100px;"></div>100px</div>
+						<div style="float:left;margin:20px">400px<div id="grid_image_slider_height" style="height:100px;"></div>100px</div>
 
 					</div>
 
 
-				</div>
-
-				<div style="float:left" class="grid-settings">
-
-					<h4><i class="fa fa-th" aria-hidden="true"></i> Grid settings</h4>
-					<p>
-						<input type="checkbox" name="grid_active" id="grid_active" value="1" <?php if($arr['grid_active'] == 1) {echo 'checked="checked"';}?>> Active
-					</p>
-					<p>
-						Grid area relative to content | article
-						<br>
-						<input type="radio" value="0" name="grid_area" <?php if($arr['grid_area'] == 0) {echo 'checked="checked"';}?>> Above 
-						<br>
-						<input type="radio" value="1" name="grid_area" <?php if($arr['grid_area'] == 1) {echo 'checked="checked"';}?>> Above content and next to any sidebar
-						<br>
-						<input type="radio" value="2" name="grid_area" <?php if($arr['grid_area'] == 2) {echo 'checked="checked"';}?>> Below content and next to any sidebar
-						<br>
-						<input type="radio" value="3" name="grid_area" <?php if($arr['grid_area'] == 3) {echo 'checked="checked"';}?>> Below
-					</p>
-					<p>
-						Custom CSS class (grid wrapper)<br>
-						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class" value="<?php echo $arr['grid_custom_classes']?>">
-					</p>
-					<p>
-						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
-						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
-						<span id="ajax_spinner_grid" style='display:none'><img src="css/images/spinner.gif"></span>
-						<span id="ajax_status_grid" style='display:none'></span>
-					</p>
-					<div style="background-color:rgb(200,200,200);padding:10px;border:1px dashed black">
-						<span class="toolbar"><button name="btnGridExport" id="btnGridExport">Export content</button></span>
-						<span class="toolbar"><button name="btnGridImport" id="btnGridImport">Import content</button></span>
-						<span class="toolbar"><button name="btnGridImportSave" id="btnGridImportSave" style="display:none">Save import (reload page)</button></span>
-
-						<textarea id="grid_json" style="width:95%;display:none"></textarea>
-						<div id="grid_json_clipboard_link">
-							<a href="#" id="grid_json_clipboard" class="hidden">Copy to clipboard</a>
-						</div>
-					</div>
-					
 				</div>
 
 
