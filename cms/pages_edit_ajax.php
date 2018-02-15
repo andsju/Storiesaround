@@ -2399,10 +2399,15 @@ if (isset($_POST['token'])){
 			$external_css = filter_input(INPUT_POST,'external_css',FILTER_SANITIZE_STRING);
 			$content_html = $_POST['content_html'];
 			$content_code = $_POST['content_code'];
+			write_debug($content_code);
+			$grid_content = trim($_POST['grid_content']);
+			$grid_cell_template = filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT) ? $_POST['grid_cell_template'] : 0;
+			$grid_custom_classes = $_POST['grid_custom_classes'];
+			$grid_cell_image_height = filter_input(INPUT_POST, 'grid_cell_image_height', FILTER_VALIDATE_INT);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-			
+
 			$selections = new Selections();
-			$result = $selections->setSelections($pages_selections_id, $active, $name, $description, $area, $content_html, $content_code, $external_js, $external_css, $utc_modified);
+			$result = $selections->setSelections($pages_selections_id, $active, $name, $description, $area, $content_html, $content_code, $external_js, $external_css, $grid_content, $grid_cell_template, $grid_custom_classes, $grid_cell_image_height, $utc_modified);
 
 			if($result) {
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');

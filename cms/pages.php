@@ -181,7 +181,7 @@ if($arr['plugins']) {
 // selections
 $pages_selections = explode(",",$arr['selections']);
 $selection_area = array_fill_keys(array('header_above', 'header', 'header_below', 'left_sidebar_top', 'left_sidebar_bottom', 'right_sidebar_top', 'right_sidebar_bottom', 'content_above', 'content_inside','content_below', 'footer_above', 'outer_sidebar'), null);
-$selection_result = set_selection_values($pages_selections, $css_files, $js_files, $pages, $dtz, $selection_area);
+$selection_result = set_selection_values($pages_selections, $css_files, $js_files, $id, $pages, $dtz, $selection_area);
 
 $css_files = $selection_result[0];
 $js_files = $selection_result[1];
@@ -217,13 +217,22 @@ if ($arr['template'] == 6) {
 
 ?>
 <body>
-    <?php print_noscript($languages) ?>
+    <?php 
+    print_noscript($languages); 
+    
+    ?>
+    <?php
+        print_mobile_menu($pages, $id, $seo, $href); 
+    ?>
+
     <?php if ($users_id) {?>
     <div id="wrapper-user">
         <div id="user-toolbar"><?php include 'includes/inc.site_active_user2.php';?></div>
     </div>
+    
     <?php }?>
-    <?php 
+    <?php
+    
     print_selection("selection-header-above", $selection_area['header_above']);
     ?>
 
@@ -239,7 +248,6 @@ if ($arr['template'] == 6) {
         
         <nav id="site-navigation-header">
             <?php
-            print_mobile_menu($pages, $id, $seo, $href);
             print_menu($pages, $id, $seo, $href, $open, $sample);
             ?>
         </nav>
@@ -261,17 +269,11 @@ if ($arr['template'] == 6) {
             $hint[8] = "<p><a href='admin.php' target='_blank'>For more settings go to admin.php</a></p>";
             for ($i = 0; $i < count($hint); $i++) {
                 echo $hint[$i];
-            }
-                            
+            }                            
         }
         if ($arr['search_field_area'] == 2) {
             print_search_field_area_page($languages);
         }
-        ?>
-        <div id="pages_search_result" class="hidden"></div>
-        <input type="hidden" id="pages_search_result_start" value="0">
-        <button id="btn-site-search-page-more" style="display:none" class="btn-link">Show more +</button>
-        <?php
         print_selection("selection-header-below", $selection_area['header_below']); 
         ?>
         <div id="top-grid"><?php print_grid($arr, 0);?></div>
@@ -369,10 +371,6 @@ if ($arr['template'] == 6) {
 
     <?php include_once 'includes/inc.debug.php'; ?>
 
-    <?php
-    
-    print_r2($request_parts);
-    ?>
 </body>
 
 </html>
