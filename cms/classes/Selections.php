@@ -72,8 +72,7 @@ class Selections extends Database
      */
     public function getSelectionsContent($pages_selections_id)
     {
-
-        $sql = "SELECT name, description, area, position, content_html, content_code, external_js, external_css, active  
+        $sql = "SELECT name, description, area, position, content_html, content_code, external_js, external_css, active, grid_content, grid_cell_template, grid_custom_classes, grid_cell_image_height
 		FROM pages_selections 
 		WHERE pages_selections_id = :id";
 
@@ -90,7 +89,7 @@ class Selections extends Database
      */
     public function getMultipleSelectionsContent($array_pages_selections_id)
     {
-        $sql = "SELECT name, description, area, position, content_html, content_code, external_js, external_css
+        $sql = "SELECT name, description, area, position, content_html, content_code, external_js, external_css, grid_content, grid_cell_template, grid_custom_classes, grid_cell_image_height
 		FROM pages_selections 
 		WHERE pages_selections_id IN (" . implode(',', array_map('intval', $array_pages_selections_id)) . ")
 		AND active = 1
@@ -169,10 +168,14 @@ class Selections extends Database
      * @param string $content_code
      * @param string $external_js
      * @param string $external_css
+     * @param string $grid_content
+     * @param int $grid_cell_template
+     * @param string $grid_custom_classes
+     * @param int $grid_cell_image_height
      * @param string $utc_modified
      * @return bool
      */
-    public function setSelections($pages_selections_id, $active, $name, $description, $area, $content_html, $content_code, $external_js, $external_css, $utc_modified)
+    public function setSelections($pages_selections_id, $active, $name, $description, $area, $content_html, $content_code, $external_js, $external_css, $grid_content, $grid_cell_template, $grid_custom_classes, $grid_cell_image_height, $utc_modified)
     {
         try {
             $sql = "UPDATE pages_selections
@@ -184,6 +187,10 @@ class Selections extends Database
 			external_css = :external_css,
 			content_html = :content_html,
 			content_code = :content_code,
+            grid_content = :grid_content,
+            grid_cell_template = :grid_cell_template,
+            grid_custom_classes = :grid_custom_classes,
+            grid_cell_image_height = :grid_cell_image_height,
 			utc_modified = :utc_modified
 			WHERE pages_selections_id = :pages_selections_id";
 
@@ -197,6 +204,10 @@ class Selections extends Database
             $stmt->bindParam(":external_css", $external_css, PDO::PARAM_STR);
             $stmt->bindParam(":content_html", $content_html, PDO::PARAM_STR);
             $stmt->bindParam(":content_code", $content_code, PDO::PARAM_STR);
+            $stmt->bindParam(":grid_content", $grid_content, PDO::PARAM_STR);
+            $stmt->bindParam(":grid_cell_template", $grid_cell_template, PDO::PARAM_INT);
+            $stmt->bindParam(":grid_custom_classes", $grid_custom_classes, PDO::PARAM_STR);
+            $stmt->bindParam(":grid_cell_image_height", $grid_cell_image_height, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {

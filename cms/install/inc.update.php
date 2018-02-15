@@ -63,4 +63,9 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "category"
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "category_position", "column_definition" => "int(2) DEFAULT '99' COMMENT 'page category position' AFTER `lang`");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "story_wide_content");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "search_field_area", "column_definition" => "tinyint(1) DEFAULT '0' COMMENT '0: none, 1:header, 2:page' AFTER `breadcrumb`");
+// 2018-02-14
+$sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" => "grid_content", "column_definition" => "longtext DEFAULT '' COMMENT 'json format' AFTER `content_code`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" => "grid_custom_classes", "column_definition" => "varchar(50) DEFAULT '' COMMENT 'custom css' AFTER `grid_content`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" => "grid_cell_template", "column_definition" => "tinyint(1) DEFAULT '0' COMMENT '0:image top 1:heading top' AFTER `grid_custom_classes`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" => "grid_cell_image_height", "column_definition" => "int(3) DEFAULT '140' COMMENT 'height in px' AFTER `grid_cell_template`");
 ?>

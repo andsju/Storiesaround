@@ -85,16 +85,6 @@ $class_editor = $wysiwyg_editor['css-class'];
 		$( ".toolbar button" ).button({
 		});
 		
-		$( "#toggle_wysiwyg" ).click(function() {
-			$( "#wysiwyg_row" ).toggle( "fast", function() {
-			});
-		});	
-		
-		$( "#toggle_code" ).click(function() {
-			$( "#code_row" ).toggle( "fast", function() {
-			});
-		});	
-
 		$('#btn_selections_save').click(function(event){
 			event.preventDefault();
 			var action = "selections_save";
@@ -109,13 +99,26 @@ $class_editor = $wysiwyg_editor['css-class'];
 			var position = $("#position option:selected").val();
 			var content_html = get_textarea_editor('<?php echo $_SESSION['site_wysiwyg']; ?>', 'content_html');			
 			var content_code = $("#content_code").val();
-			var content_code = encodeURIComponent(content_code);
+			//var content_code = encodeURIComponent(content_code);
+			var grid_content = $("#grid_content").val();
+			var grid_cell_template = $('input:checkbox[name=grid_cell_template]').is(':checked') ? 1 : 0;
+			var grid_custom_classes = $("#grid_custom_classes").val();
+			var grid_cell_image_height = $("#grid_cell_image_height").val();
+
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_selections').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_selections').hide()",700)},
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
-				data: "action=" + action + "&token=" + token + "&active=" + active + "&pages_selections_id=" + pages_selections_id + "&name=" + name + "&description=" + description + "&external_js=" + external_js + "&external_css=" + external_css + "&area=" + area + "&position=" + position + "&content_html=" + content_html + "&content_code=" + content_code,
+				data: { 
+					action: action, token: token, pages_selections_id: pages_selections_id, active: active,
+					name: name, description: description, external_js: external_js, external_css: external_css, 
+					area: area, position: position, content_html: content_html, content_code: content_code,
+					grid_cell_template: grid_cell_template, grid_custom_classes: grid_custom_classes,
+					grid_content: grid_content, grid_cell_image_height: grid_cell_image_height
+				},
+				
+				//data: "action=" + action + "&token=" + token + "&active=" + active + "&pages_selections_id=" + pages_selections_id + "&name=" + name + "&description=" + description + "&external_js=" + external_js + "&external_css=" + external_css + "&area=" + area + "&position=" + position + "&content_html=" + content_html + "&content_code=" + content_code,
 				success: function(newdata){	
 					ajaxReply(newdata,'#ajax_status_selections');
 				},
@@ -258,26 +261,37 @@ if(isset($_GET['token'])){
 							echo '</td>';
 						echo '</tr>';
 						echo '<tr>';
-							echo '<td style="padding-top:10px;">';
+							echo '<td style="padding-top:10px;" colspan="4">';
 								?>
-								<div style="margin-bottom:10px;">Content</div><div style=""><span id="toggle_wysiwyg" class="click">show/hide</span></div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="4" style="padding-top:10px;">
-								<div id="wysiwyg_row" style="display:none;">								
-								<textarea name="content_html" id="content_html" class="<?php echo $class_editor; ?>" style="width:100%;"><?php echo $row[0]['content_html']; ?></textarea>
-								</div>
+								<h4>Content</h4>
+								<textarea name="content_html" id="content_html" class="<?php echo $class_editor; ?>" style="width:100%;"><?php echo $row[0]['content_html']; ?></textarea>								
 								<?php
 							echo '</td>';
 						echo '</tr>';
 						echo '<tr>';
-							echo '<td colspan="4" style="padding-top:10px;">';
+							echo '<td style="padding-top:10px;" colspan="4">';
 								?>
-								<div style="margin-bottom:10px;">Code (html | storiesaround code)</div><div style=""><span id="toggle_code" class="click">show/hide</span></div>
-								<div id="code_row" style="display:none;">
+								<h4>Grid json</h4>
+								<p>Paste json code (export grid from a page)</p>
+								<textarea name="grid_content" id="grid_content" style="width:100%;height:100px;" class="code"><?php echo $row[0]['grid_content']; ?></textarea>
 								<p>
-								<h4>Show stories in code area</h4>
+									<span>Custom CSS class (grid wrapper):</span>
+									<input type="text" name="grid_custom_classes" id="grid_custom_classes" value="<?php echo $row[0]['grid_custom_classes']; ?>">
+									<span style="margin-left:30px">Image below heading: </span>
+									<?php
+									$checked = ($row[0]['grid_cell_template']==1) ? " checked=checked" : null;
+									?>
+									<input type="checkbox" id="grid_cell_template" name="grid_cell_template" <?php echo $checked; ?>>
+									<span style="margin-left:30px"> Grid images height: </span>
+									<input type="text" id="grid_cell_image_height" name="grid_cell_image_height" value="<?php echo $row[0]['grid_cell_image_height']; ?>" style="width:50px">
+								</p>
+								<?php
+							echo '</td>';
+						echo '</tr>';
+						echo '<tr>';
+							echo '<td style="padding-top:10px;" colspan="4">';
+								?>
+								<h4>Code</h4>
 								Code written between double square brackets <span class="code highlight">[[ ? ]]</span> will be parsed. Use storiesaround code syntax below.
 								<p>
 								<i>Write code inside <b>html element</b></i>, like <span class="code highlight"><b>&lt;div&gt;</b>[[ ? ]]<b>&lt;/div&gt;</b></span>
@@ -311,7 +325,7 @@ if(isset($_GET['token'])){
 									</tr>
 								</table>								
 								
-								<textarea name="content_code" id="content_code" style="width:100%;height:400px;" class="code"><?php echo htmlspecialchars($row[0]['content_code']); ?></textarea>
+								<textarea name="content_code" id="content_code" style="width:100%;height:100px;" class="code"><?php echo htmlspecialchars($row[0]['content_code']); ?></textarea>
 								</div>
 								<?php
 							echo '</td>';

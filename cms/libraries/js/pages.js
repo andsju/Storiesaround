@@ -421,22 +421,32 @@ $(document).ready(function() {
 		$("#site-navigation-mobile").show();
 	});
 		
-	$("#search-site").click(function(event) {
+	$("#search-site-icon").click(function(event) {
 		event.preventDefault();
-		//$("#nav-site-navigation-vertical").toggle();
-		$("#site-navigation-mobile").toggle();
-		$("#search_site").toggle();
+		var cms_dir = $("#cms_dir").val();
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/pages/sok";
 	});	
-	
-	$("#fb").click(function(event) {
-		event.preventDefault();
-		window.location.href = "http://sunet.se";
 		
-	});	
-	equalheight('div.grid-cell');
+	// window resize
+	$(window).resize(function() {
+
+		var $videos = $(".grid-video iframe");
+		var $fluidEl = $(".grid-video");
+		var newWidth = $fluidEl.width();
+		$videos.each(function() {
+			$(this)
+			.width(newWidth)
+			.height(newWidth * $(this).data('ratio'));
+		});
+		equalheight('div.grid-cell');
+	}).resize();
+
+
 	if ($("#stories_equal_height").val() == 1) {
 		equalheight('div.stories-cell');		
 	}
+
+
 	//replace_image_path('/content/', '/somefolder/content/');
 	
 });
@@ -445,15 +455,14 @@ $(document).ready(function() {
 function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
-
+	console.log("addMobileMenu", w);
 	if (w <= 767) {	
+		console.log("767");
 		var cms_dir = $("#cms_dir").val();
-
-		var newdata = ""	
-		newdata += 		'<img class="mobile-menu-icon" src="'+cms_dir+'/content/favicon.png" id="site-icon" />';
-		newdata += 		'<img class="mobile-menu-icon" src="'+cms_dir+'/cms/css/images/search-icon-32.png" style="" id="search-site" />';
-		//newdata += 		'<img class="mobile-menu-icon" src="'+cms_dir+'/cms/css/images/FB-f-Logo__white_29.png" id="fb" />';
-		
+		var newdata = '<img class="mobile-menu-icon" src="'+cms_dir+'/content/favicon.png" id="site-icon">';
+		newdata += '<img class="mobile-menu-icon" src="'+cms_dir+'/cms/css/images/icon_search.png" style="" id="search-site-icon">';
+		newdata += '<img class="mobile-menu-icon" src="'+cms_dir+'/cms/css/images/icon_login.png" id="site-login-icon" >';
+				
 		$(".mobile-buttons").append(newdata);
 		$("#site-navigation-mobile").addClass("flexnav");
 		$("#site-navigation-mobile").show();

@@ -10,7 +10,7 @@ use a theme to override settings
 /* body & page
 ------------------------- */
 body { 
-	
+
 	width: 100%; 
 	margin: 0 auto; 
 	padding: 20px 0; 
@@ -714,7 +714,7 @@ div.grid-edit {margin:0 0 20px 0}
 
 div.grid-cell {float:left;width:32%; display: flex; flex-direction: column; margin-right:2%; margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;min-height:200px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 div.grid-cell:nth-child(3n) {margin-right: 0;}
-div.grid-image-crop {min-height:80px;max-height:768px;background-size:cover;}
+div.grid-image-crop {min-height:100px;max-height:400px;background-size:cover;background-position-x: center}
 ul#grid {list-style: none;margin:0;padding:0;width:80%}
 ul#grid li {float:left;width:30%;margin-left:2%}
 div.grid-split {flex: 1 1 auto}

@@ -222,7 +222,7 @@ function set_plugin_values($id, $users_id, $css_files)
  * @param string $dtz
  * @param array $selection_area
  */
-function set_selection_values($pages_selections, $css_files, $js_files, $pages, $dtz, $selection_area)
+function set_selection_values($pages_selections, $css_files, $js_files, $id, $pages, $dtz, $selection_area)
 {
     if(is_array($pages_selections)) {
         $selections = new Selections();
@@ -245,19 +245,22 @@ function set_selection_values($pages_selections, $css_files, $js_files, $pages, 
             }
             $content_html = $s_row['content_html'];
             $content_code = implode(parse_storiesaround_coded($pages, $dtz, $s_row['content_code'],0));
-            
+            $grid_cell_template = $s_row['grid_cell_template'];
+            $grid_custom_classes = $s_row['grid_custom_classes'];
+            $grid_cell_image_height = $s_row['grid_cell_image_height'];
+            $grid_content = $s_row['grid_content'];
+            $grid_content = get_grid($id, $grid_active=1, $grid_content, $grid_custom_classes, $grid_cell_template, $grid_cell_image_height);
 
-            
             switch($s_row['area']) {
             
                 case 'header_above':
-                    $selection_area['header_above'] .= $content_html . $content_code;
+                    $selection_area['header_above'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'header':
-                    $selection_area['header'] .= $content_html . $content_code;
+                    $selection_area['header'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'header_below':
-                    $selection_area['header_below'] .= $content_html . $content_code;
+                    $selection_area['header_below'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'left_sidebar_top':
                     $selection_area['left_sidebar_top'] .= $content_html . $content_code;
@@ -266,22 +269,22 @@ function set_selection_values($pages_selections, $css_files, $js_files, $pages, 
                     $selection_area['left_sidebar_bottom'] .= $content_html . $content_code;
                 break;
                 case 'right_sidebar_top':
-                    $selection_area['right_sidebar_top'] .= $content_html . $content_code;
+                    $selection_area['right_sidebar_top'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'right_sidebar_bottom':
                     $selection_area['right_sidebar_bottom'] .= $content_html . $content_code;
                 break;
                 case 'content_above':
-                    $selection_area['content_above'] .= $content_html . $content_code;
+                    $selection_area['content_above'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'content_inside':
                     $selection_area['content_inside'] .= $content_html . $content_code;
                 break;
                 case 'content_below':
-                    $selection_area['content_below'] .= $content_html . $content_code;
+                    $selection_area['content_below'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'footer_above':
-                    $selection_area['footer_above'] .= $content_html . $content_code;
+                    $selection_area['footer_above'] .= $content_html . $content_code . $grid_content;
                 break;
                 case 'outer_sidebar':
                     $selection_area['outer_sidebar'] .= $content_html . $content_code;
@@ -446,8 +449,24 @@ function print_search_field_area_page($languages)
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="'.CMS_DIR.'/cms/css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
     $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
-    $html .= '<input type="checkbox" name="search-page-limit-tree" id="search-page-limit-tree"> '. translate("Search", "site_search_limit", $languages);
+    $html .= '<input type="checkbox" name="search-page-limit-tree" id="search-page-limit-tree"> <span id="search-page-limit-tree-helper">'. translate("Search", "site_search_limit", $languages) . '</span>';
     $html .= '</div>';
+    echo $html;
+}
+
+
+/**
+ *
+ * print site search result
+ *
+ * @param array languages
+ * @return mixed|string
+ */
+function print_search_field_result($languages)
+{
+    $html = '<div id="pages_search_result" class="hidden"></div>';
+    $html .= '<input type="hidden" id="pages_search_result_start" value="0">';
+    $html .= '<button id="btn-site-search-page-more" style="display:none" class="btn-link">'. translate("Show more", "site_search_show_more", $languages) .' +</button>';
     echo $html;
 }
 
@@ -2407,17 +2426,18 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     $html_grid .= $grid_cell_template == 0 ? $image . $header : $header . $image; 
                 break;
                 case "7":
-                        
-                        $video = getVideoEmbed($value2);
-                        $html_grid .= '<div class="grid-video">' .$video . '</div>';
+                        if (strlen($value2)) {
+                            $video = getVideoEmbed($value2);
+                            $html_grid .= '<div class="grid-video">' .$video . '</div>';
+                        }
                     break;
                 case "":
                 break;
 
                 case "13":
-                    //if(strlen($value2)) {
+                    if(strlen($value2)) {
                         $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
-                    //}
+                    }
                     break;
                 case "":
                 break;
@@ -2510,13 +2530,16 @@ function getVideoEmbed($video) {
     $int = strrpos($video, "/");
     $video_id = substr($video,  $int - strlen($video) + 1);
     $iframe = "";
+
+    
     if (strpos($video, "vimeo")) {
-        $iframe = '<iframe src="https://player.vimeo.com/video/'.$video_id.'?title=0&byline=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+        $iframe = '<iframe src="https://player.vimeo.com/video/'.$video_id.'?title=0&byline=0&autoplay=0" data-ratio="0.5625" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
     }
     if (strpos($video, "youtu")) {
-        $iframe = '<iframe src="https://www.youtube.com/embed/'.$video_id.'" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>';
+        $iframe = '<iframe src="https://www.youtube.com/embed/'.$video_id.'" data-ratio="0.5625" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>';
     }
 
+    
     return $iframe;
 }
 
@@ -2562,11 +2585,10 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
         foreach ($value as $key2 => $value2) {
             switch ($key2) {
                 case "0":
-                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][13].'">';
+                $html_grid .= '<div class="grid-cell  '.$result_copy[$counter][15].'">';
                 break;
                 case "1":
-                    if(strlen($value2)) {
-                        
+                    if(strlen($value2)) {    
                         $background_image_y = strlen($result_copy[$counter][3]) > 1 ? 'background-position-y:'. $result_copy[$counter][3] .'%': '';
                         $image = '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$value2.');'.$background_image_y.'"></div>';
                     }
@@ -2582,8 +2604,10 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                     $html_grid .= $grid_cell_template == 0 ? $image . $header : $header . $image; 
                 break;
                 case "7":
-                    $video = getVideoEmbed($value2);
-                    $html_grid .= '<div class="grid-video">' .$video . '</div>';
+                    if(strlen($value2)) {
+                        $video = getVideoEmbed($value2);
+                        $html_grid .= '<div class="grid-video">' .$video . '</div>';
+                    }
                     break;
 
                 case "11":
@@ -2592,8 +2616,9 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                     }
                     break;
                 case "13":
+                    if(strlen($value2)) {
                         $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
-                
+                    }
                     break;
                 case "17":
 
@@ -2817,6 +2842,7 @@ function parse_code($pages, $dtz, $code)
     [[story child parent "3"]]
     [[story event filter "music" date "next"]]
     */
+
     switch ($a[0]) {
         case 'story':
             $coded = "story";
@@ -2825,7 +2851,6 @@ function parse_code($pages, $dtz, $code)
     }
 
     if ($coded == "story") {
-
         switch ($a[1]) {
             case 'selected':
 

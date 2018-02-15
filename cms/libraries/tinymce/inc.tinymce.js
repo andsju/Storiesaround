@@ -11,6 +11,7 @@
 		toolbar : "",
 		//toolbar: "undo redo | bullist numlist | formats | outdent indent | image | charmap",
 		menubar: "view edit insert tools",
+		image_advtab: true,
 		style_formats: [
 			{title: 'Headings', items: [
 				{title: 'h1', block: 'h1'},
