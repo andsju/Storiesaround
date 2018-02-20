@@ -88,7 +88,8 @@ class JplayerVideo extends Widgets {
 		}
 		$path = strstr($dirname, '/') ? $dirname .'/' : '/content/uploads/pages/'.$pages_id .'/';
 		
-		$path = 'http://'. CMS_PATH . $path;
+		$path = CMS_PROTOCOL . CMS_PATH . $path;
+		
 		
 		// title 
 		$title = isset($objects['title']) ? $objects['title'] : $defaults['title'];		
@@ -97,6 +98,7 @@ class JplayerVideo extends Widgets {
 		<script>
 			var token = "<?php echo $_SESSION['token']; ?>";
 			var id = <?php echo $pages_widgets_id; ?>;
+			var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 			$(document).ready(function() {
 
 				$("#jquery_jplayer_<?php echo $pages_widgets_id; ?>").jPlayer({
@@ -141,8 +143,8 @@ class JplayerVideo extends Widgets {
 					swfPath: "<?php echo $_SESSION['CMS_DIR'];?>/cms/libraries/jquery-jplayer/Jplayer.swf",
 					supplied: "<?php echo $ext; ?><?php if ($ext2) { echo ','. $ext2; } ?>",
 					size: {
-						width: "<?php echo $w."px";?>",
-						height: "<?php echo $w/1.75."px";?>",
+						width: "<?php echo $width."px";?>",
+						height: "<?php echo $width/1.75."px";?>",
 						cssClass: "jp-video-360p"
 					},
 					wmode: "window",	

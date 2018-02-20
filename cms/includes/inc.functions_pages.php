@@ -962,9 +962,9 @@ function get_pages_tree_jqueryui_published($parent_id = 0, $id, $array_path, $a 
  * @param $id
  * @param $title
  */
-function get_stories_box($id, $title)
+function get_stories_box($id, $title, $style)
 {
-    echo '<div id="' . $id . '" class="portlet">';
+    echo '<div id="' . $id . '" class="portlet" style="'.$style.'">';
     echo $title;
     echo '</div>';
 }
@@ -1040,17 +1040,19 @@ function show_widgets_content($rows, $str, $content_width)
  * @param $stories_last_modified
  * @param $dtz
  */
-function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_last_modified, $dtz)
+function get_box_story_content_selected($rows, $languages, $content_percent_width, $wrapper_content_width, $stories_selected_area, $stories_columns, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
 {
+        
     if (isset($rows)) {
+        $image = new Image();
+        $string = "";
         foreach ($rows as $row) {
             if (!isset($_SESSION['users_id'])) {
                 if ($row['access'] < 2) {
                     continue;
                 }
             }
-
-            if ($row['container'] == $str) {
+            if ($row['container'] == $stories_selected_area) {
                 $title = $row['story_custom_title'];
                 $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
                 $pages_id = $row['pages_id'];
@@ -1060,181 +1062,101 @@ function get_box_story_content_selected($rows, $str, $col_width, $stories_wide_t
                 $utc = $row['utc_modified'];
                 $date = get_utc_dtz($utc, $dtz, 'Y-m-d H:i');
                 $date = $stories_last_modified == 1 ? get_utc_dtz($row['utc_modified'], $dtz, 'Y-m-d H:i') : '';
-                $caption = isset($row['filename']) ? $row['caption'] : '';
+                $caption = isset($row['filename']) ? $row['caption'] : '';                
+                $style_wrapper = $stories_columns == 1 && $stories_selected_area  == "main" ? "" : "width:100%"; 
+                $argh = "stories_selected_area: " . $stories_selected_area . ", content_percent_width: " . $content_percent_width . ", wrapper_content_width: " . $wrapper_content_width .", stories_columns: " . $stories_columns;
 
-                echo '<div class="stories-wrapper">';
-                if ($row['story_link']) {
-                    echo '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
+                if ($content_percent_width <= 33) {
+                        
+                    $string .= '<div class="stories-wrapper" style="'.$style_wrapper.'">';
+                    if ($row['story_link']) {
+                        $string .= '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
+                    }
+                    $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width) : '';
+                    $string .= '<div class="stories-content ' . $css_class . '">';
+                    if (isset($row['filename'])) {
+                        $string .= '<img src="' . $optimzed_image . '" class="fluid" alt="' . $caption . $stories_selected_area .'" />';
+                    }
+                    $string .= '<div class=" stories-content' . $css_class . '" style="border:0;">';
+                    if ($title == 0) {
+                        $string .= '<h4 class="stories-title" >' . $title_value .'</h4>';
+                    }
+                    if ($stories_last_modified == 1) {
+                        $string .= '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
+                    }
+                    $string .= $story;
+                    $string .= '</div></div>';
+                    if ($row['story_link']) {
+                        $string .= '</a>';
+                    }
+                    $string .= '</div>';
+    
+                } else {
+
+                    $string .= '<div class="stories-wrapper" style="'.$style_wrapper.'">';
+                    if ($row['story_link']) {
+                        $string .= '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
+                    }
+                    switch ($story_wide_teaser_image) {
+                        case 0:
+
+                            $string .= '<div class="stories-content ' . $css_class . '">';
+                            if ($title == 0) {
+                                $string .=  '<h3 class="stories-title">' . $title_value .'</h3>';
+                            }
+                            if ($stories_last_modified == 1) {
+                                $string .=  '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
+                            }
+                            $string .=  $story;
+                            $string .= '</div>';
+                            break;
+                        case 1:
+                            $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width) : '';
+                            if (isset($row['filename'])) {
+                                $string .= '<img src="' . $optimzed_image . '" class="fluid" alt="' . $caption . '" />';
+                            }
+
+                            $string .= '<div class="stories-content ' . $css_class . '">';
+                            if ($title == 0) {
+                                $string .= '<h3 class="stories-title">' . $title_value . '</h3>';
+                            }
+                            if ($stories_last_modified == 1) {
+                                $string .= '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
+                            }
+                            $string .= $story;
+                            $string .= '</div>';
+                            break;
+                        case 2:
+                            $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width) : '';
+                            $string .= '<div class="stories-content ' . $css_class . '">';
+                            if ($title == 0) {
+                                $string .= '<h3 class="stories-title">' . $title_value . '</h3>';
+                            }
+                            if ($stories_last_modified == 1) {
+                                $string .= '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
+                            }
+                            $teaser_image_class = $stories_wide_teaser_image_align == 0 ? 'float-left' : 'float-right';
+                            $string .= '<div class="stories-content">';
+                            if (isset($row['filename'])) {
+                                $string .= '<img src="' . $optimzed_image . '" style="width:' . $stories_wide_teaser_image_width . '%;height:auto;" class="' . $teaser_image_class . '" alt="' . $caption . '" />';
+                            }
+                            $string .= $story;
+                            $string .= '</div>';
+                            $string .= '<div style="clear:both"></div>';
+                            $string .= '</div>';
+                            break;
+                    }
+                    if ($row['story_link']) {
+                        $string .= '</a>';
+                    }
+                    $string .= '</div>';
+                    
                 }
-                $w = $col_width;
-
-                switch ($w) {
-                    case 138:
-                        $i = 222;
-                        $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-                        echo '<div class="stories-content ' . $css_class . '">';
-                        if (isset($row['filename'])) {
-                            echo '<img src="' . $img . '" class="fluid" alt="' . $caption . '" />';
-                        }
-                        echo '<div class=" stories-content' . $css_class . '" style="border:0;">';
-                        if ($title == 0) {
-                            echo '<h4 class="stories-title" >' . $title_value . '</h4>';
-                        }
-                        if ($stories_last_modified == 1) {
-                            echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                        }
-                        echo $story;
-                        echo '</div></div>';
-                        break;
-                    case 222:
-                        $i = 222;
-                        $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-                        echo '<div class="stories-content ' . $css_class . '">';
-                        if (isset($row['filename'])) {
-                            echo '<img src="' . $img . '" class="fluid" alt="' . $caption . '" />';
-                        }
-                        echo '<div class="stories-content ' . $css_class . '" style="border:0;">';
-                        if ($title == 0) {
-                            echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                        }
-                        if ($stories_last_modified == 1) {
-                            echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                        }
-                        echo $story;
-                        echo '</div></div>';
-                        break;
-                    case 306:
-                        $i = 474;
-                        $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-
-                        echo '<div class="stories-content ' . $css_class . '">';
-                        if (isset($row['filename'])) {
-                            echo '<img src="' . $img . '" class="fluid" alt="' . $caption . '" />';
-                        }
-                        echo '<div class="stories-content ' . $css_class . '" style="border:0;">';
-                        if ($title == 0) {
-                            echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                        }
-                        if ($stories_last_modified == 1) {
-                            echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                        }
-                        echo $story;
-                        echo '</div></div>';
-                        break;
-                    case 474:
-
-                        switch ($story_wide_teaser_image) {
-                            case 0:
-
-                                echo '<div class="stories-content ' . $css_class . '">';
-                                if ($title == 0) {
-                                    echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                                }
-                                if ($stories_last_modified == 1) {
-                                    echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                                }
-                                echo $story;
-                                echo '</div>';
-                                break;
-                            case 1:
-                                $i = 474;
-                                $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-                                if (isset($row['filename'])) {
-                                    echo '<img src="' . $img . '" class="fluid" alt="' . $caption . '" />';
-                                }
-                                echo '<div class="stories-content ' . $css_class . '">';
-                                if ($title == 0) {
-                                    echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                                }
-                                if ($stories_last_modified == 1) {
-                                    echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                                }
-                                echo $story;
-                                echo '</div>';
-                                break;
-                            case 2:
-                                $i = 222;
-                                $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-                                echo '<div class="stories-content ' . $css_class . '">';
-                                if ($title == 0) {
-                                    echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                                }
-                                if ($stories_last_modified == 1) {
-                                    echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                                }
-                                $teaser_image_class = $stories_wide_teaser_image_align == 0 ? 'float-left' : 'float-right';
-                                echo '<div class="stories-content">';
-                                if (isset($row['filename'])) {
-                                    echo '<img src="' . $img . '" style="width:' . $stories_wide_teaser_image_width . 'px;height:auto;" class="' . $teaser_image_class . '" alt="' . $caption . '" />';
-                                }
-                                echo $story;
-                                echo '</div>';
-                                echo '<div style="clear:both"></div>';
-                                echo '</div>';
-                                break;
-                        }
-                        break;
-
-                    case 726:
-                    case 978:
-
-                        switch ($story_wide_teaser_image) {
-                            case 0:
-
-                                echo '<div class="stories-content ' . $css_class . '">';
-                                if ($title == 0) {
-                                    echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                                }
-                                if ($stories_last_modified == 1) {
-                                    echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                                }
-                                echo $story;
-                                echo '</div>';
-                                break;
-                            case 1:
-                                $i = 726;
-                                $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-                                echo '<div class="stories-content ' . $css_class . '">';
-                                if (isset($row['filename'])) {
-                                    echo '<img src="' . $img . '" class="fluid" alt="' . $caption . '" />';
-                                }
-                                if ($title == 0) {
-                                    echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                                }
-                                if ($stories_last_modified == 1) {
-                                    echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                                }
-                                echo $story;
-                                echo '</div>';
-                                break;
-                            case 2:
-                                $i = 222;
-                                $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
-                                echo '<div class="stories-content ' . $css_class . '">';
-                                if (isset($row['filename'])) {
-                                    $teaser_image_class = $stories_wide_teaser_image_align == 0 ? 'float-left' : 'float-right';
-                                    echo '<div style="width:' . $stories_wide_teaser_image_width . 'px;"><img src="' . $img . '" class="fluid "' . $teaser_image_class . '" alt="' . $caption . '" /></div>';
-                                }
-                                if ($title == 0) {
-                                    echo '<h3 class="stories-title">' . $title_value . '</h3>';
-                                }
-                                if ($stories_last_modified == 1) {
-                                    echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">Published: ' . $date . '</abbr></span></div>';
-                                }
-                                echo $story;
-                                echo '<div style="clear:both"></div>';
-                                echo '</div>';
-
-                                break;
-                        }
-                        break;
-                }
-                if ($row['story_link']) {
-                    echo '</a>';
-                }
-                echo '</div>';
+                //$string .= $wrapper_content_width < 500 ? '' : '</div>';
             }
         }
+
+        return $string;;
     }
 }
 
@@ -1267,7 +1189,6 @@ function print_story_events($pages, $languages, $cms_dir, $wrapper_content_width
 
 function print_story_child($pages, $languages, $cms_dir, $id, $wrapper_content_width, $stories_child, $stories_child_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $dtz)
 {
-    print_r2("Aloha");
     if($stories_child) {
 
         $rows_child = $pages->getPagesStoryContentPublishChild($id);
@@ -1404,6 +1325,16 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
 }
 
 
+function print__story__promoted($rows_promoted, $languages, $cms_dir, $id, $wrapper_content_width, $stories_area, $stories_promoted_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
+{
+    if (!$rows_promoted) {return null;}
+    if (in_array($stories_promoted_area, $stories_area)) {
+        $html = '<div id="content-promoted-stories" class="clearfix">';
+        $html .= get_box_story_content_promoted($rows_promoted, $wrapper_content_width, $stories_last_modified, $stories_image_copyright, $dtz, $languages);
+        $html .= '</div>';
+        echo $html;
+    }
+}
 
 
 
@@ -1417,6 +1348,20 @@ function print__story__child($rows_child, $languages, $cms_dir, $id, $wrapper_co
         echo $html;
     }
 }
+
+
+function print__story__selected($rows_selected, $languages, $cms_dir, $id, $content_percent_width, $wrapper_content_width, $stories_selected_area, $stories_columns, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
+{
+    if (!$rows_selected) {return null;}
+
+    //if (in_array($stories_child_area, $stories_area)) {
+        $html = '<div id="content-selected-stories" class="clearfix">';
+        $html .= get_box_story_content_selected($rows_selected, $languages, $content_percent_width, $wrapper_content_width, $stories_selected_area, $stories_columns,$stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz);
+        $html .= '</div>';
+        echo $html;
+    //}
+}
+
 
 
 function get_box_story_content($rows, $languages, $wrapper_content_width, $stories_area, $stories_child_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
@@ -2030,6 +1975,8 @@ function set_theme()
 }
 
 
+//
+
 /**
  * @param $rows
  * @param $col_width
@@ -2161,7 +2108,7 @@ function get_box_content_child($rows_childs)
 {
     if (isset($rows_childs)) {
         foreach ($rows_childs as $row) {
-            get_stories_box($row['pages_id'], $row['title']);
+            get_stories_box($row['pages_id'], $row['title'], $style="");
         }
     }
 }
@@ -2173,7 +2120,7 @@ function get_box_content_promoted($rows_promoted)
 {
     if (isset($rows_promoted)) {
         foreach ($rows_promoted as $row) {
-            get_stories_box($row['pages_id'], $row['title']);
+            get_stories_box($row['pages_id'], $row['title'], $style="");
         }
     }
 }
@@ -2185,7 +2132,7 @@ function get_box_content_event($rows_events)
 {
     if (isset($rows_events)) {
         foreach ($rows_events as $row) {
-            get_stories_box($row['pages_id'], $row['title']);
+            get_stories_box($row['pages_id'], $row['title'], $style="");
         }
     }
 }
@@ -2194,12 +2141,12 @@ function get_box_content_event($rows_events)
  * @param $rows
  * @param $str
  */
-function get_box_content($rows, $str)
+function get_box_content($rows, $str, $style)
 {
     if (isset($rows)) {
         foreach ($rows as $row) {
             if ($row['container'] == $str) {
-                get_stories_box($row['pages_stories_id'], $row['title']);
+                get_stories_box($row['pages_stories_id'], $row['title'], $style);
             }
         }
     }
@@ -2214,7 +2161,7 @@ function get_box_content_out_of_range($rows, $str)
     if (isset($rows)) {
         foreach ($rows as $row) {
             if (strpos($str, $row['container']) !== false) {
-                get_stories_box($row['pages_stories_id'], $row['title']);
+                get_stories_box($row['pages_stories_id'], $row['title'], $style="");
             }
         }
     }

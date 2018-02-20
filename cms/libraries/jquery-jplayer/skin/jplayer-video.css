@@ -13,7 +13,7 @@ div.jp-video {
 	background:#000;
 }
 .jp-video-360p {
-	width:474px;
+	width:100%;
 	margin: 0px auto;
 }
 .jp-video-full {

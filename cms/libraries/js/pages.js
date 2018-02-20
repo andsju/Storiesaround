@@ -443,10 +443,11 @@ $(document).ready(function() {
 
 
 	if ($("#stories_equal_height").val() == 1) {
-		equalheight('div.stories-cell');		
+		equalheight('div.stories-cell');
+		equalheight('div.stories-wrapper');
 	}
 
-
+	
 	//replace_image_path('/content/', '/somefolder/content/');
 	
 });

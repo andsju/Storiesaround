@@ -1671,15 +1671,17 @@ class Pages extends Database
 
     /**
      * @param int $pages_id
+     * @param int $stories_selected
      * @param int $stories_columns
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesStoriesTemplate($pages_id, $stories_columns, $utc_modified)
+    public function updatePagesStoriesTemplate($pages_id, $stories_selected, $stories_columns, $utc_modified)
     {
         try {
-            $stmt = $this->db->prepare('UPDATE pages SET stories_columns =:stories_columns, utc_modified = :utc_modified WHERE pages_id =:pages_id');
+            $stmt = $this->db->prepare('UPDATE pages SET stories_selected =:stories_selected, stories_columns =:stories_columns, utc_modified = :utc_modified WHERE pages_id =:pages_id');
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(":stories_selected", $stories_selected, PDO::PARAM_INT);
             $stmt->bindParam(":stories_columns", $stories_columns, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();

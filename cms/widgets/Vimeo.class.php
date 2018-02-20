@@ -23,31 +23,39 @@ class Vimeo extends Widgets {
     }
 	
 	public function default_objects() {
-		$default = '{"code": ""}';
+		$default = '{"videoID": ""}';		
 		return $default;
     }
 	
 	public function default_objects_validate() {
 		// validate objects using FILTER_VALDIDATE_REGEXP and function isValidString()
-		$default_validate = '{"code": "code"}';
+		$default_validate = '{"videoID": "str"}';
 		return $default_validate;
    }
 	
 	public function help() {
 		// help text to show in form
-		$help = '{"code": "enter iframe embed code, for responsive video use add class fluid"}';
+		$help = '{"videoID": "enter clip videoID"}';
 		return $help;
    }
 	
 	public function Vimeo($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
-		// return objects in an associative array
 		$objects = json_decode($action, true);
 		$defaults = json_decode($this->default_objects(), true);
-		$code = isset($objects['code']) ? $objects['code'] : $defaults['code'];
-			
+		$videoID = isset($objects['videoID']) ? $objects['videoID'] : $defaults['videoID'];
 		?>
+		<script>
+			$(document).ready(function() {
+				var w = <?php echo $width; ?>;
+				var h = w * 0.5625;			
+				var videoID = "<?php echo $videoID; ?>";
+				var videoDiv = "videoDiv_<?php echo $pages_widgets_id; ?>"; 
+				var iframe = '<iframe src="https://player.vimeo.com/video/'+videoID+'?title=0&byline=0&autoplay=0" width="'+w+'" height="'+h+'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+				$("#"+videoDiv).append(iframe);
+			});
+		</script>
 		
-		<div id="vimeo_<?php echo $pages_widgets_id; ?>" class="video" style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;"><?php echo $code; ?></div>
+		<div id="videoDiv_<?php echo $pages_widgets_id; ?>"></div>
 		
 		<?php
 	}

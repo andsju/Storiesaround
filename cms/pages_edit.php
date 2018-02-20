@@ -238,12 +238,12 @@ foreach ( $js_files as $js ): ?>
 			text: true
 		});
 				
-		$( ".column" ).sortable({
-			connectWith: ".column",
+		$( ".column_selected_stories" ).sortable({
+			connectWith: ".column_selected_stories",
 			items: "div:not(.ui-state-disabled)"
 		});
 
-		$( ".column" ).disableSelection();
+		$( ".column_selected_stories" ).disableSelection();
 				
 		$( ".column_widgets_sidebar" ).sortable({
 			connectWith: ".column_widgets_sidebar",
@@ -1204,7 +1204,7 @@ foreach ( $js_files as $js ): ?>
 		$('#btn_save_stories').click(function(event){
 			event.preventDefault();
 			var stories_column_saved = false;
-			$(".column").each(function(){
+			$(".column_selected_stories").each(function(){
 				var result = $(this).sortable("toArray");
 				var token = $("#token").val();
 				var users_id = $("#users_id").val();
@@ -1290,7 +1290,7 @@ foreach ( $js_files as $js ): ?>
 				
 		$('#btn_delete_stories').click(function(event){
 			event.preventDefault();
-			$(".column").each(function(){
+			$(".column_selected_stories").each(function(){
 				var result = $(this).sortable("toArray");
 				var token = $("#token").val();
 				var users_id = $("#users_id").val();
@@ -1464,7 +1464,7 @@ foreach ( $js_files as $js ): ?>
 		$('#btn_new_pages_search_stories_id').click(function(event){
 			event.preventDefault();
 			var action = "stories_new";
-			var container = "A";
+			var container = "main";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var stories_id = $("input#pid").val();
@@ -1479,7 +1479,7 @@ foreach ( $js_files as $js ): ?>
 					stories_id: stories_id, container: container
 				},
 				success: function(newdata){	
-					$("#A").prepend(newdata).hide().fadeIn('fast');
+					$("#main").prepend(newdata).hide().fadeIn('fast');
 					$("#search_story").val('');
 					ajaxReply('','#ajax_status_stories_select');
 				},
@@ -1492,13 +1492,14 @@ foreach ( $js_files as $js ): ?>
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
-			var stories_columns = $("#stories_columns option:selected").val();
+			var stories_selected = $('input:checkbox[name=stories_selected]').is(':checked') ? 1 : 0;
+			var stories_columns = $('input:checkbox[name=stories_columns]').is(':checked') ? 1 : 0;
 			$.ajax({
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					stories_columns: stories_columns
+					stories_selected: stories_selected, stories_columns: stories_columns
 				},
 				success: function(newdata){	
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#add_content';
@@ -3620,23 +3621,19 @@ if(is_array($check_edit)) {
 						<table width="100%" class="edit_pages_stories">
 							<tr>
 								<td style="width:20%;">
-									<input type="checkbox" id="stories_selected" name="stories_selected" <?php if($arr['stories_selected'] > 0) {echo 'checked';}?>> 
+									<input type="checkbox" id="stories_selected" name="stories_selected" value="1" <?php if($arr['stories_selected'] > 0) {echo 'checked';}?>> 
 									Show selected pages as stories
 								</td>
 								<td>
-								<label for="stories_columns">Number of columns</label><br />
-								<select id="stories_columns" name="stories_columns">
-									<option value="1" <?php if($arr['stories_columns'] == 1) {echo 'selected';}?>>1 *</option>
-									<option value="2" <?php if($arr['stories_columns'] == 2) {echo 'selected';}?>>2</option>
-									<option value="3" <?php if($arr['stories_columns'] == 3) {echo 'selected';}?>>3</option>								
-									<option value="4" <?php if($arr['stories_columns'] == 4) {echo 'selected';}?>>4 (template 'Panorama')</option>
-									<option value="6" <?php if($arr['stories_columns'] == 6) {echo 'selected';}?>>6 (template 'Panorama')</option>
-								</select>		
+								
+								<input type="checkbox" id="stories_columns" name="stories_columns" value="1" <?php if($arr['stories_columns'] > 0) {echo 'checked';}?>> 								
+								Enable columns below content
 								<p>
-								<label for="search_story">Search story: </label><br />
-								<input id="search_story" style="width:300px;" />
-								<input type="hidden" id="pid" />				
-								<span class="toolbar_add"><button id="btn_new_pages_search_stories_id" value="btn_new_pages_search_stories_id">Add</button></span>
+									<label for="search_story">Search story: </label><br />
+									<input id="search_story" style="width:300px;" />
+									<input type="hidden" id="pid" />				
+									<span class="toolbar_add"><button id="btn_new_pages_search_stories_id" value="btn_new_pages_search_stories_id">Add</button></span>
+								</p>
 								<p>
 									<span class="toolbar"><button id="btn_dialog_pages_sitetree">Show sitetree</button></span>
 								</p>
@@ -3803,9 +3800,9 @@ if(is_array($check_edit)) {
 
 						<div class="area_space_edit"></div>
 
-						<div id="left_sidebar" class="column" style="width:100%;">
+						<div id="left_sidebar" class="column_selected_stories" style="width:100%;">
 							<div class="column_description ui-state-disabled">left sidebar - stories</div>
-							<?php get_box_content($rows, "left_sidebar"); ?>
+							<?php get_box_content($rows, "left_sidebar", ""); ?>
 						</div>
 						
 					</div>
@@ -3841,111 +3838,11 @@ if(is_array($check_edit)) {
 					</div>
 					
 					<div class="area_space_edit"></div>
-					
 					<?php
-
-					// template decides stories col width
-					switch ($arr['template']) {	
-						case 0:
-						case 1:
-						case 2:
-						case 4:
-						case 5:
-						case 6:
-					
-							switch ($arr['stories_columns']) {				
-								case 1:
-									?>
-									<div id="A" class="column" style="width:100%;"><?php get_box_content($rows, "A"); ?></div>
-									<?php
-									$str_cols_out_of_range = "BCDEF";
-								break;
-								case 2:
-									?>
-									<div id="A" class="column" style="width:49%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="B" class="column" style="width:49%;"><?php get_box_content($rows, "B"); ?></div>
-									<?php
-									$str_cols_out_of_range = "CDEF";
-								break;
-								case 3:
-									?>
-									<div id="A" class="column" style="width:32%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="B" class="column" style="width:32%;"><?php get_box_content($rows, "B"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="C" class="column" style="width:32%;"><?php get_box_content($rows, "C"); ?></div>							
-									<?php
-									$str_cols_out_of_range = "DEF";
-								break;
-								default:
-								break;
-							}
-						break;
-						
-						case 3:
-							
-							switch ($arr['stories_columns']) {				
-								case 1:
-									?>
-									<div id="A" class="column" style="width:100%;"><?php get_box_content($rows, "A"); ?></div>
-									<?php
-									$str_cols_out_of_range = "BCDEF";
-								break;
-								case 2:
-									?>
-									<div id="A" class="column" style="width:49%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="B" class="column" style="width:49%;"><?php get_box_content($rows, "B"); ?></div>
-									<?php
-									$str_cols_out_of_range = "CDEF";
-								break;
-								case 3:
-									?>
-									<div id="A" class="column" style="width:32%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:2%"></div>
-									<div id="B" class="column" style="width:32%;"><?php get_box_content($rows, "B"); ?></div>
-									<div class="column_space_edit" style="width:2%"></div>
-									<div id="C" class="column" style="width:32%;"><?php get_box_content($rows, "C"); ?></div>							
-									<?php
-									$str_cols_out_of_range = "DEF";
-								break;
-								case 4:
-									?>
-									<div id="A" class="column" style="width:23.5%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="B" class="column" style="width:23.5%;"><?php get_box_content($rows, "B"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="C" class="column" style="width:23.5%;"><?php get_box_content($rows, "C"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="D" class="column" style="width:23.5%;"><?php get_box_content($rows, "D"); ?></div>
-									<?php
-									$str_cols_out_of_range = "EF";
-								break;
-								case 6:
-									?>
-									<div id="A" class="column" style="width:15%;"><?php get_box_content($rows, "A"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="B" class="column" style="width:15%;"><?php get_box_content($rows, "B"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="C" class="column" style="width:15%;"><?php get_box_content($rows, "C"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="D" class="column" style="width:15%;"><?php get_box_content($rows, "D"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="E" class="column" style="width:15%;"><?php get_box_content($rows, "E"); ?></div>
-									<div class="column_space_edit" style="width:2%;"></div>
-									<div id="F" class="column" style="width:15%;"><?php get_box_content($rows, "F"); ?></div>
-									<?php
-									$str_cols_out_of_range = "";
-								break;
-								default:
-								break;
-							}
-						break;
-						
-					}	
+					$main_column_style = $arr['stories_columns'] == 1 ? "" : "width:100%";
 					?>
-					
+					<div id="main" class="column_selected_stories" style="width:100%;"><?php get_box_content($rows, "main", $main_column_style); ?></div>
+
 					<div style="clear:both;"></div>
 
 					<div class="area_space_edit"></div>
@@ -3992,7 +3889,7 @@ if(is_array($check_edit)) {
 
 						<div class="area_space_edit"></div>					
 
-						<div id="left_sidebar" class="column" style="width:100%;">
+						<div id="left_sidebar" class="column_selected_stories" style="width:100%;">
 							<div class="column_description ui-state-disabled">left sidebar - stories</div>
 							<?php get_box_content($rows, "left_sidebar"); ?>
 						</div>
@@ -4025,9 +3922,9 @@ if(is_array($check_edit)) {
 
 						<div class="area_space_edit"></div>
 						
-						<div id="right_sidebar" class="column" style="width:100%;">
+						<div id="right_sidebar" class="column_selected_stories" style="width:100%;">
 							<div class="column_description ui-state-disabled">right sidebar - stories</div>
-							<?php get_box_content($rows, "right_sidebar"); ?>
+							<?php get_box_content($rows, "right_sidebar", ""); ?>
 						</div>
 					
 					</div>
@@ -4059,7 +3956,7 @@ if(is_array($check_edit)) {
 					<div class="trash" title="Stories out of range" style="width:160px;background:#D0D0D0;float:left;border: 1px dashed grey;padding:5px;float:right;overflow:auto;">
 						<div class="column_description ui-state-disabled" style="float:left;padding-bottom:4px;">Stories out of range</div>
 						<div style="float:right;padding-bottom:4px;"><span class="toolbar_delete"><button id="btn_delete_stories">Trash</button></span></div>
-						<div id="pending_stories" class="column" style="width:100%;min-height:30px;background:#D0D0D0;border:0px;overflow:auto;">
+						<div id="pending_stories" class="column_selected_stories" style="width:100%;min-height:30px;background:#D0D0D0;border:0px;overflow:auto;">
 						<?php get_box_content_out_of_range($rows, $str_cols_out_of_range); ?>
 						<?php get_box_content_out_of_range($rows, 'pending_stories'); ?>
 						</div>

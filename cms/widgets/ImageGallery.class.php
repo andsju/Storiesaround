@@ -17,26 +17,26 @@ class ImageGallery extends Widgets {
 		$a['description'] = 'Show pages images gallery in colorbox';
 		$a['classname'] = 'ImageGallery';
 		// acceptable columns: 'sidebar', 'content' or either ''
-		$a['column'] = 'content';
+		$a['column'] = '';
 		// external css in filepath as in libraries, '../libraries/?/?.css
 		$a['css'] = null;
 		return $a;
     }
 	
 	public function default_objects() {
-		$default = '{"transition": "elastic", "slideshow": "false", "slideshowspeed": "5000", "tag": ""}';
+		$default = '{"transition": "elastic", "all": "false", "slideshow": "false", "slideshowspeed": "5000", "tag": ""}';
 		return $default;
     }
 	
 	public function default_objects_validate() {
 		// validate objects using FILTER_VALDIDATE_REGEXP and function isValidString()
-		$default_validate = '{"transition": "str", "slideshow": "boolean", "slideshowspeed": "milliseconds", "tag": "alphanumerical"}';
+		$default_validate = '{"transition": "str", "all": "boolean", "slideshow": "boolean", "slideshowspeed": "milliseconds", "tag": "alphanumerical"}';
 		return $default_validate;
    }
 
 	public function help() {
 		// help text to show in form
-		$help = '{"transition": "Set to elastic(default), fade, or none", "slideshow": "Show images in slideshow false or true", "slideshowspeed": "transition in milliseconds (5000 ms interval) 5-60 seconds", "tag": "filter images"}';
+		$help = '{"transition": "Set to elastic(default), fade, or none", "all": "Show all images at load: true or false", "slideshow": "Show images in slideshow false or true", "slideshowspeed": "transition in milliseconds (5000 ms interval) 5-60 seconds", "tag": "filter images"}';
 		return $help;
    }
 
@@ -58,18 +58,20 @@ class ImageGallery extends Widgets {
 		$objects = json_decode($action, true);
 		$defaults = json_decode($this->default_objects(), true);
 		$transition = isset($objects['transition']) ? $objects['transition'] : $defaults['transition'];
+		$all = isset($objects['all']) ? $objects['all'] : $defaults['all'];
 		$slideshow = isset($objects['slideshow']) ? $objects['slideshow'] : $defaults['slideshow'];
 		$slideshowspeed = isset($objects['slideshowspeed']) ? $objects['slideshowspeed'] : $defaults['slideshowspeed'];
-		$tag = isset($objects['tag']) ? $objects['tag'] : $defaults['tag'];
-		
+		$tag = isset($objects['tag']) ? $objects['tag'] : $defaults['tag'];		
 		?>
 		
 		<script>
 		
 			$(document).ready(function() {
+		
 				var token = "<?php echo $_SESSION['token']; ?>";
 				var id = <?php echo $pages_widgets_id; ?>;
 				var tag = "<?php echo $tag; ?>";
+				var all = "<?php echo $all; ?>";
 				var cms_dir = "<?php echo $_SESSION['CMS_DIR']; ?>";
 				var photo = "<?php echo $this->transl("Photo:"); ?>";
 				var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -90,24 +92,32 @@ class ImageGallery extends Widgets {
 
 						$("<a>"+caption+"</a>").attr("href", input).attr("class", a_class).attr("title", title).attr("alt", alt).appendTo("#gallery_container_<?php echo $pages_widgets_id; ?>").wrap("<p></p>");
 						
-						// first image - append teaser image
-						if(i==0) {
+						if (all=="true") {
 							var a_class =  'gallery_open_<?php echo $pages_widgets_id; ?>';
 							$("<img />").attr("src", input).css({"width":"100%","height":"auto"}).attr("alt", alt).attr("title", title).appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>").wrap("<a href=# class="+a_class+"></a>");
 							if(caption.length > 0) {
 								$("<span>"+caption+"</span>").appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>");
 							}
+						} else {
+							// first image - append teaser image
+							if(i==0) {
+								var a_class =  'gallery_open_<?php echo $pages_widgets_id; ?>';
+								$("<img />").attr("src", input).css({"width":"100%","height":"auto"}).attr("alt", alt).attr("title", title).appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>").wrap("<a href=# class="+a_class+"></a>");
+								if(caption.length > 0) {
+									$("<span>"+caption+"</span>").appendTo("#gallery_teaser_<?php echo $pages_widgets_id; ?>");
+								}
+							}
+
 						}
 						// count images
-						$("#gallery_count_<?php echo $pages_widgets_id; ?>").empty().append(i+1);
-						
+						$("#gallery_count_<?php echo $pages_widgets_id; ?>").empty().append(i+1);	
 					});
 
 					// images loaded
 					$('a.gallery_<?php echo $pages_widgets_id; ?>').colorbox({rel:'gallery_<?php echo $pages_widgets_id; ?>'});
 
 					// open gallery
-					var $gallery = $('a.gallery_<?php echo $pages_widgets_id; ?>').colorbox({rel:'gallery_<?php echo $pages_widgets_id; ?>', width: width+"px", transition:"<?php echo $transition; ?>", slideshow:<?php echo $slideshow; ?>, slideshowSpeed:<?php echo $slideshowspeed; ?>});
+					var $gallery = $('a.gallery_<?php echo $pages_widgets_id; ?>').colorbox({rel:'gallery_<?php echo $pages_widgets_id; ?>', width: width-40+"px", current: "{current} ({total})", transition:"<?php echo $transition; ?>", slideshow:<?php echo $slideshow; ?>, slideshowSpeed:<?php echo $slideshowspeed; ?>});
 					$("a.gallery_open_<?php echo $pages_widgets_id; ?>").click(function(e){
 						e.preventDefault();
 						$gallery.eq(0).click();
