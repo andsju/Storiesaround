@@ -1,11 +1,11 @@
 <?php
 
 /**
- * API for class SlideshowExtended
+ * API for class ImageGalleleryThumbs
  * extends Widgets class
  */
 
-class SlideshowExtended extends Widgets {
+class ImageGalleryThumbs extends Widgets {
 
 	public function __construct() {
         parent::__construct();
@@ -13,9 +13,9 @@ class SlideshowExtended extends Widgets {
 
 	public function info() {
 		$a = array();
-		$a['title'] = 'SlideshowExtended';
+		$a['title'] = 'ImageGalleryThumbs';
 		$a['description'] = 'Show pages images slideshow';
-		$a['classname'] = 'SlideshowExtended';
+		$a['classname'] = 'ImageGalleryThumbs';
 		// acceptable columns: 'sidebar', 'content' or either ''
 		$a['column'] = 'content';
 		// external css in filepath as in libraries, '../libraries/?/?.css
@@ -53,7 +53,7 @@ class SlideshowExtended extends Widgets {
 		echo $s;
 	}
    
-	public function SlideshowExtended($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
+	public function ImageGalleryThumbs($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
 
 		// return objects in an associative array
 		$objects = json_decode($action, true);
@@ -84,8 +84,8 @@ class SlideshowExtended extends Widgets {
 				var tag = "<?php echo $tag; ?>";
 				var cms_dir = "<?php echo $_SESSION['CMS_DIR']; ?>";
 				var photo = "<?php echo $this->transl("Photo:"); ?>";
-							
-				$.getJSON(cms_dir+"/cms/pages_ajax.php?action=widget_images&pages_widgets_id="+id+"&token="+token+"&tag="+tag+"", function(data){
+				var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+				$.getJSON(cms_dir+"/cms/pages_ajax.php?action=widget_images&pages_widgets_id="+id+"&token="+token+"&tag="+tag+"&width="+width+"", function(data){
 					
 					$.each(data, function(i,item){
 						var input = item.filename;
@@ -99,7 +99,6 @@ class SlideshowExtended extends Widgets {
 						var alt = alt_rights.length > 0 && alt_text.length > 0 ? alt_text +' / '+alt_rights : alt_text;
 						
 						var $container = "slideshow_extended_<?php echo $pages_widgets_id; ?>";
-						var img_path = cms_dir+'/content/uploads/pages/'+page+'/' +input;
 						var wish_ratio = "<?php echo $wish_ratio; ?>";
 						// adjust img position if wished ratio is less than original ratio, use Golden ratio 0.618...
 						if(wish_ratio < item.ratio) {
@@ -110,10 +109,10 @@ class SlideshowExtended extends Widgets {
 						
 						var style_slideshow_extended = (typeof offset != 'undefined') ? 'margin: -'+offset+'px 0 0 0;width:100%;' : 'margin: 0 0 0 0;width:100%;';	
 						// add images not using attr height
-						$("<img />").attr("src", img_path).attr("alt", alt).attr("title", title).attr("data-cycle-caption", caption).attr("style", style_slideshow_extended).appendTo("#slideshow_extended_<?php echo $pages_widgets_id; ?>");
+						$("<img />").attr("src", input).attr("alt", alt).attr("title", title).attr("data-cycle-caption", caption).attr("style", style_slideshow_extended).appendTo("#slideshow_extended_<?php echo $pages_widgets_id; ?>");
 						// add thumbs
 						var style_thumbs = 'padding:2px 4px 2px 4px;';
-						$("<img />").attr("src", img_path).attr("width", "50").attr("height", 50*item.ratio).attr("style", style_thumbs).attr("class", "slideshow_extended_thumbs").attr("title", caption).attr("data-caption", caption).appendTo("#slideshow_extended_thumbs_<?php echo $pages_widgets_id; ?>")
+						$("<img />").attr("src", input).attr("width", "50").attr("height", 50*item.ratio).attr("style", style_thumbs).attr("class", "slideshow_extended_thumbs").attr("title", caption).attr("data-caption", caption).appendTo("#slideshow_extended_thumbs_<?php echo $pages_widgets_id; ?>")
 						.click(function() { 
 							$("#slideshow_extended_<?php echo $pages_widgets_id; ?>").cycle(i); 
 							return false;
@@ -174,7 +173,7 @@ class SlideshowExtended extends Widgets {
 
 			<?php } ?>
 
-			<div id="slideshow_extended_<?php echo $pages_widgets_id; ?>" class="slideshow_extended" style=""
+			<div id="slideshow_extended_<?php echo $pages_widgets_id; ?>" class="slideshow_extended" 
 			data-cycle-caption="#slideshow_extended_descr_<?php echo $pages_widgets_id;?>" 
 			data-cycle-caption-template="{{caption}}"
 			data-cycle-speed="<?php echo $speed;?>"

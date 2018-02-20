@@ -467,7 +467,7 @@ div.hiddenlayer { display:none; padding-top: 10px; }
 #passmeter { width: 0px; background: darkgreen; height: 8px; }
 #passmeterbg { height: 8px; background: #eaeaea; width: 100px; }
 
-div.column { width: 200px; float: left; min-height: 150px; border: 1px dashed grey; overflow: auto;}
+div.column { float: left; min-height: 150px; border: 1px dashed grey; overflow: auto;}
 div.column_space { float: left; min-height: 150px;}
 div.column_description { padding:5px;text-align:center;font-size:0.8em;}
 div.column_space_edit { float: left; min-height: 150px;}
@@ -478,6 +478,13 @@ div.content_wrapper_edit , div.column, div.column_space_edit {  }
 div.content_wrapper_edit {float:left;}
 div.content_edit {float:left;width:100%;min-height:100px;border:1px dashed grey;overflow:hidden;}
 div.portlet { margin: 0px; border: 1px solid #e0e0e0; padding: 0.5em;}
+#main div.portlet {width:32%;margin-right:2%;float:left}
+
+div.content-selected-stories {margin:0}
+div.content-selected-stories div.stories-wrapper {width:32%;margin-right:2%;float:left}
+
+
+#main div.portlet:nth-child(3n) {margin-right:0%;}
 div.page_templates { float: left; margin: 10px;font-size:0.9em;width:130px; }
 div.edit_joins { display:none;margin:10px;padding:5px;border-top:1px dashed grey;border-bottom:1px dashed grey; }
 

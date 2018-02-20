@@ -116,6 +116,7 @@ class JplayerAudio extends Widgets {
 		<script>		
 			var token = "<?php echo $_SESSION['token']; ?>";
 			var id = <?php echo $pages_widgets_id; ?>;	
+			var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 			$(document).ready(function() {
 
 				$("#jquery_jplayer_<?php echo $pages_widgets_id; ?>").jPlayer({
