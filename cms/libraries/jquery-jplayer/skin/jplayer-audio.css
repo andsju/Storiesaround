@@ -8,8 +8,7 @@ div.jp-audio {
 	font-size: 1em;
 	font-family: Arial, sans-serif;
 	color: #fff;
-	line-height: 1.6;
-	width: 222px;
+	width: 100%;
 }
 
 
@@ -130,7 +129,7 @@ div.jp-audio div.jp-progress {
 	position:absolute;
 	top:12px;
 	left:50px;
-	width:120px;
+	width:70%;
 	overflow:hidden;
 	background: #CC0033;
 }
@@ -138,7 +137,7 @@ div.jp-audio div.jp-progress {
 div.jp-audio div.jp-current-time {
 	position:absolute;
 	top:6px;
-	left:178px;
+	right:3%;
 	overflow:hidden;
 }
 

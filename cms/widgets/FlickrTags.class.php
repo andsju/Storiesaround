@@ -54,7 +54,7 @@ class FlickrTags extends Widgets {
 		
 		<script>
 			$(document).ready(function() {
-					
+				var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 				var flickr_div = "widgets-flickr-id-<?php echo $pages_widgets_id; ?>";
 				var tags = "<?php echo $tags; ?>";
 				var tagmode = "<?php echo $tagmode; ?>";
@@ -62,8 +62,8 @@ class FlickrTags extends Widgets {
 				var timeout = "<?php echo $timeout; ?>";
 				var flickr_user_id = "<?php echo $flickr_user_id; ?>";
 				var id = <?php echo $pages_widgets_id; ?>;
-
-				$.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?id="+flickr_user_id+"&tags="+tags+"&tagmode="+tagmode+"&format=json&jsoncallback=?",
+				        
+				$.getJSON("https://api.flickr.com/services/feeds/photos_public.gne?id="+flickr_user_id+"&tags="+tags+"&tagmode="+tagmode+"&format=json&jsoncallback=?",
 				function(data){
 					var i = 0;
 					$.each(data.items, function(i,item){

@@ -1738,7 +1738,7 @@ if (isset($_POST['token'])){
 						$row = $pages->getPagesStory($pages_stories_id);						
 						$story_title = (strlen($row['title']) > 0) ? $row['title'] : "Added story...";
 						// print story
-						get_stories_box($pages_stories_id, $story_title);
+						get_stories_box($pages_stories_id, $story_title, "");
 					}
 
 				break;
@@ -1787,9 +1787,10 @@ if (isset($_POST['token'])){
 
 				case 'stories_change_cols':
 
+					$stories_selected = filter_input(INPUT_POST, 'stories_selected', FILTER_VALIDATE_INT);
 					$stories_columns = filter_input(INPUT_POST, 'stories_columns', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					$result = $pages->updatePagesStoriesTemplate($pages_id, $stories_columns, $utc_modified);
+					$result = $pages->updatePagesStoriesTemplate($pages_id, $stories_selected, $stories_columns, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'stories column', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);

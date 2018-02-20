@@ -166,7 +166,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js', 
 	CMS_DIR.'/cms/libraries/masonry/masonry.pkgd.min.js',
 	CMS_DIR.'/cms/libraries/masonry/imagesloaded.js',
-    CMS_DIR.'/cms/libraries/jquery-flexnav/jquery.flexnav.js'
+    CMS_DIR.'/cms/libraries/jquery-flexnav/jquery.flexnav.js',
 );
 
 
@@ -251,7 +251,7 @@ if ($arr['template'] == 6) {
             print_menu($pages, $id, $seo, $href, $open, $sample);
             ?>
         </nav>
-        
+
     </header>
 
     <div id="wrapper-top">
@@ -291,7 +291,10 @@ if ($arr['template'] == 6) {
     $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
 
     // get stories before template renders
-    $rows_child = $pages->getPagesStoryContentPublishChild($id); 
+    $limit_stories = isset($_SESSION['site_limit_stories']) ? $_SESSION['site_limit_stories'] : 10;
+    $rows_promoted = $arr['stories_promoted'] == 1 ? $pages->getPagesStoryContentPublishPromoted($arr['stories_filter'], $limit_stories) : null;
+    $rows_child = $arr['stories_child'] == 1 ? $pages->getPagesStoryContentPublishChild($id) : null; 
+    $rows_selected = $arr['stories_selected'] == 1 ? $pages->getPagesStoryContentPublishAllSorted($id) : null;
 
     switch ($arr['template']) {	
         case 0:
