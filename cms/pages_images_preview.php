@@ -50,8 +50,6 @@ $meta_keywords = $meta_description = $meta_robots = $meta_additional = $meta_aut
 $page_title = 'Image viewer | editor';
 $body_style = "width:1190px;max-width:100% !important;margin:0 auto;background:#333;color:#fff";
 include_once 'includes/inc.header_minimal.php';
-
-
 ?>
 
 <script>
@@ -69,22 +67,13 @@ include_once 'includes/inc.header_minimal.php';
 			
 		});
 
-		
-		
 		$('#btn_delete').click(function(event){
-
-
 			event.preventDefault();
 			var action = "delete_image";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
-			var images_filename = $("#images_filename").val();
-			console.log(token);
-			console.log(users_id);
-			console.log(pages_id);
-			console.log(images_filename);
-			
+			var images_filename = $("#images_filename").val();			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_image').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_image').hide()",700)},
@@ -99,13 +88,11 @@ include_once 'includes/inc.header_minimal.php';
 					
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#add_content';
 					location.reload(true);
-					
-				},
+				}
 			});
 			
 		});
 		
-
 		$("#dialog_delete_image").dialog({
 			autoOpen: false,
 			modal: true
@@ -405,7 +392,6 @@ $users_id = $_SESSION['users_id'];
 
 $pages = new Pages();
 $row = $pages->getPagesImagesMeta($pages_images_id);
-//if(!$row) {die;}
 
 // paths
 $p = CMS_DIR.'/content/uploads/pages/'. $pages_id .'/';
@@ -454,15 +440,11 @@ if($rows) {
 }
 
 
-
 echo "\n".'<div class="admin-panel" style="margin:10px;">';
 	
 	if($img) {
 
-		$try = $image->get_optimzed_image($img, $column_width = 1000);
-		echo $try; 
-
-	echo "\n".'<div class="wrapper clearfix" style="margin:0px;">';
+		echo "\n".'<div class="wrapper clearfix" style="margin:0px;">';
 		
 		echo "\n".'<div style="float:left;text-align:right;">';
 			echo '<h2>Edit image</h2>';
@@ -546,81 +528,88 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 			foreach($sizes as $size) {
 				if(get_file($p, $preview_img_filename, $size)) {			
 					$version = get_file_version($p, $preview_img_filename, $size);	
-					
 					echo '<li><span class="toolbar"><button id="'.$version.'" class="version">'.$size .'</button></span></li>';
 				} else {
 					echo '<li class="missing">'.$size .'</li>';
 				};					
 			}
-
-			echo '</ul>';
-			
-
-
-			
-			
-			
-
-			
-		echo "\n".'</div>';
-		echo "\n".'<div class="float" style="width:40%;padding:20px;">';
-
-			echo '<p>';
-				echo 'Filename: <span class="code"> '.$preview_img.'</span>';
-			echo '</p>';
-			echo '<p>';
-				echo 'Ratio: <span class="code">'.$row['ratio'].'</span>';
-			echo '</p>';
-
-			echo '<p>';
-				echo 'Dimension: <span class="code">'.$size[0]. ' x ' .$size[1].' px</span>';
-			echo '</p>';
-			echo '<p>';
-				echo '<label for="caption">Caption</label><br />';
-				echo '<input type="text" style="width:90%;" name="caption" id="caption" value="'.$row['caption'].'" />';
-			echo '</p>';
-			echo '<p>';
-				echo '<label for="caption">Alt attribute</label><br />';
-				echo '<input type="text" style="width:90%;" name="alt" id="alt" value="'.$row['alt'].'" maxlength="100" />';
-			echo '</p>';
-			echo '<p>';
-				echo '<label for="title">Title attribute (complement ALT text - shown as tool tip)</label><br />';
-				echo '<input type="text" style="width:90%;" name="title" id="title" value="'.$row['title'].'" maxlength="100" />';
-			echo '</p>';
-			echo '<p>';
-				echo '<label for="creator">Creator</label><br />';
-				echo '<input type="text" style="width:90%;" name="creator" id="creator" value="'.$row['creator'].'" />';
-			echo '</p>';
-			echo '<p>';
-				echo '<label for="copyright">Copyright</label><br />';
-				echo '<input type="text" style="width:90%;" name="copyright" id="copyright" value="'.$row['copyright'].'" />';
-			echo '</p>';
-			echo '<p>';
-				echo '<input type="checkbox" id="promote" name="promote" value="1"';
-				if($row['promote'] == 1) {
-					echo 'checked';
+			// database saved sizes, includes original image if exists 
+			$sizes = $pages->getPagesImagesSizes($row['filename'], $pages_id);
+			if ($sizes) {
+				foreach($sizes as $size) {
+					$sizes_in_db = $size['sizes'];
 				}
-				echo '/>&nbsp;promote image';
-			echo '</p>';
-			echo '<p>';
-				echo '<label for="tag">Tag</label><br />';
-				echo '<input type="text" style="width:50%;" name="tag" id="tag" />';
-				echo '<span class="toolbar_add"><button id="btn_add_tag" style="margin:0px" type="submit">Add</button></span>';
-				echo '<span id="ajax_spinner_tag" style="display:none;"><img src="css/images/spinner.gif"></span>';
-				echo '<span id="ajax_status_tag" style="display:none;"></span>';
-			echo '</p>';
-			echo '<div style="display:inline-block;">';
-				echo '<ul id="tags">';
+				$sizes_in_db = explode(",", $sizes_in_db);
+				$original_candidate = array_pop($sizes_in_db);
+				if (strlen($original_candidate) > 4) {
+					if(get_file($p, $preview_img_filename, $original_candidate)) {
+						$version = get_file_version($p, $preview_img_filename, $original_candidate);	
+						echo '<li><span class="toolbar"><button id="'.$version.'" class="version">original</button></span></li>';					
+					}	
+				}
+			}
+			?>
+
+			</ul>
+		</div>
+		<div class="float" style="width:40%;padding:20px;">
+
+			<p>
+				Filename: <span class="code"><?php echo $preview_img; ?></span>
+			</p>
+			<p>
+				Ratio: <span class="code"><?php echo $row['ratio']; ?></span>
+			</p>
+			<p>
+				Dimension: <span class="code"><?php echo $size[0] . ' x ' .$size[1]; ?> px</span>
+			</p>
+			<p>
+				<label for="caption">Caption</label><br>
+				<input type="text" style="width:90%;" name="caption" id="caption" value="<?php echo $row['caption']; ?>">
+			</p>
+			<p>
+				<label for="caption">Alt attribute</label><br />
+				<input type="text" style="width:90%;" name="alt" id="alt" value="<?php echo $row['alt']; ?>" maxlength="100">
+			</p>
+			<p>
+				<label for="title">Title attribute (complement ALT text - shown as tool tip)</label><br />
+				<input type="text" style="width:90%;" name="title" id="title" value="<?php echo $row['title']; ?>" maxlength="100">
+			</p>
+			<p>
+				<label for="creator">Creator</label><br>
+				<input type="text" style="width:90%;" name="creator" id="creator" value="<?php echo $row['creator']; ?>">
+			</p>
+			<p>
+				<label for="copyright">Copyright</label><br>
+				<input type="text" style="width:90%;" name="copyright" id="copyright" value="<?php echo $row['copyright']; ?>">
+			</p>
+			<p>
+			<?php
+			$checked = 	$row['promote'] == 1 ? ' checked' : '';
+			?>
+				<input type="checkbox" id="promote" name="promote" value="1" <?php echo $checked; ?>>&nbsp;promote image;
+			</p>
+			<p>
+				<label for="tag">Tag</label><br />
+				<input type="text" style="width:50%;" name="tag" id="tag">
+				<span class="toolbar_add"><button id="btn_add_tag" style="margin:0px" type="submit">Add</button></span>
+				<span id="ajax_spinner_tag" style="display:none;"><img src="css/images/spinner.gif"></span>
+				<span id="ajax_status_tag" style="display:none;"></span>
+			</p>
+			<div style="display:inline-block;">
+				<ul id="tags">
+				<?php
 				if(isset($row['tag']) && strlen($row['tag']) >0){
 					$tags = explode(",", $row['tag']);
 					foreach ($tags as $tag){
 						echo '<li>'.$tag.'<span class="ui-icon ui-icon-close" style="display:inline-block;"></span></li>';
 					}
 				}
-				echo '</ul>';
-			echo '</div>';
+				?>
+				</ul>
+			</div>
 
-			
+			<?php
 			$xmps = json_decode($row['xmpdata'], true);
 			
 			echo '<h4>Original image xmpdata</h4>';
@@ -644,11 +633,9 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 	
 echo "\n".'</div>';
 
-
 echo "\n".'<div class="admin-panel" style="margin:10px;">';
 echo '<div id="version2" style="padding:5px;margin:5px;display:none;"></div>';
 echo '</div>';
-
 
 echo '<input type="hidden" id="pages_images_id" name="pages_images_id" value="'.$pages_images_id.'" />';
 echo '<input type="hidden" id="images_filename" name="images_filename" value="'.$row['filename'].'" />';
@@ -659,16 +646,12 @@ echo '<input type="hidden" id="users_id" name="users_id" value="'.$users_id.'" /
 echo '<input type="hidden" id="pages_id" name="pages_id" value="'.$pages_id.'" />';
 ?>
 
-
 <div id="dialog_delete_image" title="Confirmation required">
   Delete this image?
 </div>
 
 
-
-
 <?php
-
 
 function show_image($img, $w) {
 
@@ -717,21 +700,11 @@ function get_file_version($path, $filename, $w) {
 	}
 }
 
-
-
-?>
-
-
-
-
-
-<?php 
 // load javascript files
 foreach ( $js_files as $js ) { 
 	echo "\n".'<script src="'.$js.'"></script>';
 }
 ?>
-
 
 </body>
 </html>

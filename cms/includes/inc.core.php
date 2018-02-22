@@ -126,10 +126,13 @@ function write_debug($s)
 
     $file = CMS_ABSPATH . '/log/php_debug.txt';
     // new message
-    $contents = $s ."\r\n";
-
+    if (is_array($s)) {
+        $contents = serialize($s) ."\r\n";
+    } else {
+        $contents = $s ."\r\n";
+    }
+    
     file_put_contents($file, $contents, FILE_APPEND | LOCK_EX);
-
 }
 
 

@@ -44,7 +44,7 @@ if (isset($_GET['token'])){
 		$page_title = "Upload image(s)";
 		
 		/*** include header ***/
-		$body_style = "width:600px;";
+		$body_style = "width:100%;margin:20px";
 
 		//--------------------------------------------------
 		include_once 'includes/inc.header_minimal.php';
@@ -63,48 +63,32 @@ if (isset($_GET['token'])){
 
 		// load javascript files
 		foreach ( $js_files as $js ):
-			echo '<script type="text/javascript" src="'.$js.'"></script>';
+			echo '<script src="'.$js.'"></script>';
 		endforeach; 
 		?>
 
-		<script type="text/javascript">
-			// function to rerun $(document).ready when new elements are added
-			// remove this function ... or...
-			function document_ready(file) {
-				$(document).ready(function() {
-					$(".colorbox_edit").colorbox({
-						width:"98%", 
-						height:"98%", 
-						iframe:true, 
-						onClosed:function(){ 
-							// location.reload(true); 
-						}
-					});
-				});
-			}
-			document_ready();
-		</script>
-
-
-
-		<script type="text/javascript">
+		<script>
 			$(document).ready(function() {		
 				var token = $("#token").val();
 				var pages_folder = $("#pages_id").val();
+				var original = $("#original").val();
+				var max_width = $("#max_width").val();
+				
 				var running = 0;
 				var uploader = new qq.FileUploader({
 					multiple: true,
 					element: document.getElementById('file-uploader'),
 					action: 'pages_images_upload_ajax.php',
 					allowedExtensions: ['jpg', 'png', 'gif', 'jpeg'],
-					template: '<div class="qq-uploader">' + 
-							'<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
-							'<div class="qq-upload-button">Upload file(s)</div>' +
-							'<ul class="qq-upload-list"></ul>' + 
-						 '</div>',
+					template: 
+						'<div class="qq-uploader">' + 
+						'<div class="qq-upload-drop-area" style="border:1px dashed black; min-height:200px"><span>Drop files here to upload</span></div>' +
+						'<div class="qq-upload-button" style="width:100%;height:50px;font-size:1.2em;padding:20px">Upload images (click or drop)</div>' +
+						'<ul class="qq-upload-list"></ul>' + 
+						'</div>',
 					
 					//debug: true,
-					params: {token: ''+token+'', pages_folder: ''+pages_folder+''},
+					params: {token: token, pages_folder: pages_folder, max_width: max_width, original: original},
 					sizeLimit: 10520000,
 
 					onSubmit: function(id, fileName){
@@ -114,21 +98,20 @@ if (isset($_GET['token'])){
 						running--;				
 
 						var filename_server = responseJSON['filename'];							
-						$('#filesUploaded').append('<div class=imbox><a href=../content/uploads/pages/' +pages_folder+ '/' +filename_server+ ' class=colorbox_edit><img src=../content/uploads/pages/' +pages_folder+ '/'+filename_server+' title='+filename_server+'></img></a></div>');						
+						$('#filesUploaded').append('<div class=imbox><a href=../content/uploads/pages/' +pages_folder+ '/' +filename_server+ ' class=colorbox_edit><img src=../content/uploads/pages/' +pages_folder+ '/'+filename_server+' title='+filename_server+'></img></a></div>');
 						
 						if(running==0){
-							$('#file-uploader').fadeOut().hide().html('<h5 style="margin-bottom:10px;">Uploaded - close window</h5>').fadeIn();
-							document_ready();
+							//$('#file-uploader').fadeOut().hide().html('<h5 style="margin-bottom:10px;">Uploaded - close window</h5>').fadeIn();
 						}
 					},
 				});
 			});
 		</script>	
 
-		
-		
-		<input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token'];?>" />
-		<input type="hidden" name="pages_id" id="pages_id" value="<?php echo $_GET['pages_id'];?>" />
+		<input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token'];?>">
+		<input type="hidden" name="pages_id" id="pages_id" value="<?php echo $_GET['pages_id'];?>">
+		<input type="hidden" name="original" id="original" value="<?php echo $_GET['original'];?>">
+		<input type="hidden" name="max_width" id="max_width" value="<?php echo $_GET['max_width'];?>">
 
 		<div id="file-uploader">
 			<noscript>          
@@ -137,9 +120,8 @@ if (isset($_GET['token'])){
 			</noscript>         
 		</div>
 
-		<div id="filesUploaded"  class="clearfix">
+		<div id="filesUploaded" class="clearfix">
 		</div>
-		
 		
 		<?php
 		}

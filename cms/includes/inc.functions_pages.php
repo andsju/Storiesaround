@@ -1066,7 +1066,7 @@ function get_box_story_content_selected($rows, $languages, $content_percent_widt
                 $style_wrapper = $stories_columns == 1 && $stories_selected_area  == "main" ? "" : "width:100%"; 
                 $argh = "stories_selected_area: " . $stories_selected_area . ", content_percent_width: " . $content_percent_width . ", wrapper_content_width: " . $wrapper_content_width .", stories_columns: " . $stories_columns;
 
-                if ($content_percent_width <= 33) {
+                if ($content_percent_width <= 33 || $stories_columns == 1) {
                         
                     $string .= '<div class="stories-wrapper" style="'.$style_wrapper.'">';
                     if ($row['story_link']) {
