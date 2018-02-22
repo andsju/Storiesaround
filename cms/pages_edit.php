@@ -1068,6 +1068,15 @@ foreach ( $js_files as $js ): ?>
 			load_images();
 		});
 
+		$('#btn_new_images').click(function(event){
+			event.preventDefault();
+			var token = $("#token").val();
+			var pages_id = $("#pages_id").val();
+			var original = $('input:checkbox[name=original]').is(':checked') ? 1 : 0;
+			var max_width = $("#max_width option:selected").val();
+			$.colorbox({width:"80%", height:"80%", iframe:true, href:"pages_images_upload.php?token="+token+"&pages_id="+pages_id+"&original="+original+"&max_width="+max_width+""});
+		});
+
 		$('#btn_load_files').click(function(event){
 			event.preventDefault();
 			load_files();
@@ -2436,7 +2445,7 @@ foreach ( $js_files as $js ): ?>
 			url: 'pages_edit_ajax.php',
 			data: "action=" + action + "&token=" + token + "&users_id=" + users_id + "&pages_id=" + pages_id + "&image=" + img,
 			success: function(){	
-				$('#'+id).closest('li').fadeOut(500, function() { $(this).closest('li').remove(); });
+				$('#'+id).closest('li').fadeOut(100, function() { $(this).closest('li').remove(); });
 			},
 		});
 	}
@@ -3209,18 +3218,44 @@ if(is_array($check_edit)) {
 
 	
 	<div id="images">
-	
+		<?php
+		$image = new Image();
+		$sizes = $image->get_image_sizes();
+		?>
+
 		<div class="admin-panel">
 			<h4><i class="fa fa-file-image-o" aria-hidden="true"></i> Images</h4>
+			<ul>
+				<li>Uploaded images are saved (if original size permits) in pixel widths: <?php echo implode(", ", $sizes); ?></li>
+				<li>Image originals are deleted by default</li>
+			</ul>
 			<p>
-				<a class="colorbox_images" href="pages_images_upload.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>"><span class="toolbar_save_images"><button id="btn_new_images">New images</button></span></a>
-				&nbsp;|&nbsp;
-				<span class="toolbar_reload"><button id="btn_load_images">Refresh images</button></span>
+			<p>
+				<div style="float:left">
+				<span class="toolbar_reload"><button id="btn_load_images">Show images</button></span>
 				&nbsp;|&nbsp;
 				<span class="toolbar_save_images"><button id="btn_save_images">Save</button></span>
-				<span id="ajax_spinner_images" style='display:none'><img src="css/images/spinner.gif"></span>
-				<span id="ajax_status_images" style='display:none'></span>
+				</div>
+				<div style="float:right">
+				New images settings - max width:
+				<select id="max_width">
+				<?php
+				foreach($sizes as $size) {
+					$selected = $size == 1366 ? " selected" : "";
+					echo '<option value="'.$size.'" '.$selected.'>'.$size.' px</option>';
+				}
+				?>
+				</select>
+				<input type="checkbox" id="original" name="original" value="1"> Keep original image 
+				<span class="toolbar_save_images"><button id="btn_new_images">Upload images</button></span>
+				</div>
+
 			</p>
+			<div class="clearfix">
+			<span id="ajax_spinner_images" style='display:none'><img src="css/images/spinner.gif"></span>
+			<span id="ajax_status_images" style='display:none'></span>
+			</div>
+			
 		</div>
 		
 		<p>

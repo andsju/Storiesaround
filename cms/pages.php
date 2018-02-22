@@ -364,6 +364,7 @@ if ($arr['template'] == 6) {
     <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>">
     <input type="hidden" name="site_language" id="site_language" value="<?php echo $_SESSION['site_language'];?>">
     <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
+    <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
     
     <?php
     $js_files = array_unique($js_files);

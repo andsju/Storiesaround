@@ -2005,6 +2005,44 @@ class Pages extends Database
         }
     }
 
+    /**
+     * @param int $ids
+     * @return array|null
+     */
+    public function getPagesContentPublishSelected($ids)
+    {
+        $sql =
+            "
+		SELECT * FROM
+		(
+			SELECT pages.pages_id, pages.title, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
+			FROM pages 
+			INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
+			WHERE pages.pages_id IN ($ids)
+			AND pages_images.story_teaser = 1
+
+			UNION
+				  
+			SELECT pages.pages_id, pages.title, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
+			FROM pages
+			WHERE pages_id IN ($ids)		 
+		) AS tmp
+		GROUP BY tmp.pages_id
+		";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':pages_id', $id, PDO::PARAM_INT);
+
+        try {
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return null;
+        }
+    }
+
 
     /**
      * @param int $id
@@ -2413,6 +2451,8 @@ class Pages extends Database
     }
 
 
+
+
     /**
      * @param int $id
      * @return array|null
@@ -2547,7 +2587,7 @@ class Pages extends Database
      * @param string $xmpdata
      * @return int
      */
-    public function savePagesImages($id, $filename, $ratio, $image_description, $artist, $xmpdata)
+    public function savePagesImages($id, $filename, $ratio, $sizes, $image_description, $artist, $xmpdata)
     {
         // prevent duplicates
         $stmt = $this->db->prepare("SELECT filename FROM pages_images WHERE pages_id = :pages_id AND filename = :filename");
@@ -2559,8 +2599,8 @@ class Pages extends Database
         if (!count($rows)) {
             try {
                 $sql_insert = "INSERT INTO pages_images 
-				(pages_id, filename, ratio, caption, copyright, xmpdata) VALUES
-				(:pages_id, :filename, :ratio, :image_description, :artist, :xmpdata)";
+				(pages_id, filename, ratio, sizes, caption, copyright, xmpdata) VALUES
+				(:pages_id, :filename, :ratio, :sizes, :image_description, :artist, :xmpdata)";
 
                 $stmt = $this->db->prepare($sql_insert);
                 $stmt->bindParam(':pages_id', $id, PDO::PARAM_INT);
@@ -2569,6 +2609,7 @@ class Pages extends Database
                 $stmt->bindParam(':artist', $artist, PDO::PARAM_STR);
                 $stmt->bindParam(':xmpdata', $xmpdata, PDO::PARAM_STR);
                 $stmt->bindParam(':ratio', $ratio, PDO::PARAM_INT);
+                $stmt->bindParam(':sizes', $sizes, PDO::PARAM_STR);
                 $stmt->execute();
                 return $this->db->lastInsertId('pages_images_id');
 
@@ -2699,6 +2740,28 @@ class Pages extends Database
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
+
+    /**
+     * @param string $filename
+     * @param int $pages_id
+     * @return bool
+     */
+    public function getPagesImagesSizes($filename, $pages_id)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT sizes FROM pages_images WHERE filename =:filename AND pages_id = :pages_id");
+            $stmt->bindParam(":filename", $filename, PDO::PARAM_STR);
+            $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
+            return $rows;
+        
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;

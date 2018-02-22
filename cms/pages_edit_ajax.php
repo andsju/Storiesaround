@@ -513,11 +513,7 @@ if (isset($_POST['token'])){
 										load_images();
 									}
 								});
-								
-							});		
-
-
-							
+							});	
 						});
 					</script>
 					<?php
@@ -824,16 +820,28 @@ if (isset($_POST['token'])){
 						$sizes = $objImage->get_image_sizes();		
 						foreach ($sizes as $size) {
 							$f = substr($filename, 0, $pos) .'_'.$size . $ext;
-							//echo $f;
 							if (is_file($p . $f)) {
-								// remove file
 								unlink($p . $f);
 							}
 						}
-						// delete from database
+						// delete database saved sizes, includes original image if exists 
 						$pages = new Pages();
-						$result = $pages->deletePagesImages($filename, $pages_id);
+						$rows = $pages->getPagesImagesSizes($filename, $pages_id);
+						if ($rows) {
+							foreach($rows as $row) {
+								$sizes_in_db = $row['sizes'];
+							}
+						}
+						$sizes = explode(",", $sizes_in_db);
+						foreach ($sizes as $size) {
+							$f = substr($filename, 0, $pos) .'_'.$size . $ext;
+							if (is_file($p . $f)) {
+								unlink($p . $f);
+							}
+						}
 
+						// delete from database
+						$result = $pages->deletePagesImages($filename, $pages_id);
 						if($result) {
 							$history = new History();
 							$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
