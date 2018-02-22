@@ -105,7 +105,7 @@ if(isset($_REQUEST['token'])){
 			}
 			
 			// Returns array('success'=>true) or array('error'=>'error message')
-			function handleUpload($uploadDirectory){
+			function handleUpload($uploadDirectory, $max_width, $original, $original_random) {
 				if (!is_writable($uploadDirectory)){
 					return array('error' => "Server error. Upload directory isn't writable.");
 				}
@@ -153,6 +153,9 @@ if(isset($_REQUEST['token'])){
 					$sizes = $objImg->get_image_sizes();
 					foreach($sizes as $size) {
 						$objImg->image_resize($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename .'_'. $size .'.'. $ext, $size);
+						if ($size == $max_width) {
+							break;
+						}
 					}
 
 					$image_description = $image_artist = '';
@@ -171,7 +174,11 @@ if(isset($_REQUEST['token'])){
 						$r = $objImg->image_extract_xmpdata($f);
 						
 						// remove file
-						unlink($uploadDirectory . $filename .'.'. $ext);
+						if ($original == 0) {
+							unlink($uploadDirectory . $filename .'.'. $ext);
+						} else {							
+							rename($uploadDirectory . $filename .'.'. $ext, $uploadDirectory . $filename . '_' . $original_random . '.'. $ext);
+						}
 					}
 					
 					$a = array('success'=>true,'dir'=>$uploadDirectory,'filename'=>$filename . '_100.' . $ext, 'ratio'=>$ratio, 'image_description'=>$image_description, 'artist'=>$image_artist, 'xmpdata' => $r);					
@@ -194,19 +201,36 @@ if(isset($_REQUEST['token'])){
 		$uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
 				
 		if(isset($_REQUEST['pages_folder'])){
-			$folder = CMS_ABSPATH .'/content/uploads/pages/'. $_REQUEST['pages_folder'] .'/';
-			$result = $uploader->handleUpload($folder);
+
+			$original = isset($_REQUEST['original']) ? $_REQUEST['original'] : 'no original';
+			$max_width = isset($_REQUEST['max_width']) ? $_REQUEST['max_width'] : 'nop max_width';
 			
+			$folder = CMS_ABSPATH .'/content/uploads/pages/'. $_REQUEST['pages_folder'] .'/';
+			$original_random = $original == 1 ? rand_string(12) : "";
+			$result = $uploader->handleUpload($folder, $max_width, $original, $original_random);
+			
+			$image = new Image();
+			$sizes = $image->get_image_sizes();
+			$sizes_to_db = "";
+			foreach($sizes as $size) {
+				$sizes_to_db .= $size . ",";
+				if ($size == $max_width) {
+					break;
+				}
+			}
+
+			$sizes_to_db .= $original == 1 ? $original_random : "";
+			$sizes_to_db = trim($sizes_to_db, ",");
+
 			if(array_key_exists('success', $result)) {
 				$ratio = $result['ratio'];
 				$filename = $result['filename'];
 				$image_description = $result['image_description'];
 				$artist = $result['artist'];
 				$xmpdata = json_encode($result['xmpdata']);
-				//print_r2($xmpdata);
 				//database save
 				$save = new Pages();
-				$save->savePagesImages($_REQUEST['pages_folder'], $filename, $ratio, $image_description, $artist, $xmpdata);
+				$save->savePagesImages($_REQUEST['pages_folder'], $filename, $ratio, $sizes_to_db, $image_description, $artist, $xmpdata);
 			}
 			
 		}		

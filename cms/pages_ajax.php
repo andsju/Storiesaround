@@ -354,6 +354,56 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 			
 			break;
 			
+
+
+			case 'widget_show_page':
+			
+				$ids = filter_var(trim($_GET['ids']), FILTER_SANITIZE_STRING);
+				$tag = filter_var(trim($_GET['tag']), FILTER_SANITIZE_STRING);
+				$search = filter_var(trim($_GET['search']), FILTER_SANITIZE_STRING);
+				$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ? $_GET['limit'] : 0;
+				$pages_id = filter_input(INPUT_GET, 'pages_id', FILTER_VALIDATE_INT) ? $_GET['pages_id'] : 0;
+				
+				$ids = explode(",", $ids);
+
+				$ids = is_array($ids) ? $ids : array(); 
+				if ($limit > count($ids)) {
+					// search
+					$row = $pages->getPagesContent($pages_id);
+					$words = "";
+					if($row) {
+						$words .= $row['tag'] . ",";
+						$words .= $row['meta_keywords'];
+					}
+					$words = str_replace(","," ",$words);
+					$words = $row['title'] . " " . $words;
+					$rows = $pages->getPagesSearchWordsRelevanceSummary($words, $status=2, $pages_id=0, $limit_tree=0);
+					
+					if ($rows) {
+						foreach($rows as $row) {
+							array_push($ids, $row['pages_id']);	
+						}
+					}
+				}
+
+				$ids = array_diff($ids, array($pages_id));
+				$ids = array_unique($ids);
+				$ids = array_slice($ids, 0, $limit);
+
+				$ids = implode(",", $ids);
+				//print_r2($ids);
+				$ids = trim($ids,",");
+				//print_r2($ids);
+				$rows = $pages->getPagesContentPublishSelected($ids);
+				//print_r2($rows);
+				if ($rows) {
+					echo json_encode($rows);
+				}
+
+			break;
+
+
+
 			case 'getStories':
 		
 				$number = filter_input(INPUT_GET, 'number', FILTER_VALIDATE_INT) ? $_GET['number'] : 0;
