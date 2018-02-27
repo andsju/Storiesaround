@@ -166,7 +166,8 @@ require_once 'inc.functions_pages.php';
 // classes
 function autoload_default($class_name)
 {
-    $file = CMS_ABSPATH . '/cms/classes/' . strtolower($class_name) . '.php';
+    //$file = CMS_ABSPATH . '/cms/classes/' . strtolower($class_name) . '.php';
+    $file = CMS_ABSPATH . '/cms/classes/' . $class_name . '.php';
     if (file_exists($file)) {
         include($file);
     }
@@ -200,13 +201,14 @@ require_once CMS_ABSPATH . '/sys/inc.db.php';
 
 // detect mobil device - choose mobile or classic layout
 if (!isset($_SESSION['layoutType']) || $_SESSION['layoutType'] == "") {
+    //include(CMS_ABSPATH . '/cms/classes/Mobile_Detect.php');
     $detect = new Mobile_Detect();
     $_SESSION['layoutType'] = $detect->isMobile() ? "mobile" : "classic";
 }
 
 // load sessions from site class
 if (!isset($_SESSION['site_id'])) {
-
+    //include(CMS_ABSPATH . '/cms/classes/Site.php');
     $z = new Site();
     $site = $z->getSite();
     if ($site) {

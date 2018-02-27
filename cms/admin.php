@@ -63,7 +63,8 @@ $meta_keywords = $meta_description = $meta_robots = $meta_additional = $meta_aut
 
 // include header
 $page_title = 'Storiesaround - administration';
-$body_style = "width:1250px;max-width:100% !important;margin-top:50px;";
+$body_style = "width:1280px;max-width:100% !important;margin-top:50px;";
+
 include_once 'includes/inc.header_admin.php';
 
 // add toolbar

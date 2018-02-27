@@ -2,9 +2,13 @@
 // include file
 if(!defined('VALID_INCL')){die('Restricted access');}
 
-include 'includes/inc.site_active_user.php';
 
 ?>
+
+<div id="wrapper-user">
+	<div id="user-toolbar"><?php include 'includes/inc.site_active_user2.php';?></div>
+</div>
+
 <script type="text/javascript">
 	$(function() {
 	

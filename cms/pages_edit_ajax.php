@@ -60,6 +60,7 @@ if (isset($_POST['token'])){
 					if ($pages_title){
 					
 						// trim content
+						$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative']), FILTER_SANITIZE_STRING);
 						$content = trim($_POST['content']);
 						$title_hide = filter_input(INPUT_POST, 'title_hide', FILTER_VALIDATE_INT) ? $_POST['title_hide'] : 0;
 						$content_author = trim($_POST['content_author']);
@@ -71,7 +72,7 @@ if (isset($_POST['token'])){
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 						
 						// use class update
-						$result = $pages->updatePagesContent($pages_id, $pages_title, $title_hide, $content, $content_author, $rss_promote, $rss_description, $events, $reservations, $plugins, $utc_modified);
+						$result = $pages->updatePagesContent($pages_id, $pages_title, $pages_title_alternative, $title_hide, $content, $content_author, $rss_promote, $rss_description, $events, $reservations, $plugins, $utc_modified);
 						
 						if($result) {
 							$history = new History();
@@ -1213,6 +1214,7 @@ if (isset($_POST['token'])){
 					$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT) ? $_POST['access'] : 0;
 					$title_tag = filter_var(trim($_POST['title_tag']), FILTER_SANITIZE_STRING);					
 					$pages_title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_STRING);
+					$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative']), FILTER_SANITIZE_STRING);
 					$content = trim($_POST['content']);
 					$content_author = trim($_POST['content_author']);
 					$pages_id_link = filter_var(trim($_POST['pages_id_link']), FILTER_SANITIZE_STRING);
@@ -1221,7 +1223,7 @@ if (isset($_POST['token'])){
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					if($status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT)) {			
-						$result = $pages->setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified);
+						$result = $pages->setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $pages_title_alternative, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified);
 						if($result) {
 							$history = new History();
 							$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'publish', $users_id, $_SESSION['token'], $utc_modified);
@@ -1818,10 +1820,8 @@ if (isset($_POST['token'])){
 					//echo "$limit:" . $limit;
 					$rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
 					if($rows_promoted) {
-						//print_r($rows_promoted);
 						echo json_encode($rows_promoted);
-					}
-			
+					}			
 					
 				break;
 				
@@ -1850,7 +1850,6 @@ if (isset($_POST['token'])){
 				}
 				
 				if($rows) {
-					//print_r($rows);
 					echo json_encode($rows);
 				}
 		
@@ -1859,9 +1858,6 @@ if (isset($_POST['token'])){
 			
 
 				case 'save_grid':
-
-					//echo "oki";
-					
 
 					$grid_active = filter_input(INPUT_POST, 'grid_active', FILTER_VALIDATE_INT) ? $_POST['grid_active'] : 0;
 					$grid_area = filter_input(INPUT_POST, 'grid_area', FILTER_VALIDATE_INT) ? $_POST['grid_area'] : 0;

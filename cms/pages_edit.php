@@ -68,7 +68,7 @@ if(isset($_SESSION['site_ui_theme'])) {
 // add css theme
 $theme = isset($_SESSION['site_theme']) ? $_SESSION['site_theme'] : '';
 if(file_exists(CMS_ABSPATH .'/content/themes/'.$theme.'/style.css')) {
-	array_push($css_files, CMS_DIR.'/content/themes/'.$theme.'/style.css');
+	//array_push($css_files, CMS_DIR.'/content/themes/'.$theme.'/style.css');
 }
 // apply edit style
 array_push($css_files, CMS_DIR.'/cms/css/pages_edit.css');
@@ -97,7 +97,7 @@ if (is_array($wysiwyg_editor)) {
 // include header
 $page_title = (isset($arr['title'])) ? $arr['title'] : "default page";
 $page_title = 'Editing: ' .$page_title;
-$body_style = "max-width:100% !important;";
+$body_style = "max-width:100% !important;background-color: #e8e8e8; ";
 include_once 'includes/inc.header_minimal.php';
 
 // load javascript files
@@ -268,6 +268,10 @@ foreach ( $js_files as $js ): ?>
 			text: false
 		});
 		
+		$('#link_title_alternative').click(function(){
+			$('#title_settings').toggle();
+		});
+
 		$('#link_stories_settings').click(function(){
 			$('#stories_settings').toggle();
 		});
@@ -819,6 +823,7 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 			var action = "seo_link";
 			var pages_title = $("#pages_title").val();
+			var pages_title_alternative = $("#pages_title_alternative").val();
 			var stopwords = $('input:checkbox[name=stopwords]').is(':checked') ? 1 : 0;
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
@@ -830,7 +835,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					pages_title: pages_title, stopwords: stopwords
+					pages_title: pages_title, pages_title_alternative: pages_title_alternative, stopwords: stopwords
 				},
 				success: function(data) {
 					var data = /[a-z]/.test(data) == true ? data : "link-" + data;
@@ -865,6 +870,7 @@ foreach ( $js_files as $js ): ?>
 			event.preventDefault();
 			var action = "suggest_meta_keywords";
 			var pages_title = $("#pages_title").val();
+			var pages_title_alternative = $("#pages_title_alternative").val();
 			var story_content = $("#story_content").val();
 			var content = $("#content").val();
 			var stopwords = 1;
@@ -878,7 +884,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					pages_title: pages_title, stopwords: stopwords, story_content: story_content, content: content
+					pages_title: pages_title, pages_title_alternative: pages_title_alternative, stopwords: stopwords, story_content: story_content, content: content
 				},
 				success: function(message){	
 					$('#meta_keywords').val(message);
@@ -1985,6 +1991,7 @@ foreach ( $js_files as $js ): ?>
 
 			var content = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'content');
 			var pages_title = $("#pages_title").val();
+			var pages_title_alternative = $("#pages_title_alternative").val();
 			var pages_id_link = $("#pages_id_link").val();
 			var content_author = $("#content_author").val();
 
@@ -2001,7 +2008,7 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id, status: status, title_tag: title_tag, access: access, 
-					content: content, content_author: content_author, pages_title: pages_title, pages_id_link: pages_id_link, 
+					content: content, content_author: content_author, pages_title: pages_title, pages_title_alternative: pages_title_alternative, pages_id_link: pages_id_link, 
 					datetime_start: datetime_start, datetime_end: datetime_end
 				},
 				success: function(message){	
@@ -2461,6 +2468,7 @@ foreach ( $js_files as $js ): ?>
 		var pages_id = $("#pages_id").val();
 		var users_id = $("#users_id").val();
 		var pages_title = $("#pages_title").val();
+		var pages_title_alternative = $("#pages_title_alternative").val();
 		var title_hide = $('input:checkbox[name=title_hide]').is(':checked') ? 1 : 0;
 		var breadcrumb_hide = $('input:checkbox[name=breadcrumb_hide]').is(':checked') ? 1 : 0;
 		var content_author = $("#content_author").val();
@@ -2477,7 +2485,7 @@ foreach ( $js_files as $js ): ?>
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
-					action: action, token: token, pages_id: pages_id, users_id: users_id, pages_title: pages_title, title_hide: title_hide, breadcrumb_hide: breadcrumb_hide, content: content, content_author: content_author, 
+					action: action, token: token, pages_id: pages_id, users_id: users_id, pages_title: pages_title, pages_title_alternative: pages_title_alternative, title_hide: title_hide, breadcrumb_hide: breadcrumb_hide, content: content, content_author: content_author, 
 					rss_promote: rss_promote, rss_description: rss_description, events: events, reservations: reservations, plugins: plugins 
 				},
 				success: function(message){	
@@ -2534,15 +2542,12 @@ foreach ( $js_files as $js ): ?>
 
 <table style="width:100%;">
 	<tr>
-		<td style="vertical-align:bottom;width:120px;">
-		<img src="css/images/storiesaround_logotype_black.png" style="width:100px;padding-left:5px;float:left;" alt="Storiesaround logotype" />
+		<td style="vertical-align:bottom;width:180px;">
+		<img src="css/images/storiesaround_logotype_black.png" style="width:140px;padding-left:5px;float:left;" alt="Storiesaround logotype" />
 		</td>
-		<td style="padding-top:10px;width:150px;">
-		<img src="css/images/icon_info.png" title="Path: <?php echo '| '. get_breadcrumb($id," &raquo ", 50, $clickable=false) .' |'; ?>" style="padding-right:5px;width:11px;height:11px;" />
+		<td>
 		Editing page:
-		</td>
-		<td style="vertical-align:bottom;">
-			<?php echo '<h3 class="admin-heading">"<span id="show_pages_title">'.$arr['title'].'</span>"</h3>'; ?>
+			<?php echo '<b>"<span class="text-bigger" id="show_pages_title">'.$arr['title'].'</span>"</b>'; ?>
 		</td>
 		<td valign="bottom" align="right" style="width:400px;">
 			
@@ -3225,32 +3230,40 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 			<h4><i class="fa fa-file-image-o" aria-hidden="true"></i> Images</h4>
-			<ul>
-				<li>Uploaded images are saved (if original size permits) in pixel widths: <?php echo implode(", ", $sizes); ?></li>
-				<li>Image originals are deleted by default</li>
-			</ul>
-			<p>
-			<p>
-				<div style="float:left">
-				<span class="toolbar_reload"><button id="btn_load_images">Show images</button></span>
-				&nbsp;|&nbsp;
-				<span class="toolbar_save_images"><button id="btn_save_images">Save</button></span>
-				</div>
-				<div style="float:right">
-				New images settings - max width:
-				<select id="max_width">
-				<?php
-				foreach($sizes as $size) {
-					$selected = $size == 1366 ? " selected" : "";
-					echo '<option value="'.$size.'" '.$selected.'>'.$size.' px</option>';
-				}
-				?>
-				</select>
-				<input type="checkbox" id="original" name="original" value="1"> Keep original image 
-				<span class="toolbar_save_images"><button id="btn_new_images">Upload images</button></span>
-				</div>
-
-			</p>
+			<table style="width:100%">
+				<tr>
+					<td style="vertical-align:bottom">
+						<ul>
+							<li>Uploaded images are saved (if original size permits) in pixel widths:<br> <?php echo implode(", ", $sizes); ?></li>
+							<li>Image originals are deleted by default</li>
+						</ul>
+						<p>
+							<span class="toolbar_reload"><button id="btn_load_images">Show images</button></span>
+							&nbsp;|&nbsp;
+							<span class="toolbar_save_images"><button id="btn_save_images">Save</button></span>
+						</p>
+					</td>
+					<td style="vertical-align:bottom; text-align:right">
+						<p>
+							New images settings - max width:
+							<select id="max_width">
+							<?php
+							foreach($sizes as $size) {
+								$selected = $size == 1366 ? " selected" : "";
+								echo '<option value="'.$size.'" '.$selected.'>'.$size.' px</option>';
+							}
+							?>
+							</select>
+						</p>
+						<p>
+							<input type="checkbox" id="original" name="original" value="1"> Keep original image 
+						</p>
+						<p>
+							<span class="toolbar_save_images"><button id="btn_new_images">Upload images</button></span>
+						</p>
+					</td>
+				</tr>
+			</table>
 			<div class="clearfix">
 			<span id="ajax_spinner_images" style='display:none'><img src="css/images/spinner.gif"></span>
 			<span id="ajax_status_images" style='display:none'></span>
@@ -3364,6 +3377,19 @@ if(is_array($check_edit)) {
 				<br />
 				<input type="text" name="pages_title" id="pages_title" title="Enter title" style="font-size:2.14em;<?php echo $css_content_width; ?>" maxlength="100" value="<?php if(isset($arr['title'])){echo $arr['title'];}?>" />
 			</p>
+
+			<a href="#" id="link_title_alternative">Alternative title</a>
+			<div id="title_settings" style="display:none">
+				<p>
+					<input type="checkbox" id="title_hide" name="title_hide" <?php if($arr['title_hide'] == 1) {echo 'checked="checked"';}?>> Hide page title (title can manually be added inside content)
+				</p>
+				<p>
+					<label for="pages_title_alternative">Alternativt title: </label>
+					<br />
+					<input type="text" name="pages_title_alternative" id="pages_title_alternative" title="Enter alternative title" style="font-size:2.14em;<?php echo $css_content_width; ?>" maxlength="100" value="<?php if(isset($arr['title_alternative'])){echo $arr['title_alternative'];}?>" />
+				</p>
+			</div>
+
 			<p>
 				<label for="content">Content: </label>
 				<br />
@@ -3376,9 +3402,6 @@ if(is_array($check_edit)) {
 				<br />
 				<input type="text" name="content_author" id="content_author" title="Enter content author and contact" style="width:460px;" maxlength="100" value="<?php if(isset($arr['content_author'])){echo $arr['content_author'];}?>" />
 			</p>
-			<div style="padding-top:10px;">
-				<input type="checkbox" id="title_hide" name="title_hide" <?php if($arr['title_hide'] == 1) {echo 'checked="checked"';}?>> Hide page title (title can manually be added inside content)
-			</div>
 
 			<p>
 				<table>
@@ -3766,8 +3789,12 @@ if(is_array($check_edit)) {
 		<div style="width:100%;">
 
 			<!-- inner div -->
-			<div style="width:100%;margin:0px auto; background-color:yellow">
+			<div style="width:100%;margin:0px auto; background-color:yellow;display:none">
 				selections
+				<?php  
+				//print_r2($row_selections);
+				//print_r2($arr['selections']);
+				?>
 			</div>		
 		
 			<!-- inner div -->

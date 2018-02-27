@@ -54,7 +54,7 @@ $js_files = array(
 
 // include header
 $page_title = translate("Login", "site_login", $languages) .' - '. $_SESSION['site_name'];
-$body_style = "width:320px;margin:0 auto;";
+$body_style = "width:320px;margin:0 auto;font-size:90%";
 include_once 'includes/inc.header_minimal.php';
 
 ?>
@@ -72,7 +72,7 @@ if(isset($_SESSION['site_maintenance'])) {
 
 ?>
 <div id="login_form" style="display:none;">
-
+<form>
 <table>
 	<tr>
 		<td>
@@ -106,7 +106,7 @@ if(isset($_SESSION['site_maintenance'])) {
 	</tr>
 </table>
 <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>" />
-
+</form>
 </div>
 
 

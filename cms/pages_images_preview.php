@@ -57,14 +57,11 @@ include_once 'includes/inc.header_minimal.php';
 	$(document).ready(function() {
 		
 		$('button.version').click(function(){
-			//console.log(this.id);
 			var p = $("#image_path").val();
-			//console.log(p);
 			var img = p+this.id;
 			var t = getTime();
 			$('#version2').html('<div>Path: <span class="code" style="padding:10px;border:1px solid #E8E8E8;margin:5px;">'+img+'</span></div><br /><img src="'+img+'?t='+t+'" />');
 			$('#version2').show();
-			
 		});
 
 		$('#btn_delete').click(function(event){
@@ -81,16 +78,10 @@ include_once 'includes/inc.header_minimal.php';
 				url: 'pages_edit_ajax.php',
 				data: "action=" + action + "&token=" + token + "&users_id=" + users_id + "&pages_id=" + pages_id + "&image=" + images_filename,
 				success: function(message){
-					//ajaxReply(message,'#ajax_status_image');
-					console.log(message);
-					//$('#li_'+pages_images_id).remove();
-					//$('#'+id).closest('li').fadeOut(500, function() { $(this).closest('li').remove(); });
-					
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#add_content';
 					location.reload(true);
 				}
-			});
-			
+			});			
 		});
 		
 		$("#dialog_delete_image").dialog({
@@ -369,13 +360,9 @@ include_once 'includes/inc.header_minimal.php';
 			}		
 		});
 		
-		
 	});
 </script>	
 <?php
-
-
-
 
 
 
@@ -383,12 +370,9 @@ include_once 'includes/inc.header_minimal.php';
 $pages_id = array_key_exists('pages_id', $_GET) ? $_GET['pages_id'] : null;
 if($pages_id == null) { die;}
 $pages_images_id = array_key_exists('pages_images_id', $_GET) ? $_GET['pages_images_id'] : null;
-//if($pages_images_id == null) { die;}
-
 
 $token = array_key_exists('token', $_GET) ? $_GET['token'] : null;
 $users_id = $_SESSION['users_id'];
-
 
 $pages = new Pages();
 $row = $pages->getPagesImagesMeta($pages_images_id);
@@ -410,9 +394,7 @@ if($row) {
 	$preview_img_filename = substr($preview_img, strrpos( $preview_img, '/')+1);
 	$width_edited_image = $image->image_info($pp . $preview_img_filename, 'width');
 } else {
-	
 	$img = $preview_img = $preview_img_filename = $width_edited_image = null;
-	
 }
 
 // images menu navigation
@@ -508,9 +490,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 				
 				<!--<span class="toolbar_rotate_left" title="Rotate left"><button class="btn_image_rotate" id="btn_image_rotate_left">rotate</button></span>-->
 				<!--<span class="toolbar_rotate_right" title="Rotate right"><button class="btn_image_rotate" id="btn_image_rotate_right">rotate</button></span>-->
-				
-				
-				
+						
 
 			</p>
 				<span class="toolbar" id="btn_save_new_image" style="display:none;"><button id="btn_image_apply_filter" class="cms-ui-red">Save image</button></span>
@@ -561,7 +541,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 				Ratio: <span class="code"><?php echo $row['ratio']; ?></span>
 			</p>
 			<p>
-				Dimension: <span class="code"><?php echo $size[0] . ' x ' .$size[1]; ?> px</span>
+				Dimension: <span class="code"><?php if (isset($size[0]) && isset($size[1])) { echo $size[0] . ' x ' .$size[1];} ?> px</span>
 			</p>
 			<p>
 				<label for="caption">Caption</label><br>
@@ -630,26 +610,24 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 		
 	}
 	
-	
-echo "\n".'</div>';
+	?>
 
-echo "\n".'<div class="admin-panel" style="margin:10px;">';
-echo '<div id="version2" style="padding:5px;margin:5px;display:none;"></div>';
-echo '</div>';
+</div>
+<div class="admin-panel" style="margin:10px;">
+	<div id="version2" style="padding:5px;margin:5px;display:none;"></div>
+</div>
 
-echo '<input type="hidden" id="pages_images_id" name="pages_images_id" value="'.$pages_images_id.'" />';
-echo '<input type="hidden" id="images_filename" name="images_filename" value="'.$row['filename'].'" />';
-echo '<input type="hidden" id="width_edited_image" name="width_edited_image" value="'.$width_edited_image.'" />';
-echo '<input type="hidden" id="token" name="token" value="'.$token.'" />';
-echo '<input type="hidden" id="image_path" name="image_path" value="'.$p.'" />';
-echo '<input type="hidden" id="users_id" name="users_id" value="'.$users_id.'" />';
-echo '<input type="hidden" id="pages_id" name="pages_id" value="'.$pages_id.'" />';
-?>
+<input type="hidden" id="pages_images_id" name="pages_images_id" value="<?php echo $pages_images_id; ?>">
+<input type="hidden" id="images_filename" name="images_filename" value="<?php echo $row['filename']; ?>">
+<input type="hidden" id="width_edited_image" name="width_edited_image" value="<?php echo $width_edited_image; ?>">
+<input type="hidden" id="token" name="token" value="<?php echo $token; ?>">
+<input type="hidden" id="image_path" name="image_path" value="<?php echo $p; ?>">
+<input type="hidden" id="users_id" name="users_id" value="<?php echo $users_id; ?>">
+<input type="hidden" id="pages_id" name="pages_id" value="<?php echo $pages_id; ?>">
 
 <div id="dialog_delete_image" title="Confirmation required">
   Delete this image?
 </div>
-
 
 <?php
 
