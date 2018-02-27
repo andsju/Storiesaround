@@ -2,19 +2,16 @@
     <div id="wrapper-page">
     
         <div id="wrapper-content" class="column" style="width:<?php echo $content_percent_width;?>%">
-        <?php echo $wrapper_content_width; ?>
             <main>
                 <?php print_selection("selection-content-above", $selection_area['content_above']); ?>
                 <div id="content-top-selections"></div>
                 <div id="content-top-grid"><?php print_grid($arr, 1);?></div>
                 <div id="content-breadcrumb"><?php print_breadcrumb($id, $arr['breadcrumb']); ?></div>
                 <article>
-                    <?php if ($arr['title_hide'] == 0) { ?>
                     <header>
-                        <h1 id="content-title"><?php echo $arr['title'] .' '.$icon; ?></h1>
+                        <h1 id="content-title"><?php echo $page_title_body .' '.$icon; ?></h1>
                         <div id="content-meta"><?php  print_meta($arr['utc_modified'], $dtz, $languages) ?></div>
                     </header>
-                    <?php } ?>
                     <div id="content-html">        
                         <?php if ($arr['search_field_area'] == 3) { print_search_field_area_page($languages); } ?>
                         <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
@@ -44,7 +41,6 @@
             </main>
         </div>
         <div id="wrapper-right-sidebar" class="column" style="width:<?php echo $right_sidebar_percent_width;?>%">
-            <?php echo $wrapper_right_sidebar_width; ?>
             <?php print_selection("selection-right-sidebar-top", $selection_area['right_sidebar_top']); ?>
             <?php
             if($_SESSION['site_navigation_vertical_sidebar'] == 0) {

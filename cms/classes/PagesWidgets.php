@@ -45,7 +45,6 @@ class PagesWidgets extends Widgets
      */
     public function showPagesWidgets($pages_widgets_id, $pages_id, $width)
     {
-        
 		$sql = "
 		SELECT pages_widgets.widgets_action, pages_widgets.widgets_header, pages_widgets.widgets_footer, pages_widgets.widgets_id, widgets.widgets_action AS widgets_default_action, widgets.widgets_title, widgets.widgets_class
 		FROM pages_widgets INNER JOIN widgets

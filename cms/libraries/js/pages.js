@@ -513,3 +513,12 @@ function replace_image_path(replace_pattern, new_pattern) {
 		$this.attr('src',$this.attr('src').replace(replace_pattern,new_pattern));
     });
 }
+
+function getFileExtension(filename) {
+	if (!filename) {return}
+	return filename.split('.').pop();
+}
+function getFileBaseName(filename) {
+	if (!filename) {return}
+	return filename.split('.').shift();
+}

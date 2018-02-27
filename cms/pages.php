@@ -111,25 +111,15 @@ if ($id == null && count($request_parts)) {
 }
 
 $sample = false;
-/*
-if ($arr == null && isset($_GET['sample'])) {
-    $arr = get_sample_data();
-} else if ($arr == null) {
-    get404();
-} else {
-    echo "Sooooo";
-}
-*/
-
 
 // get this page widgets
 $pages_widgets = new PagesWidgets();
 $rows_widgets = $pages_widgets->getPagesWidgets($id);
 $widgets_css = get_widgets_css($rows_widgets);
 
-
 // page title
-$page_title = strlen($arr['title_tag'])>0 ? $arr['title_tag'] : $arr['title'];
+$page_title_head = strlen($arr['title_tag']) > 0 ? $arr['title_tag'] : $arr['title'];
+$page_title_body = $arr['title_hide'] == 1 ? $arr['title_alternative'] : $arr['title'];
 
 // meta tags
 $meta_keywords = (strlen($arr['meta_keywords'])>0) ? $arr['meta_keywords'] : null;
@@ -143,7 +133,7 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
-    //CMS_DIR.'/cms/css/layout.css',
+    CMS_DIR.'/cms/css/layout.css',
     CMS_DIR.'/cms/libraries/font-awesome/css/font-awesome.min.css',
     'https://fonts.googleapis.com/css?family=Open+Sans'
     
@@ -151,7 +141,7 @@ $css_files = array(
 
 $css_files = add_css_themes($css_files);
 $css_files = add_css_widgets($css_files, $widgets_css);
-array_push($css_files, CMS_DIR.'/cms/css/style.css');
+//array_push($css_files, CMS_DIR.'/cms/css/style.css');
 
 // load javascript files, loads before footer.inc.php
 $js_files = array(
@@ -232,7 +222,6 @@ if ($arr['template'] == 6) {
     
     <?php }?>
     <?php
-    
     print_selection("selection-header-above", $selection_area['header_above']);
     ?>
 

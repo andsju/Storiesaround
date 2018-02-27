@@ -42,10 +42,10 @@ $js_files = array(
 	endforeach; 
 	?>
 
-	<script type="text/javascript" src="<?php echo CMS_DIR; ?>/cms/libraries/jquery/jquery.min.js"></script>
+	<script src="<?php echo CMS_DIR; ?>/cms/libraries/jquery/jquery.min.js"></script>
 	
 </head>
-<body>
+<body style="width:1280px;background:#FAFAFA;margin:0 auto;position:relative;font-size:0.8em;">
 	
 
 <?php	

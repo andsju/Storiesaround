@@ -168,25 +168,32 @@ $id = filter_var($id, FILTER_VALIDATE_INT) ? $id : 0;
         });
     });
 
-    function parseRSS(url, container) {
-        $.ajax({
-            url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=5&callback=?&q=' + encodeURIComponent(url),
-            dataType: 'json',
-            success: function (data) {
-                console.log(data.responseData.feed);
-                $(container).html('<div style="text-align:right;"><a href="' + url + '" target="_blank">' + data.responseData.feed.title + ' RSS <img src="css/images/feed-icon-14x14.png" /></a></div>');
-
-                $.each(data.responseData.feed.entries, function (key, value) {
-
-                    var html = '<h4><a href="' + value.link + '" target="_blank">' + value.title + '</a></h4>';
-                    html += '<div style="font-size:0.8em;color:#aaa;">' + value.publishedDate + '</div>';
-                    html += value.contentSnippet;
-                    $(container).append(html);
-                });
-            }
-        });
-    }
-
-    parseRSS('http://www.storiesaround.com/content/rss/news', '#stories_news');
 
 </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
+    <script>
+        /*
+        YUI().use('yql', function(Y){
+            var query = 'select * from rss(0,2) where url = "http://www.storiesaround.com/content/rss/news"';
+            var q = Y.YQL(query, function(r){
+                //r now contains the result of the YQL Query as a JSON
+                var date;
+                var feedmarkup = '<p>'
+                var feed = r.query.results.item // get feed as array of entries
+                for (var i=0; i<feed.length; i++){
+                    feedmarkup += '<div><a href="' + feed[i].link + '" target="">' + feed[i].title + '</a></div>';
+                    date = new Date(feed[i].pubDate);
+                    date = date.toISOString().substring(0, 10);
+                    feedmarkup += '<div><abbr class="timeago" datetime="'+ date +'">'+ date +'</abbr></div>'
+                    feedmarkup += '<p>' + feed[i].description + '</p>'
+                }
+                feedmarkup += '</p>';
+                document.getElementById('#stories_news').innerHTML = feedmarkup
+            })
+        })
+        */
+    </script>
+
+

@@ -391,11 +391,8 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 				$ids = array_slice($ids, 0, $limit);
 
 				$ids = implode(",", $ids);
-				//print_r2($ids);
 				$ids = trim($ids,",");
-				//print_r2($ids);
 				$rows = $pages->getPagesContentPublishSelected($ids);
-				//print_r2($rows);
 				if ($rows) {
 					echo json_encode($rows);
 				}
