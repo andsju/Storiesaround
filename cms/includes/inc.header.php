@@ -24,7 +24,7 @@
     }
     ?>
 
-    <title><?php echo $page_title; ?></title>
+    <title><?php echo $page_title_head; ?></title>
     <?php
 
     foreach ($css_files as $css) {

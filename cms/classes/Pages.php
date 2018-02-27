@@ -137,7 +137,7 @@ class Pages extends Database
      *                 
      * public function setPagesPublish($pages_id, $status, $access, $title_tag, $datetime_start, $datetime_end, $utc_modified)
     */
-    public function setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified)
+    public function setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $pages_title_alternative, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
@@ -145,6 +145,7 @@ class Pages extends Database
 			access = :access,
 			title_tag = :title_tag,
             title = :pages_title,
+            title_alternative = :pages_title_alternative,
             content = :content,
             content_author = :content_author,
             pages_id_link = :pages_id_link, 
@@ -161,6 +162,7 @@ class Pages extends Database
             $stmt->bindParam(":content", $content, PDO::PARAM_STR);
             $stmt->bindParam(":content_author", $content_author, PDO::PARAM_STR);
             $stmt->bindParam(":pages_title", $pages_title, PDO::PARAM_STR);
+            $stmt->bindParam(":pages_title_alternative", $pages_title_alternative, PDO::PARAM_STR);
             $stmt->bindParam(":pages_id_link", $pages_id_link, PDO::PARAM_STR);
             $stmt->bindParam(":utc_start_publish", $datetime_start, PDO::PARAM_STR);
             $stmt->bindParam(":utc_end_publish", $datetime_end, PDO::PARAM_STR);
@@ -1418,12 +1420,13 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesContent($pages_id, $pages_title, $title_hide, $content, $content_author, $rss_promote, $rss_description, $events, $reservations, $plugins, $utc_modified)
+    public function updatePagesContent($pages_id, $pages_title, $pages_title_alternative, $title_hide, $content, $content_author, $rss_promote, $rss_description, $events, $reservations, $plugins, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET title = :pages_title,
-			title_hide = :title_hide,
+			title_alternative = :pages_title_alternative,
+            title_hide = :title_hide,
 			content = :content,
 			content_author = :content_author,
 			rss_description = :rss_description,
@@ -1437,6 +1440,7 @@ class Pages extends Database
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(':pages_title', $pages_title, PDO::PARAM_STR);
+            $stmt->bindParam(':pages_title_alternative', $pages_title_alternative, PDO::PARAM_STR);
             $stmt->bindParam(':title_hide', $title_hide, PDO::PARAM_INT);
             $stmt->bindParam(':content', $content, PDO::PARAM_STR);
             $stmt->bindParam(':content_author', $content_author, PDO::PARAM_STR);
@@ -2015,7 +2019,7 @@ class Pages extends Database
             "
 		SELECT * FROM
 		(
-			SELECT pages.pages_id, pages.title, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
+			SELECT pages.pages_id, pages.title, pages.title_alternative, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.sizes, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
 			FROM pages 
 			INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 			WHERE pages.pages_id IN ($ids)
@@ -2023,7 +2027,7 @@ class Pages extends Database
 
 			UNION
 				  
-			SELECT pages.pages_id, pages.title, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
+			SELECT pages.pages_id, pages.title, pages.title_alternative, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS sizes, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
 			FROM pages
 			WHERE pages_id IN ($ids)		 
 		) AS tmp

@@ -68,7 +68,7 @@ if(isset($_GET['token'])){
 		include_once 'includes/inc.header_minimal.php';
 
 		?>
-		<script type="text/javascript">
+		<script>
 			$(document).ready(function() {
 				$("#btn_close").click(function(event) {
 					event.preventDefault();
@@ -87,9 +87,7 @@ if(isset($_GET['token'])){
 		echo '</div>';
 		echo '<div style="width:100%;padding-top:20px;">';
 
-			// content_html
-			//parse_storiesaround_coded($pages, $dtz, $row[0]['content_html'],0);
-			// content_code
+			echo $row[0]['content_html'];
 			$a = parse_storiesaround_coded($pages, $dtz, $row[0]['content_code'],0);
 			$a = implode($a);
 			echo $a;

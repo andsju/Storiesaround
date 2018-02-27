@@ -429,7 +429,7 @@ function print_search_field_area_header($languages)
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
-    $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
+    $html .= '<button id="btn-site-search-page">'. translate("Search", "site_search", $languages) .'</button>';
     $html .= '</div>';
     echo $html;
 }
@@ -448,7 +448,7 @@ function print_search_field_area_page($languages)
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="'.CMS_DIR.'/cms/css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
-    $html .= '<button id="btn-site-search-page" class="magnify">'. translate("Search", "site_search", $languages) .'</button>';
+    $html .= '<button id="btn-site-search-page">'. translate("Search", "site_search", $languages) .'</button>';
     $html .= '<input type="checkbox" name="search-page-limit-tree" id="search-page-limit-tree"> <span id="search-page-limit-tree-helper">'. translate("Search", "site_search_limit", $languages) . '</span>';
     $html .= '</div>';
     echo $html;
@@ -1007,7 +1007,7 @@ function get_widgets_content($rows, $str)
 }
 
 /**
- * @param $rows
+ * @param $rows 
  * @param $str
  * @param $content_width
  */
@@ -1015,9 +1015,8 @@ function show_widgets_content($rows, $str, $content_width)
 {
     if (isset($rows)) {
         if (is_array($rows)) {
-
             foreach ($rows as $row) {
-                if ($row['area'] == $str) {
+                if ($row['area'] == $str) {                    
                     $width = $content_width;
                     echo '<div class="widgets-wrapper" style="width:100%">';
                     $w = new PagesWidgets();
@@ -1368,7 +1367,6 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
 {
     $html = "";
     $image = new Image();
-    //print_r2($rows);
     
     foreach ($rows as $row) {
 
@@ -1555,11 +1553,6 @@ function get_box_story_content_child($rows, $wrapper_content_width, $css_class_u
             if ($row['story_link']) {
                 echo '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
             }
-
-            //print_r2($row);
-
-            //print_r2(isset($row['filename']));
-
             
             $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $column_width * $stories_wide_teaser_image_width / 100) : '';
             $html .= '<div class="stories-content clear' . $css_class . '">';
@@ -2338,8 +2331,6 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
 
     $result_copy = $result;
     $counter = 0;
-
-    //print_r2($result);
 
     // 0: grid-image, 2: grid-image-y, 4: heading, 6: video, 8: url, 10: link, 12: grid-content, 
     // 14: css, 16: pages_id, 18: grid-dynamic-content, 20: grid-dynamic-content-filter, 22: grid-dynamic-content-limit

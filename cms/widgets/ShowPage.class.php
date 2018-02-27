@@ -17,7 +17,7 @@ class ShowPage extends Widgets {
 		$a['description'] = 'Show more pages';
 		$a['classname'] = 'ShowPage';
 		// acceptable columns: 'sidebar', 'content' or either ''
-		$a['column'] = 'sidebar';
+		$a['column'] = 'content';
 		// external css in filepath as in libraries, '../libraries/?/?.css
 		$a['css'] = null;
 		return $a;
@@ -76,9 +76,9 @@ class ShowPage extends Widgets {
                 var limit = "<?php echo $limit; ?>";
 				var cms_dir = "<?php echo $_SESSION['CMS_DIR']; ?>";
 				var processing = true;
-				
+				var width = <?php echo $width; ?>;
 				ids = ids.split(",");
-
+				console.log(width);
 				var ids_checked = [];
 
 				for (var i = 0; i < limit; i++ ) {
@@ -97,8 +97,8 @@ class ShowPage extends Widgets {
 
 					// calculate the percentage the user has scrolled down the page
 					var scrollPercent = (scrollAmount / documentHeight) * 100;
-
-					if(scrollPercent > 70) {
+					console.log("scrollPercent", scrollPercent);
+					if(scrollPercent > 50) {
 						// run a function called doSomething
 						if (processing) {
 							doSomething();
@@ -114,14 +114,94 @@ class ShowPage extends Widgets {
 							console.log(data);
 							
 							$.each(data, function(i,item){
-								$("#wrapper-content").append("<h1>" + item.title + "</h1>");
-								$("#wrapper-content").append("<img src="+cms_dir+"/content/uploads/pages/"+item.pages_id+"/"+item.filename +">");
-								$("#wrapper-content").append("<p>" + item.content + "</p>");								
+								
+								var title = "<h1>" + item.title + item.ratio +"</h1>";
+								var content = "<p>" + item.content + "</p>";
+
+								// no image
+
+								// tiny image
+
+								// smaller image
+
+								// full scal
+								
+								var img_width = getOptimizedImageWidth(width, item.sizes);
+
+								switch (img_width) {
+									case undefined:
+									case null:
+									case "":
+
+									break;
+
+									case 
+
+								}
+
+
+
+								
+								var swap_image = getImage(item.filename, img_width);
+								// handle ratio and background-posistion-y
+								// display image in 2.39:1
+								var div_height = 0;
+								var position = 0;
+								if (item.ratio < 0.418) {
+									div_height = item.ratio * width;
+									position = 0;
+								} else {
+									div_height = 0.418 * width;
+									position = item.ratio < 0.8 ? 20 : 30;
+								}
+								var style = "width:100%;height: "+div_height+"px;background-position-y:"+position+"%;background-size:100%;background-repeat:no-repeat";
+								var image = "<div style=\"background-image: url("+cms_dir+"/content/uploads/pages/"+item.pages_id+"/"+swap_image+");"+style+"\" class=\"article-image\">bild</div>";
+
+								//$("<article>"+title+image+content+"</article").insertAfter($("#wrapper-content"));
+								$("#wrapper-content").append($("<article>"+title+image+content+"</article"));
+								
+								//$("#wrapper-content").append("<h1>" + item.title + "</h1>");
+								//var img_width = getOptimizedImageWidth(width, item.sizes);
+								//var swap_image = getImage(item.filename, img_width);
+								//if (swap_image.length) {
+								//	$("#wrapper-content").append("<img src="+cms_dir+"/content/uploads/pages/"+item.pages_id+"/"+swap_image +">");
+								//}
+								//$("#wrapper-content").append("<p>" + item.content + "</p>");
 							});
 						});
 					}
 				});
 			});
+
+
+			function getOptimizedImageWidth(wrapper_width, sizes) {
+				if (!sizes) { return "100";}
+
+				var arr = sizes.split(",");
+				for (var i = 0; i < arr.length; i++) {
+					if (wrapper_width <= arr[i]) {
+						return arr[i];
+					}
+				}
+			}
+
+			function getImageFileExtension(filename) {
+				if (!filename) {return ""}
+				return filename.split('.').pop();
+			}
+			function getImageBaseName(filename) {
+				if (!filename) {return ""}
+				return filename.split('_').shift();
+			}
+
+			function getImage(image_default, width) {
+				if (!image_default) {return ""}
+				var ext = getImageFileExtension(image_default);
+				var base = getImageBaseName(image_default);
+				return base + "_" + width + "." + ext;
+			}
+
+
 		</script>
 				
 		<?php	

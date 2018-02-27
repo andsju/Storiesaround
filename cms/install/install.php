@@ -57,7 +57,7 @@ $js_files = array(
 </head>
 
 
-<body style="width:1024px;background:#FAFAFA;margin:0 auto;position:relative;font-size:0.9em;">
+<body style="width:1280px;background:#FAFAFA;margin:0 auto;position:relative;font-size:0.8em;">
 
 <?php
 

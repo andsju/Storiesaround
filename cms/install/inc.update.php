@@ -69,4 +69,5 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" =>
 $sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" => "grid_cell_template", "column_definition" => "tinyint(1) DEFAULT '0' COMMENT '0:image top 1:heading top' AFTER `grid_custom_classes`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages_selections", "col_name" => "grid_cell_image_height", "column_definition" => "int(3) DEFAULT '140' COMMENT 'height in px' AFTER `grid_cell_template`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages_images", "col_name" => "sizes", "column_definition" => "varchar(50) DEFAULT '' COMMENT 'comma separated width sizes in px' AFTER `ratio`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "title_alternative", "column_definition" => "varchar(100) DEFAULT '' COMMENT 'alternative title when default is hidden' AFTER `title`");
 ?>

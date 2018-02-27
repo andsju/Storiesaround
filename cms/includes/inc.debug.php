@@ -3,9 +3,6 @@ $debug = false;
 if (isset($_SESSION['users_id'])) {
     $debug = $_SESSION['debug'] == 1 ? true : false;
 }
-if (isset($arr)) {
-    print_r2($arr);
-}
 
 if (LIVE == false || $debug == true) {
     echo "\n" . '<div style="clear:both;padding-top:50px;">';
@@ -36,5 +33,10 @@ if (LIVE == false || $debug == true) {
     echo "\n" . 'Classes<br />';
     print_r2(get_declared_classes());
     echo "\n" . '<p>----------  !LIVE || Administrators debug  ----------</p>';
+
+    if (isset($arr)) {
+        print_r2($arr);
+    }
+        
 }
 ?>
