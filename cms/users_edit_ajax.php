@@ -290,8 +290,8 @@ if (isset($_POST['token'])){
 							// create activation code
 							$activation_code = md5(uniqid(rand(), true));
 							// password
-							$p = new PasswordHash(8, false);
-							$pass_hash = $p->HashPassword($password1);
+							//$p = new PasswordHash(8, false);
+							$pass_hash = password_hash($password, PASSWORD_DEFAULT);
 							$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 							if($result = $users->setUsersNew($email, $pass_hash, $first_name, $last_name, $activation_code, $status=1, $utc_created)) {
 								echo 'Account created';
@@ -323,6 +323,8 @@ if (isset($_POST['token'])){
 						}					
 						
 						// check for a password and match against the confirmed password
+
+						
 						if (valid_password($pass_new, 8)) {
 							if ($pass_new != $pass_new_confirm) {
 								$reply = '<span class="reply_failure">New password did not match the confirmed password</span>';
@@ -391,9 +393,10 @@ if (isset($_POST['token'])){
 
 						// required fileds validated so far, next step
 						if ($pass_new){
-							$p = new PasswordHash(8, false);
+							$pass_hash = password_hash($pass_new, PASSWORD_DEFAULT);
+							//$p = new PasswordHash(8, false);
 							// hash new password
-							$pass_hash = $p->HashPassword($pass_new);
+							//$pass_hash = $p->HashPassword($pass_new);
 							//set new password
 							$result = $users->setUsersPassword($users_id, $pass_hash);
 

@@ -28,7 +28,7 @@ if (isset($_SESSION['first_name'])) {
 					echo "\n\t".'<li><a href="'.CMS_DIR.'/cms/logout.php">'.translate("Logout", "site_logout", $languages).'</a></li>';
 				echo '</ul>';
 			echo '</li>';
-			echo "\n\t".'<li class="toolbar-icons dropdown"><img src="'.CMS_DIR.'/cms/css/images/storiesaround_logotype_white.png" style="width:100px;" alt="Storiesaround logotype" />';
+			echo "\n\t".'<li class="toolbar-icons dropdown"><img src="'.CMS_DIR.'/cms/css/images/storiesaround_logotype_white.png" style="width:100px;" alt="Storiesaround logotype" id="logo-storiesaround">';
 			include 'inc.cms_list_links.php';
 			echo '</li>';		
 			

@@ -89,6 +89,7 @@ if (isset($_POST['token'])){
 					
 					$result2 = $users->setUsersAdmin($email, $pass_hash, $first_name, $last_name, $user_name, $utc_created);					
 					if($result2) {
+						
 
 						$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 						$_SESSION['users_id'] = $result2;
