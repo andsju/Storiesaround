@@ -139,9 +139,7 @@ if (isset($_POST['token'])){
 				case 'update_author_only':
 					
 					$author = trim($_POST['author']);
-					write_debug("Author: " . $author);
 					if (strlen($author)) {
-						write_debug("Author ok: " . $author);
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');			
 						$result = $pages->updatePagesAuthorOnly($pages_id, $author, $utc_modified);
 						if($result) {
@@ -2475,7 +2473,6 @@ if (isset($_POST['token'])){
 			$external_css = filter_input(INPUT_POST,'external_css',FILTER_SANITIZE_STRING);
 			$content_html = $_POST['content_html'];
 			$content_code = $_POST['content_code'];
-			write_debug($content_code);
 			$grid_content = trim($_POST['grid_content']);
 			$grid_cell_template = filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT) ? $_POST['grid_cell_template'] : 0;
 			$grid_custom_classes = $_POST['grid_custom_classes'];

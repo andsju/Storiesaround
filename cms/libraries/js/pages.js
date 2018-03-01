@@ -458,7 +458,7 @@ $(document).ready(function() {
 		equalheight('div.stories-wrapper');
 	}
 	
-	if (users_id && isNumeric(role_cms)) {
+	if (users_id > 0 && role_cms > 1) {
 		$(".editable").each(function() {  
 			$(this).wrap( "<form style=\"position:relative\"></form>" );
 		});

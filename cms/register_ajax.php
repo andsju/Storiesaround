@@ -6,13 +6,11 @@ include_once 'includes/inc.core.php';
 // overall
 // --------------------------------------------------
 if (isset($_POST['token'])){
-	// only accept $_POST from this §_SESSION['token']
+
 	if ($_POST['token'] == $_SESSION['token']) {
 
-		// $action
 		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_STRING);
 		
-		// switch action 
 		switch ($action) {
 		
 			case 'register_user':
@@ -26,14 +24,13 @@ if (isset($_POST['token'])){
 					$email = filter_var($trimmed['email'], FILTER_SANITIZE_EMAIL);
 				}
 
-				// passwords
 				$password = $_POST['password'];				
+
 				// passwords are simple decoded in javascript using javascript function enc() bitwise XOR
 				// decode using last 2 numbers in string
 				$parts = getCodedString($password);
 				$password = enc($parts[0], $parts[1]);
 				
-				// check for a password and match against the confirmed password
 				if (valid_password($password, 8)) {		
 												
 					if ($first_name && $last_name && $email) { 
@@ -44,17 +41,13 @@ if (isset($_POST['token'])){
 								
 						// new 
 						if(!$result) {
+
 							// create activation code
-							$activation_code = md5(uniqid(rand(), true));
-							
-							// password
-							$p = new PasswordHash(8, false);
-							$password_hash = $p->HashPassword($password);
-							
+							$activation_code = md5(uniqid(rand(), true));							
+							$pass_hash = password_hash($password, PASSWORD_DEFAULT);
 							$status = 1;
 							$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-							
-							$result = $users->setUsersNew($email, $password_hash, $first_name, $last_name, $activation_code, $status, $utc_created);
+							$result = $users->setUsersNew($email, $pass_hash, $first_name, $last_name, $activation_code, $status, $utc_created);
 							
 							$reply = array();
 							
@@ -79,10 +72,9 @@ if (isset($_POST['token'])){
 								$to = $email;
 								$subject = translate("Registration confirmation", "registration_message_subject", $languages);
 								$headers = $_SESSION['site_email'];
-								
-								// include file
+							
 								include_once 'includes/inc.send_a_mail.php';
-								// send mail
+								
 								if(send_a_mail($_SESSION['token'], $to, $fullname, $_SESSION['site_email'], $_SESSION['site_copyright'], $subject, $m_body,'')) {
 									$success = '<h3 class="admin-heading">'.translate("Registration completed", "registration_completed", $languages).'</h3>';
 									$success .= '<p>'.translate("Message sent, please use activation code in mail", "registration_message_sent", $languages).'</p>';
@@ -96,7 +88,7 @@ if (isset($_POST['token'])){
 									$history_email->setHistoryEmail($to, $_SESSION['site_email'], $subject, $m_body, $utc_datetime);
 									
 								}
-
+								
 								//hide form
 								$hide_form = true;
 								
@@ -132,7 +124,6 @@ if (isset($_POST['token'])){
 				}
 
 				echo json_encode($reply);
-
 				
 			break;
 		
@@ -159,9 +150,8 @@ if (isset($_POST['token'])){
 				$subject = translate("Registration confirmation", "registration_message_subject", $languages);
 				$headers = $_SESSION['site_email'];
 				
-				// include file
 				include_once '../includes/inc.send_a_mail.php';
-				// send mail
+				
 				if(send_a_mail($_SESSION['token'], $to, $full_name, $_SESSION['site_email'], $_SESSION['site_copyright'], $subject, $m_body,'')) {
 					echo translate("Message sent", "message_sent", $languages);
 					
