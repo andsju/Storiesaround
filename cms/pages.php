@@ -159,8 +159,26 @@ $js_files = array(
     CMS_DIR.'/cms/libraries/jquery-flexnav/jquery.flexnav.js',
 );
 
-
 $js_files = add_js_language_files($js_files);
+
+
+
+
+
+
+$wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editors, $_SESSION['site_wysiwyg']) :  null;
+// javascript files... add wysiwyg file
+if (is_array($wysiwyg_editor)) {
+	if(file_exists(CMS_ABSPATH .'/cms/libraries/'.$wysiwyg_editor['include_js_file'])) {
+		array_push($js_files, CMS_DIR.'/cms/libraries/'.$wysiwyg_editor['include_js_file']);
+	}
+}
+
+
+
+
+
+
 
 // handle plugins, set each area value to null
 $plugin_header = $plugin_left_sidebar = $plugin_right_sidebar = $plugin_content = $plugin_footer = $plugin_page = null;
@@ -234,7 +252,7 @@ if ($arr['template'] == 6) {
             include_once_customfile('includes/inc.site_header.php', $arr, $languages); 
         }
         ?>
-        
+
         <nav id="site-navigation-header">
             <?php
             print_menu($pages, $id, $seo, $href, $open, $sample);
@@ -243,6 +261,10 @@ if ($arr['template'] == 6) {
 
     </header>
 
+    <div id="wrapper-site-header-image">
+        <?php include_once_customfile('includes/inc.site_header_image.php', $arr, $languages); ?>
+    </div>
+    
     <div id="wrapper-top">
         <?php
         
@@ -351,10 +373,12 @@ if ($arr['template'] == 6) {
     <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>">
     <input type="hidden" name="cms_dir" id="cms_dir" value="<?php echo CMS_DIR;?>">
     <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>">
+    <input type="hidden" name="users_id" id="users_id" value="<?php echo $users_id;?>">
+    <input type="hidden" name="role_cms" id="role_cms" value="<?php if (isset($_SESSION['role_CMS'])) { echo $_SESSION['role_CMS']; }?>">
     <input type="hidden" name="site_language" id="site_language" value="<?php echo $_SESSION['site_language'];?>">
     <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
     <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
-    
+
     <?php
     $js_files = array_unique($js_files);
     foreach ( $js_files as $js ) { 

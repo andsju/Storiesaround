@@ -214,6 +214,16 @@ function ajaxReplyLetItBe(message, tag_id) {
 	$(tag_id).empty().append('<span class="ui-icon ui-icon-circle-check" style="display:inline-block;vertical-align:text-bottom;"></span>' + message + ' ' + now).attr('style', 'border:1px solid #999999;background:#CCFF66;padding:2px;').show();
 }
 
+function ajaxReplyInline(element, result) {
+	$("span.edit_inline_reply").each(function() {
+		$(this).remove();
+	});
+	var f = $(element).closest("form");
+	var now = getTime();
+	var message = result == 1 ? "saved: " : "error: ";
+	f.append("<span class=\"ui-icon ui-icon-circle-check edit_inline_reply\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saved: "+now+"</span>");
+}
+
 
 // function ajax_reply - highlight reply -> hide reply
 // param jsonfomat

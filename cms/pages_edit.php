@@ -650,7 +650,7 @@ foreach ( $js_files as $js ): ?>
 			var grid_cell_image_height = $("#grid_cell_image_height").val();
 			var grid_area = $('input:radio[name=grid_area]:checked').val();
 			var grid_cell_template = $('input:radio[name=grid_cell_template]:checked').val();
-
+			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_grid').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_grid').hide()",700)},
@@ -662,7 +662,7 @@ foreach ( $js_files as $js ): ?>
 					grid_cell_template: grid_cell_template, grid_custom_classes: grid_custom_classes,
 					grid_cell_image_height: grid_cell_image_height
 				},
-				success: function(message){	
+				success: function(message){
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#setup';
 					location.reload(true);
 				}
@@ -4590,7 +4590,7 @@ if(is_array($check_edit)) {
 
 
 					<?php if(get_role_CMS('author') == 1) { ?>
-						<div style="padding-top:10px;">
+						<div style="padding:10px 0;">
 							<span class="toolbar_publish"><button class="btn_pages_publish" id="<?php echo $id;?>" style="border:3px solid black">Publish</button></span>
 							<span id="ajax_spinner_publish" style="display:none;"><img src="css/images/spinner.gif"></span>
 							<span id="ajax_status_publish" style="display:none;"></span>
@@ -4607,9 +4607,11 @@ if(is_array($check_edit)) {
 			
 		</div>
 		<div class="admin-panel">
-			<label for="pages_id_link">Title tag in head (leave field empty to use default -> page title): </label>
-			<br />
-			<input type="text" name="title_tag" id="title_tag" title="Override default title tag" size="50" maxlength="100" value="<?php if(isset($arr['title_tag'])){echo $arr['title_tag'];}?>" />
+			<p>
+				<label for="pages_id_link">Title tag in head (leave field empty to use default -> page title): </label>
+				<br />
+				<input type="text" name="title_tag" id="title_tag" title="Override default title tag" size="50" maxlength="100" value="<?php if(isset($arr['title_tag'])){echo $arr['title_tag'];}?>" />
+			</p>
 		</div>
 
 		

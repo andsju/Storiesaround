@@ -2,6 +2,11 @@
 
 $(document).ready(function() {
 
+	var pages_id = $("#pages_id").val();
+	var token = $("#token").val();
+	var users_id = $("#users_id").val();
+	var role_cms = $("#role_cms").val();
+
 	var language = $("#site_language").val();
 	var lang = 0;
 	switch(language) {
@@ -420,13 +425,19 @@ $(document).ready(function() {
 		//$("#nav-site-navigation-vertical").show();
 		$("#site-navigation-mobile").show();
 	});
-		
+
 	$("#search-site-icon").click(function(event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/pages/sok";
 	});	
 		
+	$("#site-login-icon").click(function(event) {
+		event.preventDefault();
+		var cms_dir = $("#cms_dir").val();
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/login.php";
+	});	
+
 	// window resize
 	$(window).resize(function() {
 
@@ -446,12 +457,101 @@ $(document).ready(function() {
 		equalheight('div.stories-cell');
 		equalheight('div.stories-wrapper');
 	}
-
 	
+	if (users_id && isNumeric(role_cms)) {
+		$(".editable").each(function() {  
+			$(this).wrap( "<form style=\"position:relative\"></form>" );
+		});
+		$(".editable_row").each(function() {  
+			$(this).wrap( "<form></form>" );
+		});
+
+		tinymce.init({
+			selector: 'h1.editable',
+			inline: true,
+			toolbar: 'undo redo | save',
+			plugins: 'save',
+			menubar: false,
+			save_enablewhendirty: true,
+			save_onsavecallback: function() {		
+				var title = $("#content-title").text();
+				var action = "update_title_only";
+				if (title.length > 0){
+					$.ajax({				
+						type: 'POST',
+						url: 'pages_edit_ajax.php',
+						data: { 
+							action: action, token: token, pages_id: pages_id, users_id: users_id, title: title
+						},
+						success: function(result){
+							ajaxReplyInline($('#content-title').closest("form"), result);
+						}
+					});
+				}
+			}
+		});
+
+		tinymce.init({
+			selector: 'div.editable_row',
+			inline: true,
+			toolbar: 'undo redo | save',
+			plugins: 'save',
+			menubar: false,
+			save_enablewhendirty: true,
+			save_onsavecallback: function() {		
+				var author = $("#content-author").text();
+				var action = "update_author_only";
+				if (author.length > 0){
+					$.ajax({				
+						type: 'POST',
+						url: 'pages_edit_ajax.php',
+						data: { 
+							action: action, token: token, pages_id: pages_id, users_id: users_id, author: author
+						},
+						success: function(result){
+							ajaxReplyInline($('#content-author').closest("form"), result);
+						}
+					});
+				}
+			}
+		});
+		  
+		tinymce.init({
+			selector: 'div.editable',
+			inline: true,
+			plugins: [
+			  'lists link image anchor',
+			  'searchreplace visualblocks ',
+			  'media contextmenu paste save'
+			],
+			menubar: false,
+			toolbar: 'searchreplace undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | save',
+			save_enablewhendirty: true,
+			save_onsavecallback: function() {				
+				var content = tinyMCE.get('content-html').getContent();
+				var action = "update_content_only";
+				if (content.length > 0){
+					$.ajax({				
+						type: 'POST',
+						url: 'pages_edit_ajax.php',
+						data: { 
+							action: action, token: token, pages_id: pages_id, users_id: users_id, content: content
+						},
+						success: function(result){
+							ajaxReplyInline($('#content-html').closest("form"), result);
+						}
+					});
+				}
+			},		
+			content_css: [
+				]
+		});
+		
+	}
+
 	//replace_image_path('/content/', '/somefolder/content/');
-	
-});
 
+});
 
 function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;

@@ -22,24 +22,26 @@ class Pages extends Database
      * @param int $parent_id
      * @param int $parent
      * @param int $position
+     * @param int $category_position
      * @param int $access
      * @param int $status
      * @param int $template
      * @param string $utc_modified
      * @return integer
      */
-    public function setPagesAddToplevelPage($title, $parent_id, $parent, $position, $access, $status, $template, $utc_modified)
+    public function setPagesAddToplevelPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $template, $utc_modified)
     {
         try {
             $sql_insert = "INSERT INTO pages 
-			(title, parent_id, parent, position, access, status, template, utc_modified) VALUES
-			(:title, :parent_id, :parent, :position, :access, :status, :template, :utc_modified)";
+			(title, parent_id, parent, position, category_position, access, status, template, utc_modified) VALUES
+			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :template, :utc_modified)";
 
             $stmt = $this->db->prepare($sql_insert);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_INT);
             $stmt->bindParam(':parent', $parent, PDO::PARAM_INT);
             $stmt->bindParam(':position', $position, PDO::PARAM_INT);
+            $stmt->bindParam(':category_position', $category_position, PDO::PARAM_INT);            
             $stmt->bindParam(':access', $access, PDO::PARAM_INT);
             $stmt->bindParam(':status', $status, PDO::PARAM_INT);
             $stmt->bindParam(':template', $template, PDO::PARAM_INT);
@@ -58,6 +60,7 @@ class Pages extends Database
      * @param $parent_id
      * @param $parent
      * @param $position
+     * @param $category_position
      * @param $access
      * @param $status
      * @param string $utc_modified
@@ -73,18 +76,19 @@ class Pages extends Database
      * @param int $stories_columns
      * @return integer
      */
-    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns)
+    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns)
     {
         try {
             $sql_insert = "INSERT INTO pages 
-			(title, parent_id, parent, position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_show, template, stories_columns) VALUES
-			(:title, :parent_id, :parent, :position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_show, :template, :stories_columns)";
+			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_show, template, stories_columns) VALUES
+			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_show, :template, :stories_columns)";
 
             $stmt = $this->db->prepare($sql_insert);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_INT);
             $stmt->bindParam(':parent', $parent, PDO::PARAM_INT);
             $stmt->bindParam(':position', $position, PDO::PARAM_INT);
+            $stmt->bindParam(':category_position', $category_position, PDO::PARAM_INT);
             $stmt->bindParam(':access', $access, PDO::PARAM_INT);
             $stmt->bindParam(':status', $status, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
@@ -1459,6 +1463,85 @@ class Pages extends Database
     }
 
 
+    /**
+     * @param int $pages_id
+     * @param string $content
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function updatePagesContentOnly($pages_id, $content, $utc_modified)
+    {
+        try {
+            $sql_update = "UPDATE pages
+			SET content = :content,
+			utc_modified = :utc_modified
+			WHERE pages_id = :pages_id";
+
+            $stmt = $this->db->prepare($sql_update);
+            $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+            $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
+
+    /**
+     * @param int $pages_id
+     * @param string $title
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function updatePagesTitleOnly($pages_id, $title, $utc_modified)
+    {
+        try {
+            $sql_update = "UPDATE pages
+			SET title = :title,
+			utc_modified = :utc_modified
+			WHERE pages_id = :pages_id";
+
+            $stmt = $this->db->prepare($sql_update);
+            $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+            $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
+    /**
+     * @param int $pages_id
+     * @param string $author
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function updatePagesAuthorOnly($pages_id, $author, $utc_modified)
+    {
+        try {
+            $sql_update = "UPDATE pages
+			SET content_author = :author,
+			utc_modified = :utc_modified
+			WHERE pages_id = :pages_id";
+
+            $stmt = $this->db->prepare($sql_update);
+            $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(':author', $author, PDO::PARAM_STR);
+            $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+    
     /**
      * @param int $pages_id
      * @param string $meta_keywords

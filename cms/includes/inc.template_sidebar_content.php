@@ -9,17 +9,21 @@
                 <div id="content-breadcrumb"><?php print_breadcrumb($id, $arr['breadcrumb']); ?></div>
                 <article>
                     <header>
-                        <h1 id="content-title"><?php echo $page_title_body .' '.$icon; ?></h1>
+                        <h1 id="content-title" class="editable"><?php echo $page_title_body .' '.$icon; ?></h1>
                         <div id="content-meta"><?php  print_meta($arr['utc_modified'], $dtz, $languages) ?></div>
                     </header>
-                    <div id="content-html">        
-                        <?php if ($arr['search_field_area'] == 3) { print_search_field_area_page($languages); } ?>
-                        <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
-                        <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>
-                        <?php echo $arr['content'];?>
+
+                    <?php if ($arr['search_field_area'] == 3) { print_search_field_area_page($languages); } ?>
+                    <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
+                    <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>
+
+                    <div id="content-html" class="editable">        
+                        <?php echo $arr['content'];?>                        
                     </div>
+
                     <footer>
-                        <div id="content-author"><?php print_author($arr['content_author'], $languages)?></div>
+                        <div id="content-author-leading"><?php print_author($arr['content_author'], $languages)?></div>
+                        <div id="content-author" class="editable_row"><?php echo $arr['content_author']; ?></div>
                         <div id="content-social-network"></div>
                     </footer>
                 </article>
