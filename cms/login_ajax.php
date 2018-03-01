@@ -10,16 +10,12 @@ if (isset($_SESSION['login_tries'])) {
 	}
 }
 
-// validate email_username
 if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE_STRING)) { 
 
-	// trim incoming data
 	$trimmed = array_map('trim', $_POST);
 
-	// check action
 	if ($action = filter_var($trimmed['action'], FILTER_SANITIZE_STRING)) {
 
-		// switch action 
 		switch ($action) {
 		
 			case 'login':
@@ -32,16 +28,15 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 				}
 				
 				$passw = $_POST['passw'];
+
 				// passwords are simple decoded in javascript using javascript function enc() bitwise XOR
 				// decode using last 2 numbers in string
 				$parts = getCodedString($passw);
 				$passw = enc($parts[0], $parts[1]);
-				
 				$users = new Users();
 				
 				if ($result = $users->$method($email_username)) {
-				
-					
+
 					if (password_verify($passw, $result['pass_hash'])) {
 
 						if (isset($result['activation_code'])) {
@@ -55,15 +50,12 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 								if($_SESSION['site_maintenance'] == 1) {
 
 									if($result['role_CMS'] < 6) {
-
-										//redirect 
 										echo translate("Site is under maintenance. Functionality is limited, please visit later", "site_maintenance", $languages);
 										die;
 									}
 								}
 							}
 
-						
 							// set site session variables, exclude pass_hash, activation_code, utc_lastvisit, status
 							$excl = array('pass_hash','activation_code','utc_lastvisit','status');
 							foreach ($result as $key => $value){
@@ -93,14 +85,13 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 						
 						
 					} else {  
-						// password fail						
 						// count login tries
 						if (!isset($_SESSION['login_tries'])) {
 							$_SESSION['login_tries'] = 1;
 						} else {
 							$_SESSION['login_tries']++;
-							// burning - show login_tries
 
+							// burning - show login_tries
 							echo translate("Wrong password", "login_fail_password", $languages);
 							if ($_SESSION['login_tries'] >= 3) {
 								echo ' '. $_SESSION['login_tries'];
@@ -112,7 +103,6 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 				} else {
 					// user not found
 					echo translate("Wrong password or username", "login_fail", $languages);
-					
 				}
 	
 			break;

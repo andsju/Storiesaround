@@ -83,13 +83,11 @@ if (isset($_POST['token'])){
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$history = new History();
 					$history->setHistory($result, 'site_id', 'INSERT', describe('site install', $site_name), 0, $_SESSION['token'], $utc_modified);
-				
 					$pass_hash = password_hash($password, PASSWORD_DEFAULT);
 					$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');					
 					
 					$result2 = $users->setUsersAdmin($email, $pass_hash, $first_name, $last_name, $user_name, $utc_created);					
 					if($result2) {
-						
 
 						$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 						$_SESSION['users_id'] = $result2;
@@ -112,8 +110,7 @@ if (isset($_POST['token'])){
 					}
 				}
 
-				 echo $s;
-			
+				 echo $s;			
 			break;
 		}
 	}
