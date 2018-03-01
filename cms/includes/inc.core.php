@@ -201,14 +201,12 @@ require_once CMS_ABSPATH . '/sys/inc.db.php';
 
 // detect mobil device - choose mobile or classic layout
 if (!isset($_SESSION['layoutType']) || $_SESSION['layoutType'] == "") {
-    //include(CMS_ABSPATH . '/cms/classes/Mobile_Detect.php');
     $detect = new Mobile_Detect();
     $_SESSION['layoutType'] = $detect->isMobile() ? "mobile" : "classic";
 }
 
 // load sessions from site class
 if (!isset($_SESSION['site_id'])) {
-    //include(CMS_ABSPATH . '/cms/classes/Site.php');
     $z = new Site();
     $site = $z->getSite();
     if ($site) {
@@ -218,9 +216,7 @@ if (!isset($_SESSION['site_id'])) {
         $excl = array('site_smtp_server', 'site_smtp_port', 'site_smtp_username', 'site_smtp_password', 'site_smtp_authentication', 'utc_modified', 'site_maintenance_message', 'site_error_mode', 'site_history_max');
         foreach ($site as $key => $value) {
             if (!in_array($key, $excl)) {
-                //if (strlen($value) > 0) {
-                    $_SESSION[$key] = $value;
-                //}
+                $_SESSION[$key] = $value;
             }
         }
         // $_SESSION['site_domain'] must be set to avoid error logs

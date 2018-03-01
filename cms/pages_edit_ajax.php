@@ -18,7 +18,7 @@ if (isset($_POST['token'])){
 		$users_id = filter_input(INPUT_POST, 'users_id', FILTER_VALIDATE_INT) ? $_POST['users_id'] : 0;
 
 		if(!get_role_CMS('contributor') == 1) { die; }
-	
+
 		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_STRING);	
 		
 		if ($pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT)) { 
@@ -38,7 +38,29 @@ if (isset($_POST['token'])){
 					die("!token");
 				}
 			}
-			
+
+			//check pages rights for users with role_CMS author & contributor
+			if($_SESSION['role_CMS'] <= 2) {	
+				$acc_edit = false;
+				$pages_rights = new PagesRights();
+				$users_id = isset($_SESSION['users_id']) ? $_SESSION['users_id'] : 0;
+				$users_rights = $pages_rights->getPagesUsersRights($pages_id, $users_id);
+				$groups_rights = $pages_rights->getPagesGroupsRights($pages_id);
+					
+				if($users_rights) {
+					if($users_rights['rights_edit'] == 1) {
+						$acc_edit = true;
+					}
+				} else {
+					if($groups_rights) {												
+						if(get_membership_rights('rights_edit', $_SESSION['membership'], $groups_rights)) {
+							$acc_edit = true;
+						}
+					}
+				}
+				if(!$acc_edit) { die; }	
+			}
+
 			// switch action 
 			switch ($action) {
 
@@ -83,7 +105,54 @@ if (isset($_POST['token'])){
 					
 				break;
 
+
+				case 'update_content_only':
+									
+					$content = trim($_POST['content']);
+					if (strlen($content)) {
+						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');						
+						$result = $pages->updatePagesContentOnly($pages_id, $content, $utc_modified);
+						if($result) {
+							$history = new History();
+							$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('content', $content), $users_id, $_SESSION['token'], $utc_modified);
+						}			
+						echo reply($result);
+					}
+					
+				break;
+
+				case 'update_title_only':
+					
+					$title = trim($_POST['title']);
+					if (strlen($title)) {
+						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');						
+						$result = $pages->updatePagesTitleOnly($pages_id, $title, $utc_modified);
+						if($result) {
+							$history = new History();
+							$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('title', $title), $users_id, $_SESSION['token'], $utc_modified);
+						}			
+						echo reply($result);
+					}
+					
+				break;
 				
+				case 'update_author_only':
+					
+					$author = trim($_POST['author']);
+					write_debug("Author: " . $author);
+					if (strlen($author)) {
+						write_debug("Author ok: " . $author);
+						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');			
+						$result = $pages->updatePagesAuthorOnly($pages_id, $author, $utc_modified);
+						if($result) {
+							$history = new History();
+							$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('author', $author), $users_id, $_SESSION['token'], $utc_modified);
+						}	
+						echo reply($result);
+					}
+					
+				break;
+
 				case 'save_seo_link':
 					
 					// sanitize seo link
@@ -2199,13 +2268,14 @@ if (isset($_POST['token'])){
 			$parent_id = 0;
 			$parent = 0;
 			$position = 10;
+			$category_position = 99;
 			$access= 0;
 			$status = 1;
 			$template = is_numeric($_SESSION['site_template_default']) ? $_SESSION['site_template_default'] : 0;
 			$title = filter_var(trim($_POST['title_toplevel_page']), FILTER_SANITIZE_STRING);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			
-			$lastInsertId = $pages->setPagesAddToplevelPage($title, $parent_id, $parent, $position, $access, $status, $template, $utc_modified);
+			$lastInsertId = $pages->setPagesAddToplevelPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $template, $utc_modified);
 			
 			// create folder
 			if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
@@ -2230,8 +2300,9 @@ if (isset($_POST['token'])){
 				$template = is_numeric($_SESSION['site_template_default']) ? $_SESSION['site_template_default'] : 0;
 				$position = 10;
 				$access = 0;
+				$category_position = 99;
 				$status = 1;
-				$parent = 0;
+				$parent = 0;				
 				$title = filter_var(trim($_POST['title_child_page']), FILTER_SANITIZE_STRING);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
@@ -2253,8 +2324,8 @@ if (isset($_POST['token'])){
 					$stories_columns = $r['stories_columns'];
 					$stories_filter = $r['stories_filter'];
 					$selections = $r['selections'];
-	
-					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns);
+					
+					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns);
 					
 					if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
 						mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);

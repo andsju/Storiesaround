@@ -484,7 +484,6 @@ function print_author($author, $languages)
     if(strlen($author)) {
         $s = "";
         $s .= translate("Author", "pages_content_author", $languages);
-        $s .= ': <span>'.$author.'</span>';
         echo $s;
     }
 }
