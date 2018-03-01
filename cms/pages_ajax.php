@@ -5,15 +5,11 @@ include_once 'includes/inc.functions_pages.php';
 
 $pages = new Pages();
 
-write_debug("A");
-// overall
 if (isset($_POST['token']) || isset($_GET['token'])){
-	write_debug("B");
-	// only accept this $_SESSION['token']
+
 	$req =  isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
 	
 	if ($req == $_SESSION['token'])  {
-		write_debug("C");
 
 		$action = filter_var(trim($_REQUEST['action']), FILTER_SANITIZE_STRING);
 		

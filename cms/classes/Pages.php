@@ -659,7 +659,7 @@ class Pages extends Database
         $sql .= " relevance DESC, ";
         $sql .= " tag LIKE {$tags} DESC ";
         $sql .= " LIMIT $limit_start, $limit";
-        write_debug($sql);
+
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->bindParam(':status', $status, PDO::PARAM_INT);                
