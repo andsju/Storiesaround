@@ -50,8 +50,7 @@ $css_files = array(
 	CMS_DIR.'/cms/css/normalize.css', 
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/css/layout.css', 
-	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
-	CMS_DIR.'/cms/libraries/font-awesome/css/font-awesome.min.css'
+	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css'
 );
 
 // css files... add css jquery-ui theme
@@ -84,7 +83,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/js/functions.js',
-	'https://use.fontawesome.com/7d3c248bcd.js'
+	//'https://use.fontawesome.com/7d3c248bcd.js'
 );
 
 // javascript files... add wysiwyg file
@@ -398,7 +397,7 @@ foreach ( $js_files as $js ): ?>
 			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 1, "grid-dynamic-content-limit", "", "");
 			dynamic += limitSelectList;
 			cell += "<div class=\"grid-cell\" style=\"position:relative\">"
-			var tool = "<div class=\"grid-tools\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i><br><i class=\"fa fa-trash-o fa-2x\"></i></div>";
+			var tool = "<div class=\"grid-tools\"><i class=\"far fa-save\" aria-hidden=\"true\"></i><br><i class=\"far fa-edit\" aria-hidden=\"true\"></i><br><i class=\"fas fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fas fa-arrow-right\" aria-hidden=\"true\"></i><br><i class=\"far fa-trash-alt\"></i></div>";
 			cell += tool;
 
 			var adjustSelectList = getSelectNumber([0,10,20,30,40,50,60,70,80,90,100], 0, "grid-image-y", "", "");
@@ -411,7 +410,7 @@ foreach ( $js_files as $js ): ?>
 			activateEditor("tinymce");
 		});
 		
-		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-trash-o", "click", function(event) {
+		$("div#wrapper-grid").delegate( "div.grid-tools .fa-trash-alt", "click", function(event) {
 			event.preventDefault();
 			var that = $(this); 
 			$("#dialog_delete_item").dialog("open");
@@ -429,7 +428,7 @@ foreach ( $js_files as $js ): ?>
 			});
 		});
 
-		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-pencil-square-o", "click", function(event) {
+		$("div#wrapper-grid").delegate( "div.grid-tools .fa-edit", "click", function(event) {
 			event.preventDefault();
 			console.log("ppp");
 			console.log($(this).parent().parent().children());
@@ -438,7 +437,7 @@ foreach ( $js_files as $js ): ?>
 			equalheight('div.grid-cell');
 		});
 
-		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-arrow-left", "click", function(event) {
+		$("div#wrapper-grid").delegate( "div.grid-tools .fa-arrow-left", "click", function(event) {
 			event.preventDefault();
 			var item = $(this).parent().parent();
 			var prev_item = item.prev();
@@ -446,7 +445,7 @@ foreach ( $js_files as $js ): ?>
 			equalheight('div.grid-cell');
 		});
 
-		$("div#wrapper-grid").delegate( "div.grid-tools i.fa-arrow-right", "click", function(event) {
+		$("div#wrapper-grid").delegate( "div.grid-tools .fa-arrow-right", "click", function(event) {
 			event.preventDefault();
 			var item = $(this).parent().parent();
 			var next_item = item.next();
@@ -466,7 +465,7 @@ foreach ( $js_files as $js ): ?>
 			$("<span class=\"reply_fail\">"+message+"</span>").insertAfter(node);
 		} 
 
-		$("div#wrapper-grid").delegate( ".fa-floppy-o", "click", function(event) {
+		$("div#wrapper-grid").delegate( ".fa-save", "click", function(event) {
 			event.preventDefault();
 
 			var form = $(this).parent().parent().children("div.grid-form");
@@ -2349,7 +2348,7 @@ foreach ( $js_files as $js ): ?>
 			var optionTexts = [];
 			$("ul#tags li").each(function() { optionTexts.push($(this).text()) });
 			if(optionTexts.indexOf(tag) == -1) {
-				$('ul#tags').append('<li>'+tag+'<i class="fa fa-trash-o" aria-hidden="true"></i></li>');
+				$('ul#tags').append('<li>'+tag+'<i class="far fa-trash-alt" aria-hidden="true"></i></li>');
 			}
 			$("#tag").val('');
 		});
@@ -2432,8 +2431,8 @@ foreach ( $js_files as $js ): ?>
 	function page_preview(id) {
 		var w = screen.width-50;
 		var h = screen.height-50;
-		w=window.open('pages_preview.php?id='+id,'','width='+w+',height='+h+',scrollbars=1,menubar=0,location=0,directories=0,toolbar=0');
-		w.focus();
+		//w=window.open('pages_preview.php?id='+id,'','width='+w+',height='+h+',scrollbars=1,menubar=0,location=0,directories=0,toolbar=0');
+		//w.focus();
 	}
 	
 	function selection_preview(id) {
@@ -2660,7 +2659,7 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;padding-top:10px;">
-					<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Page template</h4>
+					<h4><i class="far fa-newspaper" aria-hidden="true"></i> Page template</h4>
 						<p>
 						<span class="toolbar"><button id="link_page_template_setup">Save template</button></span>
 						</p>
@@ -2714,7 +2713,7 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;">
-						<h4><i class="fa fa-picture-o" aria-hidden="true"></i> Header image</h4>
+						<h4><i class="fas fa-image" aria-hidden="true"></i> Header image</h4>
 						<p>
 							<span class="toolbar"><button id="btn_site_header_image">Show selectable images</button></span>
 							
@@ -2794,7 +2793,7 @@ if(is_array($check_edit)) {
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;">
-						<h4><i class="fa fa-tasks" aria-hidden="true"></i> Selections</h4>
+						<h4><i class="fas fa-tasks" aria-hidden="true"></i> Selections</h4>
 						<p style="margin-top:10px;">
 							<span class="toolbar"><button id="btn_site_selections" value="btn_site_selections">Save selections</button></span>
 							<span id="ajax_spinner_selections" style='display:none'><img src="css/images/spinner.gif"></span>
@@ -2853,13 +2852,13 @@ if(is_array($check_edit)) {
 				<tr>
 					<td style="width:70%">
 
-						<h4><i class="fa fa-paw" aria-hidden="true"></i> Breadcrumb</h4>
+						<h4><i class="fas fa-paw" aria-hidden="true"></i> Breadcrumb</h4>
 						
 						<p>
 							<input type="radio" name="breadcrumb" value="0" <?php if($arr['breadcrumb'] == 0) {echo 'checked';}?>> hide  | <input type="radio" name="breadcrumb" value="1" <?php if($arr['breadcrumb'] == 1) {echo 'checked';}?>> show (default) | <input type="radio" name="breadcrumb" value="2" <?php if($arr['breadcrumb'] == 2) {echo 'checked';}?>> show + children (select) | <input type="radio" name="breadcrumb" value="3" <?php if($arr['breadcrumb'] == 3) {echo 'checked';}?>> show + children (ul)
 						</p>
 					
-						<h4><i class="fa fa-globe" aria-hidden="true"></i> Language</h4>
+						<h4><i class="fas fa-globe" aria-hidden="true"></i> Language</h4>
 						<p>
 							Set this page html lang attribute - overrides site settings. 2-letter (ISO 639-1 codes)
 						</p>
@@ -2867,7 +2866,7 @@ if(is_array($check_edit)) {
 							<input type="text" size="2" name="lang" id="lang" value="<?php echo $arr['lang']; ?>" />
 						</p>
 
-						<h4><i class="fa fa-search" aria-hidden="true"></i> Search field</h4>
+						<h4><i class="fas fa-search" aria-hidden="true"></i> Search field</h4>
 						<p>
 							Specify search field area
 						</p>
@@ -2886,7 +2885,7 @@ if(is_array($check_edit)) {
 							</select>
 						</p>
 
-						<h4><i class="fa fa-tag" aria-hidden="true"></i> Category</h4>
+						<h4><i class="fas fa-tag" aria-hidden="true"></i> Category</h4>
 						<p>
 							Specify a page category  
 						</p>
@@ -2925,7 +2924,7 @@ if(is_array($check_edit)) {
 		
 			<div class="admin-panel">
 
-				<h4><i class="fa fa-folder" aria-hidden="true"></i> Folder</h4>
+				<h4><i class="fas fa-folder" aria-hidden="true"></i> Folder</h4>
 
 				<?php if (!is_dir(CMS_ABSPATH . '/content/uploads/pages/'. $id)) { ?>
 				<p>
@@ -2957,7 +2956,7 @@ if(is_array($check_edit)) {
 				<tr>
 					<td style="width:48%; vertical-align:top;">
 					<div>
-						<h4><i class="fa fa-sitemap" aria-hidden="true"></i> Page hierarchy</h4>
+						<h4><i class="fas fa-sitemap" aria-hidden="true"></i> Page hierarchy</h4>
 						<p>
 							Attach this page to parent page:&nbsp;<span id="sitetree_selected_name" style="" /></span>
 						</p>
@@ -3041,7 +3040,7 @@ if(is_array($check_edit)) {
 			<table style="width:100%">
 				<tr>
 					<td style="width:40%">
-						<h4><i class="fa fa-calendar" aria-hidden="true"></i> Calendar</h4>
+						<h4><i class="fas fa-calendar-alt" aria-hidden="true"></i> Calendar</h4>
 						<p>
 							<input type="checkbox" name="events" id="events" value="1" <?php if($arr['events'] == 1) {echo 'checked';}?>>
 							include calendar events (if changed save and reload page)
@@ -3155,7 +3154,7 @@ if(is_array($check_edit)) {
 		<div class="admin-panel">
 			<?php if(get_role_CMS('administrator') == 1) { ?>
 
-			<h4><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Plugin</h4>
+			<h4><i class="fas fa-puzzle-piece" aria-hidden="true"></i> Plugin</h4>
 			<p>
 				<input type="checkbox" name="plugins" id="plugins" value="1" <?php if($arr['plugins'] == 1) {echo 'checked';}?>>
 				include plugins 
@@ -3229,7 +3228,7 @@ if(is_array($check_edit)) {
 		?>
 
 		<div class="admin-panel">
-			<h4><i class="fa fa-file-image-o" aria-hidden="true"></i> Images</h4>
+			<h4><i class="far fa-file-image" aria-hidden="true"></i> Images</h4>
 			<table style="width:100%">
 				<tr>
 					<td style="vertical-align:bottom">
@@ -3286,7 +3285,7 @@ if(is_array($check_edit)) {
 	<div id="files">
 	
 		<div class="admin-panel">
-			<h4><i class="fa fa-file" aria-hidden="true"></i> Files</h4>
+			<h4><i class="far fa-file" aria-hidden="true"></i> Files</h4>
 			<p>
 				<a class="colorbox_images" href="pages_edit_files.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>"><span class="toolbar_save_images"><button id="btn_new_files">New files</button></span></a>
 				&nbsp;|&nbsp;
@@ -4043,7 +4042,7 @@ if(is_array($check_edit)) {
 
 				<div style="float:left;width:50%" class="grid-settings">
 
-					<h4><i class="fa fa-th" aria-hidden="true"></i> Grid settings</h4>
+					<h4><i class="fas fa-th" aria-hidden="true"></i> Grid settings</h4>
 					<p>
 						<input type="checkbox" name="grid_active" id="grid_active" value="1" <?php if($arr['grid_active'] == 1) {echo 'checked="checked"';}?>> Active
 					</p>
@@ -4059,7 +4058,7 @@ if(is_array($check_edit)) {
 						<input type="radio" value="3" name="grid_area" <?php if($arr['grid_area'] == 3) {echo 'checked="checked"';}?>> Below
 					</p>
 					<p style="margin-top:40px">
-						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="fa fa-plus-square-o fa" aria-hidden="true"></i></button><span>
+						<span class="toolbar"><button class="add-grid-item">Add grid item <i class="far fa-plus-square" aria-hidden="true"></i></button><span>
 						<span class="toolbar"><button name="btnSaveGrid" id="btnSaveGrid">Save grid</button></span>
 						<span id="ajax_spinner_grid" style='display:none'><img src="css/images/spinner.gif"></span>
 						<span id="ajax_status_grid" style='display:none'></span>
@@ -4137,14 +4136,14 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
-			<h4><i class="fa fa-leaf" aria-hidden="true"></i> Story</h4>
+			<h4><i class="fas fa-leaf" aria-hidden="true"></i> Story</h4>
 			<p>
 				How this page may be shown as a story  
 			</p>
 			<table style="width:100%;">
 				<tr>
 					<td style="width:25%;">
-					<label for="tag"><i class="fa fa-tags" aria-hidden="true"></i> Tag page:</label>
+					<label for="tag"><i class="fas fa-tags" aria-hidden="true"></i> Tag page:</label>
 					<br />
 					<input type="text" name="tag" id="tag" title="Tag page" style="width:150px;" maxlength="25" />		
 					<span class="toolbar_add"><button id="btn_add_tag" style="margin:0px" type="submit">Add</button></span>
@@ -4157,7 +4156,7 @@ if(is_array($check_edit)) {
 					if(isset($arr['tag']) && strlen($arr['tag']) >0) {
 						$tags = explode(",", $arr['tag']);
 						foreach ($tags as $tag){
-							echo '<li>'.$tag.'<i class="fa fa-trash-o" aria-hidden="true"></i></li>';
+							echo '<li>'.$tag.'<i class="far fa-trash-alt" aria-hidden="true"></i></li>';
 						}
 					}
 					?>
@@ -4315,7 +4314,7 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
-			<h4><i class="fa fa-leaf" aria-hidden="true"></i> RSS</h4>
+			<h4><i class="fas fa-leaf" aria-hidden="true"></i> RSS</h4>
 
 			<p>
 				<span style="font-size:2.14em;padding:5px;"><?php if(isset($arr['title'])){echo $arr['title'];}?></span>
@@ -4526,7 +4525,7 @@ if(is_array($check_edit)) {
 					<h4>Step 1</h4>
 				</div>
 				<div class="publish-step">
-					<h4><i class="fa fa-user-secret" aria-hidden="true"></i> Page visibilty</h4>
+					<h4><i class="fas fa-user-secret" aria-hidden="true"></i> Page visibilty</h4>
 					
 					<input type="radio" name="access" id="access" value="0" <?php if($arr['access'] == 0) {echo 'checked';}?>> logged in users with rights to read
 					<br />
@@ -4545,7 +4544,7 @@ if(is_array($check_edit)) {
 					<h4>Step 2</h4>
 				</div>
 				<div class="publish-step">
-					<h4><i class="fa fa-check-square-o" aria-hidden="true"></i> Friendly URL</h4>
+					<h4><i class="far fa-check-square" aria-hidden="true"></i> Friendly URL</h4>
 
 					<label for="pages_id_link">Friendly URL, use following title based link: </label>
 					<br />
@@ -4570,7 +4569,7 @@ if(is_array($check_edit)) {
 				</div>
 				<div class="publish-step">
 
-					<h4><i class="fa fa-play" aria-hidden="true"></i> Publish</h4>
+					<h4><i class="fas fa-play" aria-hidden="true"></i> Publish</h4>
 
 					<p>
 						<?php
