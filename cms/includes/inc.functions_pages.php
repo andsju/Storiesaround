@@ -425,7 +425,7 @@ function print_meta($utc_modified, $dtz, $languages)
 function print_search_field_area_header($languages)
 {
     $html = '<div id="site-search-header">';
-    $html .= '<label for="search"><i class="fa fa-search" aria-hidden="true"></i></label>'; 
+    $html .= '<label for="search"><i class="fas fa-search" aria-hidden="true"></i></label>'; 
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
@@ -444,7 +444,7 @@ function print_search_field_area_header($languages)
 function print_search_field_area_page($languages)
 {
     $html = '<div id="site-search-page">';
-    $html .= '<label for="search-page"><i class="fa fa-search" aria-hidden="true"></i></label>'; 
+    $html .= '<label for="search-page"><i class="fas fa-search" aria-hidden="true"></i></label>'; 
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="'.CMS_DIR.'/cms/css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
@@ -2339,11 +2339,12 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
         $header = "";
         $image = "";
         
+
         foreach ($value as $key2 => $value2) {
             switch ($key2) {
                 case "0":
                 $html_grid .= '<div class="grid-cell '.$result_copy[$counter][15].'">';
-                $html_grid .= '<div class="grid-tools"><i class="fa fa-floppy-o" aria-hidden="true"></i><br><i class="fa fa-pencil-square-o" aria-hidden="true"></i><br><i class="fa fa-arrow-left" aria-hidden="true"></i><br><i class="fa fa-arrow-right" aria-hidden="true"></i><br><i class="fa fa-trash-o fa-2x"></i></div>';
+                $html_grid .= '<div class="grid-tools"><i class="far fa-save"></i><br><i class="far fa-edit" aria-hidden="true"></i><br><i class="fas fa-arrow-left" aria-hidden="true"></i><br><i class="fas fa-arrow-right" aria-hidden="true"></i><br><i class="far fa-trash-alt"></i></div>';
                 break;
                 case "1":
                     //if(strlen($value2)) {

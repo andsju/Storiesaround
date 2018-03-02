@@ -11,12 +11,12 @@
 </div>
 
 <div id="site-navigation-cms">
-	<a href="<?php echo CMS_DIR; ?>/pages/sok"><i class="fa fa-search" aria-hidden="true"></i></a>
+	<a aria-label="<?php echo translate("Search", "search", $languages); ?>" href="<?php echo CMS_DIR; ?>/pages/sok"><i class="fas fa-search" aria-hidden></i></a>
 	<?php if (!isset($_SESSION['users_id'])) { ?>
-		<a href="<?php echo CMS_DIR; ?>/cms/login.php"><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="cms-link"><?php echo translate("Login", "site_login", $languages); ?></span></a>
+		<a aria-label="<?php echo translate("Login", "site_login", $languages); ?>" href="<?php echo CMS_DIR; ?>/cms/login.php"><i class="fas fa-sign-in-alt"></i></a>
 	<?php } ?>
 	<?php if(isset($_SESSION['site_domain_url'])) { ?>
-		<a href="<?php echo $_SESSION['site_domain_url']; ?>"><i class="fa fa-home" aria-hidden="true"></i> <span class="cms-link"><?php echo translate("Start", "site_start_page", $languages); ?></span></a>
+		<a aria-label="<?php echo translate("Start", "site_start_page", $languages); ?>" href="<?php echo $_SESSION['site_domain_url']; ?>"><i class="fas fa-home"></i></a>
 	<?php } ?>
 </div>
 

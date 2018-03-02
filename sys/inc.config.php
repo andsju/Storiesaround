@@ -4,7 +4,6 @@
 -------------------------------------------------- */
 define('LIVE', true);
 
-
 /* custom css settings, available in some select lists
 -------------------------------------------------- */
 $css_custom = array(
