@@ -7,9 +7,12 @@ if(!get_role_CMS('user') == 1) {die;}
 
 $pages = new Pages();
 
-// overall
-if (isset($_POST['token'])){
+if (isset($_POST['token'])) {
+		
 	if ($_POST['token'] == $_SESSION['token']) {
+
+		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_STRING);
+
 		// check client user-agent, prevent session been hijacked
 		if($_SESSION['HTTP_USER_AGENT'] != $_SERVER['HTTP_USER_AGENT']) {
 			die('User agent fail. Please logout and login again.');
@@ -19,27 +22,8 @@ if (isset($_POST['token'])){
 
 		if(!get_role_CMS('contributor') == 1) { die; }
 
-		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_STRING);	
-		
 		if ($pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT)) { 
 			
-			$history = new History();
-			if ($action == 'edit_ownership') { 			
-				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-				$history->setHistory($pages_id, 'pages_id', 'ACCESS', 'edit', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);
-			}
-			
-			// check active token
-			$check_edit = $history->getHistorySession($pages_id, 'pages_id');
-			if(is_array($check_edit)) {
-
-				$token_match = $_SESSION['token'] == $check_edit['session'] ? true : false;
-				if(!$token_match) {
-					die("!token");
-				}
-			}
-
-			//check pages rights for users with role_CMS author & contributor
 			if($_SESSION['role_CMS'] <= 2) {	
 				$acc_edit = false;
 				$pages_rights = new PagesRights();
@@ -59,9 +43,8 @@ if (isset($_POST['token'])){
 					}
 				}
 				if(!$acc_edit) { die; }	
-			}
-
-			// switch action 
+			}			
+			
 			switch ($action) {
 
 				case 'loremipsum':	
@@ -71,17 +54,22 @@ if (isset($_POST['token'])){
 					
 				break;
 			
+				case 'edit_ownership':	
+				
+					$history = new History();
+					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+					$history->setHistory($pages_id, 'pages_id', 'ACCESS', 'edit', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);
+					
+				break;
+
 				case 'update':
 
-					// check for pages_title value
 					if (strlen(trim($_POST['pages_title'])) > 0) {
 						$pages_title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_STRING);
 					}
 					
-					// required fields validated so far, next step
 					if ($pages_title){
 					
-						// trim content
 						$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative']), FILTER_SANITIZE_STRING);
 						$content = trim($_POST['content']);
 						$title_hide = filter_input(INPUT_POST, 'title_hide', FILTER_VALIDATE_INT) ? $_POST['title_hide'] : 0;
@@ -93,7 +81,6 @@ if (isset($_POST['token'])){
 						$plugins = filter_input(INPUT_POST, 'plugins', FILTER_VALIDATE_INT) ? $_POST['plugins'] : 0;
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 						
-						// use class update
 						$result = $pages->updatePagesContent($pages_id, $pages_title, $pages_title_alternative, $title_hide, $content, $content_author, $rss_promote, $rss_description, $events, $reservations, $plugins, $utc_modified);
 						
 						if($result) {
@@ -105,6 +92,45 @@ if (isset($_POST['token'])){
 					
 				break;
 
+
+				case 'update_inline' :
+	
+					$utc_datetime = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+					$utc_datetime_dtz = get_utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
+					$history = new History();
+
+					$check_edit = $history->getHistorySession($pages_id, 'pages_id');
+					$acc = false;
+					if(is_array($check_edit)) {
+
+						$utc_last_modified = $check_edit['utc_datetime'];
+						$last_token = $check_edit['session'];
+						$last_name = $check_edit['name'];
+						$utc_last_modified_dtz = get_utc_dtz($utc_last_modified, $dtz, 'Y-m-d H:i:s');
+						
+						// check tokens
+						$token_match = $_SESSION['token'] == $last_token ? true : false;
+
+						if($token_match) {
+							$history->setHistory($pages_id, 'pages_id', 'ACCESS', 'edit', $_SESSION['users_id'], $_SESSION['token'], $utc_datetime);
+							$acc = true;
+						}
+
+						if(!$acc) {
+
+							$utc_stamp = new DateTime($utc_last_modified_dtz, new DateTimeZone($dtz));
+							$utc_stamp->modify('+ 300 seconds');
+							$utc_editable = $utc_stamp->format('Y-m-d H:i:s');
+							if($utc_datetime_dtz > $utc_editable) {
+								$history->setHistory($pages_id, 'pages_id', 'ACCESS', 'edit', $_SESSION['users_id'], $_SESSION['token'], $utc_datetime);
+								$acc = true;
+							}
+						}
+					}
+
+					echo $acc;
+
+				break;
 
 				case 'update_content_only':
 									
@@ -153,11 +179,9 @@ if (isset($_POST['token'])){
 
 				case 'save_seo_link':
 					
-					// sanitize seo link
 					$pages_id_link = filter_var(trim($_POST['pages_id_link']), FILTER_SANITIZE_STRING);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					// use class update
 					$result = $pages->updatePagesSeoLink($pages_id, $pages_id_link, $utc_modified);
 					
 					if($result) {
@@ -178,7 +202,6 @@ if (isset($_POST['token'])){
 					$meta_additional = filter_var(trim($_POST['meta_additional']), FILTER_SANITIZE_MAGIC_QUOTES);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					// use class update
 					$result = $pages->updatePagesMeta($pages_id, $meta_keywords, $meta_description, $meta_robots, $meta_additional, $utc_modified);
 					
 					if($result) {
@@ -193,9 +216,7 @@ if (isset($_POST['token'])){
 
 				case 'update_pages_position':
 
-					// array of pages
 					$pages_id_array = $_POST['arr_pages_id'];
-					// use class update
 					$result = $pages->updatePagesPosition($pages_id_array);
 					
 					if($result) {

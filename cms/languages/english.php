@@ -47,6 +47,8 @@ $languages["btn_search"] = 'Search';
 // pages
 $languages['pages_add_childpage'] = 'Add page';
 $languages['pages_edit'] = 'Edit';
+$languages['pages_edit_inline'] = 'Edit inline';
+$languages['pages_edit_inline_default'] = 'Edit page in separate browser window';
 $languages['pages_status_published'] = 'Published';
 $languages['pages_status_modified'] = 'Modified';
 $languages['pages_content_author'] = 'Author';

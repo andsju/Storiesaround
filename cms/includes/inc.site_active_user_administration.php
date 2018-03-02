@@ -6,7 +6,7 @@ if(!defined('VALID_INCL')){die('Restricted access');}
 ?>
 
 <div id="wrapper-user">
-	<div id="user-toolbar"><?php include 'includes/inc.site_active_user2.php';?></div>
+	<div id="user-toolbar"><?php include 'includes/inc.site_active_user.php';?></div>
 </div>
 
 <script type="text/javascript">

@@ -47,6 +47,8 @@ $languages["btn_search"] = 'Sök';
 // pages
 $languages['pages_add_childpage'] = 'Ny sida';
 $languages['pages_edit'] = 'Redigera';
+$languages['pages_edit_inline'] = 'Redigera inline';
+$languages['pages_edit_inline_default'] = 'Redigera sidan i eget fönster';
 $languages['pages_status_published'] = 'Publicerad';
 $languages['pages_status_modified'] = 'Redigerad';
 $languages['pages_content_author'] = 'Sidansvarig';

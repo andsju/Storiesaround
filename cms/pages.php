@@ -134,7 +134,6 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
     CMS_DIR.'/cms/css/layout.css',
-    CMS_DIR.'/cms/libraries/font-awesome/css/font-awesome.min.css',
     'https://fonts.googleapis.com/css?family=Open+Sans'
     
 );
@@ -156,7 +155,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js', 
 	CMS_DIR.'/cms/libraries/masonry/masonry.pkgd.min.js',
 	CMS_DIR.'/cms/libraries/masonry/imagesloaded.js',
-    CMS_DIR.'/cms/libraries/jquery-flexnav/jquery.flexnav.js',
+    CMS_DIR.'/cms/libraries/jquery-flexnav/jquery.flexnav.js'
 );
 
 $js_files = add_js_language_files($js_files);
@@ -235,7 +234,7 @@ if ($arr['template'] == 6) {
 
     <?php if ($users_id) {?>
     <div id="wrapper-user">
-        <div id="user-toolbar"><?php include 'includes/inc.site_active_user2.php';?></div>
+        <div id="user-toolbar"><?php include 'includes/inc.site_active_user.php';?></div>
     </div>
     
     <?php }?>
@@ -387,6 +386,11 @@ if ($arr['template'] == 6) {
     ?>
 
     <?php include_once 'includes/inc.debug.php'; ?>
+    
+    <div id="dialog_edit" title="Confirmation required" style="display:none;">
+        <?php echo translate("Use default edit options", "pages_edit_inline_default", $languages); ?>
+    </div>
+    
 
 </body>
 
