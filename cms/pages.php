@@ -133,9 +133,7 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
 	CMS_DIR.'/cms/libraries/jquery-flexnav/flexnav.css',
-    CMS_DIR.'/cms/css/layout.css',
-    'https://fonts.googleapis.com/css?family=Open+Sans'
-    
+    CMS_DIR.'/cms/css/layout.css'    
 );
 
 $css_files = add_css_themes($css_files);
@@ -153,8 +151,6 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-plugin-validation/jquery.validate.js',
 	CMS_DIR.'/cms/libraries/jquery-jplayer/jquery.jplayer.min.js', 
 	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js', 
-	CMS_DIR.'/cms/libraries/masonry/masonry.pkgd.min.js',
-	CMS_DIR.'/cms/libraries/masonry/imagesloaded.js',
     CMS_DIR.'/cms/libraries/jquery-flexnav/jquery.flexnav.js'
 );
 

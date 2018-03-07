@@ -82,8 +82,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js', 
 	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
-	CMS_DIR.'/cms/libraries/js/functions.js',
-	//'https://use.fontawesome.com/7d3c248bcd.js'
+	CMS_DIR.'/cms/libraries/js/functions.js'
 );
 
 // javascript files... add wysiwyg file
@@ -2536,6 +2535,7 @@ foreach ( $js_files as $js ): ?>
 <input type="hidden" id="wysiwyg" value="<?php echo strtolower($wysiwyg_editor['editor']) ;?>" />
 <input type="hidden" name="pages_id" id="pages_id" value="<?php echo $id;?>" />
 <input type="hidden" id="users_id" name="users_id" value="<?php echo $_SESSION['users_id']; ?>">
+<input type="hidden" id="theme" name="theme" value="<?php echo $_SESSION['site_theme']; ?>">
 <input type="hidden" id="parent_id" name="parent_id" value="<?php echo $arr['parent_id']; ?>">
 <input type="hidden" id="site_header_image" name="site_header_image" value="<?php echo $arr['header_image']; ?>">
 
@@ -4659,8 +4659,5 @@ if(is_array($check_edit)) {
 </div>
 
 <?php include_once 'includes/inc.footer_cms.php'; ?>
-<?php
-print_r(ini_get('post_max_size'));
-?>
 </body>
 </html>

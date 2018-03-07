@@ -11,7 +11,7 @@ if (isset($_SESSION['first_name'])) {
 
 			echo "\n\t".'<li class="toolbar-icons"><a href="'.$_SESSION['site_domain_url'].'" title="'.translate("Home", "site_home", $languages).'"><i class="fas fa-home"></i></a></li>';
 			if(get_role_CMS('contributor') == 1) {
-				echo "\n\t".'<li class="toolbar-icons"><a href="'.CMS_DIR.'/cms/admin.php" target="_blank" title="'.translate("Administration", "site_administration", $languages).'"><i class="fas fa-cog"></i></a></li>';
+				echo "\n\t".'<li class="toolbar-icons"><a href="'.CMS_DIR.'/cms/admin.php" target="_blank" title="'.translate("Administration", "site_administration", $languages).'"><i class="fas fa-cogs"></i></a></li>';
 			
 				if(get_role_CMS('author') == 1 && $is_page == true) {
 					echo "\n\t".'<li class="toolbar-icons"><a href="'.CMS_DIR.'/cms/admin.php?t=pages&amp;tp=add&amp;id='. $id .'" class="colorbox_edit" title="'.translate("Add page", "pages_add_childpage", $languages).'">&nbsp;<i class="far fa-file"></i></a></li>';
@@ -22,7 +22,7 @@ if (isset($_SESSION['first_name'])) {
 				}
 			}
 			
-			echo "\n\t".'<li class="toolbar-icons dropdown" title="'. $_SESSION['first_name'] .' '. $_SESSION['last_name'] .'"><i class="fas fa-user"></i>';	
+			echo "\n\t".'<li class="toolbar-icons dropdown" title="'. $_SESSION['first_name'] .' '. $_SESSION['last_name'] .'"><i class="far fa-user"></i>';	
 				echo '<ul>';
 					echo "\n\t".'<li>IP adress: '.$_SERVER['REMOTE_ADDR'].'</li>';
 					echo "\n\t".'<li><a id="link_user" href="'.CMS_DIR.'/cms/users_edit.php?users_id='. $_SESSION['users_id'] .'">'. $_SESSION['first_name'] .' '. $_SESSION['last_name'] .'&nbsp;<span class="ui-icon ui-icon-person" style="display:inline-block;"></span></a> </li>';

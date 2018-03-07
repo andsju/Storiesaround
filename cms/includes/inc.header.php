@@ -8,13 +8,13 @@
 
     <?php
     if (isset($meta_keywords)) {
-        echo "\n\t" . '<meta name="keywords" content="' . $meta_keywords . '" />';
+        echo "\n\t" . '<meta name="keywords" content="' . $meta_keywords . '">';
     }
     if (isset($meta_description)) {
-        echo "\n\t" . '<meta name="description" content="' . $meta_description . '" />';
+        echo "\n\t" . '<meta name="description" content="' . $meta_description . '">';
     }
     if (isset($meta_robots)) {
-        echo "\n\t" . '<meta name="robots" content="' . $meta_robots . '" />';
+        echo "\n\t" . '<meta name="robots" content="' . $meta_robots . '">';
     }
     if (isset($meta_additional)) {
         echo "\n" . stripcslashes($meta_additional);
@@ -25,21 +25,22 @@
     ?>
 
     <title><?php echo $page_title_head; ?></title>
-    <?php
+    <?php echo $_SESSION['site_script']; ?>
+    <script src="<?php echo CMS_DIR; ?>/cms/libraries/jquery/jquery.min.js"></script>    
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <!--<script src="https://www.google.com/jsapi"></script>-->
 
+    <?php
     foreach ($css_files as $css) {
         if (isset($_SESSION['site_theme']) && $css == CMS_DIR . '/cms/themes/' . $_SESSION['site_theme'] . '/style.css') {
-            echo "\n\t" . '<link rel="stylesheet" type="text/css" href="' . $css . '" id="themes-css" />';
+            echo "\n\t" . '<link rel="stylesheet" type="text/css" href="' . $css . '" id="themes-css">';
         } else {
-            echo "\n\t" . '<link rel="stylesheet" type="text/css" href="' . $css . '" />';
+            echo "\n\t" . '<link rel="stylesheet" type="text/css" href="' . $css . '">';
         }
     }
     ?>
 
-    <script src="<?php echo CMS_DIR; ?>/cms/libraries/jquery/jquery.min.js"></script>
-    <script src="https://www.google.com/jsapi"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-    <link rel="icon" type="image/png" href="<?php echo CMS_DIR; ?>/content/favicon.png" />
+    <link rel="icon" type="image/png" href="<?php echo CMS_DIR; ?>/content/favicon.png">
 
 
     <?php
