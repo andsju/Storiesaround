@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <?php if (!defined('VALID_INCL')) {
     die();
 } ?>
@@ -12,14 +12,14 @@
     <?php
     //load css files
     foreach ($css_files as $css):
-        echo "\n" . '<link rel="stylesheet" type="text/css" href="' . $css . '" />';
+        echo "\n\t" . '<link rel="stylesheet" type="text/css" href="' . $css . '">';
     endforeach;
-
-    echo "\n";
-    echo "\n\t" . '<script src="' . CMS_DIR . '/cms/libraries/jquery/jquery.min.js"></script>';
-    echo "\n\t" . '<script src="https://www.google.com/jsapi"></script>';
-    echo "\n";
     ?>
+
+    <script src="<?php echo CMS_DIR; ?>/cms/libraries/jquery/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <!--<script src="https://www.google.com/jsapi"></script>-->
+    <link rel="icon" type="image/png" href="<?php echo CMS_DIR; ?>/content/favicon.png">
 
 </head>
 

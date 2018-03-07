@@ -2,7 +2,7 @@
   
 /* site status (development = false)
 -------------------------------------------------- */
-define('LIVE', true);
+define('LIVE', false);
 
 /* custom css settings, available in some select lists
 -------------------------------------------------- */
@@ -20,7 +20,6 @@ $css_custom = array(
 -------------------------------------------------- */
 $editors = array(	
 	"(none)" => array("editor" => null, "css-class" => "", "include_js_file" => "", "include_js_script" => ""),
-	"nicedit" => array("editor" => "nicedit", "css-class" => "nicedit", "include_js_file" => "nicedit/nicEdit.js", "include_js_script" => "nicedit/inc.nicedit.js"),
 	"tinymce" => array("editor" => "tinymce", "css-class" => "tinymce", "include_js_file" => "tinymce/tinymce.min.js", "include_js_script" => "tinymce/inc.tinymce.js"),
 );
 

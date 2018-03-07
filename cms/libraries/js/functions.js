@@ -2,11 +2,6 @@ function get_textarea_editor(editor, textarea_id) {
 
 	var arg = null;
 	switch (editor) {
-		case 'nicedit':
-			if (typeof (nicEditors) != "undefined") {
-				arg = nicEditors.findEditor(textarea_id).getContent();
-			}
-			break;
 		case 'tinymce':
 			if (typeof (tinyMCE) != "undefined") {
 				arg = tinyMCE.get(textarea_id).getContent();
