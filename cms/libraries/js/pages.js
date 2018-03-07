@@ -505,6 +505,7 @@ $(document).ready(function () {
 
 	$("#user_navigation").delegate("#inline_edit", "click",  function() {
 		inlineEdit(pages_id, users_id, role_cms, token);
+		notifyInlineEdit($(this));
 	});
 
 	//replace_image_path('/content/', '/somefolder/content/');
@@ -512,21 +513,18 @@ $(document).ready(function () {
 });
 
 
+function notifyInlineEdit(element) {
+	element.css("background-color", "lightgreen");
+	setTimeout(function() {element.css("background-color", "inherit");}, 1000);
+}
+
 function inlineEdit(pages_id, users_id, role_cms, token) {
 
 	if (users_id > 0 && role_cms > 1) {
 		var cms_dir = $("#cms_dir").val();
 		var ajax_url = cms_dir + '/cms/pages_edit_ajax.php';
 
-
-
 		let checkEditStatus = new Promise((resolve, reject) => {
-
-			// check if token allows....
-			console.log("pages_id", pages_id);
-			console.log("users_id", users_id);
-			console.log("role_cms", role_cms);
-			console.log("token", token);
 			var action = "update_inline";
 			$.ajax({
 				type: 'POST',
@@ -538,18 +536,13 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 					users_id: users_id
 				},
 				success: function (result) {
-					console.log("result", result);
 					resolve(result);
 				}
 			});
-
 		});
 
 		checkEditStatus.then((result) => {
-			console.log("Aloha result: ", result);
-
 			if (!result) {
-
 				$("#dialog_edit").dialog("open");
 				$("#dialog_edit").dialog({	
 					modal: true,
@@ -562,11 +555,13 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 
 			} else {
 
-				$(".editable").each(function () {
+				$(".editable").each(function () {			
 					$(this).wrap("<form style=\"position:relative\"></form>");
+					notifyInlineEdit($(this));
 				});
 				$(".editable_row").each(function () {
 					$(this).wrap("<form></form>");
+					notifyInlineEdit($(this));
 				});
 		
 				tinymce.init({
@@ -637,6 +632,30 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 					],
 					menubar: false,
 					toolbar: 'searchreplace undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | save',
+					style_formats_merge: true,
+					style_formats: [
+						{title: 'Custom text', items: [		
+							{title : 'Horizont line shadowed <p>', block : 'p', classes : 'horizont-line'},
+							{title : 'FAQ question <p>', block : 'p', classes : 'faq-question'},
+							{title : 'FAQ answer <p>', block : 'p', classes : 'faq-answer'},
+							{title : 'Box shadowed<p>', block : 'p', classes : 'box-shadowed'},
+							{title : 'Box elevated<p>', block : 'p', classes : 'box-elevated'},
+							{title : 'Quote emphasize <p>', block : 'p', classes : 'quote-emphasize'},
+							{title : 'Read more <span>', inline : 'span', classes : 'read-more'},
+							{title : 'Highlight <span>', inline : 'span', classes : 'highlight-word'},
+							{title : 'Bigger <span>', inline : 'span', classes : 'text-bigger'},
+							{title : 'Smaller <span>', inline : 'span', classes : 'text-smaller'},
+							{title : 'SMALL CAPS <span>', inline : 'span', classes : 'small-caps'},
+						]},
+						{title: 'Image', items: [		
+							{title : 'align left 33%', selector : 'img', styles : {'width' : '33%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
+							{title : 'align left 50%', selector : 'img', styles : {'width' : '50%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
+							{title : 'align rigth 33%', selector : 'img', styles : {'width' : '33%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0 10px'}},
+							{title : 'align rigth 50%', selector : 'img', styles : {'width' : '50%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0  10px'}},
+							{title : '100%', selector : 'img', styles : {'width' : '100%', 'height' : 'auto', 'margin' : '10px 0'}}
+						]},
+						
+					],		
 					save_enablewhendirty: true,
 					save_onsavecallback: function () {
 						var content = tinyMCE.get('content-html').getContent();
