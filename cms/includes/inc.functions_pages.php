@@ -1066,7 +1066,7 @@ function get_box_story_content_selected($rows, $languages, $content_percent_widt
 
                 if ($content_percent_width <= 33 || $stories_columns == 1) {
                         
-                    $string .= '<div class="stories-wrapper" style="'.$style_wrapper.'">';
+                    $string .= '<div class="stories-wrapper '.$stories_css_class.'" style="'.$style_wrapper.'">';
                     if ($row['story_link']) {
                         $string .= '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
                     }
@@ -2343,7 +2343,7 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
         foreach ($value as $key2 => $value2) {
             switch ($key2) {
                 case "0":
-                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][15].'">';
+                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][15].' gridedit">';
                 $html_grid .= '<div class="grid-tools"><i class="far fa-save"></i><br><i class="far fa-edit" aria-hidden="true"></i><br><i class="fas fa-arrow-left" aria-hidden="true"></i><br><i class="fas fa-arrow-right" aria-hidden="true"></i><br><i class="far fa-trash-alt"></i></div>';
                 break;
                 case "1":
@@ -2416,35 +2416,20 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                 break;
                 case "21":
                     $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
-                    //if (strlen($result_copy[$counter][7])) {
-                        $html_grid .= '<div class="grid-split"></div>';
-                        $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
-                    //}
-
+                    $html_grid .= '<div class="grid-split"></div>';
+                    $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
 
                     $grid_image_y = (int)$result_copy[$counter][3];
                     $adjustSelectList = get_select_number(array(0,10,20,30,40,50,60,70,80,90,100), $grid_image_y, "grid-image-y", "", "");
-         
-         
-
-/*                     var dynamic = "<hr><div class=\"dynamic hidden\"><p>Dynamic content</p>";			
-                    var dynamicSelectList = getSelectStrings([["none", "none"], ["stories-child", "Child stories"], ["stories-event", "Event stories"], ["stories-promoted", "Promoted stories"]], "", "grid-dynamic-content", "", "");
-                    dynamic += dynamicSelectList;
-                    dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\" maxlength=\"25\">"; 
-                    dynamic += "<p>Limit promoted stories</p>";
-                    var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 1, "grid-dynamic-content-limit", "", "");
-                    dynamic += limitSelectList;
- */        
-
          
                     $dynamic = '<hr><div class="dynamic hidden"><p>Dynamic content</p>';
                     $dynamic .= get_select_strings(array(array("none", "none"),array("stories-child", "Child stories"),array("stories-event", "Event stories"),array("stories-promoted", "Promoted stories")), "", "grid-dynamic-content", "", "");
                     $dynamic .= '<p>Filter promoted stories (tag):</p><input type="text" name="grid-dynamic-content-filter" maxlength="25">'; 
                     $dynamic .= '<p>Limit promoted stories</p>';
                     $dynamic .= get_select_number(array(0,1,2,3,4,5,6,7,8,9), 1, "grid-dynamic-content-limit", "", "");
-
-                    $html_grid .= '<div class="grid-form hidden"><p>Image<br><input type="text" name="grid-image" maxlength="255" value="'.$result_copy[$counter][1].'"></p><p>Adjust image (background-position-y %): '.$adjustSelectList.'</p><p>Heading<br><input type="text" name="heading" maxlength="100" value="'.$result_copy[$counter][5].'"></p><p>Video<br><input type="text" name="video" maxlength="100" value="'.$result_copy[$counter][7].'"></p><p>URL<br><input type="text" name="url" maxlength="255" value="'.$result_copy[$counter][9].'"></p><p>Link title<br><input type="text" name="link" maxlength="50" value="'.$result_copy[$counter][11].'"></p><p>Content<br><textarea class="tinymce-grid" name="grid-content">'.$result_copy[$counter][13].'</textarea></p><p>Custom css class<br><input type="text" name="css" maxlength="100" value="'.$result_copy[$counter][15].'"><input type="hidden" name="pages_id" value="'.$result_copy[$counter][15].'"></p><p>Toggle <a class="toggle" href="#dynamic">dynamic content</a></p>'.$dynamic.'</div>';
-
+                    
+                    $class_select = '<a class="colorbox_grid_class"  href="pages_css.php?token='. $_SESSION['token'].'&pages_id='.$pages_id.'&return=false">&nbsp;<i class="fas fa-question-circle"></i></a>';
+                    $html_grid .= '<div class="grid-form hidden"><p>Image<br><input type="text" name="grid-image" maxlength="255" value="'.$result_copy[$counter][1].'"></p><p>Adjust image (background-position-y %): '.$adjustSelectList.'</p><p>Heading<br><input type="text" name="heading" maxlength="100" value="'.$result_copy[$counter][5].'"></p><p>Video<br><input type="text" name="video" maxlength="100" value="'.$result_copy[$counter][7].'"></p><p>URL<br><input type="text" name="url" maxlength="255" value="'.$result_copy[$counter][9].'"></p><p>Link title<br><input type="text" name="link" maxlength="50" value="'.$result_copy[$counter][11].'"></p><p>Content<br><textarea class="tinymce-grid" name="grid-content">'.$result_copy[$counter][13].'</textarea></p><p>Custom css class<br><input type="text" name="css" maxlength="100" value="'.$result_copy[$counter][15].'">'.$class_select.'<input type="hidden" name="pages_id" value="'.$result_copy[$counter][15].'"></p><p>Toggle <a class="toggle" href="#dynamic">dynamic content</a></p>'.$dynamic.'</div>';
 
                     $html_grid .= '</div></div>';
                 break;

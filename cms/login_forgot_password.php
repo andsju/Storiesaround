@@ -16,7 +16,6 @@ $css_files = array(
 	CMS_DIR.'/cms/css/layout.css', 
 	CMS_DIR.'/cms/css/pages_edit.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css'
-	//CMS_DIR.'/cms/libraries/jquery-datatables/style.css
 );
 
 // css files... add css jquery-ui theme
@@ -38,9 +37,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
 	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
-	CMS_DIR.'/cms/libraries/js/functions.js',
-	//CMS_DIR.'/cms/libraries/js/pages_calendar.js'
-	//CMS_DIR.'/cms/libraries/tinymce/plugins/moxiemanager/js/moxman.loader.min.js'
+	CMS_DIR.'/cms/libraries/js/functions.js'
 );
 
 
@@ -50,7 +47,6 @@ $body_style = "width:460px;margin:0 auto;";
 require 'includes/inc.header_minimal.php';
 
 ?>
-
 
 
 
@@ -184,7 +180,7 @@ if(isset($_SESSION['site_maintenance'])) {
 <?php 
 // load javascript files
 foreach ( $js_files as $js ):
-	echo '<script type="text/javascript" src="'.$js.'"></script>';
+	echo '<script src="'.$js.'"></script>';
 endforeach;
 ?>
 

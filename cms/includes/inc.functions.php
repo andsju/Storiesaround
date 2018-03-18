@@ -210,11 +210,11 @@ function rand_string($length)
  */
 function random_password($length)
 {
-    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+";
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&()_+";
     $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $lower = 'abcdefghijklmnopqrstuvwxyz';
     $numbers = '0123456789';
-    $special = '!@#$%^&*()_+';
+    $special = '!@#$%&()_+';
     $s = substr(str_shuffle($upper), 0, 2) . substr(str_shuffle($lower), 0, 2) . substr(str_shuffle($numbers), 0, 2) . substr(str_shuffle($special), 0, 2);
     // more than 8 characters
     $extra = $length > 8 ? substr(str_shuffle($chars), 0, $length - 8) : '';
