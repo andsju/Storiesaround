@@ -131,7 +131,7 @@ if ($email1 = filter_input(INPUT_POST, 'email1', FILTER_SANITIZE_STRING)) {
 				// check if we have a user
 				if ($result = $users->getUsersLoginEmail($email1)) {
 								
-					$password = rand_string(8);
+					$password = random_password(8);
 					$pass_hash = password_hash($password, PASSWORD_DEFAULT);
 					$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
@@ -148,7 +148,7 @@ if ($email1 = filter_input(INPUT_POST, 'email1', FILTER_SANITIZE_STRING)) {
 						$m_body .= $_SESSION['site_name'] .', '. $_SESSION['site_email'];
 						$m_body .= "<br />";
 						$m_body .= "<br />";
-						$m_body .= $pass;
+						$m_body .= $password;
 						$m_body .= "<br />";
 						$m_body .= "<br />";
 						$m_body .= "(IP: ". $_SERVER['REMOTE_ADDR'] ."), ". $utc_created;					

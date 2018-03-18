@@ -5,7 +5,7 @@
 			
 			//selector : "textarea.tinymce",
 			mode : "specific_textareas",
-			selector : "textarea#content, textarea#story_content",
+			selector : "textarea#content, textarea#story_content, textarea#content_html",
 			autoresize_max_height: 900,
 			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css','css/wysiwyg_editor.css'],
 			// plugins : " stories",
@@ -28,14 +28,13 @@
 					{title : 'Smaller <span>', inline : 'span', classes : 'text-smaller'},
 					{title : 'SMALL CAPS <span>', inline : 'span', classes : 'small-caps'},
 				]},
-				{title: 'Image', items: [		
+				{title: 'Image', items: [
 					{title : 'align left 33%', selector : 'img', styles : {'width' : '33%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
 					{title : 'align left 50%', selector : 'img', styles : {'width' : '50%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
 					{title : 'align rigth 33%', selector : 'img', styles : {'width' : '33%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0 10px'}},
 					{title : 'align rigth 50%', selector : 'img', styles : {'width' : '50%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0  10px'}},
 					{title : '100%', selector : 'img', styles : {'width' : '100%', 'height' : 'auto', 'margin' : '10px 0'}}
-				]},
-				
+				]}
 			],
 			templates: [ 
 				{title: 'Lorem ipsum 1', description: 'Dummy text', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae suscipit velit, a blandit augue. Quisque eu condimentum tellus. Pellentesque luctus, tortor non consectetur convallis, urna magna suscipit tortor, id commodo elit magna sit amet eros. Quisque eget interdum risus. Vestibulum nec lectus sit amet diam lacinia sollicitudin eget ac magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque purus ipsum, porttitor eget vestibulum et, congue eget ipsum. Curabitur sagittis est mi, et molestie ipsum porttitor ac.'}, 
