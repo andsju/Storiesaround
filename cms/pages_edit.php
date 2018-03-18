@@ -140,7 +140,15 @@ foreach ( $js_files as $js ): ?>
 			onClosed:function(){ 
 			}
 		});
-		
+
+		$(".colorbox_grid_class").colorbox({
+			width:"50%", 
+			height:"50%", 
+			iframe:true, 
+			onClosed:function(){
+			}
+		});
+
 		$("#tabs_edit").show(); 		
 		
 		$( ".toolbar_reload button" ).button({			
@@ -2493,7 +2501,13 @@ foreach ( $js_files as $js ): ?>
 			});
 		}
 	}
-	
+
+
+	function ciao(m) {
+		console.log(m);
+	}
+
+
 	function load_images() {
 		var action = "show_images";
 		var token = $("#token").val();
@@ -4082,6 +4096,7 @@ if(is_array($check_edit)) {
 					<p>
 						Custom CSS class (grid wrapper)<br>
 						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class" value="<?php echo $arr['grid_custom_classes']?>">
+						<a class="colorbox_grid_class" href="pages_css.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>&return=true"><i class="far fa-question-circle"></i></a>
 					</p>
 
 					<div style="float:left">
@@ -4251,11 +4266,11 @@ if(is_array($check_edit)) {
 				</tr>
 				<tr>
 					<td colspan="2">
-					<div style="width:100%;overflow:auto;height:200px;" id="set_custom_css">
+					<div style="width:100%;overflow:auto;height:600px;" id="set_custom_css">
 					<?php
 
-					foreach($css_custom as $key => $value) {						
-						echo '<div class="'.$key.'" data-css="'.$key.'" style="float:left; width:120px;height:100px;margin:5px;" title="'.$value.'">';
+					foreach($css_custom as $key => $value) {
+						echo '<div class="'.$key.'" data-css="'.$key.'" style="float:left; width:220px;height:220px;margin:5px;" title="'.$key.'">';
 							echo '<h3>Lorem</h3>';
 							echo '<p>'.$value.'</p>';
 						echo '</div>';

@@ -102,6 +102,7 @@ div#content-meta { font-size:0.8em;padding:5px 0 }
 div#content-html { }
 div#content-author-leading, div#content-author { text-align:right;font-style:italic; }
 div#content-social-networking { padding:2px;border:1px dashed #FFF;}
+article {width: 100%; margin-bottom:40px}
 
 /* footer
 ------------------------- */
@@ -281,6 +282,10 @@ ul#navigation-root a:hover { }
 ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decoration: underline}
 
 
+/* navigation, vertical
+ -------------------------*/
+#nav-site-navigation-vertical {margin: 0 0 40px 0}
+
 /* overide default css, custom settings found in wysiwyg editor
 ------------------------- */
 
@@ -294,6 +299,41 @@ ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decorati
 .darkgreen { background:#006400;color:#FFF; padding: 5px; border: 1px solid #000; }
 .darkred  h3, .darkred  h4, .navyblue h3, .navyblue h4, .purple h3, .purple h4, .darkgreen h3, .darkgreen h4 {color:#FFF;}
 .navy h3, .navy h4 {color:#FFF;}
+
+
+.gf-rod-1 { background-color:#691600 !important; color:#fff; padding:10px}
+.gf-rod-2 { background-color:#8d131d !important; color:#fff; padding:10px}
+.gf-rod-3 { background-color:#932205 !important; color:#fff; padding:10px}
+.gf-rod-4 { background-color:#b43a1a !important; color:#fff; padding:10px}
+.gf-rod-5 { background: linear-gradient(#932205, #b43a1a); color:#fff; padding:10px}
+.gf-rod-5b { background: linear-gradient(rgb(124,10,2), rgb(110,5,5)); color:#fff; padding:10px}
+.gf-gul-1 { background-color:#F9CF3B !important; color:#000; padding:10px}
+.gf-gul-2 { background-color:#FFDD66 !important; color:#000; padding:10px}
+.gf-gul-12 { background: linear-gradient(#F9CF3B, #FFDD66); color:#000; padding:10px}
+.gf-gron-1 { background-color:#515607 !important; color:#FFF; padding:10px}
+.gf-gron-2 { background-color:#E8EEA2 !important; color:#000; padding:10px}
+.gf-gron-3 { background-color:#F9FDA9 !important; color:#000; padding:10px}
+.sun-on-the-horizon { background: linear-gradient(#fceabb, #f8b500); color:#000; padding:50px}
+.the-strain { background: linear-gradient(#870000, #190a05); color:#FFF}
+.snapchat { background: linear-gradient(#e9e766, #ffffff); color:#000; padding:50px}
+.frost { background: linear-gradient(#000428, #004e92); color:#FFF; padding:50px}
+.frost *:not(img) {color:white; margin:10px}
+.sky {background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); padding:50px}
+.snow {background-image: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); padding:50px}
+.green-olive { background: linear-gradient(#006400, #556B2F); color:#FFF; padding:50px}
+.light-yellow { background: linear-gradient(#FFFFE0, #FFFACD); color:#000; padding:50px}
+.wheat-cornsilk { background: linear-gradient(135deg,#F5DEB3, #FFF8DC); color:#000; padding:50px}
+.gr1 { background: linear-gradient(135deg,#ebeeb1, #d6daad); color:#000; padding:50px}
+.gr2 { background: linear-gradient(135deg,#f5f7d8, #eaecd6); color:#000; padding:50px}
+.gr23 { background: linear-gradient(45deg,#e8eea2, #f9fda9); color:#000; padding:50px}
+.wheat-grey { background: linear-gradient(135deg,#F5DEB3, #fffafa); color:#000; padding:50px}
+
+.space {padding:50px}
+
+
+.grid-cell:hover:not(.gridedit) {transform: scale(1.005)}
+.stories-wrapper:hover {transform: scale(1.01)}
+
 
 .title-red {color:red;padding:0 0 5px 0;}
 .title-green {color:green;padding:0 0 5px 0;}

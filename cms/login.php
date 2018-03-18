@@ -21,7 +21,6 @@ $css_files = array(
 	CMS_DIR.'/cms/css/layout.css', 
 	CMS_DIR.'/cms/css/pages_edit.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css'
-	//CMS_DIR.'/cms/libraries/jquery-datatables/style.css
 );
 
 // add css theme
