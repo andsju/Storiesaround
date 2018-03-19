@@ -45,7 +45,7 @@ if (isset($_GET['token'])){
         <?php
 
         foreach($css_custom as $key => $value) {
-            echo '<div class="choose-class '.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;" title="'.$key.'">';
+            echo '<div class="choose-class space '.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;padding:10px" title="'.$key.'">';
                 echo '<p>'.$value.'</p>';
             echo '</div>';
         }
