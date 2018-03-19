@@ -1217,10 +1217,8 @@ foreach ( $js_files as $js ): ?>
 		
 		$(document).on('click', '#set_custom_css div', function (e) {
 			var css = $( this ).data("css");
-			$('#story_css_class').val(css).hide().fadeIn(500);
-			
+			$('#story_css_class').val(css).hide().fadeIn(500);			
 		});
-		
 
 		$('#btn_save_stories').click(function(event){
 			event.preventDefault();
@@ -4254,24 +4252,18 @@ if(is_array($check_edit)) {
 				<tr>
 					<td style="width:33%;">
 						<label for="story_css_class">Background css class:</label><br />
-						<select id="story_css_class" name="story_css_class" class="code">
-							<option value=""></option>
-							<?php 
-							get_css_class($css_custom, $input=$arr['story_css_class']);
-							?>
-						</select>
+						<input type="text" id="story_css_class" name="story_css_class" class="code" value="<?php echo $arr['story_css_class']; ?>">
 					</td>
 					<td>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-					<div style="width:100%;overflow:auto;height:600px;" id="set_custom_css">
+					<div style="width:100%;overflow:auto;" id="set_custom_css">
 					<?php
 
 					foreach($css_custom as $key => $value) {
-						echo '<div class="'.$key.'" data-css="'.$key.'" style="float:left; width:220px;height:220px;margin:5px;" title="'.$key.'">';
-							echo '<h3>Lorem</h3>';
+						echo '<div class="'.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;padding:10px" title="'.$value.'">';
 							echo '<p>'.$value.'</p>';
 						echo '</div>';
 					}
