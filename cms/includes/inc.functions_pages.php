@@ -1995,30 +1995,32 @@ function get_box_story_content_promoted($rows, $col_width, $stories_last_modifie
             $i = $col_width > 222 ? 726 : 222;
             $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
 
-            echo '<div class="stories-wrapper" style="width:100%;">';
             if ($row['story_link']) {
                 echo '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
             }
-            echo '<div class="stories-content ' . $css_class . '">';
+
+            echo '<div class="stories-wrapper">';
+            //echo '<div class="stories-content ' . $css_class . '">';
             if (!is_null($row['filename'])) {
                 echo '<img src="' . $img . '"  class="fluid" alt="' . $caption . '" />';
             }
-            echo '<div class="stories-content ' . $css_class . '" style="border:0;">';
+            $add_class_padding = strlen($css_class) ? "stories-padding" : ""; 
+            echo '<div class="stories-content '. $css_class .' '.$add_class_padding.'" style="border:0;">';
             if (strlen($row['copyright']) && $show_image_copyright == 1) {
                 echo '<div class="stories-image-meta">' . translate("Photo:", "site_photo", $languages) . ' ' . $row['copyright'] . '</div>';
             }
             if ($title == 0) {
-                echo '<h3 class="stories-title">' . $title_value . '</h3>';
+                echo '<h3 class="stories-title" style="margin-top:0">' . $title_value . '</h3>';
             }
             if ($stories_last_modified == 1) {
                 echo '<div class="stories-meta"><span class="stories-meta"><abbr class="timeago" title="' . $date . '">' . $date . '</abbr></span></div>';
             }
             echo $row['story_content'];
-            echo '</div></div>';
+            echo '</div>';
+            echo '</div>';
             if ($row['story_link']) {
                 echo '</a>';
             }
-            echo '</div>';
 
         }
     }
@@ -2347,20 +2349,20 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                 $html_grid .= '<div class="grid-tools"><i class="far fa-save"></i><br><i class="far fa-edit" aria-hidden="true"></i><br><i class="fas fa-arrow-left" aria-hidden="true"></i><br><i class="fas fa-arrow-right" aria-hidden="true"></i><br><i class="far fa-trash-alt"></i></div>';
                 break;
                 case "1":
-                    //if(strlen($value2)) {
+                    if(strlen($value2)) {
                         
                         $background_image_y = strlen($result_copy[$counter][3]) > 1 ? 'background-position-y:'. $result_copy[$counter][3] .'%': '';
                         $image = strlen($value2) ? '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$value2.');'.$background_image_y.'"></div>' : "";
-                    //}
+                    }
                     
                 break;
                 case "5":
-                    //if(strlen($value2)) {
+                    if(strlen($value2)) {
                         $a_href = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : "";
                         $a_start = ""; 
                         $a_end = ""; 
                         $header .= $a_start . '<h2 class="grid-heading">' . $value2 . '</h2>' . $a_end ;
-                    //}
+                    }
                     $html_grid .= $grid_cell_template == 0 ? $image . $header : $header . $image; 
                 break;
                 case "7":
@@ -2417,8 +2419,9 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                 case "21":
                     $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
                     $html_grid .= '<div class="grid-split"></div>';
+                    if(strlen($link)) {
                     $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
-
+                    }
                     $grid_image_y = (int)$result_copy[$counter][3];
                     $adjustSelectList = get_select_number(array(0,10,20,30,40,50,60,70,80,90,100), $grid_image_y, "grid-image-y", "", "");
          
@@ -2499,8 +2502,9 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
     $counter = 0;
     // 0: grid-image, 2: grid-image-y, 4: heading, 6: video, 8: url, 10: link, 12: grid-content, 
     // 14: css, 16: pages_id, 18: grid-dynamic-content, 20: grid-dynamic-content-filter, 22: grid-dynamic-content-limit
+    $add_wrapper_class = strlen($grid_custom_classes) ? "wrapper-grid-padding" : "";
 
-    $html_grid = '<div id="wrapper-grid" class="'.$grid_custom_classes.' clearfix">';
+    $html_grid = '<div id="wrapper-grid" class="'.$grid_custom_classes.' '.$add_wrapper_class.' clearfix">';
     foreach($result as $key => $value) {
         $header = "";
         $image = "";
@@ -2535,7 +2539,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
 
                 case "11":
                     if(strlen($value2)) {
-                        $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
+                        //$html_grid .= '<div class="grid-content">' . $value2 . '</div>';
                     }
                     break;
                 case "13":
