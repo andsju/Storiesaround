@@ -60,7 +60,10 @@ include_once 'includes/inc.header_minimal.php';
 			var p = $("#image_path").val();
 			var img = p+this.id;
 			var t = getTime();
-			$('#version2').html('<div>Path: <span class="code" style="padding:10px;border:1px solid #E8E8E8;margin:5px;">'+img+'</span></div><br /><img src="'+img+'?t='+t+'" />');
+			//var copylink = "<button class="copy_file" data-file="+img+" title=\"Copy file location\"><i class=\"fas fa-link\"></i></button>";
+			var copylink = "";
+			var copylink = "<button class=\"copy_file\" data-file="+img+" title=\"Copy file location\"><i class=\"fas fa-link\"></i></button>";
+			$('#version2').html('<div>Path: <span class="code" style="padding:10px;border:1px solid #E8E8E8;margin:5px;">'+img+'</span>'+copylink+'</div><br /><img src="'+img+'?t='+t+'" />');
 			$('#version2').show();
 		});
 
@@ -360,6 +363,19 @@ include_once 'includes/inc.header_minimal.php';
 			}		
 		});
 		
+		$("body").delegate(".copy_file", "click", function() {
+			var file = $(this).attr("data-file");
+			$(this).append("<input type=text value="+file+" id=\"copy_file_to_clipboard\">");
+			var copyText = document.getElementById("copy_file_to_clipboard");
+			copyText.select();
+			document.execCommand("Copy");
+			$(this).css("background-color", "yellow");
+			return copyText.parentNode.removeChild(copyText);
+		});
+
+
+
+
 	});
 </script>	
 <?php
@@ -536,6 +552,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 
 			<p>
 				Filename: <span class="code"><?php echo $preview_img; ?></span>
+				<button class="copy_file" data-file="<?php echo $preview_img; ?>" title="Copy file location"><i class="fas fa-link"></i></button>
 			</p>
 			<p>
 				Ratio: <span class="code"><?php echo $row['ratio']; ?></span>

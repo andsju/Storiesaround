@@ -23,45 +23,33 @@ if (isset($_GET['token'])){
 		if($_SESSION['HTTP_USER_AGENT'] != $_SERVER['HTTP_USER_AGENT']) {
 			die('User agent fail. Please logout and login again.');
 		}
-	
-	
-		// validate pages_id
+		
 		if ($pages_id = filter_input(INPUT_GET, 'pages_id', FILTER_VALIDATE_INT)) { 
 	
-
-		/*** css files, loaded in inc.header.php ***/
-		//--------------------------------------------------
-
 		$css_files = array(
 			CMS_DIR.'/cms/css/normalize.css', 
 			CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 			CMS_DIR.'/cms/css/layout.css', 
 			CMS_DIR.'/cms/css/pages_edit.css', 
 			CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
-			CMS_DIR.'/cms/libraries/fileuploader/fileuploader.css' );
-		
+			CMS_DIR.'/cms/libraries/fileuploader/fileuploader.css' 
+		);		
 
 		$page_title = "Upload image(s)";
 		
-		/*** include header ***/
 		$body_style = "width:100%;margin:20px";
 
-		//--------------------------------------------------
 		include_once 'includes/inc.header_minimal.php';
 
-
-
-		// load javascript files
 		$js_files = array(
 			CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.custom.min.js', 
 			CMS_DIR.'/cms/libraries/js/functions.js', 
 			CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
-			CMS_DIR.'/cms/libraries/fileuploader/fileuploader.js' );
-
+			CMS_DIR.'/cms/libraries/fileuploader/fileuploader.js' 
+		);
 
 		echo '<div id="main-wrapper">';
 
-		// load javascript files
 		foreach ( $js_files as $js ):
 			echo '<script src="'.$js.'"></script>';
 		endforeach; 
@@ -123,6 +111,7 @@ if (isset($_GET['token'])){
 		<div id="filesUploaded" class="clearfix">
 		</div>
 		
+
 		<?php
 		}
 	}

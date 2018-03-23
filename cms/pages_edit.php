@@ -2916,7 +2916,11 @@ if(is_array($check_edit)) {
 								}
 							}
 							?>
+								<option value="99"></option>
 							</select>
+							<?php
+							echo ' (weight: '. $arr['category_position'] .')';
+							?>
 						</p>
 												
 					</td>
@@ -4153,7 +4157,7 @@ if(is_array($check_edit)) {
 			<p>
 				How this page may be shown as a story  
 			</p>
-			<table style="width:100%;">
+			<table style="width:100%;" class="page-settings">
 				<tr>
 					<td style="width:25%;">
 					<label for="tag"><i class="fas fa-tags" aria-hidden="true"></i> Tag page:</label>
@@ -4187,7 +4191,7 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
-			<table style="width:100%;">
+			<table style="width:100%;" class="page-settings">
 				<tr>
 					<td style="width:33%;">
 					<input type="checkbox" name="story_promote" id="story_promote" value="1" <?php if($arr['story_promote'] == 1) {echo 'checked';}?>> promote story to front page
@@ -4207,7 +4211,7 @@ if(is_array($check_edit)) {
 			$story_event_date = ($arr['story_event_date']>'2000-01-01 00:00') ? new DateTime(utc_dtz($arr['story_event_date'], $dtz, 'Y-m-d H:i')) : '';
 			?>
 		
-			<table style="width:100%;">
+			<table style="width:100%;" class="page-settings">
 				<tr>
 					<td style="width:33%;">
 					<input type="checkbox" name="story_event" id="story_event" value="1" <?php if($arr['story_event'] == 1) {echo 'checked';}?>> set story as event
@@ -4229,7 +4233,7 @@ if(is_array($check_edit)) {
 		
 		<div class="admin-panel">
 
-			<table style="width:100%;">
+			<table style="width:100%;" class="page-settings">
 				<tr>
 					<td style="width:33%;">
 					<input type="checkbox" name="story_custom_title" id="story_custom_title" value="1" <?php if($arr['story_custom_title'] == 1) {echo 'checked';}?>>
@@ -4248,7 +4252,7 @@ if(is_array($check_edit)) {
 
 		<div class="admin-panel">
 
-			<table style="width:100%;">
+			<table style="width:100%;" class="page-settings">
 				<tr>
 					<td style="width:33%;">
 						<label for="story_css_class">Background css class:</label><br />
@@ -4277,7 +4281,7 @@ if(is_array($check_edit)) {
 		
 		<div class="admin-panel">
 		
-			<table>
+			<table class="page-settings">
 				<tr>
 					<td style="vertical-align:top;width:35%;">
 						<h4>Story</h4> 

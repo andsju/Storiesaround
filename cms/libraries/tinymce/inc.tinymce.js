@@ -10,7 +10,7 @@
 			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css','css/wysiwyg_editor.css'],
 			// plugins : " stories",
 			plugins : "advlist anchor autoresize charmap code hr image imagetools link lists media paste searchreplace table template visualblocks wordcount moxiemanager",
-			toolbar: "undo redo | styleselect | bold italic | bullist numlist | outdent indent | link | image",
+			toolbar: "undo redo | removeformat | styleselect | bold italic | bullist numlist | outdent indent | link | image",
 			menubar: "view edit insert tools",
 			image_advtab: true,
 			style_formats_merge: true,
