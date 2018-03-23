@@ -7,6 +7,7 @@ body {
     letter-spacing: 0.01em;
 }
 
+html,body,li,p {font-family: 'Open sans', sans-serif;}
 
 #wrapper-site-header {
     max-width: 1280px;
@@ -17,51 +18,22 @@ body {
 paragraphs, indentation
 ------------------------- */
 p { line-height: 1.5em; margin: 0}
-p+p { text-indent: 1.5em }
+div#content-html ul li { line-height: 1.5em; margin: 0}
+p+p { text-indent: 1em }
 
 
-div#wrapper-top {margin-top:10px }
 
-.gf-senhostrod { background-color:#8d131d !important; color:#fff; }
-.gf-senhostrod h3 { color:#fff;}
-.gf-hostrod { background-color:#b43a1a !important; color:#fff; }
-.gf-hostrod h3 { color:#fff;}
-.gf-hostrod-darker { background-color:#932205 !important; color:#fff; }
-.gf-hostrod-darker h3 { color:#fff;}
-.gf-hostrod-darkest { background-color:#691600 !important; color:#fff;}
-.gf-hostrod-darkest h3 { color:#fff;}
-.gf-senhostgul { background-color:#dc9013 !important; color:#fff; }
-.gf-senhostgul h3 { color:#fff;}
-.gf-senhostgul-darkest { background-color !important:#885500; color:#fff; }
-.gf-senhostgul-darkest h3 { color:#fff;}
-.gf-senhostgul-lighter { background-color !important:#EFAD3F; color:#000; }
-.gf-senhostgul-lighter h3 { color:#000;}
-.gf-senhostgul-lightest { background-color !important:#FFC76B; color:#000;}
-.gf-senhostgul-lightest h3 { color:#000;}
-.gf-hostgul { background-color:#EAB80A !important; color:#000; }
-.gf-hostgul h3 { color:#000;}
-.gf-hostgul-lighter { background-color:#F9CF3B !important; color:#000;}
-.gf-hostgul-lighter h3 { color:#000;}
-.gf-hostgul-lightest { background-color:#FFDD66 !important; color:#000;}
-.gf-hostgul-lightest h3 { color:#000;}
-.gf-sommargron { background-color:#99A03E !important; color:#fff; }
-.gf-sommargron h3 { color:#fff;}
-.gf-sommargron-darker { background-color:#787F20 !important; color:#fff; }
-.gf-sommargron-darker h3 { color:#fff;}
-.gf-sommargron-darkest { background-color:#515607 !important; color:#fff; }
-.gf-sommargron-darkest h3 { color:#fff;}
-.gf-sommargron-lighter { background-color:#BCC365 !important; color:#000; }
-.gf-sommargron-lighter h3 { color:#000;}
-.gf-sommargron-lightest { background-color:#E8EEA2 !important; color:#000; }
-.gf-sommargron-lightest h3 { color:#000;}
-.gf-bokskog { background-color:#CCD34C !important; color:#000; }
-.gf-bokskog h3 { color:#000;}
-.gf-bokskog-darkest { background-color:#8A9010 !important; color:#fff; }
-.gf-bokskog-darkest h3 { color:#fff;}
-.gf-bokskog-lightest { background-color:#F9FDA9 !important; color:#000; }
-.gf-bokskog-lightest h3 { color:#000;}
-
-
+div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient(#F5DEB3, #FFF8DC); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #fdfcfb 0%, #e2d1c3 100%); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #e8eea2, #f9fda9); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #F9CF3B, #FFDD66); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #5a5856,#646260); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {border-top-color: black;}
+div#site-search-page {border-bottom-color: black;}
+#site-search-page label {color:whitesmoke}
+div#site-search-page input[type='checkbox'] {display: none}
+span#search-page-limit-tree-helper {display:none}
+#site-search-page label {}
 
 .smartsign {
     width: 1920px;
@@ -177,4 +149,9 @@ ______________________________________________________________________________ *
 	div.grid-cell {float:left;width:100%; /*display: flex; flex-direction: column;*/ margin-right:0; margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;/*min-height:200px;*/position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 
 
+}
+
+
+@media (min-width: 769px)  {
+	#site-navigation-header {top:40px}
 }

@@ -17,8 +17,8 @@
                     <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
                     <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>
 
-                    <div id="content-html" class="editable">        
-                        <?php echo $arr['content'];?>                        
+                    <div id="content-html" class="editable"> 
+                        <?php echo $arr['content'];?>
                     </div>
 
                     <footer>

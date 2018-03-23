@@ -19,7 +19,8 @@ $css_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/css/layout.css', 
 	CMS_DIR.'/cms/css/pages_edit.css', 
-	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css'
+	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
+	CMS_DIR.'/cms/libraries/fileuploader/fileuploader.js'
 );
 
 // css files... add css jquery-ui theme

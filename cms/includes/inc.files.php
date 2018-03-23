@@ -47,17 +47,29 @@ if (!get_role_CMS('administrator') == 1) {
 
 $folders = array(
     CMS_DIR . "/cms/css/images" => "cms/css/images",
-    CMS_DIR . "/content/uploads/ads" => "content/uploads/ads",
     CMS_DIR . "/content/uploads/files" => "content/uploads/files",
     CMS_DIR . "/content/uploads/header" => "content/uploads/header",
     CMS_DIR . "/content/uploads/html" => "content/uploads/html",
     CMS_DIR . "/content/uploads/images" => "content/uploads/images",
-    CMS_DIR . "/content/uploads/media" => "content/uploads/media"
+    CMS_DIR . "/content/uploads/media" => "content/uploads/media",
+    CMS_DIR . "/content/uploads/media" => "content/uploads/misc"
 );
 
 ?>
-
 <h4 class="admin-heading">Browse directory</h4>
+
+<?php
+/*
+print_r2(CMS_ABSPATH);
+print_r2(CMS_DIR);
+print_r2(strlen(CMS_DIR));
+*/
+?>
+
+<p>
+    <span class="toolbar"><button id="btn_upload">Upload files</button></span>
+    <input type="checkbox" id="overwrite" name="overwrite" value="1"> Overwrite file if exists
+</p>
 
 <div class="select_items">
     <?php
@@ -72,6 +84,6 @@ $folders = array(
     <span id="ajax_status_directory" class="hide"></span>&nbsp;
 </div>
 
-<div id="directory_view" style="border:1px dashed #000;margin:10px;overflow:auto;max-height:600px;padding:10px;"
+<div id="directory_view" style="border:1px dashed #000;overflow:auto;max-width:100%;padding:10px;display:none"
      class="ui-black-white">
 </div>
