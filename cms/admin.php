@@ -44,7 +44,8 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/js/functions.js',
-	CMS_DIR.'/cms/libraries/tinymce/plugins/moxiemanager/js/moxman.loader.min.js'
+	CMS_DIR.'/cms/libraries/tinymce/plugins/moxiemanager/js/moxman.loader.min.js',
+	CMS_DIR.'/cms/libraries/fileuploader/fileuploader.js'
 );
 
 // javascript files... add wysiwyg file
@@ -102,6 +103,42 @@ include_once 'includes/inc.site_active_user_administration.php';
 			iframe:true, 
 			onClosed:function(){ 
 			}
+		});
+
+		$("#btn_upload").click(function(event) {
+			var token = $("#token").val();
+			var dir = $("#dir").val()
+			var overwrite = $('input:checkbox[name=overwrite]').is(':checked') ? 1 : 0;
+			$.colorbox({width:"640px", height:"300px", iframe:true, href:"admin_upload.php?token="+token+"&folder="+dir+"&overwrite="+overwrite});
+		});
+
+		
+		$("body").delegate(".delete_file", "click", function() {
+			var token = $("#token").val();
+			var action = "delete_file";
+			var file = $(this).attr("data-file");
+			var file_in_list = $(this); 
+			
+			$.ajax({
+				type: 'POST',
+				url: 'admin_edit_ajax.php',
+				data: { 
+					action: action, token: token, file: file
+				},
+				success: function(message){	
+					file_in_list.text("File deleted");
+				}
+			});
+		});
+
+		$("body").delegate(".copy_file", "click", function() {
+			var file = $(this).attr("data-file");
+			$(this).append("<input type=text value="+file+" id=\"copy_file_to_clipboard\">");
+			var copyText = document.getElementById("copy_file_to_clipboard");
+			copyText.select();
+			document.execCommand("Copy");
+			$(this).css("background-color", "yellow");
+			return copyText.parentNode.removeChild(copyText);
 		});
 
 		$(".colorbox_edit_reload").colorbox({

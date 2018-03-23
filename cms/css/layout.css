@@ -50,9 +50,9 @@ div#page404 {margin:0 auto; width:200px;height:200px;padding:20px;border:3px sol
 #wrapper-page { width: 1280px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
 #wrapper-top {width: 1280px;margin: 0 auto}
 #wrapper-bottom, #wrapper-site-footer {width: 1280px;margin: 20px auto}
-#wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0}
-#wrapper-right-sidebar { height: 100%; padding: 0 0 0 20px}
-#wrapper-content { height: 100%; padding: 0 20px 0 0; border-left: 0px solid black; border-right: 1px solid black; }
+#wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0; overflow: hidden;}
+#wrapper-right-sidebar { height: 100%; padding: 0 0 0 20px; overflow: hidden;}
+#wrapper-content { height: 100%; padding: 0 20px 0 0; border-left: 0px solid black; border-right: 1px solid black; ; overflow: hidden;}
 #wrapper-user:after, #wrapper-site-header:after, #wrapper-page:after, #wrapper-top:after, #wrapper-bottom:after, article, .clear:after {
     content: "";
     clear: both;
@@ -80,11 +80,11 @@ div#site-navigation-cms a {color: black; padding:10px;}
 #site-search button { padding: 5px; font-size: 1em }
 #site-search label {position: absolute; left:20px; top:20px; font-size:1.4em}
 #site-search span img {position: absolute; right:90px; top:25px; font-size:1.4em}
-#site-search-page { margin: 20px 0; padding: 10px; position: relative; background-color:#e0e0e0}
+#site-search-page { margin: 20px 0; padding: 7px; position: relative; background-color:#e0e0e0}
 #site-search-page input[type=text] {width:400px; padding: 15px 15px 15px 40px; font-size: 1em}
 #site-search-page input[type=checkbox] {margin-left:20px; transform: scale(1.5)}
 #site-search-page button { padding: 15px; font-size: 1em }
-#site-search-page label {position: absolute; left:20px; top:20px; font-size:1.4em}
+#site-search-page label {position: absolute; left:20px; top:20px; font-size:1.4em;}
 #site-search-page span img {position: absolute; left:430px; top:25px; font-size:1.4em}
 a.search h3 {color:navy; padding-bottom:0}
 a.search + p {margin:0.8em 0 1.5em 0}
@@ -110,7 +110,7 @@ footer {margin-top:20px}
 
 /* headings 
 ------------------------- */
-h1,h2,h3,h4,h5,h6 {  margin: 0.9em 0 0.3em 0; padding-bottom: 0; font-weight: 600;}
+h1,h3,h3,h4,h5,h6 {  margin: 0.9em 0 0.3em 0; padding-bottom: 0; font-weight: 600;}
 h1 { padding-top: 16px; font-size: 2.67em;}
 h2 { padding-top: 12px; font-size: 2em;	}
 h3 { padding-top: 8px; font-size: 1.5em; }
@@ -294,25 +294,25 @@ ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decorati
 .gf-red-2 { background-color:#932205; color:#fff;}
 .gf-red-12 { background: linear-gradient(#691600, #932205); color:#fff; }
 
-.gf-red-1 h2, .gf-red-1 div, .gf-red-1 p, .gf-red-1 a,
-.gf-red-2 h2, .gf-red-2 div, .gf-red-2 p, .gf-red-2 a,
-.gf-red-12 h2, .gf-red-12 div, .gf-red-12 p, .gf-red-12 a  {color:#fff; text-decoration: none }
+.gf-red-1 h3, .gf-red-1 div, .gf-red-1 p, .gf-red-1 a,
+.gf-red-2 h3, .gf-red-2 div, .gf-red-2 p, .gf-red-2 a,
+.gf-red-12 h3, .gf-red-12 div, .gf-red-12 p, .gf-red-12 a  {color:#fff; text-decoration: none }
 
 .gf-yellow-1 { background-color:#F9CF3B; color:#000; }
 .gf-yellow-2 { background-color:#FFDD66; color:#000; }
 .gf-yellow-12 { background: linear-gradient(#F9CF3B, #FFDD66); color:#000; }
 
-.gf-yellow-1 h2, .gf-yellow-1 div, .gf-yellow-1 p, .gf-yellow-1 a,
-.gf-yellow-2 h2, .gf-yellow-2 div, .gf-yellow-2 p, .gf-yellow-2 a,
-.gf-yellow-12 h2, .gf-yellow-12 div, .gf-yellow-12 p, .gf-yellow-12 a {color:#000; text-decoration: none }
+.gf-yellow-1 h3, .gf-yellow-1 div, .gf-yellow-1 p, .gf-yellow-1 a,
+.gf-yellow-2 h3, .gf-yellow-2 div, .gf-yellow-2 p, .gf-yellow-2 a,
+.gf-yellow-12 h3, .gf-yellow-12 div, .gf-yellow-12 p, .gf-yellow-12 a {color:#000; text-decoration: none }
 
 .gf-green-1 { background-color:#E8EEA2; color:#000; }
 .gf-green-2 { background-color:#F9FDA9; color:#000; }
 .gf-green-12 { background: linear-gradient(45deg,#e8eea2, #f9fda9); color:#000;}
 
-.gf-green-1 h2, .gf-green-1 div, .gf-green-1 p, .gf-green-1 a,
-.gf-green-2 h2, .gf-green-2 div, .gf-green-2 p, .gf-green-2 a,
-.gf-green-12 h2, .gf-green-12 div, .gf-green-12 p, .gf-green-12 a  {color:#000; text-decoration: none }
+.gf-green-1 h3, .gf-green-1 div, .gf-green-1 p, .gf-green-1 a,
+.gf-green-2 h3, .gf-green-2 div, .gf-green-2 p, .gf-green-2 a,
+.gf-green-12 h3, .gf-green-12 div, .gf-green-12 p, .gf-green-12 a  {color:#000; text-decoration: none }
 
 .sky {background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); }
 .snow {background-image: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%);}
@@ -320,14 +320,14 @@ ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decorati
 .eggwhite {background-color:#ffefc1; color:#000;}
 .white { background:#FFF; color:#000; }
 
-.sky h2, .sky div, .sky p, .sky a,
-.snow h2, .snow div, .snow p, .snow a,
-.wheat-cornsilk h2, .wheat-cornsilk div, .wheat-cornsilk p, .wheat-cornsilk a,
-.eggwhite h2, .eggwhite div, .eggwhite p, .eggwhite a,
-.white h2, .white div, .white p, .white a {color: #000; text-decoration: none}
+.sky h3, .sky div, .sky p, .sky a,
+.snow h3, .snow div, .snow p, .snow a,
+.wheat-cornsilk h3, .wheat-cornsilk div, .wheat-cornsilk p, .wheat-cornsilk a,
+.eggwhite h3, .eggwhite div, .eggwhite p, .eggwhite a,
+.white h3, .white div, .white p, .white a {color: #000; text-decoration: none}
 
 .frost { background: linear-gradient(#000428, #004e92); color:#FFF; }
-.frost h2, .frost div, .frost p, .frost a {color: #fff; text-decoration: none}
+.frost h3, .frost div, .frost p, .frost a {color: #fff; text-decoration: none}
 
 .border {border: 1px solid grey}
 .box-space {padding:10px}
@@ -568,7 +568,8 @@ div.ui-menu { width: 100px; }
 .ui-datepicker table {font-size: 1em !important }
 
 ul.ui-autocomplete {padding: 10px}
-ul.ui-autocomplete li {color:navy}
+ul.ui-autocomplete li {font-size:0.9em;color:navy;}
+ul.ui-autocomplete li:not(.ui-autocomplete-category) {padding-left:10px}
 ul li.ui-autocomplete-category {font-weight: bold; margin:25px 0 0 5px;}
 .ui-menu-item-wrapper:hover {color:navy !important; }
 .ui-menu-item-wrapper:active {color:black !important }
@@ -636,6 +637,8 @@ div.admin-area-inner input,
 div.admin-area-inner select,
 select#preview_theme { font-size:1em;padding:6px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;border: 1px solid #cccccc;margin:4px 4px 0 0} 
 select#preview_theme { position:absolute; top:140px; right:20px;z-index:999;}
+
+div.admin-panel table.page-settings {margin: 10px 0;}
 
 label.admin-text { font-size: 1.2em;font-weight:500;float:none;}
 p.admin-text { margin:10px 0px;}
@@ -766,9 +769,9 @@ div.grid-image-crop {min-height:100px;max-height:400px;background-size:cover;bac
 ------------------------- */
 div.grid-cell {float:left;width:32%; margin-right:2%; margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 div.grid-cell:nth-child(3n) {margin-right: 0;}
-div.grid-cell h2, div.grid-content, div.grid-cell div.story, div.grid-dynamic {margin:10px;flex: 0 1 auto;}
+div.grid-cell h3, div.grid-content, div.grid-cell div.story, div.grid-dynamic {margin:10px;flex: 0 1 auto;}
 div.grid-link { text-align: center; padding:10px; margin:8px; flex: 0 1 auto; }
-
+div.grid-cell div.grid-content  {overflow: hidden;}
 
 /* grid custom class
 ------------------------- */
@@ -794,7 +797,7 @@ div#content-selected-stories div.stories-wrapper:nth-child(3n) {margin-right:0}
 
 div.stories-cell {position: relative;float:left; width:32%; min-height:200px; display: flex; flex-direction: column; margin-right:2%; margin-bottom:20px; border: 1px solid black; background-color:rgb(255,255,255); text-align: left;font-size:initial; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 div.stories-cell:nth-child(3n) {margin-right: 0;}
-div.stories-cell h2, div.stories-cell div.stories-content {margin:10px;flex: 0 1 auto;}
+div.stories-cell h3, div.stories-cell div.stories-content {margin:10px;flex: 0 1 auto;}
 
 
 
@@ -1105,7 +1108,7 @@ div.stories-cell h2, div.stories-cell div.stories-content {margin:10px;flex: 0 1
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
 	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
-	#site-header { width: 100%; height: 320px; overflow: hidden }
+	#site-header { width: 100%; height: 400px; overflow: hidden }
 
 
 	ul#navigation-root { width: 100%; padding:0; margin: 0; list-style: none;}

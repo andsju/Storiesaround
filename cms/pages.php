@@ -259,7 +259,11 @@ if ($arr['template'] == 6) {
     <div id="wrapper-site-header-image">
         <?php include_once_customfile('includes/inc.site_header_image.php', $arr, $languages); ?>
     </div>
-    
+    <?php
+    if ($arr['search_field_area'] == 2) {
+        print_search_field_area_page($languages);
+    }
+    ?>
     <div id="wrapper-top">
         <?php
         
@@ -276,9 +280,6 @@ if ($arr['template'] == 6) {
             for ($i = 0; $i < count($hint); $i++) {
                 echo $hint[$i];
             }                            
-        }
-        if ($arr['search_field_area'] == 2) {
-            print_search_field_area_page($languages);
         }
         print_selection("selection-header-below", $selection_area['header_below']); 
         ?>

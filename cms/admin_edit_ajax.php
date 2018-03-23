@@ -440,15 +440,18 @@ if (isset($_POST['token'])){
 					if ($dh = opendir(CMS_ABSPATH .'/'. $directory_text)) {
 						$images_ext = array('jpg','jpeg','gif','png');
 
+						
 						while (($file = readdir($dh)) !== false) {
 							if (!is_dir(CMS_ABSPATH .'/'. $directory_text.'/'.$file)) {
-							
+								$trash = '<button class="delete_file" data-file="'.CMS_ABSPATH .'/'. $directory_text.'/'.$file.'" title="Delete file"><i class="fas fa-trash-alt"></i></button>'; 
+								$copy = '<button class="copy_file" data-file="'.CMS_DIR .'/'. $directory_text.'/'.$file.'" title="Copy file location"><i class="fas fa-link"></i></button>'; 
 								$ext = pathinfo($directory_text.'/'.$file, PATHINFO_EXTENSION);
 								if(in_array($ext, $images_ext)) {
-									echo $file.' ('.round(filesize(CMS_ABSPATH .'/'. $directory_text.'/'.$file)/1024,1).' kb)'.$ext.'<br /><img src="'.CMS_DIR . '/'. $directory_text.'/'.$file.'" /><br />';
+									echo $trash.' '.$copy.' '. $file.' ('.round(filesize(CMS_ABSPATH .'/'. $directory_text.'/'.$file)/1024,1).' kb)'.$ext.'<br /><img src="'.CMS_DIR . '/'. $directory_text.'/'.$file.'" /><br />';
 								} else {
-									echo '<pre><a href="'.$directory_text.'/'.$file.'" target="_blank">'.$file .'</a></pre>';
+									echo '<pre>'.$trash.' '.$copy.' . <a href="'.$directory_text.'/'.$file.'" target="_blank">'.$file .'</a></pre>';
 								}
+								echo '<hr>';
 							}
 						}
 						closedir($dh);
@@ -456,6 +459,13 @@ if (isset($_POST['token'])){
 				}
 				
 
+			break;
+
+			case 'delete_file';
+				$file = $_POST['file'];
+				if(is_file($file)) {
+					unlink($file);
+				}
 			break;
 
 
