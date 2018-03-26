@@ -10,16 +10,14 @@ $plugin_bookitems_category_id = null;
 // parse arguments
 parse_str($plugin_arguments, $plugin_argument);
 // check if we have a value
+
 if($plugin_argument) {
 	$plugin_bookitems_category_id = $plugin_argument['plugin_bookitems_category_id'];
 }
 
-
-
 if(!$plugin_bookitems_category_id) {
 	die();
 }
-
 
 $users_id = isset($_SESSION['users_id']) ? $_SESSION['users_id'] : 0;
 
@@ -32,7 +30,6 @@ echo '<input type="hidden" name="token" id="token" value="'.$_SESSION['token'].'
 echo '<input type="hidden" name="users_id" id="users_id" value="'.$users_id.'" />';
 echo '<input type="hidden" name="cms_dir" id="cms_dir" value="'.CMS_DIR.'" />';
 echo '<input type="hidden" name="plugin_bookitems_category_id" id="plugin_bookitems_category_id" value="'.$plugin_bookitems_category_id.'" />';
-
 ?>
 
 <script>
@@ -178,7 +175,7 @@ echo '<input type="hidden" name="plugin_bookitems_category_id" id="plugin_bookit
 			$( "#dialog_bookitems" ).dialog({
 				
 				autoOpen: true,
-				width: 400,
+				width: 450,
 				height: 600,
 				modal: true,
 				draggable: true,

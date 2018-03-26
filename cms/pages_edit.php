@@ -3824,6 +3824,7 @@ if(is_array($check_edit)) {
 				}
 				
 				$column_space_edit = 'width:2%;';
+				
 				switch ($arr['template']) {	
 					case 0:
 						// sidebars 
@@ -3968,7 +3969,7 @@ if(is_array($check_edit)) {
 
 						<div id="left_sidebar" class="column_selected_stories" style="width:100%;">
 							<div class="column_description ui-state-disabled">left sidebar - stories</div>
-							<?php get_box_content($rows, "left_sidebar"); ?>
+							<?php get_box_content($rows, "left_sidebar", ""); ?>
 						</div>
 						
 					</div>
