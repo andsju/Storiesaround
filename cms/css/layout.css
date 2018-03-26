@@ -50,14 +50,18 @@ div#page404 {margin:0 auto; width:200px;height:200px;padding:20px;border:3px sol
 #wrapper-page { width: 1280px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
 #wrapper-top {width: 1280px;margin: 0 auto}
 #wrapper-bottom, #wrapper-site-footer {width: 1280px;margin: 20px auto}
-#wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0; overflow: hidden;}
-#wrapper-right-sidebar { height: 100%; padding: 0 0 0 20px; overflow: hidden;}
-#wrapper-content { height: 100%; padding: 0 20px 0 0; border-left: 0px solid black; border-right: 1px solid black; ; overflow: hidden;}
+#wrapper-left-sidebar {height: 100%; padding-right: 20px; overflow: hidden;}
+#wrapper-right-sidebar { height: 100%; padding-left: 20px; overflow: hidden;}
+#wrapper-content { height: 100%; overflow: hidden;}
 #wrapper-user:after, #wrapper-site-header:after, #wrapper-page:after, #wrapper-top:after, #wrapper-bottom:after, article, .clear:after {
     content: "";
     clear: both;
     display: table
 }
+
+div.column-having-left-sidebar {padding-left: 20px; border-left: 1px solid black;}
+div.column-having-right-sidebar {padding-right: 20px; border-right: 1px solid black;}
+
 
 
 /* site heading
@@ -103,6 +107,7 @@ div#content-html { }
 div#content-author-leading, div#content-author { text-align:right;font-style:italic; }
 div#content-social-networking { padding:2px;border:1px dashed #FFF;}
 article {width: 100%; margin-bottom:40px}
+
 
 /* footer
 ------------------------- */
@@ -202,7 +207,7 @@ ul li.not-published { text-decoration: line-through; }
 .datepicker-week-col {  }
 .datepicker-weekdays { padding: 0.2em; text-align: center; font-weight:normal; }
 a.datepicker-day  { }
-table.calendar-event {border-collapse: collapse; background:#FFF; border:1px solid #D0D0D0; width:100%; }
+table.calendar-event {border-collapse: collapse; background:#FFF; border:1px solid #D0D0D0; width:100%; font-size:0.9em }
 table.calendar-event thead tr th{ padding:5px;}
 tr.calendar-event-nav { }
 th.weekdays, th.columns {text-align:left;}
@@ -211,11 +216,11 @@ td.calendar-event {cursor:pointer;}
 span.calendar-date {font-size:0.9em;}
 span.calendar-week { font-size:0.9em;margin:0 5px;}
 div.calendar-month-name { font-size:1em;margin:2px;}
-.calendar-event-container { margin:3px; }
+.calendar-event-container { margin:3px; font-size: 0.9em }
 .calendar-somedays { padding: 1px 2px; font-size: 0.9em;  border-top: 1px solid #AAA !important; border-bottom: 1px solid #AAA !important; border-left: 0 !important; border-right: 0 !important;  height: inherit !important; }
 img.calendar-flagday { margin-left:10px; }
 div.calendar-column { width:100%;float:left;overflow:hidden;  border:1px solid #D0D0D0; padding:0px;border-radius: 4px;}
-div.calendar-events-container { padding:0 7px 7px 7px;}
+div.calendar-events-container { padding:0 7px 7px 7px; font-size:0.95em}
 h5.calendar-events-category { font-weight:normal;padding-bottom:5px;}
 h6.calendar-events-heading { font-style:normal; padding-top: 7px; font-size: 0.9em; }
 div.calendar-events { }
@@ -1096,9 +1101,9 @@ div.stories-cell h3, div.stories-cell div.stories-content {margin:10px;flex: 0 1
 	#wrapper-page { width: 1280px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
 	#wrapper-top {width: 1280px;margin: 0 auto}
 	#wrapper-bottom, #wrapper-site-footer {width: 1280px;margin: 20px auto}
-	#wrapper-left-sidebar {height: 100%; padding: 0 20px 0 0}
-	#wrapper-right-sidebar { height: 100%; padding: 0 0 0 20px}
-	#wrapper-content { height: 100%; padding: 0 20px 0 0; border-left: 0px solid black; border-right: 1px solid black; }
+	#wrapper-left-sidebar {height: 100%; }
+	#wrapper-right-sidebar { height: 100%; }
+	#wrapper-content { height: 100%; }
 	#wrapper-user:after, #wrapper-site-header:after, #wrapper-page:after, #wrapper-top:after, #wrapper-bottom:after, article, .clear:after {
 		content: "";
 		clear: both;

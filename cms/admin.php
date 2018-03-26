@@ -728,8 +728,8 @@ switch($t) {
 							<p class="admin-text">
 								<label for="site_navigation_vertical_sidebar" class="admin-text">Site navigation vertical sidebar</label><br />
 								<select name="site_navigation_vertical_sidebar" id="site_navigation_vertical_sidebar">
-									<option value="0" <?php if($_SESSION['site_navigation_vertical_sidebar'] == 0) {echo ' selected';} ?>>left sidebar when available</option>
-									<option value="1" <?php if($_SESSION['site_navigation_vertical_sidebar'] == 1) {echo ' selected';} ?>>right sidebar when available</option>
+									<option value="1" <?php if($_SESSION['site_navigation_vertical_sidebar'] == 1) {echo ' selected';} ?>>left sidebar when available</option>
+									<option value="0" <?php if($_SESSION['site_navigation_vertical_sidebar'] == 0) {echo ' selected';} ?>>right sidebar when available</option>
 								</select>
 								<i> set site navigation vertical sidebar</i>
 							</p>

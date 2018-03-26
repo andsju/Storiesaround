@@ -880,6 +880,7 @@ class Bookitems extends Plugins {
 		$view = null;
 		
 		if(!$acc_read) {
+			echo '<p>Rättigheter saknas</p>';
 			die();
 		}
 	

@@ -149,65 +149,60 @@ function add_js_language_files($js_files)
     return $js_files;    
 }
 
+
 /**
  *
  * set plugin values
  *
  * @param int $id
+ * @param int $$users_id
+ * @param array $plugin_settings
+ * @return array $plugin_settings
  */
-function set_plugin_values($id, $users_id, $css_files)
+function set_plugin__values($id, $users_id, $plugin_settings) 
 {
-    //if($arr['plugins']) {
-        
-        // main class
-        $pages_plugins = new PagesPlugins();					
-        // get this class name
-        $plugin = $pages_plugins->getPagesPlugins($id);
-        if($plugin) {
-            // only use plugin if active
-            if($plugin['plugins_active'] == 1) {
-                // use class
-                $plugin_class = new $plugin['plugins_title']();
-                
-                // get info
-                $plugin_info = $plugin_class->info();
+
+    $pages_plugins = new PagesPlugins();					
     
-                // get plugin css			
-                if(strlen(trim($plugin_info['css']))>0){
-                    array_push($css_files, trim($plugin_info['css']));
-                }
-                // returns an array for which areas should be replaced by plugin
-                $plugin_action = $plugin_class->action($id, $users_id, $_SESSION['token'], $plugin_info['area']);
+    // get this class name
+    $plugin = $pages_plugins->getPagesPlugins($id);
+
+    if($plugin) {
+        
+        if($plugin['plugins_active'] == 1) {
+
+            $plugin_class = new $plugin['plugins_title']();
                 
-                if($plugin_action) {
-                    foreach($plugin_action as $p) {
-                        foreach($p as $key=>$value) {
-                            switch ($key) {
-                                case 'header';
-                                    $plugin_header = $value;
-                                break;
-                                case 'left_sidebar';
-                                    $plugin_left_sidebar = $value;
-                                break;
-                                case 'content';
-                                    $plugin_content = $value;
-                                break;
-                                case 'right_sidebar';
-                                    $plugin_right_sidebar = $value;
-                                break;
-                                case 'footer';
-                                    $plugin_footer = $value;
-                                break;
-                                case 'page';
-                                    $plugin_page = $value;
-                                break;
-                            }
+            // get info
+            $plugin_info = $plugin_class->info();
+
+            // get plugin css			
+            if(strlen(trim($plugin_info['css'])) > 0){
+                $plugin_settings["css"] = $plugin_info['css'];
+            }
+
+            // returns an array for which areas should be replaced by plugin
+            $plugin_action = $plugin_class->action($id, $users_id, $_SESSION['token'], $plugin_info['area']);
+            
+            if($plugin_action) {
+                foreach($plugin_action as $p) {
+                    foreach($p as $key=>$value) {
+                        switch ($key) {
+                            case 'sidebar';
+                                $plugin_settings["sidebar"] = $value;
+                            break;
+                            case 'content';
+                                $plugin_settings["content"] = $value;
+                            break;
                         }
                     }
                 }
             }
+
         }
-    //}
+    }
+
+    return $plugin_settings;
 }
 
 
@@ -2268,7 +2263,7 @@ function get_select_number($arrayOfNumbers, $current, $name, $id, $classes)
         $html = '<select '. $name . $id . $classes.'>';
         $selected = '';
         for ($i = 0; $i < count($arrayOfNumbers); $i++) {
-            $selected = $current === $arrayOfNumbers[$i] ? ' selected' : ''; 
+            $selected = $current == $arrayOfNumbers[$i] ? ' selected' : ''; 
             $html .= '<option value="'.$arrayOfNumbers[$i].'" '.$selected.'>'.$arrayOfNumbers[$i].'</option>';
         }
         $html .= '</select>';
@@ -2288,7 +2283,7 @@ function get_select_strings($arrayOfStrings, $current, $name, $id, $classes)
         $html = '<select '. $name . $id . $classes.'>';
         $selected = '';
         for ($i = 0; $i < count($arrayOfStrings); $i++) {
-            $selected = $current === $arrayOfStrings[$i] ? ' selected' : ''; 
+            $selected = $current === $arrayOfStrings[$i][0] ? ' selected' : ''; 
             $html .= '<option value="'.$arrayOfStrings[$i][0].'" '.$selected.'>'.$arrayOfStrings[$i][1].'</option>';
         }
         $html .= '</select>';
@@ -2311,6 +2306,8 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
 {
     $pages = new Pages();
     $imageClass = new Image();
+    $calendar = new Calendar();
+
     $grid_content_json = json_decode($grid_content);
     
     // json to a multidimensional array
@@ -2381,7 +2378,6 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                 break;
                 case "19":
 
-                    //$html_grid .= '<div class="grid-dynamic hidden">';
                     $html_grid .= '<div class="grid-dynamic">';
                     if ($value2 == "stories-child") {
                         
@@ -2415,6 +2411,26 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                         
                         }
                     }
+                    if ($value2 == "calendar-events") {
+                        $search = (string)$result_copy[$counter][21];
+                        $limit = (int)$result_copy[$counter][23];
+                        $cal = $calendar->getCalendarCategoriesSearch($search);
+                        if($cal) {
+                            $calendar_categories_id = $cal[0]['calendar_categories_id'];
+                            $events = $calendar->getCalendarEvents($calendar_categories_id, $date = date('Y-m-d'), "2weeks");                            
+                            if ($events) {
+                                $count_events = 0;
+                                foreach ($events as $event) {
+                                    if ($limit > $count_events) {
+                                        $html_grid .= '<h5>'.transl(date('l',strtotime($event['event_date']))) .' '. strtolower(date('j',strtotime($event['event_date']))) .' '. strtolower(transl(date('F',strtotime($event['event_date'])))) .'</h5>';
+                                        $html_grid .= '<p>'.nl2br($event['event']) . '</p>';
+                                        $count_events++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     $html_grid .= '</div>';
                 break;
                 case "21":
@@ -2425,25 +2441,21 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     }
                     $grid_image_y = (int)$result_copy[$counter][3];
                     $adjustSelectList = get_select_number(array(0,10,20,30,40,50,60,70,80,90,100), $grid_image_y, "grid-image-y", "", "");
-         
+
                     $dynamic = '<hr><div class="dynamic hidden"><p>Dynamic content</p>';
-                    $dynamic .= get_select_strings(array(array("none", "none"),array("stories-child", "Child stories"),array("stories-event", "Event stories"),array("stories-promoted", "Promoted stories")), "", "grid-dynamic-content", "", "");
-                    $dynamic .= '<p>Filter promoted stories (tag):</p><input type="text" name="grid-dynamic-content-filter" maxlength="25">'; 
-                    $dynamic .= '<p>Limit promoted stories</p>';
-                    $dynamic .= get_select_number(array(0,1,2,3,4,5,6,7,8,9), 1, "grid-dynamic-content-limit", "", "");
+                    $dynamic .= get_select_strings(array(array("none", "none"),array("stories-child", "Child stories"),array("stories-promoted", "Promoted stories"),array("calendar-events", "Calendar events")), $result_copy[$counter][19], "grid-dynamic-content", "", "");
+                    $dynamic .= '<p>Filter content:</p><input type="text" name="grid-dynamic-content-filter" maxlength="25" value="'.$result_copy[$counter][21].'">'; 
+                    $dynamic .= '<p>Limit content</p>';
+                    $dynamic .= get_select_number(array(0,1,2,3,4,5,6,7,8,9), $result_copy[$counter][23], "grid-dynamic-content-limit", "", "");
                     
                     $class_select = '<a class="colorbox_grid_class"  href="pages_css.php?token='. $_SESSION['token'].'&pages_id='.$pages_id.'&return=false">&nbsp;<i class="fas fa-question-circle"></i></a>';
                     $html_grid .= '<div class="grid-form hidden"><p>Image<br><input type="text" name="grid-image" maxlength="255" value="'.$result_copy[$counter][1].'"></p><p>Adjust image (background-position-y %): '.$adjustSelectList.'</p><p>Heading<br><input type="text" name="heading" maxlength="100" value="'.$result_copy[$counter][5].'"></p><p>Video<br><input type="text" name="video" maxlength="100" value="'.$result_copy[$counter][7].'"></p><p>URL<br><input type="text" name="url" maxlength="255" value="'.$result_copy[$counter][9].'"></p><p>Link title<br><input type="text" name="link" maxlength="50" value="'.$result_copy[$counter][11].'"></p><p>Content<br><textarea class="tinymce-grid" name="grid-content">'.$result_copy[$counter][13].'</textarea></p><p>Custom css class<br><input type="text" name="css" maxlength="100" value="'.$result_copy[$counter][15].'">'.$class_select.'<input type="hidden" name="pages_id" value="'.$result_copy[$counter][15].'"></p><p>Toggle <a class="toggle" href="#dynamic">dynamic content</a></p>'.$dynamic.'</div>';
 
                     $html_grid .= '</div></div>';
                 break;
-
-
                 
-            }
-            
+            }            
         }
-
             
         $counter++;
     }
@@ -2483,6 +2495,8 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
 {
     $pages = new Pages();
     $imageClass = new Image();
+    $calendar = new Calendar();
+
     $grid_content_json = json_decode($grid_content);
     
     // json to a multidimensional array
@@ -2507,11 +2521,13 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
     $add_wrapper_class = strlen($grid_custom_classes) ? "wrapper-grid-padding" : "";
 
     $html_grid = '<div id="wrapper-grid" class="'.$grid_custom_classes.' '.$add_wrapper_class.' clearfix">';
+
     foreach($result as $key => $value) {
         $header = "";
         $image = "";
 
         foreach ($value as $key2 => $value2) {
+
             switch ($key2) {
                 case "0":
                 $html_grid .= '<div class="grid-cell  '.$result_copy[$counter][15].'">';
@@ -2538,11 +2554,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                         $html_grid .= '<div class="grid-video">' .$video . '</div>';
                     }
                     break;
-
                 case "11":
-                    if(strlen($value2)) {
-                        //$html_grid .= '<div class="grid-content">' . $value2 . '</div>';
-                    }
                     break;
                 case "13":
                     if(strlen($value2)) {
@@ -2552,6 +2564,10 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                 case "17":
                     break;
                 case "19":
+
+                    if (strlen($value2)) {
+                        $html_grid .= '<div class="grid-content">' ;
+                    }
                     if ($value2 == "stories-child") {
                         
                         $p_id = (int)$result_copy[$counter][17];
@@ -2581,7 +2597,30 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                             }                            
                         }
                     }
-                break;
+                    
+                    if ($value2 == "calendar-events") {
+                        $search = (string)$result_copy[$counter][21];
+                        $limit = (int)$result_copy[$counter][23];
+                        $cal = $calendar->getCalendarCategoriesSearch($search);
+                        if($cal) {
+                            $calendar_categories_id = $cal[0]['calendar_categories_id'];
+                            $events = $calendar->getCalendarEvents($calendar_categories_id, $date = date('Y-m-d'), "2weeks");                            
+                            if ($events) {
+                                $count_events = 0;
+                                foreach ($events as $event) {
+                                    if ($limit > $count_events) {
+                                        $html_grid .= '<h5>'.transl(date('l',strtotime($event['event_date']))) .' '. strtolower(date('j',strtotime($event['event_date']))) .' '. strtolower(transl(date('F',strtotime($event['event_date'])))) .'</h5>';
+                                        $html_grid .= '<p>'.nl2br($event['event']) . '</p>';
+                                        $count_events++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (strlen($value2)) {$html_grid .= '</div>'; }
+
+                    break;
                 case "21":
                     $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
                     if (strlen($result_copy[$counter][9])) {
