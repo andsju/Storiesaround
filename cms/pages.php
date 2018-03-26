@@ -169,17 +169,13 @@ if (is_array($wysiwyg_editor)) {
 	}
 }
 
-
-
-
-
-
-
-// handle plugins, set each area value to null
-$plugin_header = $plugin_left_sidebar = $plugin_right_sidebar = $plugin_content = $plugin_footer = $plugin_page = null;
+// handle plugins
+$plugin_settings = array("css"=>"","sidebar"=>"", "content"=>"");
 if($arr['plugins']) {
-    set_plugin_values($id, $users_id, $css_files);
+    $plugin_settings = set_plugin__values($id, $users_id, $plugin_settings);
+    array_push($css_files, $plugin_settings["css"]);
 }
+
 
 // selections
 $pages_selections = explode(",",$arr['selections']);
@@ -303,6 +299,8 @@ if ($arr['template'] == 6) {
     $rows_child = $arr['stories_child'] == 1 ? $pages->getPagesStoryContentPublishChild($id) : null; 
     $rows_selected = $arr['stories_selected'] == 1 ? $pages->getPagesStoryContentPublishAllSorted($id) : null;
 
+    $cms_dir = CMS_DIR;
+
     switch ($arr['template']) {	
         case 0:
             // sidebars
@@ -310,12 +308,17 @@ if ($arr['template'] == 6) {
             $left_sidebar_percent_width = $right_sidebar_percent_width = $sidebar_percent_width;
             $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            include 'includes/inc.template_sidebars.php';
         break;
         case 1:
             // left sidebar
             $content_percent_width = 100 - $sidebar_percent_width;
             $left_sidebar_percent_width = $sidebar_percent_width;
             $right_sidebar_percent_width = 0;
+            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            $wrapper_left_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            $wrapper_right_sidebar_width = 0;
+            include 'includes/inc.template_sidebar_left.php';
 
         break;
         case 2:
@@ -326,23 +329,34 @@ if ($arr['template'] == 6) {
             $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
             $wrapper_left_sidebar_width = 0;
-            include 'includes/inc.template_sidebar_content.php';
+            include 'includes/inc.template_sidebar_right.php';
+
         break;
         case 3:
             // panorama
             $content_percent_width = 100;
             $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
+            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
+            include 'includes/inc.template_panorama.php';
+
         break;
         case 4:
             // sidebars right joined
             $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
+            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $right_sidebar_percent_width = $sidebar_percent_width;
             $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
+            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            include 'includes/inc.template_sidebars_joined.php';
+
         break;					
         case 5:
+        case 6:
             // custom
             $content_percent_width = 100;
             $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
+            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             if (is_file(CMS_ABSPATH.'/content/templates/' . $arr['template_custom'])) {
                 include CMS_ABSPATH.'/content/templates/' . $arr['template_custom'];
             } else {

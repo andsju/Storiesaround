@@ -11,7 +11,7 @@ $rows1 = $cal->getCalendarEventsRSS(1, $limit);
 $rows2 = $cal->getCalendarEventsRSS(2, $limit);
 $rows = array_merge($rows1,$rows2);
 
-
+/*
 function aasort (&$array, $key) {
     $sorter=array();
     $ret=array();
@@ -25,7 +25,7 @@ function aasort (&$array, $key) {
     }
     $array=$ret;
 }
-
+*/
 aasort($rows,"event_date");
 
 

@@ -5,7 +5,9 @@ table.unit_settings td { padding:5px; }
 table.units { width:100%; font-size: 13px;}
 table.units td { border:0px solid black;padding:0px; }
 table.units td label { padding-top:10px; }
+table.units td input, table.units td textarea { padding:5px; }
 
+table.units h3 { margin:0; padding:0 }
 div#units_list { overflow-y:scroll;max-height:150px;margin:10px 0;}
 
 div.units {width:100%;display:block;	border:1px dotted #000;margin: 5px 0;box-sizing: border-box;-moz-box-sizing:border-box;padding: 4px;width:100%;min-height:83px;background:#ffff99;width:100%;}
@@ -13,8 +15,9 @@ div.units {width:100%;display:block;	border:1px dotted #000;margin: 5px 0;box-si
 
 div.units_description { font-weight:normal;font-size:0.8em;}
 
-table.utc td { border:0;padding:0px; }
-table.utc td input, table.utc td select{ font-size:13px; }
+
+table.utc td input, table.utc td select{ font-size:13px; padding:3px}
+
 
 div.repeat_form { margin-left:20px;margin-right:20px;width:90%; }
 
@@ -30,6 +33,10 @@ div.box_boka_beskrivning { font-size:1em; }
 
 
 
+.ui-dialog-buttonset button {font-size:0.8em !important}
+
+
+
 table#rights td.check { text-align:center;}
 
 
@@ -39,6 +46,7 @@ table#rights td.check { text-align:center;}
 
 table.calendar-bookitems  { background:#FFF; font-size: 0.9em; margin:0; border-spacing: 0px;}
 tr.calendar-bookitems-nav { background: #e8e8e8;border:1px solid #D0D0D0;}
+tr.calendar-bookitems-nav th { padding:5px 0}
 th.calendar-bookitems-thead { background: url('images/ui-bg_glass_55_fbf9ee_1x400.png') repeat-x scroll 50% 50% #E6E6E6; padding: 0.8em;border: 1px solid #C2C2C2; text-align:left; font-size:1em;vertical-align:top;text-align:center;}
 tr.calendar-bookitems-weekend { background: #F5F5F5;}
 tr.calendar-bookitems-today { background: #FEFFCE;}
