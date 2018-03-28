@@ -294,7 +294,7 @@ if ($arr['template'] == 6) {
     $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
 
     // get stories before template renders
-    $limit_stories = isset($_SESSION['site_limit_stories']) ? $_SESSION['site_limit_stories'] : 10;
+    $limit_stories = $arr['stories_limit'];
     $rows_promoted = $arr['stories_promoted'] == 1 ? $pages->getPagesStoryContentPublishPromoted($arr['stories_filter'], $limit_stories) : null;
     $rows_child = $arr['stories_child'] == 1 ? $pages->getPagesStoryContentPublishChild($id) : null; 
     $rows_selected = $arr['stories_selected'] == 1 ? $pages->getPagesStoryContentPublishAllSorted($id) : null;
@@ -371,9 +371,10 @@ if ($arr['template'] == 6) {
         <div id="bottom-grid"><?php print_grid($arr, 3);?></div>
     </div>
 
-    <?php print_selection("selection-footer-above", $selection_area['footer_above']); ?>
+    
 
     <footer id="wrapper-site-footer">
+    <?php print_selection("selection-footer-above", $selection_area['footer_above']); ?>
         <div id="site-about"></div>
         <div id="site-contact"></div>
         <div id="site-rss"></div>

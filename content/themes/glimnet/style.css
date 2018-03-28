@@ -4,7 +4,8 @@ body {
     padding: 0;
     font-family: 'Open sans', sans-serif;
     max-width: 100%;
-    letter-spacing: 0.01em;
+	letter-spacing: 0.01em;
+	background-image: url(images/gf-blend-grey.png)
 }
 
 html,body,li,p {font-family: 'Open sans', sans-serif;}
@@ -23,11 +24,64 @@ p+p { text-indent: 1em }
 
 
 
-div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient(#F5DEB3, #FFF8DC); border:1px solid grey;margin-bottom:20px}
-div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #fdfcfb 0%, #e2d1c3 100%); border:1px solid grey;margin-bottom:20px}
-div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #e8eea2, #f9fda9); border:1px solid grey;margin-bottom:20px}
 div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #F9CF3B, #FFDD66); border:1px solid grey;margin-bottom:20px}
 div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #5a5856,#646260); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gl-blend-9.png); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gl-blend-15.png); border:1px solid grey;margin-bottom:20px}
+div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gf-blend.png); background-repeat: repeat-y; border:1px solid grey;margin-bottom:20px}
+
+
+.gf-red-1 { background-color:#691600; color:#fff;}
+.gf-red-2 { background-color:#932205; color:#fff;}
+.gf-red-12 { background: linear-gradient(#691600, #932205); color:#fff; }
+
+.gf-red-1 h3, .gf-red-1 div, .gf-red-1 p, .gf-red-1 a,
+.gf-red-2 h3, .gf-red-2 div, .gf-red-2 p, .gf-red-2 a,
+.gf-red-12 h3, .gf-red-12 div, .gf-red-12 p, .gf-red-12 a  {color:#fff; text-decoration: none }
+
+.gf-yellow-1 { background-color:#F9CF3B; color:#000; }
+.gf-yellow-2 { background-color:#FFDD66; color:#000; }
+.gf-yellow-12 { background: linear-gradient(#F9CF3B, #FFDD66); color:#000; }
+
+.gf-yellow-1 h3, .gf-yellow-1 div, .gf-yellow-1 p, .gf-yellow-1 a,
+.gf-yellow-2 h3, .gf-yellow-2 div, .gf-yellow-2 p, .gf-yellow-2 a,
+.gf-yellow-12 h3, .gf-yellow-12 div, .gf-yellow-12 p, .gf-yellow-12 a {color:#000; text-decoration: none }
+
+.gf-green-1 { background-color:#E8EEA2; color:#000; }
+.gf-green-2 { background-color:#F9FDA9; color:#000; }
+.gf-green-12 { background: linear-gradient(45deg,#e8eea2, #f9fda9); color:#000;}
+
+.gf-green-1 h3, .gf-green-1 div, .gf-green-1 p, .gf-green-1 a,
+.gf-green-2 h3, .gf-green-2 div, .gf-green-2 p, .gf-green-2 a,
+.gf-green-12 h3, .gf-green-12 div, .gf-green-12 p, .gf-green-12 a  {color:#000; text-decoration: none }
+
+.gf-design {background: url(images/gf-blend.png); border:1px solid grey;background-size: 100%}
+
+.gf-grid-white-1 {background-color: white !important; color:black}
+
+.gf-grid-green-1 {background-color: white !important; }
+.gf-grid-green-1 h3, .gf-grid-green-1 a {color: black }
+.grid-design.gf-grid-green-1 {background: url(images/gf-blend.png); background-repeat: repeat-y; border:1px solid grey;}
+
+.gf-grid-yellow-1 {background-color: white !important }
+.gf-grid-yellow-1 h3, .gf-grid-yellow-1 a {color: black }
+.grid-design.gf-grid-yellow-1 {background: #FFDD66 !important;}
+
+.gf-grid-red-1 {background-color: white !important }
+.gf-grid-red-1 h3, .gf-grid-red-1 a {color: black }
+.grid-design.gf-grid-red-1 {background: #8d131d !important;}
+
+.gf-grid-grey-1 {background-color: white !important }
+.gf-grid-grey-1 h3, .gf-grid-grey-1 a {color: black }
+.grid-design.gf-grid-grey-1 {background: #5a5856 !important;}
+
+.gf-warm-grey {background: #646260; color:#fff; padding:20px}
+.gf-warm-grey h3, .gf-warm-grey div, .gf-warm-grey p, .gf-warm-grey a {color:#fff; text-decoration: none }
+
+
+
+span#storiesaround {display:none}
+
 div#site-search-page {border-top-color: black;}
 div#site-search-page {border-bottom-color: black;}
 #site-search-page label {color:whitesmoke}
@@ -153,5 +207,9 @@ ______________________________________________________________________________ *
 
 
 @media (min-width: 769px)  {
+	
 	#site-navigation-header {top:40px}
+	ul#navigation-root li {border:0; }
+	ul#navigation-root li.node-open a { border-bottom:4px solid #99a03e;  text-decoration: none; }
+	ul#navigation-root li:hover {background-color:rgba(204,211,76,0.5) }
 }

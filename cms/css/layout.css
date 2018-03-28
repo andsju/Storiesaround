@@ -35,7 +35,8 @@ use a theme to override settings
  
 /* body
 ------------------------- */
-hml, body { margin: 0; padding: 0; font-family: 'Verdana', sans-serif; } 
+hml, body { margin: 0; padding: 0; font-family: 'Verdana', sans-serif } 
+#wrapper-site-header { }
 
 
 /* 404 page
@@ -47,7 +48,7 @@ div#page404 {margin:0 auto; width:200px;height:200px;padding:20px;border:3px sol
 ------------------------- */
 #wrapper-user { width: 100%; height: 40px; position: fixed; top: 0; left: 0; z-index: 999; color: white; background-color: black; }
 #wrapper-site-header { width: 100%; position: relative }
-#wrapper-page { width: 1280px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
+#wrapper-page { width: 1280px; min-height: 10px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
 #wrapper-top {width: 1280px;margin: 0 auto}
 #wrapper-bottom, #wrapper-site-footer {width: 1280px;margin: 20px auto}
 #wrapper-left-sidebar {height: 100%; padding-right: 20px; overflow: hidden;}
@@ -102,9 +103,10 @@ div#content-breadcrumb {  }
 div#content-links {  }
 div#content-title {  }
 div#content-title h1 {  }
-div#content-meta { font-size:0.8em;padding:5px 0 }
 div#content-html { }
-div#content-author-leading, div#content-author { text-align:right;font-style:italic; }
+div#content-meta { text-align:right; font-size:0.8em;margin:10px 0 }
+div#content-author-leading, div#content-author { text-align:right; }
+div#content-author {font-style:italic;}
 div#content-social-networking { padding:2px;border:1px dashed #FFF;}
 article {width: 100%; margin-bottom:40px}
 
@@ -286,7 +288,7 @@ abbr.timeago { font-size:0.9em;}
 div#site-navigation-root { padding: 2px 0px; margin-bottom:10px; }
 ul#navigation-root a:hover { }
 ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decoration: underline}
-
+ul#navigation-root li:last-child {border-right:0}
 
 /* navigation, vertical
  -------------------------*/
@@ -294,31 +296,6 @@ ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decorati
 
 /* custom classes
 ------------------------- */
-
-.gf-red-1 { background-color:#691600; color:#fff;}
-.gf-red-2 { background-color:#932205; color:#fff;}
-.gf-red-12 { background: linear-gradient(#691600, #932205); color:#fff; }
-
-.gf-red-1 h3, .gf-red-1 div, .gf-red-1 p, .gf-red-1 a,
-.gf-red-2 h3, .gf-red-2 div, .gf-red-2 p, .gf-red-2 a,
-.gf-red-12 h3, .gf-red-12 div, .gf-red-12 p, .gf-red-12 a  {color:#fff; text-decoration: none }
-
-.gf-yellow-1 { background-color:#F9CF3B; color:#000; }
-.gf-yellow-2 { background-color:#FFDD66; color:#000; }
-.gf-yellow-12 { background: linear-gradient(#F9CF3B, #FFDD66); color:#000; }
-
-.gf-yellow-1 h3, .gf-yellow-1 div, .gf-yellow-1 p, .gf-yellow-1 a,
-.gf-yellow-2 h3, .gf-yellow-2 div, .gf-yellow-2 p, .gf-yellow-2 a,
-.gf-yellow-12 h3, .gf-yellow-12 div, .gf-yellow-12 p, .gf-yellow-12 a {color:#000; text-decoration: none }
-
-.gf-green-1 { background-color:#E8EEA2; color:#000; }
-.gf-green-2 { background-color:#F9FDA9; color:#000; }
-.gf-green-12 { background: linear-gradient(45deg,#e8eea2, #f9fda9); color:#000;}
-
-.gf-green-1 h3, .gf-green-1 div, .gf-green-1 p, .gf-green-1 a,
-.gf-green-2 h3, .gf-green-2 div, .gf-green-2 p, .gf-green-2 a,
-.gf-green-12 h3, .gf-green-12 div, .gf-green-12 p, .gf-green-12 a  {color:#000; text-decoration: none }
-
 .sky {background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); }
 .snow {background-image: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%);}
 .wheat-cornsilk { background: linear-gradient(135deg,#F5DEB3, #FFF8DC); color:#000;}
@@ -338,6 +315,7 @@ ul#navigation-root li.node-open a { background: #FFF; color: #000; text-decorati
 .box-space {padding:10px}
 
 .grid-cell:hover:not(.gridedit) {transform: scale(1.003)}
+
 div.wrapper-grid-padding {padding:20px}
 
 .faq-question { font-family: Georgia; font-size: 1.4em; color:#4F531E;padding: 8px 0 2px 0;}
@@ -352,7 +330,25 @@ div.wrapper-grid-padding {padding:20px}
 .text-smaller { font-size: 0.9em; }
 .quote-emphasize { font-family: Georgia, Garamond, Times, serif; letter-spacing:0.1em; text-align:center; margin: 10% 10%; line-height: 120%; font-size: 1.7em; }
 .small-caps { font-variant: small-caps; }
+a.link-look-alike-button {text-decoration: none; display: inline-block;padding:4px 16px 4px 4px;border-style: solid; border-width:2px; border-color: ButtonHighLight ButtonShadow ButtonShadow ButtonHighLight; color: white;font-size:1.5em; background-color:rgb(153,160,62)}
+a.link-look-alike-button:hover {border-color: ButtonHighLight; background-color:rgb(204,211,76);}
 
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 35px;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 /* END front-end styles
 ------------------------- 
 -------------------------
@@ -770,13 +766,26 @@ div.grid-image-crop {min-height:100px;max-height:400px;background-size:cover;bac
 .grid-video { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; }
 .grid-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
+
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 35px;
+    height: 0;
+    overflow: hidden;
+}
+
+
 /* grid
 ------------------------- */
-div.grid-cell {float:left;width:32%; margin-right:2%; margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+div.grid-cell {float:left;width:32%; margin-right:2%; margin-bottom:20px; border: 1px solid black;  text-align: left;font-size:initial;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 div.grid-cell:nth-child(3n) {margin-right: 0;}
 div.grid-cell h3, div.grid-content, div.grid-cell div.story, div.grid-dynamic {margin:10px;flex: 0 1 auto;}
 div.grid-link { text-align: center; padding:10px; margin:8px; flex: 0 1 auto; }
 div.grid-cell div.grid-content  {overflow: hidden;}
+div.grid-design {height: 20px;}
+
 
 /* grid custom class
 ------------------------- */
@@ -800,23 +809,27 @@ div#content-selected-stories {margin:0}
 div#content-selected-stories div.stories-wrapper {width:32%;margin-right:2%;float:left}
 div#content-selected-stories div.stories-wrapper:nth-child(3n) {margin-right:0}
 
-div.stories-cell {position: relative;float:left; width:32%; min-height:200px; display: flex; flex-direction: column; margin-right:2%; margin-bottom:20px; border: 1px solid black; background-color:rgb(255,255,255); text-align: left;font-size:initial; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+#content-bottom-stories {margin:0}
+#content-bottom-stories div.stories-wrapper {width:32%;margin-right:2%;float:left}
+#content-bottom-stories div.stories-wrapper:nth-child(3n) {margin-right:0}
+
+div.stories-cell {position: relative;float:left; width:32%; min-height:200px; display: flex; flex-direction: column; margin-right:2%; margin-bottom:20px; border: 1px solid black; text-align: left;font-size:initial; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 div.stories-cell:nth-child(3n) {margin-right: 0;}
 div.stories-cell h3, div.stories-cell div.stories-content {margin:10px;flex: 0 1 auto;}
 
 
 
 @media (min-width: 320px) and (max-width: 767px) {
-	div.grid-cell {float:left;width:100%; display: flex; flex-direction: column;  margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;min-height:200px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+	div.grid-cell {float:left;width:100%; display: flex; flex-direction: column;  margin-bottom:20px; border: 1px solid black; text-align: left;font-size:initial;min-height:100px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 	div.grid-cell:nth-child(1n) {margin-right: 0;}
 }
 @media (min-width: 768px) and (max-width: 1024px) {
-	div.grid-cell {float:left;width:48%; margin-right:4%; display: flex; flex-direction: column;  margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;min-height:200px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+	div.grid-cell {float:left;width:48%; margin-right:4%; display: flex; flex-direction: column;  margin-bottom:20px; border: 1px solid black; text-align: left;font-size:initial;min-height:100px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 	div.grid-cell:nth-child(1n) {margin-right: 4%}
 	div.grid-cell:nth-child(2n) {margin-right: 0}
 }
 @media (min-width: 1025px) and (max-width: 1920px) {
-	div.grid-cell {float:left;width:32%; margin-right:2%; display: flex; flex-direction: column;  margin-bottom:20px; border: 1px solid black; background-color:rgb(230,230,230); text-align: left;font-size:initial;min-height:200px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+	div.grid-cell {float:left;width:32%; margin-right:2%; display: flex; flex-direction: column;  margin-bottom:20px; border: 1px solid black; text-align: left;font-size:initial;min-height:100px;position: relative; box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 	div.grid-cell:nth-child(1n) {margin-right: 2%}
 	div.grid-cell:nth-child(2n) {margin-right: 2%}
 	div.grid-cell:nth-child(3n) {margin-right: 0}
@@ -1098,7 +1111,7 @@ div.stories-cell h3, div.stories-cell div.stories-content {margin:10px;flex: 0 1
 	------------------------- */
 	#wrapper-user { width: 100%; height: 40px; position: fixed; top: 0; left: 0; z-index: 999; color: white; background-color: black; }
 	#wrapper-site-header { width: 100%; position: relative;margin-top:40px }
-	#wrapper-page { width: 1280px; min-height: 100px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
+	#wrapper-page { width: 1280px; min-height: 10px; margin: 0 auto; padding: 20px; background-color: rgb(255, 255, 255); box-shadow: 10px 0 10px -10px  rgba(0, 0, 0, 0.2), -10px 0 10px -10px  rgba(0, 0, 0, 0.2); border-left:1px solid black; border-right:1px solid black}
 	#wrapper-top {width: 1280px;margin: 0 auto}
 	#wrapper-bottom, #wrapper-site-footer {width: 1280px;margin: 20px auto}
 	#wrapper-left-sidebar {height: 100%; }
