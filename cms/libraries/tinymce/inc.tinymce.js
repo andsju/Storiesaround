@@ -27,6 +27,7 @@
 					{title : 'Bigger <span>', inline : 'span', classes : 'text-bigger'},
 					{title : 'Smaller <span>', inline : 'span', classes : 'text-smaller'},
 					{title : 'SMALL CAPS <span>', inline : 'span', classes : 'small-caps'},
+					{title : 'Button look-alike', selector : 'a', classes : 'link-look-alike-button'},
 				]},
 				{title: 'Image', items: [
 					{title : 'align left 33%', selector : 'img', styles : {'width' : '33%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
@@ -34,6 +35,10 @@
 					{title : 'align rigth 33%', selector : 'img', styles : {'width' : '33%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0 10px'}},
 					{title : 'align rigth 50%', selector : 'img', styles : {'width' : '50%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0  10px'}},
 					{title : '100%', selector : 'img', styles : {'width' : '100%', 'height' : 'auto', 'margin' : '10px 0'}}
+				]},
+				{title: 'Areas', items: [
+					{title : 'Warm grey', block : 'div', classes : 'gf-warm-grey'},
+					{title : 'GF design', block : 'div', classes : 'gf-design'}
 				]}
 			],
 			templates: [ 

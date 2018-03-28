@@ -1,7 +1,7 @@
 
     <div id="wrapper-page">
     
-        <div id="wrapper-content" class="column column-having-right-sidebar" style="width:75%">
+        <div id="wrapper-content" class="column column-having-right-sidebar" style="width:75%; overflow:auto">
             <main>
                 <?php print_selection("selection-content-above", $selection_area['content_above']); ?>
                 <div id="content-top-selections"></div>

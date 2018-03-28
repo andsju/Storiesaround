@@ -633,6 +633,7 @@ equalheight = function (container) {
 			rowDivs[currentDiv].height(currentTallest);
 		}
 	});
+	
 }
 
 function getSelectNumber(arrayOfNumbers, current, name, id, classes) {

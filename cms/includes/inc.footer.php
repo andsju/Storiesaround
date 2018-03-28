@@ -15,6 +15,6 @@ if (isset($_SESSION['site_email'])) {
 </div>
 <?php
 if (isset($_SESSION['site_copyright'])) {
-    echo '<div style="float:right;">' . CMS . ' | &#169; ' . $_SESSION['site_copyright'] . '</div>';
+    echo '<div style="float:right;"><span id="storiesaround">' . CMS . ' | </span>&#169; ' . $_SESSION['site_copyright'] . '</div>';
 }
 ?>
