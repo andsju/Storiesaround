@@ -77,6 +77,12 @@ include_once 'includes/inc.site_active_user_administration.php';
 <script>
 	$(document).ready(function() {
 
+		$("#dialog_delete_file").dialog({
+			autoOpen: false,
+			modal: true
+		});		
+
+
 		$(function() {
 			$("#tab_admin").tabs({
 			});
@@ -112,21 +118,33 @@ include_once 'includes/inc.site_active_user_administration.php';
 			$.colorbox({width:"640px", height:"300px", iframe:true, href:"admin_upload.php?token="+token+"&folder="+dir+"&overwrite="+overwrite});
 		});
 
-		
 		$("body").delegate(".delete_file", "click", function() {
-			var token = $("#token").val();
-			var action = "delete_file";
-			var file = $(this).attr("data-file");
-			var file_in_list = $(this); 
-			
-			$.ajax({
-				type: 'POST',
-				url: 'admin_edit_ajax.php',
-				data: { 
-					action: action, token: token, file: file
+
+			var that = $(this);
+			event.preventDefault();
+			$("#dialog_delete_file").dialog("open");
+			$("#dialog_delete_file").dialog({
+				buttons : {
+				"Confirm" : function() {
+					$(this).dialog("close");
+					var token = $("#token").val();
+					var action = "delete_file";
+					var file = that.attr("data-file");
+					var file_in_list = that; 
+					$.ajax({
+						type: 'POST',
+						url: 'admin_edit_ajax.php',
+						data: { 
+							action: action, token: token, file: file
+						},
+						success: function(message){	
+							file_in_list.text("File deleted");
+						}
+					});
 				},
-				success: function(message){	
-					file_in_list.text("File deleted");
+				"Cancel" : function() {
+					$(this).dialog("close");
+					}
 				}
 			});
 		});
@@ -1900,6 +1918,11 @@ switch($t) {
 	
 }
 ?>
+
+
+<div id="dialog_delete_file" title="Confirmation required" style="display:none;">
+  Delete this image?
+</div>
 
 <input type="hidden" id="users_id" name="users_id" value="<?php echo $_SESSION['users_id']; ?>">
 <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token'];?>" />

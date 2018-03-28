@@ -486,6 +486,18 @@ $(document).ready(function () {
 	// window resize
 	$(window).resize(function () {
 
+		var $medias = $("#content-html iframe");
+		var $fluidEl = $("#content-html");
+		var newWidth = $fluidEl.width();
+		$medias.each(function () {
+			$(this)
+				.attr('data-ratio', this.height / this.width)
+				.removeAttr('height')
+				.removeAttr('width')
+				.width(newWidth)
+				.height(newWidth * $(this).data('ratio'));
+		});
+		
 		var $videos = $(".grid-video iframe");
 		var $fluidEl = $(".grid-video");
 		var newWidth = $fluidEl.width();
@@ -494,7 +506,9 @@ $(document).ready(function () {
 				.width(newWidth)
 				.height(newWidth * $(this).data('ratio'));
 		});
+		
 		equalheight('div.grid-cell');
+		//equalheight('div.grid-video');
 	}).resize();
 
 
@@ -507,6 +521,7 @@ $(document).ready(function () {
 		inlineEdit(pages_id, users_id, role_cms, token);
 		notifyInlineEdit($(this));
 	});
+
 
 	//replace_image_path('/content/', '/somefolder/content/');
 
@@ -696,7 +711,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
-	console.log("addMobileMenu", w);
+	//console.log("addMobileMenu", w);
 	if (w <= 767) {
 		console.log("767");
 		var cms_dir = $("#cms_dir").val();

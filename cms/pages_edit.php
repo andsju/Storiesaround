@@ -67,7 +67,7 @@ if(isset($_SESSION['site_ui_theme'])) {
 // add css theme
 $theme = isset($_SESSION['site_theme']) ? $_SESSION['site_theme'] : '';
 if(file_exists(CMS_ABSPATH .'/content/themes/'.$theme.'/style.css')) {
-	//array_push($css_files, CMS_DIR.'/content/themes/'.$theme.'/style.css');
+	array_push($css_files, CMS_DIR.'/content/themes/'.$theme.'/style.css');
 }
 // apply edit style
 array_push($css_files, CMS_DIR.'/cms/css/pages_edit.css');
@@ -396,14 +396,14 @@ foreach ( $js_files as $js ): ?>
 			var form = "";
 			var html = "";
 			
-			var dynamic = "<hr><div class=\"dynamic hidden\"><p>Dynamic content</p>";			
-			var dynamicSelectList = getSelectStrings([["none", "none"], ["stories-child", "Child stories"], ["stories-event", "Event stories"], ["stories-promoted", "Promoted stories"]], "", "grid-dynamic-content", "", "");
+			var dynamic = "<hr><div class=\"dynamic hidden\"><p>Dynamic content</p>";
+			var dynamicSelectList = getSelectStrings([["none", "none"], ["stories-child", "Child stories"], ["stories-promoted", "Promoted stories"], ["calendar-events", "Calendar events"]], "", "grid-dynamic-content", "", "");
 			dynamic += dynamicSelectList;
 			dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\" maxlength=\"25\">"; 
 			dynamic += "<p>Limit promoted stories</p>";
 			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 1, "grid-dynamic-content-limit", "", "");
 			dynamic += limitSelectList;
-			cell += "<div class=\"grid-cell\" style=\"position:relative\">"
+			cell += "<div class=\"grid-cell gridedit\" style=\"position:relative\">"
 			var tool = "<div class=\"grid-tools\"><i class=\"far fa-save\" aria-hidden=\"true\"></i><br><i class=\"far fa-edit\" aria-hidden=\"true\"></i><br><i class=\"fas fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fas fa-arrow-right\" aria-hidden=\"true\"></i><br><i class=\"far fa-trash-alt\"></i></div>";
 			cell += tool;
 
@@ -437,10 +437,9 @@ foreach ( $js_files as $js ): ?>
 
 		$("div#wrapper-grid").delegate( "div.grid-tools .fa-edit", "click", function(event) {
 			event.preventDefault();
-			console.log("ppp");
-			console.log($(this).parent().parent().children());
 			$(this).parent().parent().children("div.grid-form").show();
 			activateEditor("tinymce");
+			console.log("equalheight");
 			equalheight('div.grid-cell');
 		});
 
@@ -3592,16 +3591,21 @@ if(is_array($check_edit)) {
 								<td>
 									<label for="stories_promoted">Show promoted pages in area:</label><br />
 									<select id="stories_promoted_area" name="stories_promoted_area">
-										<option value="0" <?php if($arr['stories_promoted_area'] == 0) {echo 'selected';}?>>(none)</option>
+
 										<option value="0"></option>
-										<option value="1" <?php if($arr['stories_promoted_area'] == 1) {echo 'selected';}?>>left sidebar</option>
-										<option value="2" <?php if($arr['stories_promoted_area'] == 2) {echo 'selected';}?>>right sidebar</option>
+										<option value="1" <?php if($arr['stories_promoted_area'] == 1) {echo 'selected';}?>>left sidebar | top image teaser</option>
+										<option value="2" <?php if($arr['stories_promoted_area'] == 2) {echo 'selected';}?>>left sidebar | align image teaser to story</option>
 										<option value="0"></option>
-										<option value="3" <?php if($arr['stories_promoted_area'] == 3) {echo 'selected';}?>>content | columns | small</option>
-										<option value="4" <?php if($arr['stories_promoted_area'] == 4) {echo 'selected';}?>>content | columns | large</option>
+										<option value="3" <?php if($arr['stories_promoted_area'] == 3) {echo 'selected';}?>>right sidebar | top image teaser</option>
+										<option value="4" <?php if($arr['stories_promoted_area'] == 4) {echo 'selected';}?>>right sidebar | align image teaser to story</option>
 										<option value="0"></option>
-										<option value="5" <?php if($arr['stories_promoted_area'] == 5) {echo 'selected';}?>>content | rows | align image teaser</option>
-										<option value="6" <?php if($arr['stories_promoted_area'] == 6) {echo 'selected';}?>>content | rows | exclude image teaser</option>
+										<option value="5" <?php if($arr['stories_promoted_area'] == 5) {echo 'selected';}?>>content | columns | top image teaser</option>
+										<option value="6" <?php if($arr['stories_promoted_area'] == 6) {echo 'selected';}?>>content | columns | align image teaser</option>
+										<option value="0"></option>
+										<option value="7" <?php if($arr['stories_promoted_area'] == 7) {echo 'selected';}?>>content | rows | align image teaser to title</option>
+										<option value="8" <?php if($arr['stories_promoted_area'] == 8) {echo 'selected';}?>>content | rows | align image teaser to story</option>										
+										<option value="9" <?php if($arr['stories_promoted_area'] == 9) {echo 'selected';}?>>content | rows | exclude image teaser</option>
+
 									</select>
 									<p>
 									<label for="stories_filter">Set filter: (tag):</label><br />
@@ -4137,7 +4141,7 @@ if(is_array($check_edit)) {
 				
 				<div id="wrapper-grid" class="grid-edit clearfix">
 				<?php
-				$html_grid = get_grid_edit($id, $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);    
+				$html_grid = get_grid_edit($id, $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);
 				echo $html_grid;				
 				?>
 				</div>

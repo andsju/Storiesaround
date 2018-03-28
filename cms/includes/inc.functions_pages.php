@@ -1325,7 +1325,8 @@ function print__story__promoted($rows_promoted, $languages, $cms_dir, $id, $wrap
     if (!$rows_promoted) {return null;}
     if (in_array($stories_promoted_area, $stories_area)) {
         $html = '<div id="content-promoted-stories" class="clearfix">';
-        $html .= get_box_story_content_promoted($rows_promoted, $wrapper_content_width, $stories_last_modified, $stories_image_copyright, $stories_css_class, $dtz, $languages);
+        //$html .= get_box_story_content_promoted($rows_promoted, $wrapper_content_width, $stories_last_modified, $stories_image_copyright, $stories_css_class, $dtz, $languages);
+        $html .= get_box_story_content($rows_promoted, $languages, $wrapper_content_width, $stories_area, $stories_promoted_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz);
         $html .= '</div>';
         echo $html;
     }
@@ -1359,7 +1360,7 @@ function print__story__selected($rows_selected, $languages, $cms_dir, $id, $cont
 
 
 
-function get_box_story_content($rows, $languages, $wrapper_content_width, $stories_area, $stories_child_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
+function get_box_story_content($rows, $languages, $wrapper_content_width, $stories_area, $stories_area_show, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
 {
     $html = "";
     $image = new Image();
@@ -1378,7 +1379,7 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
         $story = $row['story_content'];
         $story_wide_teaser_image = $row['story_wide_teaser_image'];
         $caption = $row['caption'];
-        $alt = $row['alt'];
+        $alt = "";
         $copyright = strlen($row['copyright']) ? translate("Photo:", "site_photo", $languages) . ' ' . $row['copyright'] : '';
         $css_class = strlen($row['story_css_class']) > 0 ? $row['story_css_class'] : '';
         $css_class = strlen($stories_css_class) > 0 ? $stories_css_class : $css_class;
@@ -1388,33 +1389,32 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
         $teaser_image_class = $stories_wide_teaser_image_align == 0 ? 'float-left' : 'float-right';
         $add_class_padding = strlen($css_class) ? "stories-padding" : ""; 
 
-        switch ($stories_child_area) {
+        switch ($stories_area_show) {
 
             case 1: // left sidebar | top image teaser
             case 3: // right sidebar | top image teaser
-                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width) : '';
-                $html .= '<div class="column" style="width:100%">';
-                $html .= $a_start;
-                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
-                $html .= '<div class="stories-content '. $css_class .' '.$add_class_padding.'">';
-                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
-                $html .= $a_end;
-                $html .= $stories_last_modified == 1 ? $stories_meta : '';
-                $html .= $story . '</div></div>';
-                
-            break;
-            case 2: // left sidebar | align image teaser to story
-            case 4: // right sidebar | align image teaser to story
-                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
-                $html .= '<div class="column" style="width:100%;display:grid">';
-                $html .= '<div class="stories-content '. $css_class .' '.$add_class_padding.'">';
-                $html .= $a_start;
+
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * 33 / 100) : '';
+                $html .= '<div class="stories-cell" style="width:100%;display:grid">';
+                $html .= isset($row['filename']) ? $a_start . '<img src="' . $optimzed_image . '" class="fluid" style="width:100%" alt="' . $alt . '" title="' . $copyright . '"/>' . $a_end : '';
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';                
                 $html .= $a_end;
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
                 $html .= $a_start;
-                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
                 $html .= $a_end;
+                $html .= $story . '</div>';
+            break;
+
+            case 2: // left sidebar | align image teaser to story
+            case 4: // right sidebar | align image teaser to story
+                $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
+                $html .= '<div class="stories-cell '. $css_class .' " style="width:100%;display:grid">';
+                $html .= '<div class="stories-content">';
+                $html .= isset($row['filename']) ? $a_start .'<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '"/>' . $a_end : '';
+                $html .= $a_start;
+                $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';                
+                $html .= $a_end;
+                $html .= $stories_last_modified == 1 ? $stories_meta : '';
                 $html .= $story . '</div></div>';
                 
             break;
@@ -1430,13 +1430,13 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
                 $html .= $a_end;
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
-                $html .= $story . '</div></div>';
+                $html .= $story .'</div></div>';
 
             break;
             case 6: // content | columns | align image teaser
                 $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * 20 / 100) : '';
-                $html .= '<div class="stories-cell">';
-                $html .= '<div class="stories-content ' . $css_class . '">';                
+                $html .= '<div class="stories-cell ' . $css_class . '">';
+                $html .= '<div class="stories-content">';                
                 $html .= $a_start;
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
                 $html .= $a_end;
@@ -1451,8 +1451,8 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
 
             case 7: // content | rows | align image teaser to title
                 $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
-                $html .= '<div class="stories-wrapper clear">';                
-                $html .= '<div class="stories-content ' . $css_class . '">';
+                $html .= '<div class="stories-wrapper clear " style="width:100%; clear:both;display:flex">';
+                $html .= '<div class="stories-content ' . $css_class . ' '.$add_class_padding.'" style="width:100%;">';
                 $html .= $a_start;
                 $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid ' . $teaser_image_class . '" alt="' . $alt . '" title="' . $copyright . '" style="width:'.$stories_wide_teaser_image_width .'%"/>' : '';
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';
@@ -1465,8 +1465,8 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
 
             case 8: // content | rows | align image teaser to story
                 $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * $stories_wide_teaser_image_width / 100) : '';
-                $html .= '<div class="stories-wrapper clear">';
-                $html .= '<div class="stories-content ' . $css_class . '">';
+                $html .= '<div class="stories-wrapper clear " style="width:100%; clear:both;display:flex">';
+                $html .= '<div class="stories-content ' . $css_class . ' '.$add_class_padding.'" style="width:100%;">';
                 $html .= $a_start;
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
                 $html .= $a_end;
@@ -1480,13 +1480,13 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
             break;
 
             case 9: // content | rows | exclude image teaser
-                $html .= '<div class="stories-wrapper clear">';
-                $html .= $a_start;        
-                $html .= '<div class="stories-content ' . $css_class . '">';
+                $html .= '<div class="stories-wrapper clear " style="width:100%; clear:both;display:flex">';
+                $html .= '<div class="stories-content ' . $css_class . ' '.$add_class_padding.'" style="width:100%;">';
+                $html .= $a_start;
                 $html .= $title == 0 ? '<h3 class="stories-title">' . $title_value . '</h3>' : '';        
+                $html .= $a_end;
                 $html .= $stories_last_modified == 1 ? $stories_meta : '';
                 $html .= $story . '</div></div>';
-                $html .= $a_end;
 
             break;
 
@@ -1988,11 +1988,10 @@ function get_box_story_content_promoted($rows, $col_width, $stories_last_modifie
             $i = $col_width > 222 ? 726 : 222;
             $img = isset($row['filename']) ? CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . str_replace('_100.', '_' . $i . '.', $row['filename']) : '';
 
+            echo '<div class="stories-wrapper">';
             if ($row['story_link']) {
                 echo '<a class="stories" href="pages.php?id=' . $row['pages_id'] . '">';
-            }
-
-            echo '<div class="stories-wrapper">';
+            }            
             if (!is_null($row['filename'])) {
                 echo '<img src="' . $img . '"  class="fluid" alt="' . $caption . '" />';
             }
@@ -2009,10 +2008,10 @@ function get_box_story_content_promoted($rows, $col_width, $stories_last_modifie
             }
             echo $row['story_content'];
             echo '</div>';
-            echo '</div>';
             if ($row['story_link']) {
                 echo '</a>';
             }
+            echo '</div>';
 
         }
     }
@@ -2304,6 +2303,7 @@ function get_select_strings($arrayOfStrings, $current, $name, $id, $classes)
  */
 function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_classes, $grid_cell_template, $grid_cell_image_height)
 {
+
     $pages = new Pages();
     $imageClass = new Image();
     $calendar = new Calendar();
@@ -2434,10 +2434,14 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     $html_grid .= '</div>';
                 break;
                 case "21":
+
                     $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
-                    $html_grid .= '<div class="grid-split"></div>';
-                    if(strlen($link)) {
-                    $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
+                    if (strlen($result_copy[$counter][9])) {
+                        $html_grid .= '<div class="grid-split"></div>';
+                        $html_grid .= strlen($result_copy[$counter][15]) ? '<div class="grid-design '.$result_copy[$counter][15].'"></div>' : '';
+                        $html_grid .= strlen($link) ? '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>' : '';                            
+                    } else {
+                        $html_grid .= strlen($result_copy[$counter][15]) ? '<div class="grid-design '.$result_copy[$counter][15].'"></div>' : '';
                     }
                     $grid_image_y = (int)$result_copy[$counter][3];
                     $adjustSelectList = get_select_number(array(0,10,20,30,40,50,60,70,80,90,100), $grid_image_y, "grid-image-y", "", "");
@@ -2452,6 +2456,7 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                     $html_grid .= '<div class="grid-form hidden"><p>Image<br><input type="text" name="grid-image" maxlength="255" value="'.$result_copy[$counter][1].'"></p><p>Adjust image (background-position-y %): '.$adjustSelectList.'</p><p>Heading<br><input type="text" name="heading" maxlength="100" value="'.$result_copy[$counter][5].'"></p><p>Video<br><input type="text" name="video" maxlength="100" value="'.$result_copy[$counter][7].'"></p><p>URL<br><input type="text" name="url" maxlength="255" value="'.$result_copy[$counter][9].'"></p><p>Link title<br><input type="text" name="link" maxlength="50" value="'.$result_copy[$counter][11].'"></p><p>Content<br><textarea class="tinymce-grid" name="grid-content">'.$result_copy[$counter][13].'</textarea></p><p>Custom css class<br><input type="text" name="css" maxlength="100" value="'.$result_copy[$counter][15].'">'.$class_select.'<input type="hidden" name="pages_id" value="'.$result_copy[$counter][15].'"></p><p>Toggle <a class="toggle" href="#dynamic">dynamic content</a></p>'.$dynamic.'</div>';
 
                     $html_grid .= '</div></div>';
+
                 break;
                 
             }            
@@ -2530,7 +2535,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
 
             switch ($key2) {
                 case "0":
-                $html_grid .= '<div class="grid-cell  '.$result_copy[$counter][15].'">';
+                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][15].'">';
                 break;
                 case "1":
                     if(strlen($value2)) {    
@@ -2625,7 +2630,11 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                     $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
                     if (strlen($result_copy[$counter][9])) {
                         $html_grid .= '<div class="grid-split"></div>';
-                        $html_grid .= '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>';
+                        $html_grid .= strlen($result_copy[$counter][15]) ? '<div class="grid-design '.$result_copy[$counter][15].'"></div>' : '';
+                        $html_grid .= strlen($link) ? '<div class="grid-link"><a href="'.$result_copy[$counter][9].'">'.$link.'</a></div>' : '';                            
+                    } else {
+                        $html_grid .= '<div class="grid-split"></div>';
+                        $html_grid .= strlen($result_copy[$counter][15]) ? '<div class="grid-design '.$result_copy[$counter][15].'"></div>' : '';
                     }
                     $html_grid .= '</div>';
                 break;
