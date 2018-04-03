@@ -25,9 +25,8 @@
         </div>
     
         <div id="wrapper-content" class="column column-having-left-sidebar column-having-right-sidebar" style="width:<?php echo $content_percent_width;?>%">
-            <main>
-                <?php print_selection("selection-content-above", $selection_area['content_above']); ?>
-                <div id="content-top-selections"></div>
+            <main>                
+                <div id="content-top-selections"><?php print_selection("selection-content-above", $selection_area['content_above']); ?></div>
                 <div id="content-top-grid"><?php print_grid($arr, 1);?></div>
                 <div id="content-breadcrumb"><?php print_breadcrumb($id, $arr['breadcrumb']); ?></div>
                 <article>
@@ -85,6 +84,6 @@
             ?>
             </aside>
             <?php print_selection("selection-right-sidebar-bottom", $selection_area['right_sidebar_bottom']); ?>
-        </div
+        </div>
         
     </div>

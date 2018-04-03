@@ -18,7 +18,9 @@ DirectoryIndex index.php index.html index.htm
 
 # rewrite 
 RewriteEngine on
-
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
 # stop redirecting if the request has already been redirected once
 RewriteCond %{ENV:REDIRECT_STATUS} 200
 RewriteRule .* - [L]

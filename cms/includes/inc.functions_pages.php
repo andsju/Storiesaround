@@ -1352,7 +1352,9 @@ function print__story__selected($rows_selected, $languages, $cms_dir, $id, $cont
 
     //if (in_array($stories_child_area, $stories_area)) {
         $html = '<div id="content-selected-stories" class="clearfix">';
-        $html .= get_box_story_content_selected($rows_selected, $languages, $content_percent_width, $wrapper_content_width, $stories_selected_area, $stories_columns,$stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz);
+        $html .= get_box_story_content($rows_selected, $languages, $wrapper_content_width, $stories_area, $stories_child_area, $stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz);
+        //$html .= get_box_story_content_selected($rows_selected, $languages, $content_percent_width, $wrapper_content_width, $stories_selected_area, $stories_columns,$stories_css_class, $stories_wide_teaser_image_align, $stories_wide_teaser_image_width, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz);
+        
         $html .= '</div>';
         echo $html;
     //}
@@ -2525,7 +2527,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
     // 14: css, 16: pages_id, 18: grid-dynamic-content, 20: grid-dynamic-content-filter, 22: grid-dynamic-content-limit
     $add_wrapper_class = strlen($grid_custom_classes) ? "wrapper-grid-padding" : "";
 
-    $html_grid = '<div id="wrapper-grid" class="'.$grid_custom_classes.' '.$add_wrapper_class.' clearfix">';
+    $html_grid = '<div class="wrapper-grid '.$grid_custom_classes.' '.$add_wrapper_class.' clearfix">';
 
     foreach($result as $key => $value) {
         $header = "";
@@ -2672,7 +2674,7 @@ function print_grid($arr, $area)
 function print_mobile_menu($pages, $id, $seo, $href) 
 {
     if ($_SESSION['layoutType'] == "mobile") {
-        echo '<div id="site-navigation-mobile-wrapper">';
+        echo '<div id="wrapper-mobile-site-navigation">';
             echo '<div class="mobile-buttons"></div><div class="menu-button"></div>';               
                 echo '<nav id="site-navigation-mobile">';
                 $seo = $_SESSION['site_seo_url'] == 1 ? 1 : 0;
