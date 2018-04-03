@@ -371,14 +371,12 @@ if ($arr['template'] == 6) {
         <div id="bottom-grid"><?php print_grid($arr, 3);?></div>
     </div>
 
-    
-
     <footer id="wrapper-site-footer">
-    <?php print_selection("selection-footer-above", $selection_area['footer_above']); ?>
+        <?php print_selection("selection-footer-above", $selection_area['footer_above']); ?>
+        <?php include_once_customfile('includes/inc.footer.php', $arr, $languages); ?>
         <div id="site-about"></div>
         <div id="site-contact"></div>
         <div id="site-rss"></div>
-        <?php include_once_customfile('includes/inc.footer.php', $arr, $languages); ?>			
     </footer>
 
     <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>">
