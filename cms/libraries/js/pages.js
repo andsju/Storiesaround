@@ -712,8 +712,8 @@ function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
 	//console.log("addMobileMenu", w);
-	if (w <= 767) {
-		console.log("767");
+	if (w <= 768) {
+		console.log("768");
 		var cms_dir = $("#cms_dir").val();
 		var newdata = '<img class="mobile-menu-icon" src="' + cms_dir + '/content/favicon.png" id="site-icon">';
 		newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_search.png" style="" id="search-site-icon">';

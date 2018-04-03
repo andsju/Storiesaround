@@ -314,7 +314,7 @@ $js_files = array(
 						var action = "bookitems_category_rights_add_users";
 						var token = $("#token").val();
 						var cms_dir = $("#cms_dir").val();
-						var ajax_dir = cms_dir +'/cms/plugins/bookitems/';
+						var ajax_dir = cms_dir +'/content/plugins/bookitems/';
 						$.ajax({
 							beforeSend: function() { loading = $('#ajax_spinner_rights').show()},
 							complete: function(){ loading = setTimeout("$('#ajax_spinner_rights').hide()",700)},
@@ -369,7 +369,7 @@ $js_files = array(
 						var action = "bookitems_category_rights_add_groups";
 						var token = $("#token").val();
 						var cms_dir = $("#cms_dir").val();
-						var ajax_dir = cms_dir +'/cms/plugins/bookitems/';
+						var ajax_dir = cms_dir +'/content/plugins/bookitems/';
 						$.ajax({
 							beforeSend: function() { loading = $('#ajax_spinner_rights').show()},
 							complete: function(){ loading = setTimeout("$('#ajax_spinner_rights').hide()",700)},
@@ -396,7 +396,7 @@ $js_files = array(
 			var action = "plugin_bookitems_category_rights_delete";
 			var token = $("#token").val();
 			var cms_dir = $("#cms_dir").val();
-			var ajax_dir = cms_dir +'/cms/plugins/bookitems/';
+			var ajax_dir = cms_dir +'/content/plugins/bookitems/';
 			var plugin_bookitems_category_rights_id = $(this).val();
 			console.log(plugin_bookitems_category_rights_id);
 			$(this).parent().parent().parent().remove();
@@ -418,7 +418,7 @@ $js_files = array(
 		var plugin_bookitems_category_id = $("#plugin_bookitems_category_id").val();
 		var action = "plugin_bookitems_category_rights_save";
 		var cms_dir = $("#cms_dir").val();
-		var ajax_dir = cms_dir +'/cms/plugins/bookitems/';
+		var ajax_dir = cms_dir +'/content/plugins/bookitems/';
 		var token = $("#token").val();
 		var r_id = [];
 		var r_read = [];
