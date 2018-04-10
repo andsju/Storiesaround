@@ -501,14 +501,23 @@ $(document).ready(function () {
 		var $videos = $(".grid-video iframe");
 		var $fluidEl = $(".grid-video");
 		var newWidth = $fluidEl.width();
+		var h = 0;
 		$videos.each(function () {
 			$(this)
 				.width(newWidth)
 				.height(newWidth * $(this).data('ratio'));
+				h = newWidth * $(this).data('ratio');
+		});
+		$fluidEl.each(function () {
+			$(this)
+				//.height(h);
+				// setting height crossbrowser
+				.css("height", h + "px");
 		});
 		
-		equalheight('div.grid-cell');
 		//equalheight('div.grid-video');
+		equalheight('div.grid-cell');
+
 	}).resize();
 
 
@@ -712,8 +721,8 @@ function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
 	//console.log("addMobileMenu", w);
-	if (w <= 768) {
-		console.log("768");
+	if (w <= 1024) {
+		console.log("1024");
 		var cms_dir = $("#cms_dir").val();
 		var newdata = '<img class="mobile-menu-icon" src="' + cms_dir + '/content/favicon.png" id="site-icon">';
 		newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_search.png" style="" id="search-site-icon">';
