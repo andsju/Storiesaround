@@ -11,14 +11,15 @@ body {
 html,body,li,p {font-family: 'Open sans', sans-serif;}
 
 #wrapper-site-header {
-    max-width: 1280px;
+    max-width: 100%;
     margin: 40px auto 0 auto;
 }
 
 /*
 paragraphs, indentation
 ------------------------- */
-p, div { line-height: 1.5em; margin: 0}
+p, div { line-height: 1.5; margin: 0}
+h1,h2,h3,h4,h5,h6 {line-height: 1.2}
 div#content-html ul li { line-height: 1.5em; margin: 0}
 p+p { text-indent: 1em }
 div#content-html {margin-top: 20px}
@@ -130,30 +131,6 @@ ______________________________________________________________________________ *
 
 
 
-
-	/* mobile menu */
-	div#wrapper-mobile-site-navigation {position: absolute; top:0; left:0; width:100%;background-color: black;z-index: 999; height:46px}
-	nav#site-navigation-mobile { display:none;}
-	.menu-button .touch-button .navicon { font-size: 24px; top: 14px; color: #fff; }
-	.mobile-buttons, .menu-button {line-height: 1em} 
-	.mobile-menu-icon {margin:5px 10px}
-	ul.nav-tree { margin:0 !important; padding:0;}
-	ul.nav-tree li{ margin: 0; padding:0 !important;}
-	.menu-button {background: #000; color: #fff !important;padding: 0;position: static;}
-	.touch-button { font-weight: bold !important;}
-	.flexnav li a { background: #fff;}
-	.flexnav .touch-button { background: rgba(0,0,0,0) !important; }
-	.flexnav li ul li a { background: rgb(245,245,245);}
-	.flexnav ul li ul li a { background: rgb(235,235,235);}
-	.flexnav ul li ul li ul li a { background: rgb(225,225,225);}
-	.flexnav ul li ul li ul li ul li a { background: rgb(215,215,215);}
-	.flexnav ul li ul li ul li ul li ul li a { background: rgb(205,205,205);}
-	.flexnav .touch-button .navicon { top: 1em; }
-
-	img#site-login-icon, img#search-site-icon {opacity: 0.7}
-    .mobile-menu-icon {width: 24px;}
-    .mobile-buttons {margin-top: 5px}
-    img#logo-storiesaround {width:80px !important}
     
 	h1 { padding-top: 12px; font-size: 2em;	}
 	h2 { padding-top: 8px; font-size: 1.5em; }
@@ -165,9 +142,9 @@ ______________________________________________________________________________ *
     
 
 	header#wrapper-site-header { width:100% }
-	div#site-navigation-identity {}
+	div#site-navigation-identity {text-align: center}
 	div#site-name {display:none}
-	div#site-navigation-identity img {width:90%; margin:20px 10px 0 10px}
+	div#site-navigation-identity img {width:50%; margin:20px 10px 0 10px}
 	div#site-slogan-heading {}
 	div#site-navigation-cms { right:0; display: none}
 	div#site-header {width:100%; }
@@ -194,7 +171,7 @@ ______________________________________________________________________________ *
 	div#content-breadcrumb {}
 	div#content-title {}
 	div#content-html {}
-	div#content-author {margin:20px 0}
+	div#content-author {}
 
 
 	div#wrapper-left-sidebar, div#wrapper-right-sidebar {width:100% !important; padding:0; border: 0}
