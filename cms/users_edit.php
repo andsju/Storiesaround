@@ -375,6 +375,13 @@ foreach ( $js_files as $js ): ?>
 			modal: true
 		});		
 
+		$('#btn_logout').click(function(event){
+			event.preventDefault();
+			var cms_dir = $("#cms_dir").val();
+			window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/logout.php"; 
+		});
+
+
 		$('#btn_user_update_status').click(function(event){
 			event.preventDefault();
 			$("#users_account_status").dialog("open");
@@ -472,6 +479,10 @@ foreach ( $js_files as $js ): ?>
 			});
 		}
 	}
+
+
+
+	
 </script>
 
 
@@ -539,6 +550,7 @@ if($_SESSION['users_id'] == $users_id && $profile_edit == false) { die('Account 
 		<input type="hidden" id="users_id" name="users_id" value="<?php echo $users_id; ?>">
 		<span id="ajax_status_user" style="display:none;"></span>
 		<span id="ajax_spinner_user" style='display:none'><img src="css/images/spinner.gif"></span>
+		<span class="toolbar"><button id="btn_logout">Logout</button></span>
 		<span class="toolbar"><button id="btn_user_update">Save</button></span>
 		</td>
 	</tr>

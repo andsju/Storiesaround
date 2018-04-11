@@ -2403,12 +2403,12 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
                         if ($rows_promoted) {
                             
                             foreach ($rows_promoted as $row_promoted) {
-                                $html_grid .= '<a href="pages.php?pages_id='.$row_promoted['pages_id'].'"><div class="story">';
+                                $html_grid .= '<div class="story">';
                                 $optimzed_image = isset($row_promoted['filename']) ? $imageClass->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row_promoted['pages_id'] . '/' .  $row_promoted['filename'], 400) : '';
-                                $html_grid .= '<h4>'.$row_promoted['title'] . '</h4>';
+                                $html_grid .= '<a href="pages.php?pages_id='.$row_promoted['pages_id'].'"><h4>'.$row_promoted['title'] . '</h4></a>';
                                 $html_grid .= isset($row_promoted['filename']) ? '<img src="' . $optimzed_image . '" style="float:right;width:33%;margin-left:10px">' : '';
                                 $html_grid .= $row_promoted['story_content'];
-                                $html_grid .= '</div></a>';
+                                $html_grid .= '</div>';
                             }
                         
                         }
@@ -2595,12 +2595,12 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
 
                         if ($rows_promoted) {
                             foreach ($rows_promoted as $row_promoted) {
-                                $html_grid .= '<a href="pages.php?id='.$row_promoted['pages_id'].'"><div class="story">';
+                                $html_grid .= '<div class="story">';
                                 $optimzed_image = isset($row_promoted['filename']) ? $imageClass->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row_promoted['pages_id'] . '/' .  $row_promoted['filename'], 400) : '';
-                                $html_grid .= '<h4>'.$row_promoted['title'] . '</h4>';
+                                $html_grid .= '<a href="pages.php?id='.$row_promoted['pages_id'].'"><h4>'.$row_promoted['title'] . '</h4></a>';
                                 $html_grid .= isset($row_promoted['filename']) ? '<img src="' . $optimzed_image . '" style="float:right;width:33%;margin-left:10px">' : '';
                                 $html_grid .= $row_promoted['story_content'];
-                                $html_grid .= '</div></a>';
+                                $html_grid .= '</div>';
                             }                            
                         }
                     }
