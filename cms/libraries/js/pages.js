@@ -483,6 +483,26 @@ $(document).ready(function () {
 		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/login.php";
 	});
 
+	$("#site-admin-icon").click(function (event) {
+		event.preventDefault();
+		var cms_dir = $("#cms_dir").val();
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/admin.php"; 
+	});
+	
+	$("#site-edit-icon").click(function (event) {
+		event.preventDefault();
+		var cms_dir = $("#cms_dir").val();
+		var pages_id = $(this).attr("data-id");
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages_edit.php?id="+ pages_id; 
+	});
+
+	$("#site-user-icon").click(function (event) {
+		event.preventDefault();
+		var cms_dir = $("#cms_dir").val();
+		var users_id = $("#users_id").val();
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/users_edit.php?id="+ users_id; 
+	});
+
 	// window resize
 	$(window).resize(function () {
 
@@ -531,6 +551,10 @@ $(document).ready(function () {
 		notifyInlineEdit($(this));
 	});
 
+	$("body").delegate("#site-inline-edit-icon", "click",  function() {
+		inlineEdit(pages_id, users_id, role_cms, token);
+		notifyInlineEdit($(this));
+	});
 
 	//replace_image_path('/content/', '/somefolder/content/');
 
@@ -703,13 +727,8 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 					},
 					content_css: []
 				});
-		
-
-
 
 			}
-
-
 
 		});
 	}
@@ -720,13 +739,26 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 function addMobileMenu() {
 	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
-	//console.log("addMobileMenu", w);
+
 	if (w <= 1024) {
-		console.log("1024");
+
 		var cms_dir = $("#cms_dir").val();
+		var pages_id = $("#pages_id").val();
+		var role_cms = $("#role_cms").val();
 		var newdata = '<img class="mobile-menu-icon" src="' + cms_dir + '/content/favicon.png" id="site-icon">';
 		newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_search.png" style="" id="search-site-icon">';
-		newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_login.png" id="site-login-icon" >';
+		if (!logged_in) {
+			newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_login.png" id="site-login-icon">';
+		} else {
+			if (role_cms >= 5) {
+				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_cogs.png" id="site-admin-icon">';
+			}
+			if (role_cms >= 3) {
+				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_edit.png" id="site-edit-icon" data-id="'+pages_id+'">';
+				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_inline_edit.png" id="site-inline-edit-icon" data-id="'+pages_id+'">';
+			}
+			newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_user.png" id="site-user-icon" data-id="'+pages_id+'">';	
+		} 
 
 		$(".mobile-buttons").append(newdata);
 		$("#site-navigation-mobile").addClass("flexnav");

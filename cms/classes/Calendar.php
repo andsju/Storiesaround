@@ -697,7 +697,7 @@ class Calendar extends Database
                 } else {
 
                     //check role_CMS author & contributor
-                    if (get_role_CMS('author') == 1 | get_role_CMS('contributor') == 1) {
+                    if (get_role_CMS('author') == 1 || get_role_CMS('contributor') == 1) {
 
                         // user rights
                         $calendar_rights = new CalendarRights();
@@ -1590,7 +1590,7 @@ class Calendar extends Database
             } else {
 
                 //check role_CMS author & contributor
-                if (get_role_CMS('author') == 1 | get_role_CMS('contributor') == 1) {
+                if (get_role_CMS('author') == 1 || get_role_CMS('contributor') == 1) {
 
                     // user rights to this page
                     $calendar_rights = new CalendarRights();
