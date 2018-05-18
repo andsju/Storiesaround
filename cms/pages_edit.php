@@ -384,10 +384,6 @@ foreach ( $js_files as $js ): ?>
 			save();
 		});
 
-
-		////////////////////////////
-
-
 		// grid
 		$('.add-grid-item').click(function(event){
 			event.preventDefault();
@@ -396,20 +392,46 @@ foreach ( $js_files as $js ): ?>
 			var form = "";
 			var html = "";
 			
-			var dynamic = "<hr><div class=\"dynamic hidden\"><p>Dynamic content</p>";
-			var dynamicSelectList = getSelectStrings([["none", "none"], ["stories-child", "Child stories"], ["stories-promoted", "Promoted stories"], ["calendar-events", "Calendar events"]], "", "grid-dynamic-content", "", "");
+			var dynamic = "<div class=\"grid-settings dynamic\"><p>Dynamic content</p>";
+			var dynamicSelectList = getSelectStrings([["none", "none"], ["story-selected", "Selected story"], ["story-promoted", "Promoted story"], ["calendar-event", "Calendar event"]], "", "grid-dynamic-content", "", "");
 			dynamic += dynamicSelectList;
-			dynamic += "<p>Filter promoted stories (tag):</p><input type=\"text\" name=\"grid-dynamic-content-filter\" maxlength=\"25\">"; 
-			dynamic += "<p>Limit promoted stories</p>";
-			var limitSelectList = getSelectNumber([0,1,2,3,4,5,6,7,8,9], 1, "grid-dynamic-content-limit", "", "");
-			dynamic += limitSelectList;
-			cell += "<div class=\"grid-cell gridedit\" style=\"position:relative\">"
-			var tool = "<div class=\"grid-tools\"><i class=\"far fa-save\" aria-hidden=\"true\"></i><br><i class=\"far fa-edit\" aria-hidden=\"true\"></i><br><i class=\"fas fa-arrow-left\" aria-hidden=\"true\"></i><br><i class=\"fas fa-arrow-right\" aria-hidden=\"true\"></i><br><i class=\"far fa-trash-alt\"></i></div>";
+			dynamic += "<div class=\"grid-settings\"><p>Dynamic filter: string or id</p><input type=\"text\" name=\"grid-dynamic-content-filter\" maxlength=\"25\"></div>"; 
+			dynamic += "<div class=\"grid-settings\"><p>Dynamic match: get position (single) get number (mulitple)</p>";
+			var limitSelectList = getSelectNumber([0,1,2,3,4,5], 1, "grid-dynamic-content-limit", "", "");
+			dynamic += limitSelectList + "</div>";
+			dynamic += "<div class=\"grid-settings\"><p>Dynamic default content (no match)</p><textarea class=\"tinymce-grid\" name=\"grid-dynamic-content-default\"></textarea></div>";
+
+			cell += "<div class=\"grid-cell gridedit\" style=\"position:relative\">";
+			var tool = "<div class=\"grid-tools\">\
+			<i class=\"far fa-save\" aria-hidden=\"true\"></i><br>\
+			<i class=\"far fa-edit\" aria-hidden=\"true\"></i><br>\
+			<i class=\"fas fa-arrow-left\" aria-hidden=\"true\"></i>\
+			<br><i class=\"fas fa-arrow-right\" aria-hidden=\"true\"></i>\
+			<br><i class=\"far fa-trash-alt\"></i>\
+			</div>";
 			cell += tool;
 
+			cell += "<span class=\"grid-label\"></span>";
+
 			var adjustSelectList = getSelectNumber([0,10,20,30,40,50,60,70,80,90,100], 0, "grid-image-y", "", "");
-			cell += "<div class=\"grid-image-crop hidden\"></div><h2 class=\"grid-heading hidden\"></h2><div class=\"grid-video hidden\"></div><div class=\"grid-content hidden\"></div><div class=\"grid-dynamic hidden\"></div><div class=\"grid-link hidden\"></div>";
-			form += "<div class=\"grid-form\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p><p>Adjust image (background-position-y %): "+adjustSelectList+"</p><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p><p>Video<br><input type=\"text\" name=\"video\" maxlength=\"100\"></p><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p><p>Content<br><textarea class=\"tinymce-grid\" name=\"grid-content\"></textarea></p><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"><input type=\"hidden\" name=\"pages_id\" value=\""+pages_id+"\"></p><p>Toggle <a class=\"toggle\" href=\"#dynamic\">dynamic content</a></p>"+dynamic+"</div>";
+			cell += "<div class=\"grid-image-crop hidden\"></div>\
+			<div class=\"grid-video hidden\"></div>\
+			<h3 class=\"grid-heading hidden\"></h3>\
+			<div class=\"grid-content hidden\"></div>\
+			<div class=\"grid-dynamic hidden\"></div>\
+			<div class=\"grid-link hidden\"></div>";
+			
+			form += "<div class=\"grid-form hidden\">\
+			<div class=\"grid-settings\"><p>Image<br><input type=\"text\" name=\"grid-image\" maxlength=\"255\"></p></div>\
+			<div class=\"grid-settings\"><p>Adjust image (background-position-y %): "+adjustSelectList+"</p></div>\
+			<div class=\"grid-settings\"><p>Heading<br><input type=\"text\" name=\"heading\" maxlength=\"100\"></p></div>\
+			<div class=\"grid-settings\"><p>Video<br><input type=\"text\" name=\"video\" maxlength=\"100\"></p></div>\
+			<div class=\"grid-settings\"><p>URL<br><input type=\"text\" name=\"url\" maxlength=\"255\"></p></div>\
+			<div class=\"grid-settings\"><p>Link title<br><input type=\"text\" name=\"link\" maxlength=\"50\"></p></div>\
+			<div class=\"grid-settings\"><p>Content<br><textarea class=\"tinymce-grid\" name=\"grid-content\"></textarea></p></div>\
+			<div class=\"grid-settings\"><p>Custom css class<br><input type=\"text\" name=\"css\" maxlength=\"100\"></p></div>\
+			<div class=\"grid-settings\"><p>Label<br><input type=\"text\" name=\"label\" maxlength=\"25\"></p></div>\
+			<div class=\"grid-settings\"><p>Dynamic content</p>"+dynamic+"</div>";
 			html += cell + form + "</div>";
 
 			$("div#wrapper-grid").append(html);
@@ -437,10 +459,13 @@ foreach ( $js_files as $js ): ?>
 
 		$("div#wrapper-grid").delegate( "div.grid-tools .fa-edit", "click", function(event) {
 			event.preventDefault();
+			var el = $(this).parent().parent().children();
 			$(this).parent().parent().children("div.grid-form").show();
 			activateEditor("tinymce");
-			console.log("equalheight");
 			equalheight('div.grid-cell');
+			setTimeout(function() {
+				equalheight('div.grid-cell');
+			}, 1000);
 		});
 
 		$("div#wrapper-grid").delegate( "div.grid-tools .fa-arrow-left", "click", function(event) {
@@ -465,15 +490,8 @@ foreach ( $js_files as $js ): ?>
 			equalheight('div.grid-cell');
 		});
 		
-
-		function showValidation(parent, node, message) {
-			parent.find("span").remove();
-			$("<span class=\"reply_fail\">"+message+"</span>").insertAfter(node);
-		} 
-
 		$("div#wrapper-grid").delegate( ".fa-save", "click", function(event) {
 			event.preventDefault();
-
 			var form = $(this).parent().parent().children("div.grid-form");
 			var image, heading, video, url, url1, url2, link, css, pages_id;
 			image = form.find("input[name=grid-image]")[0].value;
@@ -482,75 +500,71 @@ foreach ( $js_files as $js ): ?>
 			url = form.find("input[name=url]")[0].value;
 			link = form.find("input[name=link]")[0].value;
 			css = form.find("input[name=css]")[0].value;
-			pages_id = form.find("input[name=pages_id]")[0];
+			label = form.find("input[name=label]")[0].value;
+			pages_id = $("#pages_id").val();
 			image_position_y = form.find("select[name=grid-image-y]").val();
-			
+
 			$(form.find("span.reply_fail")).each( function(i) {
 				$(this).remove();
 			});
 			
-
-			if (!validateThis(url, "url")) {
-				showValidation(form.find("input[name=url]").parent(), form.find("input[name=url]")[0], " * check URL");
-			}
-
 			tinyMCE.triggerSave();
 
 			var content = form.find("textarea").val();
 			if (content.length > 5000) {
 				var words = $(content).text().split(' ').length;
-				
-				showValidation(form.find("textarea").parent(), form.find("textarea"), " * Exceeded 5000 characters: " + "(" +content.length+ ")");
 				content = "";
 			}
 
 			var cell = $(this).parent().parent();
 			cell.attr("class", "grid-cell");
-
 			cell.addClass(css);
+			var design = cell.find("div.grid-design");
+			design.addClass(css);
 
-			var imagePreview = $(this).parent().siblings("div.grid-image-crop");
+			var imagePreview = $(this).parent().parent().find("div.grid-image-crop");
 			imagePreview.css("background-image", "url("+image+")");
 			if(image.length) {
 				imagePreview.removeClass("hidden");			
 			}
-
-			var headingPreview = $(this).parent().siblings("h2.grid-heading");
+			var headingPreview = $(this).parent().parent().find("h3.grid-heading");
 			headingPreview.text(heading);
 			if(heading.length) {
-				headingPreview.removeClass("hidden");					
+				headingPreview.removeClass("hidden");	
 			}
-			var videoPreview = $(this).parent().siblings("div.grid-video");
+			var labelPreview = $(this).parent().parent().find("span.grid-label");
+			labelPreview.text(label);
+			if(label.length) {
+				labelPreview.removeClass("hidden");	
+			}
+			var videoPreview = $(this).parent().parent().find("div.grid-video");
 			videoPreview.text("Click 'Save grid' button and reload page to preview video: " +video);
 			if(video.length) {
 				videoPreview.removeClass("hidden");		
 			}
-			var contentPreview = $(this).parent().siblings("div.grid-content");
+			var contentPreview = $(this).parent().parent().find("div.grid-content");
 			contentPreview.html(content);
 			if(content.length) {
 				contentPreview.removeClass("hidden");
 			}
-			var urlPreview = $(this).parent().siblings("div.grid-link");
+			var urlPreview = $(this).parent().parent().find("div.grid-link");
 			urlPreview.html("<a href=\""+url+"\">"+link+"</a>");
 			if(link.length) {
 				urlPreview.removeClass("hidden");		
 			}
 			// dynamic
 			var dynamicContent, dynamicContentFilter, dynamicContentLimit;
-			dynamicContent = form.children("div.dynamic").find("select[name=grid-dynamic-content]").val();
-			dynamicContentFilter = form.children("div.dynamic").find("input[name='grid-dynamic-content-filter']")[0].value;
-			dynamicContentLimit = form.children("div.dynamic").find("select[name=grid-dynamic-content-limit]").val();
+			dynamicContent = form.children("div.grid-settings").find("select[name=grid-dynamic-content]").val();
+			dynamicContentFilter = form.children("div.grid-settings").find("input[name='grid-dynamic-content-filter']")[0].value;
+			dynamicContentLimit = form.children("div.grid-settings").find("select[name=grid-dynamic-content-limit]").val();
+			dynamicContentDefault = form.children("div.grid-settings").find("select[name=grid-dynamic-content-default]").val();
 
-			// ajax dynamic call
-			// Promoted stories
-			
 			var action = "get_dynamic_stories";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
+			var gridForm = $(this).closest("div.grid-cell");
 
-			var dynamicBox = $(this).parent().siblings("div.grid-dynamic"); 
-			
 			$.ajax({	
 				beforeSend: function() { loading = $('#ajax_spinner_grid').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_grid').hide()",500)},
@@ -561,58 +575,14 @@ foreach ( $js_files as $js ): ?>
 					dynamicContent: dynamicContent, dynamicContentFilter: dynamicContentFilter, dynamicContentLimit: dynamicContentLimit,
 				},
 				success: function(result){
-					ajaxReply('','#ajax_status_stories_child');
-					var html = dynamicContent == "stories-child" ? "<ul>" : "";
-					if (result.length) {
-						
-						$.each(JSON.parse(result), function(index, object) {
-							
-							html += dynamicContent == "stories-child" ? "<li>" : "<div>";
-							$.each(object, function(key, value) {
-								
-								if (dynamicContent == "stories-promoted") {
-									if (key == 'title') {
-										html += "<h5>"+value+"</h5>";
-									}
-									if (key == 'story_content') {
-										html += "<div>"+value+"</div>";
-									}
-								}
-
-								if (dynamicContent == "stories-child") {
-									if (key == 'pages_id') {
-										html += "<a href=\"\pages.php?pages_id="+value+"\">";
-									}
-									if (key == 'title') {
-										html += value+"</a>";
-									}
-								}
-
-								if (dynamicContent == "stories-event") {
-									if (key == 'story_event_date') {
-										var eventDate = value.split(" "); 
-										html += "<i>"+eventDate[0]+"</i>";
-									}
-									var story_event_date
-									if (key == 'title') {
-										html += "<h4>"+value+"</h4>";
-									}
-									if (key == 'story_content') {
-										html += "<div>"+value+"</div>";
-									}
-								}
-								
-							});
-							html += dynamicContent == "stories-child" ? "</li>" : "</div>";
-							
-						});
-						
-						html += dynamicContent == "stories-child" ? "</ul>" : "";
-
-						dynamicBox.html(html);
-						dynamicBox.removeClass("hidden");	
-					}
+					gridForm.append("<div>Save grid and reload</div>");
+					console.log(result);
 					
+					if (result.length) {
+						$.each(JSON.parse(result), function(index, object) {
+							console.log(index, object);
+						});
+					}
 				}
 			});
 			
@@ -634,7 +604,6 @@ foreach ( $js_files as $js ): ?>
 			$("#grid_json").select();
 			document.execCommand('copy');
 		});
-
 
 		$("#btnGridImport").click(function(event) {
 			event.preventDefault();
@@ -679,7 +648,6 @@ foreach ( $js_files as $js ): ?>
 			var grid_content = JSON.stringify($("#gridform").serializeArray());
 			console.log(grid_content);
 			//grid_content = stringEscape(grid_content);
-			console.log(grid_content);
 			var action = "save_grid";
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
@@ -712,8 +680,6 @@ foreach ( $js_files as $js ): ?>
 			return s ? s.replace(/\\/g,'\\\\').replace(/'/g,"\\'") : s;
 		}
 
-		
-
 		$("div#wrapper-grid").delegate( "select[name='grid-image-y']", "change", function(event) {
 			event.preventDefault();
 			var value = $(this).val();
@@ -735,10 +701,7 @@ foreach ( $js_files as $js ): ?>
 				});
 				equalheight('div.grid_cell_image_height');
 			}
-
     	});
-
-
 
 		// window resize
 		$(window).resize(function() {
@@ -753,16 +716,6 @@ foreach ( $js_files as $js ): ?>
 			});
 			equalheight('div.grid-cell');
 		}).resize();
-
-
-
-
-		////////////////////////////
-
-
-
-
-
 		
 		$('#content_loremipsum').click(function(event){
 			event.preventDefault();
@@ -981,7 +934,6 @@ foreach ( $js_files as $js ): ?>
 			
 		});
 
-
 		$("#directory_view").delegate( ".image_mark", "click", function() {
 			var filename = $(this).attr("data-file");
 			var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
@@ -1053,8 +1005,7 @@ foreach ( $js_files as $js ): ?>
 				}
 			});
 		});
-		
-		
+				
 		$('#selections_checked').on('change', function(event) {
 			event.preventDefault();			
 			if (this.checked) {
@@ -2423,9 +2374,9 @@ foreach ( $js_files as $js ): ?>
 				menubar: "",
 				image_advtab: true,
 				plugins: [
-					"autolink lists link hr anchor pagebreak code image paste stories"
+					"autolink lists link hr anchor pagebreak code image paste"
 				],
-				toolbar: "undo redo bold italic link code image removeformat stories",
+				toolbar: "undo redo bold italic link code image removeformat",
 				paste_remove_styles: true,
 				extended_valid_elements:'script'
 			});
@@ -4097,41 +4048,38 @@ if(is_array($check_edit)) {
 					
 				</div>
 
-				<div style="float:left;width:45%;margin-left:5%" class="grid-cell-settings">
+				<div style="float:left;width:20%;margin-left:5%" class="grid-cell-settings">
 				
 					<h4>Grid cell settings</h4>
-					<p>
+					<div>
 						Custom CSS class (grid wrapper)<br>
-						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="50" id="grid-class" value="<?php echo $arr['grid_custom_classes']?>">
+						<input type="text" name="grid_custom_classes" id="grid_custom_classes" size="30" id="grid-class" value="<?php echo $arr['grid_custom_classes']?>">
 						<a class="colorbox_grid_class" href="pages_css.php?token=<?php echo $_SESSION['token'];?>&pages_id=<?php echo $_GET['id'];?>&return=true"><i class="far fa-question-circle"></i></a>
-					</p>
-
-					<div style="float:left">
-						<p>
-							Grid cell template
-							<br>
-							<input type="radio" value="0" name="grid_cell_template" <?php if($arr['grid_cell_template'] == 0) {echo 'checked="checked"';}?>> Image above heading
-							<br>
-							<input type="radio" value="1" name="grid_cell_template" <?php if($arr['grid_cell_template'] == 1) {echo 'checked="checked"';}?>> Heading above image
-						</p>
-
-						<img src="css/images/grid-cell-image-heading.png" class="template">
-						<img src="css/images/grid-cell-heading-image.png" class="template">
-
 					</div>
-				
-					<div style="float:left">
-						<p>Grid images height</p>
-						<input id="grid_cell_image_height" type="text" value="<?php echo $arr['grid_cell_image_height']?>" readonly style="border:1px dotted grey;width:3em">
+					
+					<div style="margin:20px 0;">
+						Grid cell template
 						<br>
-						<div style="float:left;margin:20px">400px<div id="grid_image_slider_height" style="height:100px;"></div>100px</div>
-
+						<input type="radio" value="0" name="grid_cell_template" disabled <?php if($arr['grid_cell_template'] == 0) {echo 'checked="checked"';}?>> Image above heading
+						<br>
+						<input type="radio" value="1" name="grid_cell_template" disabled <?php if($arr['grid_cell_template'] == 1) {echo 'checked="checked"';}?>> Heading above image
 					</div>
-
 
 				</div>
 
+				<div style="float:left;width:15%;margin-left:5%;padding-left:20px" class="grid-cell-settings">
+					<h4>&nbsp;</h4>
+					Grid images height
+					<br>
+					<input id="grid_cell_image_height" type="text" value="<?php echo $arr['grid_cell_image_height']?>" readonly style="border:1px dotted grey;width:3em">
+					<br>
+					<div style="float:left;margin:20px">
+						400px
+						<div id="grid_image_slider_height" style="height:100px;margin:10px 0"></div>
+						100px
+					</div>
 
+				</div>
 
 			</p>
 		</div>

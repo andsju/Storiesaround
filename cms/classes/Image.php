@@ -619,7 +619,7 @@ class Image
         }
     }
 
-/**
+    /**
      * @param string path_and_filename
      * @param int column_width
      * @return string
@@ -646,6 +646,20 @@ class Image
                 }
             }
             return $path_and_filename;
+        }
+    }
+
+
+    /**
+     * @param string path_and_filename
+     * @return string
+     */
+    public function get_image_info($path_and_filename)
+    {
+        $image = new Image();
+        if (is_file($_SERVER['DOCUMENT_ROOT'] . $path_and_filename)) {
+            if (!list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'] . $path_and_filename)) return "Unsupported picture type!";
+            return array($width, $height);
         }
     }
 

@@ -7,10 +7,11 @@
                 <div id="content-top-grid"><?php print_grid($arr, 1);?></div>
                 <div id="content-breadcrumb"><?php print_breadcrumb($id, $arr['breadcrumb']); ?></div>
                 <article>
+                    <?php if ($arr['title_hide'] == 0) { ?>
                     <header>
-                        <h1 id="content-title" class="editable"><?php echo $page_title_body .' '.$icon; ?></h1>
-                        
+                        <h1 id="content-title" class="editable"><?php echo $page_title_body .' '.$icon; ?></h1>                        
                     </header>
+                    <?php } ?>
                     <?php if ($arr['search_field_area'] == 3) { print_search_field_area_page($languages); } ?>
                     <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
                     <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>

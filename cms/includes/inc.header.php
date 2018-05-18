@@ -30,7 +30,6 @@
     
     <script src="<?php echo CMS_DIR; ?>/cms/libraries/jquery/jquery.min.js"></script>    
     <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-    <!--<script src="https://www.google.com/jsapi"></script>-->
 
     <?php
     foreach ($css_files as $css) {
@@ -41,11 +40,12 @@
         }
     }
     ?>
-
     <link rel="icon" type="image/png" href="<?php echo CMS_DIR; ?>/content/favicon.png">
-
-
     <?php
+    foreach ($og_properties as $key => $value) {
+        echo "\n\t" . '<meta property="og:'. $key .'" content="'.$value.'">';
+    }
+    echo "\n\t";    
     include_once_customfile('includes/inc.head_elements.php', $arr, $languages);
     ?>
 

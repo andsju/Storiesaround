@@ -1595,10 +1595,12 @@ class Calendar extends Database
                     // user rights to this page
                     $calendar_rights = new CalendarRights();
                     $users_id = isset($_SESSION['users_id']) ? $_SESSION['users_id'] : 0;
-                    $users_rights = $calendar_rights->getCalendarUsersRights($calendar_categories_id, $users_id);
+                    $users_rights = $calendar_rights->getCalendarUsersRights($category, $users_id);
+
+                    write_debug($users_rights);
 
                     // groups rights to this page
-                    $groups_rights = $calendar_rights->getCalendarGroupsRights($calendar_categories_id);
+                    $groups_rights = $calendar_rights->getCalendarGroupsRights($category);
 
                     // read
                     if ($users_rights) {
@@ -1625,6 +1627,7 @@ class Calendar extends Database
                             }
                         }
                     }
+                    
 
                 }
             }

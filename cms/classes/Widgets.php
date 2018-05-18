@@ -205,11 +205,11 @@ class Widgets extends Database
         $wcolumn = $info['column'];
 
         echo '<select name="widgets_area_target" id="widgets_area_target" class="code">';
-        if ($wcolumn == 'sidebar' || $wcolumn == '') {
-            echo '<option value="widgets_right_sidebar" ' . is_selected("widgets_right_sidebar", $widgets_area) . '>right sidebar</option>';
-        }
         if ($wcolumn == 'content' || $wcolumn == '') {
             echo '<option value="widgets_content" ' . is_selected("widgets_content", $widgets_area) . '>content</option>';
+        }
+        if ($wcolumn == 'sidebar' || $wcolumn == '') {
+            echo '<option value="widgets_right_sidebar" ' . is_selected("widgets_right_sidebar", $widgets_area) . '>right sidebar</option>';
         }
         if ($wcolumn == 'sidebar' || $wcolumn == '') {
             echo '<option value="widgets_left_sidebar" ' . is_selected("widgets_left_sidebar", $widgets_area) . '>left sidebar</option>';
