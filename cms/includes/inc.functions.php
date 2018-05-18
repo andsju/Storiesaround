@@ -877,6 +877,23 @@ function flatt_array(array $a)
 }
 
 /**
+ * flatten a multidimensional array to one dimension
+ *
+ * @param array $a
+ * @return array
+ */
+function array_flatten(array $a)
+{
+    $ret_array = array();
+    foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($a)) as $k => $v) {
+        $ret_array[] = $v;
+    }
+    return $ret_array;
+}
+
+
+
+/**
  * @param $result
  * @return string
  */

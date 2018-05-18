@@ -23,6 +23,12 @@ if (isset($_GET['token'])){
             CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css' 
         );
 		
+		// add css theme
+		$theme = isset($_SESSION['site_theme']) ? $_SESSION['site_theme'] : '';
+		if(file_exists(CMS_ABSPATH .'/content/themes/'.$theme.'/style.css')) {
+			array_push($css_files, CMS_DIR.'/content/themes/'.$theme.'/style.css');
+		}
+		
 		$page_title = "Set css class";	
 		$body_style = "width:100%;margin:20px";
 
@@ -45,8 +51,9 @@ if (isset($_GET['token'])){
         <?php
 
         foreach($css_custom as $key => $value) {
-            echo '<div class="choose-class space '.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;padding:10px" title="'.$key.'">';
-                echo '<p>'.$value.'</p>';
+            echo '<div class="choose-class space '.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;padding:10px;position:relative" title="'.$key.'">';
+				echo '<p>'.$value.'</p>';
+				echo '<div class="grid-design '.$key.'"></div>';
             echo '</div>';
         }
         ?>

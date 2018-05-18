@@ -1914,32 +1914,29 @@ if (isset($_POST['token'])) {
 				break;
 				
 				case 'get_dynamic_stories':
-				//echo 'Aloha';	
 
-				$dynamic_content = $_POST['dynamicContent'];
-				$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_STRING) ? $_POST['dynamicContentFilter'] : '';
-				$limit = filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT) ? $_POST['dynamicContentLimit'] : 0;
-				//echo "$stories_filter: ". $stories_filter;
-				//echo "$limit:" . $limit;
-				$rows = array();
-				switch ($dynamic_content) {
-					case "stories-promoted":
-						$rows = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
-					break;
-					case "stories-child":
-						$rows = $pages->getPagesChildren($pages_id);
-					break;
-					case "stories-event":
-						$date = date('Y-m-d');
-						$period = "next";						 
-						$rows = $pages->getPagesStoryContentPublishEvent($stories_filter, $date, $period);
-					break;
+					$dynamic_content = $_POST['dynamicContent'];
+					$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_STRING) ? $_POST['dynamicContentFilter'] : '';
+					$limit = filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT) ? $_POST['dynamicContentLimit'] : 0;
+					$rows = array();
+					switch ($dynamic_content) {
+						case "story-promoted":
+							$rows = $pages->getPagesStoryContentPublishPromotedOffset($stories_filter, $limit);
+						break;
+						case "stories-child":
+							$rows = $pages->getPagesChildren($pages_id);
+						break;
+						case "stories-event":
+							$date = date('Y-m-d');
+							$period = "next";						 
+							$rows = $pages->getPagesStoryContentPublishEvent($stories_filter, $date, $period);
+						break;
+						
+					}
 					
-				}
-				
-				if($rows) {
-					echo json_encode($rows);
-				}
+					if($rows) {
+						echo json_encode($rows);
+					}
 		
 				
 				break;
