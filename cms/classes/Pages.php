@@ -2103,7 +2103,7 @@ class Pages extends Database
             "
 		SELECT * FROM
 		(
-			SELECT pages.pages_id, pages.title, pages.title_alternative, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.sizes, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
+			SELECT pages.pages_id, pages.title, pages.title_alternative, pages.content, pages.story_content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.sizes, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
 			FROM pages 
 			INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 			WHERE pages.pages_id IN ($ids)
@@ -2111,7 +2111,7 @@ class Pages extends Database
 
 			UNION
 				  
-			SELECT pages.pages_id, pages.title, pages.title_alternative, pages.content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS sizes, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
+			SELECT pages.pages_id, pages.title, pages.title_alternative, pages.content, pages.story_content, pages.access, pages.story_link, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS sizes, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
 			FROM pages
 			WHERE pages_id IN ($ids)		 
 		) AS tmp
@@ -2184,7 +2184,7 @@ class Pages extends Database
             "SELECT * 
 		FROM 
 		(	
-		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.alt, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
 		FROM pages
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.story_promote = 1
@@ -2193,7 +2193,7 @@ class Pages extends Database
 		AND pages.tag LIKE :search
 		AND pages_images.story_teaser = 1
 		UNION
-		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS alt, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
 		FROM pages
 		WHERE pages.story_promote = 1
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
@@ -2211,6 +2211,54 @@ class Pages extends Database
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * @param string $search
+     * @param int $limit
+     * @return array
+     *
+     * sql syntax
+     * get all promoted pages missing image teaser ->  (creating null values for image instanses)
+     * union
+     * get all promoted pages having image teaser ->
+     * order pages, publish date descending, as 'rank'
+     */
+    public function getPagesStoryContentPublishPromotedOffset($search, $offset)
+    {
+        $sql =
+            "SELECT * 
+		FROM 
+		(	
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.alt, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+		FROM pages
+		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
+		WHERE pages.story_promote = 1
+		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
+		OR NOW() > pages.utc_start_publish AND pages.utc_end_publish IS NULL) 
+		AND pages.tag LIKE :search
+		AND pages_images.story_teaser = 1
+		UNION
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS alt, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
+		FROM pages
+		WHERE pages.story_promote = 1
+		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
+		OR NOW() > pages.utc_start_publish AND pages.utc_end_publish IS NULL) 
+		AND pages.tag LIKE :search
+		) a
+		GROUP BY pages_id
+		ORDER BY rank desc LIMIT $offset, 1";
+
+        // apply percentages to search string
+        $search = "%" . $search . "%";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
 
 
     /**
@@ -2551,6 +2599,27 @@ class Pages extends Database
         $sql = "SELECT pages_images_id, filename, copyright, caption, alt, title, tag, promote, story_teaser
 		FROM pages_images 
 		WHERE pages_id = :pages_id
+		ORDER BY position, filename";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':pages_id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    /**
+     * @param int $id
+     * @return array|null
+     */
+    public function getPagesImagesTeaser($id)
+    {
+        $rows = null;
+        $sql = "SELECT pages_images_id, filename, copyright, caption, alt, title, tag, promote, story_teaser
+		FROM pages_images 
+		WHERE pages_id = :pages_id 
+        AND story_teaser = 1 
 		ORDER BY position, filename";
 
         $stmt = $this->db->prepare($sql);

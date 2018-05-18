@@ -10,6 +10,12 @@ if($_SESSION['site_maintenance'] == 1 && $_SESSION['role_CMS'] < 4) { header('Lo
 $request = substr($_SERVER['REQUEST_URI'], strlen(CMS_DIR.'/'));
 $request_parts = explode('/', $request);
 
+// url 
+$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$protocol = isset($_SERVER['HTTPS']) ? "https" : "http";
+$address = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$url = $protocol . '://' . $address;
+
 // $request_parts now holds: [0] htaccess rewrite folder, [1] seo title (or script name)
 $id = array_key_exists('id', $_GET) ? $_GET['id'] : $request_parts[1];
 
@@ -126,6 +132,10 @@ $meta_keywords = (strlen($arr['meta_keywords'])>0) ? $arr['meta_keywords'] : nul
 $meta_description = (strlen($arr['meta_description'])>0) ? $arr['meta_description'] : null;
 $meta_robots = (strlen($arr['meta_robots'])>0) ? $arr['meta_robots'] : null;
 $meta_additional = (strlen($arr['meta_additional'])>0) ? $arr['meta_additional'] : null;
+
+// open graph
+$description = $arr['story_content'];
+$og_properties = get_og_meta($pages, $protocol, $url, $page_title_body, $description, $arr, $id);
 
 // css files, loaded in header.inc.php
 $css_files = array(

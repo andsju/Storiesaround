@@ -37,7 +37,7 @@ div#site-search-page {text-align: center; display: block;margin:0; background: l
 div#site-search-page {text-align: center; display: block;margin:0; background: linear-gradient( #5a5856,#646260); border:1px solid grey;margin-bottom:20px}
 div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gl-blend-9.png); border:1px solid grey;margin-bottom:20px}
 div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gl-blend-15.png); border:1px solid grey;margin-bottom:20px}
-div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gf-blend.png); background-repeat: repeat-y; border:1px solid grey;}
+div#site-search-page {text-align: center; display: block;margin:0; background: url(images/gf-blend.png); background-repeat: repeat; border:1px solid grey;}
 
 
 .gf-red-1 { background-color:#691600; color:#fff;}
