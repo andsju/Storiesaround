@@ -2158,7 +2158,7 @@ class Pages extends Database
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
 		OR NOW() > pages.utc_start_publish AND pages.utc_end_publish IS NULL) 
 		) a
-		ORDER BY position ASC, title ASC";
+		ORDER BY utc_start_publish DESC, title ASC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':pages_id', $id, PDO::PARAM_INT);
