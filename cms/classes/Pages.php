@@ -2810,6 +2810,39 @@ class Pages extends Database
         }
     }
 
+  /**
+     * @param int $pages_images_id
+     * @param string $caption
+     * @param int $position
+     * @param int $story_teaser
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function replacePagesImages($pages_images_id, $filename, $ratio, $sizes, $artist, $xmpdata)
+    {
+        try {
+            $sql = "UPDATE pages_images
+			SET filename = :filename,
+            ratio = :ratio,
+            sizes = :sizes,
+            copyright = :artist,
+            xmpdata = :xmpdata
+			WHERE pages_images_id = :pages_images_id";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":pages_images_id", $pages_images_id, PDO::PARAM_INT);
+            $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
+            $stmt->bindParam(':ratio', $ratio, PDO::PARAM_INT);
+            $stmt->bindParam(':sizes', $sizes, PDO::PARAM_STR);
+            $stmt->bindParam(':artist', $artist, PDO::PARAM_STR);
+            $stmt->bindParam(':xmpdata', $xmpdata, PDO::PARAM_STR);
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
 
     /**
      * @param int $pages_images_id

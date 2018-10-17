@@ -123,7 +123,8 @@ include_once 'includes/inc.header_minimal.php';
 					var token = $("#token").val();
 					var users_id = $("#users_id").val();
 					var pages_id = $("#pages_id").val();
-					var images_filename = $("#images_filename").val();			
+					var images_filename = $("#images_filename").val();
+
 					$.ajax({
 						beforeSend: function() { loading = $('#ajax_spinner_image').show()},
 						complete: function(){ loading = setTimeout("$('#ajax_spinner_image').hide()",700)},
@@ -147,7 +148,26 @@ include_once 'includes/inc.header_minimal.php';
 		$("#dialog_delete_image").dialog({
 			autoOpen: false,
 			modal: true
-		});		
+		});
+
+		$('#btn_replace').click(function(event){
+			event.preventDefault();
+			var action = "replace_image";
+			var token = $("#token").val();
+			var users_id = $("#users_id").val();
+			var pages_id = $("#pages_id").val();
+			var images_filename = $("#images_filename").val();
+			var pages_images_id = $("#pages_images_id").val();
+			var original = $('input:checkbox[name=original]').is(':checked') ? 1 : 0;
+			var max_width = $("#max_width option:selected").val();
+			$.colorbox({
+				width:"50%", height:"50%", iframe:true, href:"pages_images_upload_replace.php?token="+token+"&pages_id="+pages_id+"&pages_images_id="+pages_images_id+"&original="+original+"&max_width="+max_width+"&replace=true&images_filename="+images_filename+"",
+				onClosed:function(){
+     			   parent.location.reload();
+    			}
+			});
+		});
+
 
 		$('#btn_save_image_meta').click(function(event){
 			event.preventDefault();
@@ -509,6 +529,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 		echo "\n".'<div style="float:right;text-align:right;padding-top:10px;">';
 			echo '<span class="toolbar"><button id="btn_close" type="submit">Close</button></span>';
 			echo '<span class="toolbar"><button id="btn_delete" type="submit">Delete</button></span>';
+			echo '<span class="toolbar"><button id="btn_replace" type="submit">Replace image</button></span>';
 			echo '<span class="toolbar"><button id="btn_save_image_meta">Save</button></span><span id="ajax_spinner_image" style="display:none;"><img src="css/images/spinner.gif"></span><span id="ajax_status_image" style="display:none;"></span>';
 		echo "\n".'</div>';
 		
