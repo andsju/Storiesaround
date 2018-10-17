@@ -203,7 +203,7 @@ if(isset($_REQUEST['token'])){
 		if(isset($_REQUEST['pages_folder'])){
 
 			$original = isset($_REQUEST['original']) ? $_REQUEST['original'] : 'no original';
-			$max_width = isset($_REQUEST['max_width']) ? $_REQUEST['max_width'] : 'nop max_width';
+			$max_width = isset($_REQUEST['max_width']) ? $_REQUEST['max_width'] : 'no max_width';
 			$pages_images_id = isset($_REQUEST['pages_images_id']) ? $_REQUEST['pages_images_id'] : 0;
 			$folder = CMS_ABSPATH .'/content/uploads/pages/'. $_REQUEST['pages_folder'] .'/';
 			$original_random = $original == 1 ? rand_string(12) : "";
