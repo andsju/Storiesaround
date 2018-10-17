@@ -60,7 +60,7 @@ class PagesWidgets extends Widgets
             $w = new $row['widgets_class'];
             $widgets_action = $row['widgets_action'];
             $html .= '<div class="widgets-header">' . $row['widgets_header'] . '</div>';
-            $w->{$row['widgets_class']}($widgets_action, $pages_widgets_id, $pages_id, $width);
+            $html .= $w->{$row['widgets_class']}($widgets_action, $pages_widgets_id, $pages_id, $width);
             $html .= '<div class="widgets-footer">' . $row['widgets_footer'] . '</div>';
         }
         echo $html;
@@ -218,7 +218,7 @@ class PagesWidgets extends Widgets
         try {
             $stmt = $this->db->prepare('UPDATE pages_widgets SET area =:area, position =:position WHERE pages_widgets_id =:pages_widgets_id');
             $stmt->bindParam(':pages_widgets_id', $pages_widgets_id, PDO::PARAM_INT);
-            $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
+
             $stmt->bindParam(':area', $area, PDO::PARAM_STR);
             $stmt->bindParam(':position', $position, PDO::PARAM_INT);
             $stmt->execute();

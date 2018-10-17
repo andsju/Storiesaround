@@ -10,3 +10,4 @@ content/uploads/pages/**
 content/uploads/plugins/
 log/
 sys/inc.db.php
+_tmp/

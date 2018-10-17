@@ -2692,7 +2692,7 @@ class Pages extends Database
     public function getPagesImagesMeta($pages_images_id)
     {
         $rows = null;
-        $sql = "SELECT filename, creator, copyright, caption, alt, title, tag, xmpdata, promote, ratio, story_teaser, utc_created
+        $sql = "SELECT filename, creator, copyright, caption, caption_extended, alt, title, tag, xmpdata, promote, ratio, story_teaser, utc_created
 		FROM pages_images 
 		WHERE pages_images_id = :pages_images_id";
 
@@ -2713,7 +2713,7 @@ class Pages extends Database
     public function getPagesImagesSlideshowFeed($pages_widgets_id, $tag)
     {
         $rows = null;
-        $sql = "SELECT pages_images.filename, pages_images.creator, pages_images.copyright, pages_images.caption, pages_images.alt, pages_images.title, pages_images.ratio, pages_images.tag, pages_images.pages_id
+        $sql = "SELECT pages_images.filename, pages_images.creator, pages_images.copyright, pages_images.caption, pages_images.caption_extended, pages_images.alt, pages_images.title, pages_images.ratio, pages_images.tag, pages_images.pages_id
 		FROM pages_images
 		LEFT JOIN pages_widgets ON pages_images.pages_id = pages_widgets.pages_id
 		LEFT JOIN widgets ON pages_widgets.widgets_id = widgets.widgets_id
@@ -2845,12 +2845,13 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesImagesMeta($pages_images_id, $caption, $alt, $title, $creator, $copyright, $tag, $promote, $utc_modified)
+    public function updatePagesImagesMeta($pages_images_id, $caption, $caption_extended, $alt, $title, $creator, $copyright, $tag, $promote, $utc_modified)
     {
         try {
             $sql = "UPDATE pages_images
 			SET caption = :caption,
-			alt = :alt,
+			caption_extended = :caption_extended,
+            alt = :alt,
 			title = :title,
 			creator = :creator,
 			copyright = :copyright,
@@ -2862,6 +2863,7 @@ class Pages extends Database
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":pages_images_id", $pages_images_id, PDO::PARAM_INT);
             $stmt->bindParam(":caption", $caption, PDO::PARAM_STR);
+            $stmt->bindParam(":caption_extended", $caption_extended, PDO::PARAM_STR);
             $stmt->bindParam(":alt", $alt, PDO::PARAM_STR);
             $stmt->bindParam(":title", $title, PDO::PARAM_STR);
             $stmt->bindParam(":creator", $creator, PDO::PARAM_STR);

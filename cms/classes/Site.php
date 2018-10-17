@@ -303,13 +303,14 @@ class Site extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function setSiteContent($site_id, $site_header_image, $site_404, $site_rss_description, $site_publish_guideline, $utc_modified)
+    public function setSiteContent ($site_id, $site_header_image, $site_404, $site_about_cookies_url, $site_rss_description, $site_publish_guideline, $utc_modified)
     {
         try {
             $sql = "UPDATE site
 			SET site_rss_description = :site_rss_description,
             site_header_image = :site_header_image,
             site_404 = :site_404,
+            site_about_cookies_url = :site_about_cookies_url,
 			site_publish_guideline = :site_publish_guideline,
 			utc_modified = :utc_modified
 			WHERE site_id = :site_id";
@@ -318,6 +319,7 @@ class Site extends Database
             $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
             $stmt->bindParam(":site_header_image", $site_header_image, PDO::PARAM_STR);
             $stmt->bindParam(":site_404", $site_404, PDO::PARAM_STR);
+            $stmt->bindParam(":site_about_cookies_url", $site_about_cookies_url, PDO::PARAM_STR);            
             $stmt->bindParam(":site_rss_description", $site_rss_description, PDO::PARAM_STR);
             $stmt->bindParam(":site_publish_guideline", $site_publish_guideline, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);

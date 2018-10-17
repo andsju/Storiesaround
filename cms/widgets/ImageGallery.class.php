@@ -81,7 +81,7 @@ class ImageGallery extends Widgets {
 						var input = item.filename;
 						var page = item.pages_id;
 						var caption = item.caption;
-						var title = item.title.length > 0 ? item.title : '';
+						var title = item.title.length > 0 ? item.title : caption;
 						var alt_text = item.alt.length > 0 ? item.alt : item.caption;
 						var alt_text = alt_text.length > 0 ? alt_text : '';					
 						var alt_rights = item.copyright.length > 0 ? '('+item.copyright+')' : '';
