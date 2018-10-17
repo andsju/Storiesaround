@@ -2229,19 +2229,16 @@ if (isset($_POST['token'])) {
 					$area = filter_var(trim($_POST['id']), FILTER_SANITIZE_STRING);
 					$position = 1;
 					foreach($_POST['result'] as $key => $value) {
+						
 						$w = new PagesWidgets();
 						$w->updatePagesWidgetsLayout($pages_id, $area, $position, $value);
-						echo $value;
-						echo '<br />';
-						echo $position;
+						
 						$position++;
 					}
 
 					echo 'widgets layout saved: '. date('H:i:s');
 					
 				break;
-
-				
 
 			}
 		}
@@ -2251,6 +2248,7 @@ if (isset($_POST['token'])) {
 			
 			$pages_images_id = filter_var(trim($_POST['pages_images_id']), FILTER_VALIDATE_INT);
 			$caption = filter_var(trim($_POST['caption']), FILTER_SANITIZE_STRING);
+			$caption_extended = trim($_POST['caption_extended']);
 			$alt = filter_var(trim($_POST['alt']), FILTER_SANITIZE_STRING);
 			$title = filter_var(trim($_POST['title']), FILTER_SANITIZE_STRING);
 			$creator = filter_var(trim($_POST['creator']), FILTER_SANITIZE_STRING);
@@ -2260,22 +2258,12 @@ if (isset($_POST['token'])) {
 
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			
-			echo "pages_images_id: " . $pages_images_id;
-			echo "caption: " . $caption;
-			echo "alt: ". $alt;
-			echo "title: " . $title;
-			echo "creator: ". $creator;
-			echo "copyright: " . $copyright;
-			echo "tag: ". $tag;
-			echo "promote: ". $promote;
-			$result = $pages->updatePagesImagesMeta($pages_images_id, $caption, $alt, $title, $creator, $copyright, $tag, $promote, $utc_modified);
+			$result = $pages->updatePagesImagesMeta($pages_images_id, $caption, $caption_extended, $alt, $title, $creator, $copyright, $tag, $promote, $utc_modified);
 			if($result) {
 				$history = new History();
 				$history->setHistory($pages_images_id, 'pages_images_id', 'UPDATE', describe('image meta', $pages_images_id), $users_id, $_SESSION['token'], $utc_modified);
-			}
-			
+			}			
 		}
-
 		
 		// create new pages
 		if ($action == 'pages_add_toplevel_page') { 

@@ -556,10 +556,65 @@ $(document).ready(function () {
 		notifyInlineEdit($(this));
 	});
 
+	if (!getCookie("cookieAlert")) {
+		$("#about-cookies").show();
+	}
+
+	$("#btn_about_cookies").click(function() {
+
+		var accepted_cookies = getCookie("cookieAlert");
+
+		if (!accepted_cookies) {
+			var action = "accept_cookies";
+			var cms_dir = $("#cms_dir").val();
+			var ajax_url = cms_dir + '/cms/pages_ajax.php';
+			var accept_cookies = "true";
+			setCookie("cookieAlert", "true", 180);
+			$.ajax({
+				type: 'POST',
+				url: ajax_url,
+				data: {
+					action: action,
+					token: token,
+					accept_cookies: accept_cookies
+				},
+				success: function (result) {
+					if (result) {
+						$("#about-cookies").remove();
+					}
+				}
+			});
+		} 
+	});
+	
+
 	//replace_image_path('/content/', '/somefolder/content/');
 
 });
 
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 function notifyInlineEdit(element) {
 	element.css("background-color", "lightgreen");

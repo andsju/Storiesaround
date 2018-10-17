@@ -45,6 +45,20 @@ $js_files = array(
 	//CMS_DIR.'/cms/libraries/tinymce/plugins/moxiemanager/js/moxman.loader.min.js'
 );
 
+
+
+$wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editors, $_SESSION['site_wysiwyg']) :  null;
+$class_editor = $wysiwyg_editor['css-class'];
+
+
+// javascript files... add wysiwyg file
+if (is_array($wysiwyg_editor)) {
+	if(file_exists(CMS_ABSPATH .'/cms/libraries/'.$wysiwyg_editor['include_js_file'])) {
+		array_push($js_files, CMS_DIR.'/cms/libraries/'.$wysiwyg_editor['include_js_file']);
+	}
+}
+
+
 // include header
 $meta_keywords = $meta_description = $meta_robots = $meta_additional = $meta_author = null;
 $page_title = 'Image viewer | editor';
@@ -56,6 +70,38 @@ include_once 'includes/inc.header_minimal.php';
 	
 	$(document).ready(function() {
 		
+		var theme = $("#theme").val();
+		tinymce.init({
+			
+			selector : "textarea.tinymce",
+			mode : "specific_textareas",
+			selector : "textarea#caption_extended",
+			autoresize_max_height: 900,
+			
+			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css','css/wysiwyg_editor.css'],
+			plugins : "advlist anchor autoresize charmap code hr image imagetools link lists media paste searchreplace table template visualblocks wordcount moxiemanager",
+			toolbar: "undo redo | removeformat | styleselect | bold italic",
+			menubar: "view edit",
+			image_advtab: true,
+			style_formats_merge: true,
+			style_formats: [
+				{title: 'Custom text', items: [		
+					{title : 'Horizont line shadowed <p>', block : 'p', classes : 'horizont-line'},
+					{title : 'FAQ question <p>', block : 'p', classes : 'faq-question'},
+					{title : 'FAQ answer <p>', block : 'p', classes : 'faq-answer'},
+					{title : 'Box shadowed<p>', block : 'p', classes : 'box-shadowed'},
+					{title : 'Box elevated<p>', block : 'p', classes : 'box-elevated'},
+					{title : 'Quote emphasize <p>', block : 'p', classes : 'quote-emphasize'},
+					{title : 'Read more <span>', inline : 'span', classes : 'read-more'},
+					{title : 'Highlight <span>', inline : 'span', classes : 'highlight-word'},
+					{title : 'Bigger <span>', inline : 'span', classes : 'text-bigger'},
+					{title : 'Smaller <span>', inline : 'span', classes : 'text-smaller'},
+					{title : 'SMALL CAPS <span>', inline : 'span', classes : 'small-caps'},
+					{title : 'Button look-alike', selector : 'a', classes : 'link-look-alike-button'},
+				]}
+			]
+		});
+
 		$('button.version').click(function(){
 			var p = $("#image_path").val();
 			var img = p+this.id;
@@ -69,24 +115,35 @@ include_once 'includes/inc.header_minimal.php';
 
 		$('#btn_delete').click(function(event){
 			event.preventDefault();
-			var action = "delete_image";
-			var token = $("#token").val();
-			var users_id = $("#users_id").val();
-			var pages_id = $("#pages_id").val();
-			var images_filename = $("#images_filename").val();			
-			$.ajax({
-				beforeSend: function() { loading = $('#ajax_spinner_image').show()},
-				complete: function(){ loading = setTimeout("$('#ajax_spinner_image').hide()",700)},
-				type: 'POST',
-				url: 'pages_edit_ajax.php',
-				data: "action=" + action + "&token=" + token + "&users_id=" + users_id + "&pages_id=" + pages_id + "&image=" + images_filename,
-				success: function(message){
-					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#add_content';
-					location.reload(true);
+			$("#dialog_delete_image").dialog("open");
+			$("#dialog_delete_image").dialog({
+				buttons : {
+				"Confirm" : function() {
+					var action = "delete_image";
+					var token = $("#token").val();
+					var users_id = $("#users_id").val();
+					var pages_id = $("#pages_id").val();
+					var images_filename = $("#images_filename").val();			
+					$.ajax({
+						beforeSend: function() { loading = $('#ajax_spinner_image').show()},
+						complete: function(){ loading = setTimeout("$('#ajax_spinner_image').hide()",700)},
+						type: 'POST',
+						url: 'pages_edit_ajax.php',
+						data: "action=" + action + "&token=" + token + "&users_id=" + users_id + "&pages_id=" + pages_id + "&image=" + images_filename,
+						success: function(message){
+							window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#add_content';
+							location.reload(true);
+						}
+					});
+					$(this).dialog("close");
+				},
+				"Cancel" : function() {
+					$(this).dialog("close");
+					}
 				}
-			});			
+			});
 		});
-		
+
 		$("#dialog_delete_image").dialog({
 			autoOpen: false,
 			modal: true
@@ -99,6 +156,7 @@ include_once 'includes/inc.header_minimal.php';
 			var users_id = $("#users_id").val();
 			var pages_images_id = $("#pages_images_id").val();
 			var caption = $("#caption").val();
+			var caption_extended = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'caption_extended');
 			var alt = $("#alt").val();
 			var title = $("#title").val();
 			var creator = $("#creator").val();
@@ -106,7 +164,6 @@ include_once 'includes/inc.header_minimal.php';
 			var optionTagTexts = [];
 			$("ul#tags li").each(function() { optionTagTexts.push($(this).text()) });
 			var tag = optionTagTexts.toString();
-			console.log("tag", tag);
 			var promote = $('input:checkbox[name=promote]').is(':checked') ? 1 : 0;
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_image').show()},
@@ -115,7 +172,7 @@ include_once 'includes/inc.header_minimal.php';
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, pages_images_id: pages_images_id, users_id: users_id, 
-					caption: caption, alt: alt, title: title, creator: creator, copyright: copyright, tag: tag, promote: promote 
+					caption: caption, caption_extended: caption_extended, alt: alt, title: title, creator: creator, copyright: copyright, tag: tag, promote: promote 
 				},
 				success: function(message){
 					ajaxReply(message,'#ajax_status_image');
@@ -152,6 +209,7 @@ include_once 'includes/inc.header_minimal.php';
 			$('#ajax_spinner_tag').show();
 			setTimeout("$('#ajax_spinner_tag').hide()",700);
 			var tag = $("#tag").val();
+			tag = tag.replace(/<\/?[^>]+(>|$)/g, "");
 			var optionTexts = [];
 			$("ul#tags li").each(function() { optionTexts.push($(this).text()) });
 			if(optionTexts.indexOf(tag) == -1) {
@@ -380,8 +438,6 @@ include_once 'includes/inc.header_minimal.php';
 </script>	
 <?php
 
-
-
 // check $_GET id
 $pages_id = array_key_exists('pages_id', $_GET) ? $_GET['pages_id'] : null;
 if($pages_id == null) { die;}
@@ -420,8 +476,6 @@ if($rows) {
 	echo '<div style="width:100%;background:#000;overflow:auto;white-space: nowrap; height:80px;color:#fff;">';
 		echo '<ul id="imagerow" style="margin:0; padding:0; list-style:none;">';
 		foreach($rows as $r) {
-			echo '<li id="li_'.$r['pages_images_id'].'" style="float:left;">';
-			echo '<a href="pages_images_preview.php?pages_images_id='.$r['pages_images_id'].'&pages_id='.$pages_id.'&token='.$token.'"><img src='.$p . $r['filename'].' style="height:30px;padding:5px;" /></a>';
 			// delete tmp images while looping image click menu
 			$preview_img2 = $p .'/'. $r['filename'];			
 			$preview_img2 = $image->get_max_image($preview_img2);
@@ -431,6 +485,10 @@ if($rows) {
 			if(file_exists($pp . $new_filename_prefix . $fn)) {
 				unlink($pp . $new_filename_prefix . $fn);
 			}
+
+			$class = strpos($preview_img2,$preview_img_filename) ? "preview" : "";
+			echo '<li id="li_'.$r['pages_images_id'].'" style="float:left;" class="'.$class.'">';
+			echo '<a href="pages_images_preview.php?pages_images_id='.$r['pages_images_id'].'&pages_id='.$pages_id.'&token='.$token.'"><img src='.$p . $r['filename'].' style="height:30px;padding:5px;" /></a>';
 			echo '</li>';
 		}
 		echo '</ul>';
@@ -445,7 +503,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 		echo "\n".'<div class="wrapper clearfix" style="margin:0px;">';
 		
 		echo "\n".'<div style="float:left;text-align:right;">';
-			echo '<h2>Edit image</h2>';
+			echo '<h2 style="margin:0">Edit image</h2>';
 		echo "\n".'</div>';
 		
 		echo "\n".'<div style="float:right;text-align:right;padding-top:10px;">';
@@ -459,11 +517,11 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 	echo "\n".'<hr />';	
 	
 	
-	echo "\n".'<div class="wrapper clearfix" style="margin:0px;">';
+	echo "\n".'<div class="wrapper clearfix" style="margin:0px;width:100%">';
 
 		// image size
 		$size = $preview_img ? getimagesize($_SERVER['DOCUMENT_ROOT'] . $preview_img) : "";
-		echo "\n".'<div class="float" style="width:60%; max-width:'.$size[0].'px;min-width:474px;">';
+		echo "\n".'<div class="float" style="width:60%;">';
 			
 			//echo '<img src="'.$preview_img.'" style="width:100%;max-width:'.$size[0].'px;" id="edit_image" />';
 			echo '<div id="container1"><img src="'.$preview_img.'?t='.date('H:m:s').'" style="width:100%;max-width:'.$size[0].'px;" id="edit_image" title="'.$row['title'].'" alt="'.$row['alt'].'" /><div id="box_image" style="display:none;"></div></div>';
@@ -548,43 +606,35 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 
 			</ul>
 		</div>
-		<div class="float" style="width:40%;padding:20px;">
+		<div class="float" style="width:40%;padding:0 20px;">
 
 			<p>
 				Filename: <span class="code"><?php echo $preview_img; ?></span>
 				<button class="copy_file" data-file="<?php echo $preview_img; ?>" title="Copy file location"><i class="fas fa-link"></i></button>
 			</p>
 			<p>
-				Ratio: <span class="code"><?php echo $row['ratio']; ?></span>
-			</p>
-			<p>
-				Dimension: <span class="code"><?php if (isset($size[0]) && isset($size[1])) { echo $size[0] . ' x ' .$size[1];} ?> px</span>
-			</p>
-			<p>
 				<label for="caption">Caption</label><br>
-				<input type="text" style="width:90%;" name="caption" id="caption" value="<?php echo $row['caption']; ?>">
+				<input type="text" style="width:100%;" name="caption" id="caption" value="<?php echo $row['caption']; ?>">
+			</p>
+			<p>
+				<label for="caption_extended">Caption - extended</label><br>
+				<textarea id="caption_extended" name="caption_extended" class="<?php echo $class_editor; ?>" style="width:100%;"><?php echo $row['caption_extended']; ?></textarea>
 			</p>
 			<p>
 				<label for="caption">Alt attribute</label><br />
-				<input type="text" style="width:90%;" name="alt" id="alt" value="<?php echo $row['alt']; ?>" maxlength="100">
+				<input type="text" style="width:100%;" name="alt" id="alt" value="<?php echo $row['alt']; ?>" maxlength="100">
 			</p>
 			<p>
 				<label for="title">Title attribute (complement ALT text - shown as tool tip)</label><br />
-				<input type="text" style="width:90%;" name="title" id="title" value="<?php echo $row['title']; ?>" maxlength="100">
+				<input type="text" style="width:100%;" name="title" id="title" value="<?php echo $row['title']; ?>" maxlength="100">
 			</p>
 			<p>
 				<label for="creator">Creator</label><br>
-				<input type="text" style="width:90%;" name="creator" id="creator" value="<?php echo $row['creator']; ?>">
+				<input type="text" style="width:100%;" name="creator" id="creator" value="<?php echo $row['creator']; ?>">
 			</p>
 			<p>
 				<label for="copyright">Copyright</label><br>
-				<input type="text" style="width:90%;" name="copyright" id="copyright" value="<?php echo $row['copyright']; ?>">
-			</p>
-			<p>
-			<?php
-			$checked = 	$row['promote'] == 1 ? ' checked' : '';
-			?>
-				<input type="checkbox" id="promote" name="promote" value="1" <?php echo $checked; ?>>&nbsp;promote image;
+				<input type="text" style="width:100%;" name="copyright" id="copyright" value="<?php echo $row['copyright']; ?>">
 			</p>
 			<p>
 				<label for="tag">Tag</label><br />
@@ -592,6 +642,10 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 				<span class="toolbar_add"><button id="btn_add_tag" style="margin:0px" type="submit">Add</button></span>
 				<span id="ajax_spinner_tag" style="display:none;"><img src="css/images/spinner.gif"></span>
 				<span id="ajax_status_tag" style="display:none;"></span>
+				<?php
+				$checked = 	$row['promote'] == 1 ? ' checked' : '';
+				?>
+				<input type="checkbox" id="promote" name="promote" value="1" <?php echo $checked; ?>>&nbsp;promote image
 			</p>
 			<div style="display:inline-block;">
 				<ul id="tags">
@@ -605,10 +659,13 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 				?>
 				</ul>
 			</div>
+			<p>
+				Ratio: <span class="code"><?php echo $row['ratio']; ?></span>
+			</p>
 
 			<?php
 			$xmps = json_decode($row['xmpdata'], true);
-			
+			/*
 			echo '<h4>Original image xmpdata</h4>';
 			
 			if(is_array($xmps)) {
@@ -618,6 +675,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 					echo '<br />';
 				}
 			}
+			*/
 		echo "\n".'</div>';
 	echo "\n".'</div>';
 
@@ -641,6 +699,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 <input type="hidden" id="image_path" name="image_path" value="<?php echo $p; ?>">
 <input type="hidden" id="users_id" name="users_id" value="<?php echo $users_id; ?>">
 <input type="hidden" id="pages_id" name="pages_id" value="<?php echo $pages_id; ?>">
+<input type="hidden" id="theme" name="theme" value="<?php echo $_SESSION['site_theme']; ?>">
 
 <div id="dialog_delete_image" title="Confirmation required">
   Delete this image?

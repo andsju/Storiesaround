@@ -1741,6 +1741,7 @@ function get_og_meta($pages, $protocol, $url, $page_title_body, $description, $a
     $image = new Image();
     $row_image = $pages->getPagesImagesTeaser($id);
     
+    if (!$row_image) {return array();}
     $filename = $row_image[0]['filename'];
     $optimzed_image = isset($filename) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $arr['pages_id'] . '/' . $filename, 1200) : '';
     $im1 = $protocol . '://'. $_SERVER['HTTP_HOST'] . $optimzed_image;
@@ -2607,7 +2608,7 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
                 $cal = $calendar->getCalendarCategoriesSearch($search);
                 if($cal) {
                     $calendar_categories_id = $cal[0]['calendar_categories_id'];
-                    $events = $calendar->getCalendarEvents($calendar_categories_id, $date = date('Y-m-d'), "2weeks");                            
+                    $events = $calendar->getCalendarEvents($calendar_categories_id, $date = date('Y-m-d'), "2weeks");
                     if ($events) {
                         $count_events = 0;
                         foreach ($events as $event) {
@@ -2828,7 +2829,7 @@ function print_grid($arr, $area)
     }
 
     if ($arr['grid_area'] == $area) {
-        $html_grid = get_grid($arr['pages_id'], $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);    
+        $html_grid = get_grid($arr['pages_id'], $arr['grid_active'], $arr['grid_content'], $arr['grid_custom_classes'], $arr['grid_cell_template'], $arr['grid_cell_image_height']);
         echo $html_grid;
     }
 }
@@ -3052,4 +3053,18 @@ function parse_code($pages, $dtz, $code)
     return $str;
 }
 
+
+function aboutCookies($languages) {
+    $str = '<div id="about-cookies" class="hidden">';
+    $str .= translate("This website uses cookies to enable easier navigation and to provide functionality. Read more on ", "site_cookie", $languages);
+    $str .= $_SESSION['site_domain'];
+    $str .= '<p><a href="'.$_SESSION['site_about_cookies_url'].'">'.translate("Cookies and how data is stored", "site_cookie_read_more", $languages).'</a> ';
+    $str .= '<button id="btn_about_cookies">'.translate("Got it. ", "site_cookie_got_it", $languages).'</button></p>';
+    $str .= '</div>';
+    if ($_SESSION['accept_cookies'] == true) {
+        return "";    
+    } else {
+        return $str;
+    }
+}
 ?>

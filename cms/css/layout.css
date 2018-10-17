@@ -548,6 +548,7 @@ div.page_templates { float: left; margin: 10px;font-size:0.9em;width:130px; }
 div.edit_joins { display:none;margin:10px;padding:5px;border-top:1px dashed grey;border-bottom:1px dashed grey; }
 
 div.box_pages { margin:10px;padding:10px;border:1px solid grey;max-height:120px;overflow:auto; }
+ul#imagerow .preview {border-bottom:2px solid white}
 
 div.ui-sortable-placeholder { padding: 5px; border: 1px solid; visibility: visible !important; height: 50px !important; }
 div.ui-sortable-placeholder * { visibility: hidden; }
@@ -578,9 +579,9 @@ div.sortable_units ul{ list-style:none;margin:0;padding:0;}
 div.sortable_units li { margin: 2px; padding: 2px; border: 1px solid #DDDDDD;}
 
 ul#tags { list-style:none;margin:0;padding:0; } 
-ul#tags li { float:left; margin:3px; background:white; border-radius:4px;border:1px dashed black;padding:5px;vertical-align:middle;font-family: monospace; font-size:1.2em;}
+ul#tags li { float:left; margin:3px; background:white; border-radius:4px;border:1px dashed black;padding:5px;vertical-align:middle;font-family: monospace; font-size:1.2em; color:black}
 ul#tags li span{vertical-align:top;cursor:pointer; padding:2px;margin-left:4px;vertical-align: bottom}
-ul#tags li i {margin-left:8px; cursor:pointer}
+ul#tags li i, ul#tags li svg {margin-left:8px; cursor:pointer}
 ul.tags_match { list-style:none;margin:0 0 0 5px;padding:0; } 
  
 .highlight { background: #FFFf99 !important; padding:3px; }
@@ -735,6 +736,9 @@ iframe.fluid {position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 div#login_form td { padding:5px;}	
 div#login_form td input {width:80%;padding:3px;}
 
+div#about-cookies {position:fixed; text-align:center; bottom:0; width:100%; padding:10px;border-top:4px solid black; background-color: #446162; width:100%; color:white}
+div#about-cookies a {color: white; text-decoration: underline}
+div#about-cookies button { padding: 4px; margin-left:10px; font-size: .9em; }
 
 
 /* grid edit
@@ -795,6 +799,23 @@ div.grid-cell.green div.grid-link {border-top:2px solid green}
 div.grid-cell.green  {background-color: white;} 
 div.grid-cell.red {background-color: red} 
 
+
+
+/* grid images */
+div.grid_images div.widgets-grid-cell {width: 30%; margin-bottom: 20px;float:left; font-size:0.9em; background-color:rgb(240,240,240);margin-right: 5%;border: 1px solid grey;box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+
+div.grid_images div.widgets-grid-cell:nth-child(3n) {margin-right: 0%}
+
+div.grid_images div.image-holder { float:left; width:30% }
+div.grid_images div.image-holder img {width:100%; height:auto; }
+
+div.grid_images div.image-caption {width:70%; float:left; padding:10px;}
+
+div.image-caption p+p { text-indent:0 }
+
+div.grid_images_wrapper div.widgets-header {width:100%; clear: both; float: none}
+
+div.widgets-header {float:none !important; width:100%}
 
 
 /* floated column items 
@@ -928,6 +949,8 @@ div.stories-cell div.stories-content {margin:10px;flex: 0 1 auto;}
 	div.gallery_listed_container { display: -webkit-flex;-webkit-flex-wrap: wrap; display: flex; flex-wrap: wrap; }
 	div.gallery_listed { padding:10px; float:left; }
 	div.gallery_listed img { width:100%; height:auto;}
+
+	div.grid_images div.widgets-grid-cell {width: 100%; }
 	
 	/* grid */
 	div#top-grid div.wrapper-grid {margin: 20px}
@@ -974,6 +997,8 @@ div.stories-cell div.stories-content {margin:10px;flex: 0 1 auto;}
 	div#top-grid div.wrapper-grid {margin: 20px}
 	div.wrapper-grid {margin: 20px 0}
 	div.wrapper-grid-padding {padding:0}
+
+	div.grid_images div.widgets-grid-cell {width: 100%; }
 
 	div.grid-cell, div.stories-cell {float:left;width:48%; display: flex; flex-direction: column;  margin-bottom:20px; text-align: left;font-size:initial;min-height:100px;position: relative; }
 	div.grid-cell:nth-child(1n), div.stories-cell:nth-child(1n) {margin-right: 4%}
