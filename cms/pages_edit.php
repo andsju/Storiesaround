@@ -1242,6 +1242,7 @@ foreach ( $js_files as $js ): ?>
 				pages_id: pages_id,
 				result: result  
 				}; 
+				console.log("result", result);
 				if (result.length > 0){
 					$.post("pages_edit_ajax.php", items, function(){
 						var widgets_saved = true;
@@ -1250,10 +1251,11 @@ foreach ( $js_files as $js ): ?>
 			});
 		
 			if(widgets_saved = true) {
+				
 				$('#ajax_spinner_widgets').show();
-				setTimeout("$('#ajax_spinner_widgets').hide()",700);					
-				setTimeout("$('#').hide()",3000);
+				setTimeout("$('#ajax_spinner_widgets').hide()",700);
 				ajaxReply('saved','#ajax_status_widgets');
+				
 			}
 		});
 				
@@ -2308,7 +2310,7 @@ foreach ( $js_files as $js ): ?>
 			$("#tag").val('');
 		});
 		
-		$("ul#tags").delegate( "i", "click", function() {
+		$("ul#tags").delegate( ".fa-trash-alt", "click", function() {
 			$(this).parent().remove();
 		});		
 

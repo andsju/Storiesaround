@@ -5,7 +5,7 @@
 			
 			//selector : "textarea.tinymce",
 			mode : "specific_textareas",
-			selector : "textarea#content, textarea#story_content, textarea#content_html",
+			selector : "textarea#content, textarea#story_content, textarea#content_html, textarea#site_404",
 			autoresize_max_height: 900,
 			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css','css/wysiwyg_editor.css'],
 			// plugins : " stories",

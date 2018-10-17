@@ -15,6 +15,14 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 		
 		switch ($action) {
 		
+			case 'accept_cookies':
+
+				$boolean = $_POST['accept_cookies'] == 'true' || $_POST['accept_cookies'] == 1 ? true : false;
+				$_SESSION['accept_cookies'] = $boolean;
+				echo $boolean;
+
+			break;
+
 			case 'pages_search':
 
 				$s = $_POST['s'];

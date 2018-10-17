@@ -112,20 +112,21 @@ if (isset($_POST['token'])){
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_header_image = filter_var(trim($_POST['site_header_image']), FILTER_SANITIZE_STRING);
 				$site_404 = $_POST['site_404'];
+				$site_about_cookies_url = filter_var(trim($_POST['site_about_cookies_url']), FILTER_SANITIZE_STRING);
 				$site_rss_description = filter_var(trim($_POST['site_rss_description']), FILTER_SANITIZE_STRING);
 				$site_publish_guideline = filter_var(trim($_POST['site_publish_guideline']), FILTER_SANITIZE_STRING);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
-				$result = $site->setSiteContent($site_id, $site_header_image, $site_404, $site_rss_description, $site_publish_guideline, $utc_modified);
+				$result = $site->setSiteContent($site_id, $site_header_image, $site_404, $site_about_cookies_url, $site_rss_description, $site_publish_guideline, $utc_modified);
 				if($result) {
 					$_SESSION['site_rss_description'] = $site_rss_description;
 					$_SESSION['site_header_image'] = $site_header_image;
-					$_SESSION['site_publish_guideline'] = $site_publish_guideline;					
+					$_SESSION['site_publish_guideline'] = $site_publish_guideline;
+					$_SESSION['site_about_cookies_url'] = $site_about_cookies_url;			
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$history = new History();
-					$history->setHistory($site_id, 'site_id', 'UPDATE', 'site content publishing', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);							
-					
+					$history->setHistory($site_id, 'site_id', 'UPDATE', 'site content publishing', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);
 				}
 				
 			break;

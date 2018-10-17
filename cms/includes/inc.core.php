@@ -247,6 +247,13 @@ $lang = isset($_SESSION['site_lang']) ? $_SESSION['site_lang'] : '';
 $dtz = isset($_SESSION['site_timezone']) ? $_SESSION['site_timezone'] : 'Europe/Stockholm';
 
 
+/* cookie info 
+-------------------------------------------------- */
+if (!isset($_SESSION['accept_cookies'])) {
+    $_SESSION['accept_cookies'] = false;
+}
+
+
 /* function PDO database connection, constants from configuration file
 -------------------------------------------------- */
 function db_connect()

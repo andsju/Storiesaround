@@ -119,7 +119,7 @@ function isValidString($string, $reg)
     if ((is_string(($string))) && is_string(($reg))) {
 
         // allowed string
-        $allowed = array('username', 'strong_password', 'str', 'css', 'html', 'code', 'path', 'words', 'name', 'postnummer', 'personnummer', 'personnummerPTF', 'milliseconds', 'alpha', 'numerical', 'alphanumerical', 'ratio', 'email', 'sevendigits', '0-9', '1-20', 'date', 'ip', 'url', 'url_query', 'hex', 'php', 'boolean', 'any-all', 'characters', 'comma_separated_numbers');
+        $allowed = array('username', 'strong_password', 'str', 'css', 'html', 'code', 'path', 'words', 'name', 'postnummer', 'personnummer', 'personnummerPTF', 'milliseconds', 'alpha', 'numerical', 'alphanumerical', 'ratio', 'email', 'sevendigits', '0-9', '1-20', 'date', 'ip', 'url', 'url_query', 'hex', 'php', 'boolean', 'any-all', 'characters', 'comma_separated_numbers', 'any');
         if (in_array($reg, $allowed)) {
             $regex_string = Array(
                 // username; letters, digits. Underscore is allowed if followed by one or more letters / digits. Minimum 4 character. Maximum 20 characters
@@ -183,7 +183,9 @@ function isValidString($string, $reg)
                 // any or all
                 'characters' => '/[\p{L}]+/u',
                 //comma separatednumbers
-                'comma_separated_numbers' => '/^[\d]+(,[\d]+)*$/'                
+                'comma_separated_numbers' => '/^[\d]+(,[\d]+)*$/',
+                //any
+                'any' => '/^([\s\S])*$/'
             );
             if (filter_var($string, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $regex_string[$reg])))) {
                 return true;

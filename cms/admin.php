@@ -267,9 +267,8 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var site_header_image = $("#site_header_image").val();
 			var site_404 = get_textarea_editor('<?php echo $wysiwyg_editor['editor']; ?>', 'site_404');
 			var site_rss_description = $("#site_rss_description").val();
+			var site_about_cookies_url = $("#site_about_cookies_url").val();
 			var site_publish_guideline = $("#site_publish_guideline").val();
-			console.log("site_header_image", site_header_image);
-			console.log("site_404", site_404);
 			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_site_content').show()},
@@ -278,7 +277,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 				url: 'admin_edit_ajax.php',
 				data: { 
 					action: action, token: token, site_id: site_id, site_rss_description: site_rss_description,
-					site_header_image: site_header_image, site_404: site_404, site_publish_guideline: site_publish_guideline
+					site_header_image: site_header_image, site_404: site_404, site_about_cookies_url: site_about_cookies_url, site_publish_guideline: site_publish_guideline
 				},
 				success: function(message){	
 					ajaxReply(message,'#ajax_status_site_content');
@@ -517,6 +516,8 @@ include_once 'includes/inc.site_active_user_administration.php';
 		});
 
 	});
+
+	
 </script>
 
 
@@ -875,9 +876,15 @@ switch($t) {
 						<div class="admin-panel">
 							<h3 class="admin_heading">404 content</h3>
 							<div>
-								<textarea name="site_404" id="site_404" class="<?php echo $wysiwyg_editor['css-class']; ?>" style=""><?php echo $site['site_404'] ?></textarea>
+								<textarea name="site_404" id="site_404" class="<?php echo $wysiwyg_editor['editor']; ?>" style=""><?php echo $site['site_404'] ?></textarea>
 							</div>
+						</div>
 
+						<div class="admin-panel">
+							<h3 class="admin_heading">Cookie read more url</h3>
+							<?php
+							get_input_text("site_about_cookies_url", "Set url to read about cookies on this site", "admin-text", "width:80%;", "255", $site['site_about_cookies_url'], "");
+							?>
 						</div>
 
 						<div class="admin-panel">
