@@ -159,7 +159,8 @@ include_once 'includes/inc.header_minimal.php';
 			var images_filename = $("#images_filename").val();
 			var pages_images_id = $("#pages_images_id").val();
 			var original = $('input:checkbox[name=original]').is(':checked') ? 1 : 0;
-			var max_width = $("#max_width option:selected").val();
+			var max_width = $("#size_max").val();
+			console.log("max_width", max_width);
 			$.colorbox({
 				width:"50%", height:"50%", iframe:true, href:"pages_images_upload_replace.php?token="+token+"&pages_id="+pages_id+"&pages_images_id="+pages_images_id+"&original="+original+"&max_width="+max_width+"&replace=true&images_filename="+images_filename+"",
 				onClosed:function(){
@@ -616,6 +617,7 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 				}
 				$sizes_in_db = explode(",", $sizes_in_db);
 				$original_candidate = array_pop($sizes_in_db);
+				$size_max = $original_candidate;
 				if (strlen($original_candidate) > 4) {
 					if(get_file($p, $preview_img_filename, $original_candidate)) {
 						$version = get_file_version($p, $preview_img_filename, $original_candidate);	
@@ -721,6 +723,8 @@ echo "\n".'<div class="admin-panel" style="margin:10px;">';
 <input type="hidden" id="users_id" name="users_id" value="<?php echo $users_id; ?>">
 <input type="hidden" id="pages_id" name="pages_id" value="<?php echo $pages_id; ?>">
 <input type="hidden" id="theme" name="theme" value="<?php echo $_SESSION['site_theme']; ?>">
+<input type="hidden" id="size_max" name="size_max" value="<?php echo $size_max; ?>">
+
 
 <div id="dialog_delete_image" title="Confirmation required">
   Delete this image?
