@@ -305,7 +305,7 @@ ul#navigation-root li:last-child {border-right:0}
 .border {border: 1px solid grey}
 .box-space {padding:10px}
 
-.grid-cell:hover:not(.gridedit) {transform: scale(1.003)}
+.grid-cell:hover:not(.gridedit) {transform: scale(1); box-shadow: 0 0 8px rgba(255, 255, 0, 0.5)}
 
 div.wrapper-grid-padding {padding:20px}
 
@@ -802,11 +802,11 @@ div.grid-cell.red {background-color: red}
 
 
 /* grid images */
-div.grid_images div.widgets-grid-cell {width: 30%; margin-bottom: 20px;float:left; font-size:0.9em; background-color:rgb(240,240,240);margin-right: 5%;border: 1px solid grey;box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
+div.grid_images div.widgets-grid-cell {width: 30%; margin-bottom: 20px;float:left; font-size:0.9em; background-color:rgb(245,245,245); background-image: linear-gradient(rgb(245,245,245), rgb(252,252,252)); margin-right: 5%;border: 1px solid grey;box-shadow: 0 0 8px rgba(0, 0, 0, 0.3)}
 
 div.grid_images div.widgets-grid-cell:nth-child(3n) {margin-right: 0%}
 
-div.grid_images div.image-holder { float:left; width:30% }
+div.grid_images div.image-holder { float:left; width:30%; display: grid; padding:2px }
 div.grid_images div.image-holder img {width:100%; height:auto; }
 
 div.grid_images div.image-caption {width:70%; float:left; padding:10px;}
