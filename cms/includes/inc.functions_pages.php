@@ -1425,7 +1425,11 @@ function get_box_story_content($rows, $languages, $wrapper_content_width, $stori
                 $optimzed_image = isset($row['filename']) ? $image->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row['pages_id'] . '/' . $row['filename'], $wrapper_content_width * 33 / 100) : '';
                 $html .= '<div class="stories-cell ' . $css_class . '">';
                 $html .= $a_start;
-                $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
+
+                $img_holder = '<div class="image-holder" style="background-image: url('.$optimzed_image.')"></div>';
+                $html .= isset($row['filename']) ? $img_holder : '';
+
+                // $html .= isset($row['filename']) ? '<img src="' . $optimzed_image . '" class="fluid" alt="' . $alt . '" title="' . $copyright . '"/>' : '';
                 $html .= $a_end;
                 $html .= '<div class="stories-content">';
                 $html .= $a_start;
