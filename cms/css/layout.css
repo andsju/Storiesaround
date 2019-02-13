@@ -152,10 +152,10 @@ div.stories-meta { margin:0 0 5px 0; font-size:0.9em}
 div.stories-content { }
 div.stories-content .float-left{ float:left;margin:4px 10px 4px 0;}
 div.stories-content .float-right{ float:right;margin:4px 0 4px 10px; }
+div.image-holder {width:100%; height: 0; padding-top: 66.64%;background-size: cover; background-repeat: no-repeat}
 span.stories-meta { font-size:0.8em;}
 a.stories:link, a.stories:visited { text-decoration:none;font-weight:normal;color:#000;}
 a.stories:hover {text-decoration:none;}
-
 
 
 /* stories events
