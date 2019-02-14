@@ -1,4 +1,6 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+
 // include file
 if(!defined('VALID_INCL')){die('Restricted access');}
 
@@ -26,7 +28,11 @@ function send_a_mail($token, $to, $to_name, $from, $from_name, $subject, $body, 
 		if(!$smtp) { die('SMTP settings fail'); };
 		
 		//include phpmailer class
-		require_once(CMS_ABSPATH.'/cms/libraries/phpmailer/PHPMailerAutoload.php');
+		//require_once(CMS_ABSPATH.'/cms/libraries/phpmailer/PHPMailerAutoload.php');
+		require_once(CMS_ABSPATH.'/cms/libraries/phpmailer/src/PHPMailer.php');
+		require_once(CMS_ABSPATH.'/cms/libraries/phpmailer/src/SMTP.php');
+		require_once(CMS_ABSPATH.'/cms/libraries/phpmailer/src/Exception.php');
+		
 
 		$mail = new PHPMailer(true); 								// the true param means it will throw exceptions on errors
 		$mail->CharSet = 'UTF-8';
@@ -68,8 +74,9 @@ function send_a_mail($token, $to, $to_name, $from, $from_name, $subject, $body, 
 				$mail->SMTPSecure = 'tls';
 			}
 			
-			$mail->From = $from;
-			$mail->FromName = $from_name;
+			// authentication 
+			$mail->From = $smtp['site_smtp_username'];
+			$mail->FromName = $_SESSION['site_name'];
 			$mail->AddAddress($to, $to_name);
 			$mail->AddReplyTo($from, $from_name);
 			//$mail->addCC('cc@example.com');
@@ -100,7 +107,7 @@ function send_a_mail($token, $to, $to_name, $from, $from_name, $subject, $body, 
 		} catch (phpmailerException $e) {
 			if($debug == 1) {
 				echo $e->errorMessage(); //error messages from PHPMailer
-				//print_r($mail);
+				print_r2($mail);
 			}
 		}
 		
