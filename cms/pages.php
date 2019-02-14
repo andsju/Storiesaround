@@ -416,9 +416,6 @@ if ($arr['template'] == 6) {
         <?php echo translate("Use default edit options", "pages_edit_inline_default", $languages); ?>
     </div>
     
-<?php
-print_r2($_SESSION['site_name']);
-?>
 </body>
 
 </html>
