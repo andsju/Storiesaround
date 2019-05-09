@@ -3060,8 +3060,7 @@ function parse_code($pages, $dtz, $code)
 
 function aboutCookies($languages) {
     $str = '<div id="about-cookies" class="hidden">';
-    $str .= translate("This website uses cookies to enable easier navigation and to provide functionality. Read more on ", "site_cookie", $languages);
-    $str .= $_SESSION['site_domain'];
+    $str .= translate("This website uses cookies to enable easier navigation and to provide functionality. Read more: ", "site_cookie", $languages);
     $str .= '<p><a href="'.$_SESSION['site_about_cookies_url'].'">'.translate("Cookies and how data is stored", "site_cookie_read_more", $languages).'</a> ';
     $str .= '<button id="btn_about_cookies">'.translate("Got it. ", "site_cookie_got_it", $languages).'</button></p>';
     $str .= '</div>';

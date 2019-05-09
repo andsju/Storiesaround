@@ -32,7 +32,7 @@ $languages["site_search_show_more"] = 'Show more';
 $languages["site_read"] = 'read';
 $languages["site_photo"] = 'Photo:';
 $languages["noscript"] = 'JavaScript is not enabled, current settings in your browser prevents functionality';
-$languages["site_cookie"] = 'This website uses cookies to enable easier navigation and to provide functionality. Read more on ';
+$languages["site_cookie"] = 'This website uses cookies to enable easier navigation and to provide functionality. Read more: ';
 $languages["site_cookie_read_more"] = 'Cookies and how data is stored';
 $languages["site_cookie_got_it"] = 'Continue';
 
