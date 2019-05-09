@@ -32,7 +32,7 @@ $languages["site_search_show_more"] = 'Visa fler';
 $languages["site_read"] = 'läs';
 $languages["site_photo"] = 'Foto:';
 $languages["noscript"] = 'JavaScript är inte aktiverat, nuvarande inställningar i din webbläsare förhindrar viss funktionalitet';
-$languages["site_cookie"] = 'Den här webbplatsen använder cookies för att underlätta navigering och skapa funktionalitet. Läs mer på ';
+$languages["site_cookie"] = 'Den här webbplatsen använder cookies för att underlätta navigering och skapa funktionalitet. Läs mer: ';
 $languages["site_cookie_read_more"] = 'Cookies och lagring av data';
 $languages["site_cookie_got_it"] = 'Fortsätt';
 
