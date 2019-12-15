@@ -2524,7 +2524,10 @@ function getVideoEmbed($video) {
  */
 function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, $grid_cell_template, $grid_cell_image_height)
 {
-
+    // no content -> return
+    if (strlen($grid_content) === 0) {
+        return;
+    }
 
     $pages = new Pages();
     $imageClass = new Image();
