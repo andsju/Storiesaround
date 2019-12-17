@@ -879,3 +879,182 @@ function getFileBaseName(filename) {
 	}
 	return filename.split('.').shift();
 }
+
+
+
+
+
+
+
+
+
+
+// root element html
+var doc = document.documentElement;
+var h = window.screen.height;
+
+let parallaxImages = document.querySelectorAll(".parallax");
+
+
+
+// save initial images heights
+let parallaxImagesHeight = [];
+parallaxImages.forEach(element => {
+	let elementStyle = window.getComputedStyle(element);
+	let height = parseInt(elementStyle.getPropertyValue("height"));
+	parallaxImagesHeight.push(height);
+})
+
+	// first image fit height
+	let rect = parallaxImages[0].getBoundingClientRect();
+	console.log("h1", h, parallaxImages[0], rect, window.innerHeight);
+	parallaxImages[0].style.height = window.innerHeight - rect.y - 50 + "px";
+
+
+window.addEventListener('load', (event) => {
+
+	// first image fit height
+	let rect = parallaxImages[0].getBoundingClientRect();
+	console.log("h2", h, parallaxImages[0], rect);
+	
+
+	window.addEventListener("scroll", function (event) {
+		showParallax(parallaxImages);
+	});	
+});
+
+function showParallax(elements) {
+	if (elements.length === 0) {
+		return;
+	}
+	let i = 0;
+	elements.forEach(element => {
+		let result = isInView(element);
+		
+		if (result.rectangle.top < -result.rectangle.height || result.rectangle.top > result.rectangle.height) {
+			return;
+		}
+		if (result.rectangle.top <= 0 && result.rectangle.height >= 0) {
+			element.style.height = parallaxImagesHeight[i] + (result.rectangle.top * 0.5) + "px";
+		} else if (result.check === true) {
+			element.style.height = parallaxImagesHeight[i] + "px";
+		} 
+		i++;
+	});
+
+}
+
+function isInView(element) {
+	let rectangle = element.getBoundingClientRect();
+	let html = document.documentElement;
+	let result = {}
+	result.check =
+		rectangle.top >= 0 &&
+		rectangle.left >= 0 &&
+		rectangle.bottom <= (window.innerHeight || html.clientHeight) &&
+		rectangle.right <= (window.innerWidth || html.clientWidth);
+	result.rectangle = rectangle;
+	return result;
+}
+
+
+
+// swap settings
+let swapSlideshowCycleImagesTime = 6000;
+let swapSlideshowCycleImagesStart = true;
+
+// swap images
+window.addEventListener('load', (event) => {
+	setInterval(function () {
+		fadeSlideshowCycleImages();
+	}, swapSlideshowCycleImagesTime);
+});
+
+
+// function to fade images
+function fadeSlideshowCycleImages() {
+
+	// check if ready
+	if (swapSlideshowCycleImagesStart === false) {
+		return
+	}
+
+	// get wrappers
+	// let wrappers = document.querySelectorAll(".slideshow-cycle-wrapper");
+
+	// get images
+	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
+
+	// no images
+	if (images.length <= 1) {
+		return
+	}
+
+	// last image
+	let image = images[images.length - 1];
+
+	// prepare
+	swapSideshowCycleImagesStart = false;
+	let currentOpacity = 1;
+	let step = 0.005;
+
+	// change opacity
+	let swapIntervalId = setInterval(function () {
+
+		// done ?
+		if (currentOpacity <= 0) {
+
+			clearInterval(swapIntervalId);
+
+			// DOM manipulation
+			let parent = image.parentElement;
+			parent.removeChild(image);
+			parent.prepend(image);
+
+			// reset opacity
+			image.style.opacity = 1;
+
+			// done
+			swapSlideshowCycleImagesStart = true;
+
+			// caption
+			//swapSlideshowCycleImageCaption(parent);
+
+		} else {
+
+			// ändra stegvis opacitet
+			currentOpacity -= step;
+			image.style.opacity = currentOpacity;
+		}
+	}, 1000 / 60);
+}
+
+// show caption
+function swapSlideshowCycleImageCaption(element) {
+
+	// get cycle images
+	let images = element.querySelectorAll(".slideshow-cycle-image");
+
+	// get last image caption
+	let caption = images[images.length - 1].getAttribute("data-caption");
+
+	if (caption.length === 0) {
+		return
+	};
+
+	// get caption position
+	let position = images[images.length - 1].getAttribute("data-caption-align");
+
+	// get element
+	let elementCaption = document.querySelector("#slideshow-cycle-caption");
+
+	// show caption
+	elementCaption.style.textAlign = position;
+	elementCaption.innerHTML = caption;
+	elementCaption.style.filter = "opacity(1)";
+
+	setTimeout(function () {
+		elementCaption.style.filter = "opacity(0)";
+	}, swapSlideshowCycleImagesTime - 2000);
+}
+
