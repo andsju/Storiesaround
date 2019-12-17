@@ -199,7 +199,7 @@ class Selections extends Database
             $stmt->bindParam(":active", $active, PDO::PARAM_INT);
             $stmt->bindParam(":name", $name, PDO::PARAM_STR);
             $stmt->bindParam(":description", $description, PDO::PARAM_STR);
-            $stmt->bindParam(":area", $area, PDO::PARAM_INT);
+            $stmt->bindParam(":area", $area, PDO::PARAM_STR);
             $stmt->bindParam(":external_js", $external_js, PDO::PARAM_STR);
             $stmt->bindParam(":external_css", $external_css, PDO::PARAM_STR);
             $stmt->bindParam(":content_html", $content_html, PDO::PARAM_STR);

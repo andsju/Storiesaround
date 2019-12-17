@@ -2485,9 +2485,10 @@ if (isset($_POST['token'])) {
 			$grid_cell_image_height = filter_input(INPUT_POST, 'grid_cell_image_height', FILTER_VALIDATE_INT);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
+			write_debug($area);
 			$selections = new Selections();
 			$result = $selections->setSelections($pages_selections_id, $active, $name, $description, $area, $content_html, $content_code, $external_js, $external_css, $grid_content, $grid_cell_template, $grid_custom_classes, $grid_cell_image_height, $utc_modified);
-
+			write_debug($result);
 			if($result) {
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				$history = new History();
