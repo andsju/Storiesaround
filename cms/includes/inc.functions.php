@@ -948,4 +948,14 @@ function getCodedString($string)
     return array($encoded, $number);
 }
 
+
+/**
+ * @param $string
+ * @return string
+ */
+function getFileExtension($file_and_path)
+{
+    return pathinfo($file_and_path, PATHINFO_EXTENSION);
+}
+
 ?>

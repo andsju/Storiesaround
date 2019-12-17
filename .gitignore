@@ -3,6 +3,7 @@ content/includes/
 content/rss/
 content/uploads/ads/**
 content/uploads/files/**
+content/uploads/header/**
 content/uploads/images/**
 content/uploads/media/**
 content/uploads/misc/**
