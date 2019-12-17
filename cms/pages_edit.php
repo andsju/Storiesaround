@@ -902,8 +902,11 @@ foreach ( $js_files as $js ): ?>
 			var pages_id = $("#pages_id").val();
 
 			var header_image = [];
-			$("#directory_view_slides div").each(function(){			
-				header_image.push($(this).attr("data-image"));
+			$("#directory_view_slides div").each(function() {
+				var media = $(this).attr("data-image");
+				if (media.length > 0) {
+					header_image.push($(this).attr("data-image"));
+				}			
 				
 			});
 
@@ -914,6 +917,10 @@ foreach ( $js_files as $js ): ?>
 			
 			var header_image_timeout = $("#header_image_timeout").val();
 			var header_caption_show = $('input:checkbox[name=header_caption_show]').is(':checked') ? 1 : 0;
+			
+			if (header_image.length === 0) {
+				return;
+			}
 			
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_header_image').show()},
@@ -928,17 +935,23 @@ foreach ( $js_files as $js ): ?>
 					ajaxReply('','#ajax_status_header_image');
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#setup';
 					location.reload(true);
-					
-				},
+				}
 			});
 			
 		});
 
 		$("#directory_view").delegate( ".image_mark", "click", function() {
 			var filename = $(this).attr("data-file");
-			var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+			var image = "";
+			var video = $(this).attr("data-video");
+			if (video == "false") {
+				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+			} else {
+				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:360px;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"></div>';
+				// image = '<div data-image=\"'+filename+'\" class="header-images"><video data-image=\"'+filename+'\" style=\"width:360px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"></div>';
+			}
 			var isFile = false;
-			$("#directory_view_slides div").each(function(){
+			$("#directory_view_slides div, #directory_view_slides video").each(function(){
 				img = $(this).attr("data-image");
 				if(img == filename) {
 					isFile = true;
@@ -948,8 +961,10 @@ foreach ( $js_files as $js ): ?>
 			$("#directory_view input").each(function(){
 				var checked = $(this).is(':checked') ? 1 : 0;
 				var filename = $(this).attr("data-file");
+				
 				if(checked == 0) {
-					$("#directory_view_slides div").each(function(){
+					console.log("input", filename);
+					$("#directory_view_slides div, #directory_view_slides video").each(function(){
 						if (filename == $(this).attr("data-image")) {
 							$(this).remove();
 						}
@@ -2630,13 +2645,13 @@ if(is_array($check_edit)) {
 					</td>
 					<td style="padding-bottom:10px;">
 						<div style="float:right;width:100%;height:260px;overflow-y: hidden;overflow:auto;">
-							<div class="page_templates"><input type="radio" name="setup_template" value="0" <?php if($arr['template'] == 0) {echo 'checked';}?>> "Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
-							<div class="page_templates"><input type="radio" name="setup_template" value="1" <?php if($arr['template'] == 1) {echo 'checked';}?>> "Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
-							<div class="page_templates"><input type="radio" name="setup_template" value="2" <?php if($arr['template'] == 2) {echo 'checked';}?>> "Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
-							<div class="page_templates"><input type="radio" name="setup_template" value="3" <?php if($arr['template'] == 3) {echo 'checked';}?>> "Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
-							<div class="page_templates"><input type="radio" name="setup_template" value="4" <?php if($arr['template'] == 4) {echo 'checked';}?>> "Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
-							<div class="page_templates"><input type="radio" name="setup_template" value="5" <?php if($arr['template'] == 5) {echo 'checked';}?>> Custom "main"<img src="css/images/template_panorama_custom_main.png" style="margin-top:10px;height:75px;"></div>
-							<div class="page_templates"><input type="radio" name="setup_template" value="6" <?php if($arr['template'] == 6) {echo 'checked';}?>> Custom "page"<img src="css/images/template_panorama_custom_page.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="0" <?php if($arr['template'] == 0) {echo 'checked';}?>>"Sidebars"<br><img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="1" <?php if($arr['template'] == 1) {echo 'checked';}?>>"Left sidebar"<br><img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="2" <?php if($arr['template'] == 2) {echo 'checked';}?>>"Right sidebar"<br><img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="3" <?php if($arr['template'] == 3) {echo 'checked';}?>>"Panorama"<br><img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="4" <?php if($arr['template'] == 4) {echo 'checked';}?>>"Sidebars joined"<br><img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="5" <?php if($arr['template'] == 5) {echo 'checked';}?>>Custom "main"<br><img src="css/images/template_panorama_custom_main.png" style="margin-top:10px;height:75px;"></div>
+							<div class="page_templates"><input type="radio" name="setup_template" value="6" <?php if($arr['template'] == 6) {echo 'checked';}?>>Custom "page"<br><img src="css/images/template_panorama_custom_page.png" style="margin-top:10px;height:75px;"></div>
 												
 							<?php
 							$str = "";	
@@ -2676,17 +2691,50 @@ if(is_array($check_edit)) {
 			
 			<table border="0" style="width:100%;">
 				<tr>
-					<td width="25%" style="vertical-align:top;">
+					<td width="25%" style="vertical-align:top;" rowspan="2">
 						<h4><i class="fas fa-image" aria-hidden="true"></i> Header image</h4>
 						<p>
 							<span class="toolbar"><button id="btn_site_header_image">Show selectable images</button></span>
-							
 						</p>
+
+						<div id="directory_view" style="max-height:400px;overflow:auto;">					
+						<?php
+
+							$header_image = json_decode($arr['header_image']);
+							$header_caption = json_decode($arr['header_caption']);
+
+							$dir = '/content/uploads/header';
+																
+							if (is_dir(CMS_ABSPATH . '/'. $dir)) {
+
+								if ($dh = opendir(CMS_ABSPATH .'/'. $dir)) {
+									$images_ext = array('jpg','jpeg','gif','png', 'mp4');
+
+									while (($file = readdir($dh)) !== false) {
+										if (!is_dir(CMS_ABSPATH .'/'. $dir.'/'.$file)) {
+										
+											$ext = pathinfo($dir.'/'.$file, PATHINFO_EXTENSION);
+											if(in_array($ext, $images_ext)) {
+												$checked = in_array($file, $header_image) ? " checked" : "";
+												if ($ext != 'mp4') {
+													echo '<div class="code" style="position:relative"><img alt="'.$file.'" src="../content/uploads/header/'. $file .'" data-filename="'.$file.'" width="150px" style="margin-bottom:10px;" /><input type="checkbox" '.$checked.' class="image_mark" data-file="'.$file.'" data-video="false" style="position:absolute;top:2px;left:2px;transform:scale(2);"></div>';
+												} else {
+													echo '<div class="code" style="position:relative"><video id="header_video_url" width="150" muted controls><source src="..'.$dir.'/'.$file.'"></video><input type="checkbox" '.$checked.' class="image_mark" data-file="'.$file.'" data-video="true" style="position:absolute;top:2px;left:2px;transform:scale(2);"></div>';
+												}
+
+											}
+										}
+									}
+									closedir($dh);
+								}
+							}	
+						?>
+						</div>
+
+
 					</td>
 					<td style="vertical-align:top;">
 						<?php
-						$header_image = json_decode($arr['header_image']);
-						$header_caption = json_decode($arr['header_caption']);
 						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';						
 						echo '<div class="cycle-slideshow" id="site-header-edit" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-edit-alt-caption">';
 						$n = 0;
@@ -2711,38 +2759,54 @@ if(is_array($check_edit)) {
 					</td>
 				</tr>
 				<tr>
-					<td style="vertical-align:top;">
-						<div id="directory_view" style="max-height:400px;overflow:auto;display:none"></div>
-					</td>
 					<td style="vertical-align:top">
 					
-					<div id="header_options" style="display:none">
-					<p>
-						<input type="checkbox" name="header_caption_show" <?php if ($arr['header_caption_show'] == 1) { echo ' checked';}?> value="1"> Show caption
-					</p>
-					<p>
-						<select id="header_image_timeout">
-						<?php 
-						$timeouts = array(8000, 10000, 12000, 15000, 20000);						
-						foreach ($timeouts as $timeout) {
-							$sec = $timeout / 1000;
-							echo '<option value="'.$timeout.'"';
-							if ($arr['header_image_timeout'] == $timeout) {
-								echo ' selected';
+						<p>
+							<input type="checkbox" name="header_caption_show" <?php if ($arr['header_caption_show'] == 1) { echo ' checked';}?> value="1"> Show caption
+						</p>
+						<p>
+							<select id="header_image_timeout">
+							<?php 
+							$timeouts = array(8000, 10000, 12000, 15000, 20000);						
+							foreach ($timeouts as $timeout) {
+								$sec = $timeout / 1000;
+								echo '<option value="'.$timeout.'"';
+								if ($arr['header_image_timeout'] == $timeout) {
+									echo ' selected';
+								}
+								echo '>'.$sec.' sec</option>';
 							}
-							echo '>'.$sec.' sec</option>';
-						}
-						?>
-						</select> Slideshow timeout
-					</p>
-					<p>
-					<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
-					<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
-					<span id="ajax_status_header_image" style="display:none;"></span>
-					</p>
-					</div>
-					<div id="directory_view_slides" style="max-height:400px;display:none"></div>
-					
+							?>
+							</select> Slideshow timeout
+						</p>
+						<p>
+							<div id="directory_view_slides">
+							<?php
+							if (is_array($header_image)) {
+								$dir = '/content/uploads/header';
+								if (is_dir(CMS_ABSPATH . '/'. $dir)) {
+									$countHeader = 0;
+									foreach ($header_image as $image) {																
+										$ext = getFileExtension($image);
+										if ($ext == "mp4") {
+											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:360px; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"></div>';
+										} else {
+											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"></div>';
+										}
+										$countHeader++;
+									}
+								}
+							}
+							?>
+							</div>
+						</p>
+
+						<p>
+							<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
+							<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
+							<span id="ajax_status_header_image" style="display:none;"></span>
+						</p>
+
 					</td>
 					<td style="vertical-align:top;float:right">&nbsp;
 					
@@ -2838,7 +2902,7 @@ if(is_array($check_edit)) {
 						<p>
 							<select id="search_field_area">
 							<?php
-							$search_fields = [0 => "none", 1 => "header", 2 => "page top", 3 => "page content"];						
+							$search_fields = [0 => "none", 1 => "above header", 2 => "inside header", 3 => "page top", 4 => "page content"];						
 							if ($search_fields) {
 								foreach ($search_fields as $key => $value) {
 									$selected = $key == $arr['search_field_area'] ? " selected" : "";

@@ -266,7 +266,7 @@ if ($arr['template'] == 6) {
         <?php include_once_customfile('includes/inc.site_header_image.php', $arr, $languages); ?>
     </div>
     <?php
-    if ($arr['search_field_area'] == 2) {
+    if ($arr['search_field_area'] == 3) {
         print_search_field_area_page($languages);
     }
     ?>

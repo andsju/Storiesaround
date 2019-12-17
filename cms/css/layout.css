@@ -67,8 +67,32 @@ div.column-having-right-sidebar {padding-right: 20px; border-right: 1px solid bl
 
 /* site heading
 ------------------------- */
-#site-header img { width: 100%  }
+/* #site-header img { width: 100%  }
 #site-header img.first { display: block} 
+ */
+ #site-header {
+
+	height: 800px;
+	position: relative;
+	overflow: hidden;
+	background-size: 100%;
+	width: 100%;
+   
+}
+ 
+#site-header img.slideshow-cycle-image {
+	position: absolute;
+	width: 100%;
+	opacity: 1;
+}
+
+#site-header video {
+	position: absolute;
+	width: 100%;
+	opacity: 1;
+}
+
+
 
 #site-header-alt-caption {  }
 a#site-name-link h1 {display: none}
@@ -83,6 +107,22 @@ div#site-navigation-cms a {color: black; padding:10px;}
 /* site search
 ------------------------- */
 #site-search { position: absolute; top: 25px; margin: 0 0 0 277px;  padding: 10px;  }
+
+#site-header #site-search-page {
+	position: absolute;
+	bottom: 30%;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	width: 40%;
+	padding: 10px;
+	background-color: burlywood;
+	box-shadow: 0 0 20px black;
+}
+
+
+
 #site-search input {}
 #site-search button { padding: 5px; font-size: 1em }
 #site-search label {position: absolute; left:20px; top:20px; font-size:1.4em}
@@ -538,7 +578,7 @@ div.site_content { width: 52px; height: 44px; float: left; background: url(image
 div.site_content_target { width: 52px; height: 44px; float: left; background: url(images/site_bg_grey-yellow.png) repeat-x; border: 1px solid #FFF;text-align:center;line-height:60px; }
 div.site_header:hover, div.site_footer:hover, div.site_content:hover, div.site_content_target:hover, div.site_sidebar_left:hover, div.site_sidebar_target_left:hover, div.site_sidebar_right:hover, div.site_sidebar_target_right:hover { border: 1px solid #000; background: #FFFFFF; }
 
-div.header-images {width:100%; height:80px; background-size: 100%; position:relative}
+div.header-images {width:100%; height:100px; background-size: 100%; position:relative}
 div.header-images input {width:200px;position:absolute; top:20px; right:-230px;}
 
 table.code-hints th, table.code-hints td { text-align:left; background-color:#fafafa; padding:5px; }
@@ -661,8 +701,8 @@ div#ajax_status_register  { font-size: 125%; }
 ul.cms-version { list-style:none;}
 
 #directory_view {border:1px dashed #000;margin:10px;overflow:auto;max-height:600px;padding:20px;float:left; }
-#directory_view_slides {border:1px dashed #000;margin:10px;overflow:visible;max-height:600px;padding:5px;float:left; width:60%;}
-#directory_view_slides div {margin:5px 0;}
+#directory_view_slides {border:1px dashed #000;margin:10px;overflow:visible;min-height:200px;max-height:600px;padding:5px;float:left; width:60%;}
+#directory_view_slides div {margin:5px 0; max-height: 200px;}
 div.select_items {margin: 10px 0;}
 #tabs-publish > a > span  { display:inline-block; height: 12px; margin-bottom:4px; }
 #status > span {display:inline-block; }
@@ -1279,7 +1319,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
 	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
-	#site-header { width: 100%; height: 320px; overflow: hidden }
+	#site-header { width: 100%; min-height: 400px; overflow: hidden }
 
 	ul#navigation-root { width: 100%; padding:0; margin: 0; list-style: none;}
 	ul#navigation-root li { float: left; margin-left: 5px; }
@@ -1296,7 +1336,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 }
 
 @media (min-width: 1600px)  {
-	#site-header { width: 100%; height: 400px; overflow: hidden }
+	#site-header { width: 100%; min-height: 400px; overflow: hidden }
 }
 
 

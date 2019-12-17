@@ -2343,8 +2343,8 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
     
     // json to a multidimensional array
     $result = array();
-    $index = -1;
-    if (count($grid_content_json)) {
+    $index = -1;    
+    if (json_last_error() === JSON_ERROR_NONE) {
        foreach($grid_content_json as $key=>$val){
             foreach($val as $k=>$v){
                 // first item value 'grid-image'
