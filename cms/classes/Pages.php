@@ -1612,34 +1612,6 @@ class Pages extends Database
 
     /**
      * @param int $pages_id
-     * @param int $landing_page
-     * @param string $utc_modified
-     * @return bool
-     */
-    public function setPagesLandingPage($pages_id, $landing_page, $utc_modified)
-    {
-        try {
-            $sql_update = "UPDATE pages
-			SET landing_page = :landing_page,
-			utc_modified = :utc_modified
-			WHERE pages_id = :pages_id";
-
-            $stmt = $this->db->prepare($sql_update);
-            $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
-            $stmt->bindParam(':landing_page', $landing_page, PDO::PARAM_INT);
-            $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
-            return $stmt->execute();
-
-        } catch (PDOException $e) {
-            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
-            return false;
-        }
-    }
-
-
-
-    /**
-     * @param int $pages_id
      * @param int $plugins
      * @param string $utc_modified
      * @return bool
