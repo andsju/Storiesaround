@@ -73,4 +73,12 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "title_alt
 // 2018-05-25
 $sqls_alter_add_column[] = array("tbl_name" => "pages_images", "col_name" => "caption_extended", "column_definition" => "varchar(1000) DEFAULT '' COMMENT 'extended caption' AFTER `caption`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_about_cookies_url", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'read about cookies url' AFTER `site_404`");
+//2019-12-28
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "story_event_date", "col_name_new" => "story_event_date", "column_definition" => "DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'story event date'");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "utc_created", "col_name_new" => "utc_created", "column_definition" => "DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created'");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "utc_modified", "col_name_new" => "utc_modified", "column_definition" => "DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'modified'");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "landing_page", "column_definition" => "tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0:none, 1:set CSS class' AFTER `category`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_image_fade", "column_definition" => "varchar(25) COLLATE utf8_unicode_ci DEFAULT 'normal' COMMENT 'header image fade' AFTER `header_image_timeout`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "parallax_scroll", "column_definition" => "tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '0:none, 1:scroll' AFTER `header_image_timeout`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'left, center, right' AFTER `header_caption`");
 ?>

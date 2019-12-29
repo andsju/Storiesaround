@@ -3060,7 +3060,10 @@ function parse_code($pages, $dtz, $code)
     return $str;
 }
 
-
+/**
+ * @param $languages
+ * @return string
+ */
 function aboutCookies($languages) {
     $str = '<div id="about-cookies" class="hidden">';
     $str .= translate("This website uses cookies to enable easier navigation and to provide functionality. Read more: ", "site_cookie", $languages);
@@ -3072,5 +3075,19 @@ function aboutCookies($languages) {
     } else {
         return $str;
     }
+}
+
+/**
+ * @param $value
+ * @return integer
+ */
+function getCaptionAlignAsInteger($value) {
+    $n = 0;
+    if ($value == "center") {
+        $n = 1;
+    } else if ($value == "right") {
+        $n = 2;
+    }
+    return $n;
 }
 ?>

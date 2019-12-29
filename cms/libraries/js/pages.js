@@ -1,9 +1,9 @@
 $(document).ready(function () {
-	
+
 	$("#dialog_edit").dialog({
 		autoOpen: false,
 		modal: true
-	});		
+	});
 
 
 	var pages_id = $("#pages_id").val();
@@ -486,21 +486,21 @@ $(document).ready(function () {
 	$("#site-admin-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/admin.php"; 
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/admin.php";
 	});
-	
+
 	$("#site-edit-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		var pages_id = $(this).attr("data-id");
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages_edit.php?id="+ pages_id; 
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages_edit.php?id=" + pages_id;
 	});
 
 	$("#site-user-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		var users_id = $("#users_id").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/users_edit.php?id="+ users_id; 
+		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/users_edit.php?id=" + users_id;
 	});
 
 	// window resize
@@ -517,7 +517,7 @@ $(document).ready(function () {
 				.width(newWidth)
 				.height(newWidth * $(this).data('ratio'));
 		});
-		
+
 		var $videos = $(".grid-video iframe");
 		var $fluidEl = $(".grid-video");
 		var newWidth = $fluidEl.width();
@@ -526,7 +526,7 @@ $(document).ready(function () {
 			$(this)
 				.width(newWidth)
 				.height(newWidth * $(this).data('ratio'));
-				h = newWidth * $(this).data('ratio');
+			h = newWidth * $(this).data('ratio');
 		});
 		$fluidEl.each(function () {
 			$(this)
@@ -534,7 +534,7 @@ $(document).ready(function () {
 				// setting height crossbrowser
 				.css("height", h + "px");
 		});
-		
+
 		//equalheight('div.grid-video');
 		equalheight('div.grid-cell');
 
@@ -546,12 +546,12 @@ $(document).ready(function () {
 		equalheight('div.stories-wrapper');
 	}
 
-	$("#user_navigation").delegate("#inline_edit", "click",  function() {
+	$("#user_navigation").delegate("#inline_edit", "click", function () {
 		inlineEdit(pages_id, users_id, role_cms, token);
 		notifyInlineEdit($(this));
 	});
 
-	$("body").delegate("#site-inline-edit-icon", "click",  function() {
+	$("body").delegate("#site-inline-edit-icon", "click", function () {
 		inlineEdit(pages_id, users_id, role_cms, token);
 		notifyInlineEdit($(this));
 	});
@@ -560,7 +560,7 @@ $(document).ready(function () {
 		$("#about-cookies").show();
 	}
 
-	$("#btn_about_cookies").click(function() {
+	$("#btn_about_cookies").click(function () {
 
 		var accepted_cookies = getCookie("cookieAlert");
 
@@ -584,9 +584,9 @@ $(document).ready(function () {
 					}
 				}
 			});
-		} 
+		}
 	});
-	
+
 
 	//replace_image_path('/content/', '/somefolder/content/');
 
@@ -594,31 +594,33 @@ $(document).ready(function () {
 
 
 function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+	var expires = "expires=" + d.toUTCString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
 }
 
 function notifyInlineEdit(element) {
 	element.css("background-color", "lightgreen");
-	setTimeout(function() {element.css("background-color", "inherit");}, 1000);
+	setTimeout(function () {
+		element.css("background-color", "inherit");
+	}, 1000);
 }
 
 function inlineEdit(pages_id, users_id, role_cms, token) {
@@ -647,18 +649,18 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 		checkEditStatus.then((result) => {
 			if (!result) {
 				$("#dialog_edit").dialog("open");
-				$("#dialog_edit").dialog({	
+				$("#dialog_edit").dialog({
 					modal: true,
 					buttons: {
-					  Ok: function() {
-						$( this ).dialog( "close" );
-					  }
-					}				
+						Ok: function () {
+							$(this).dialog("close");
+						}
+					}
 				});
 
 			} else {
 
-				$(".editable").each(function () {			
+				$(".editable").each(function () {
 					$(this).wrap("<form style=\"position:relative\"></form>");
 					notifyInlineEdit($(this));
 				});
@@ -666,7 +668,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 					$(this).wrap("<form></form>");
 					notifyInlineEdit($(this));
 				});
-		
+
 				tinymce.init({
 					selector: 'h1.editable',
 					inline: true,
@@ -695,7 +697,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 						}
 					}
 				});
-		
+
 				tinymce.init({
 					selector: 'div.editable_row',
 					inline: true,
@@ -724,7 +726,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 						}
 					}
 				});
-		
+
 				tinymce.init({
 					selector: 'div.editable',
 					inline: true,
@@ -736,29 +738,120 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 					menubar: false,
 					toolbar: 'searchreplace undo redo | styleselect | bold italic | bullist numlist outdent indent | link image | save',
 					style_formats_merge: true,
-					style_formats: [
-						{title: 'Custom text', items: [		
-							{title : 'Horizont line shadowed <p>', block : 'p', classes : 'horizont-line'},
-							{title : 'FAQ question <p>', block : 'p', classes : 'faq-question'},
-							{title : 'FAQ answer <p>', block : 'p', classes : 'faq-answer'},
-							{title : 'Box shadowed<p>', block : 'p', classes : 'box-shadowed'},
-							{title : 'Box elevated<p>', block : 'p', classes : 'box-elevated'},
-							{title : 'Quote emphasize <p>', block : 'p', classes : 'quote-emphasize'},
-							{title : 'Read more <span>', inline : 'span', classes : 'read-more'},
-							{title : 'Highlight <span>', inline : 'span', classes : 'highlight-word'},
-							{title : 'Bigger <span>', inline : 'span', classes : 'text-bigger'},
-							{title : 'Smaller <span>', inline : 'span', classes : 'text-smaller'},
-							{title : 'SMALL CAPS <span>', inline : 'span', classes : 'small-caps'},
-						]},
-						{title: 'Image', items: [		
-							{title : 'align left 33%', selector : 'img', styles : {'width' : '33%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
-							{title : 'align left 50%', selector : 'img', styles : {'width' : '50%', 'height' : 'auto', 'float' : 'left', 'margin' : '0 10px 0 0'}},
-							{title : 'align rigth 33%', selector : 'img', styles : {'width' : '33%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0 10px'}},
-							{title : 'align rigth 50%', selector : 'img', styles : {'width' : '50%', 'float' : 'right', 'height' : 'auto', 'margin' : '0 0 0  10px'}},
-							{title : '100%', selector : 'img', styles : {'width' : '100%', 'height' : 'auto', 'margin' : '10px 0'}}
-						]},
-						
-					],		
+					style_formats: [{
+							title: 'Custom text',
+							items: [{
+									title: 'Horizont line shadowed <p>',
+									block: 'p',
+									classes: 'horizont-line'
+								},
+								{
+									title: 'FAQ question <p>',
+									block: 'p',
+									classes: 'faq-question'
+								},
+								{
+									title: 'FAQ answer <p>',
+									block: 'p',
+									classes: 'faq-answer'
+								},
+								{
+									title: 'Box shadowed<p>',
+									block: 'p',
+									classes: 'box-shadowed'
+								},
+								{
+									title: 'Box elevated<p>',
+									block: 'p',
+									classes: 'box-elevated'
+								},
+								{
+									title: 'Quote emphasize <p>',
+									block: 'p',
+									classes: 'quote-emphasize'
+								},
+								{
+									title: 'Read more <span>',
+									inline: 'span',
+									classes: 'read-more'
+								},
+								{
+									title: 'Highlight <span>',
+									inline: 'span',
+									classes: 'highlight-word'
+								},
+								{
+									title: 'Bigger <span>',
+									inline: 'span',
+									classes: 'text-bigger'
+								},
+								{
+									title: 'Smaller <span>',
+									inline: 'span',
+									classes: 'text-smaller'
+								},
+								{
+									title: 'SMALL CAPS <span>',
+									inline: 'span',
+									classes: 'small-caps'
+								},
+							]
+						},
+						{
+							title: 'Image',
+							items: [{
+									title: 'align left 33%',
+									selector: 'img',
+									styles: {
+										'width': '33%',
+										'height': 'auto',
+										'float': 'left',
+										'margin': '0 10px 0 0'
+									}
+								},
+								{
+									title: 'align left 50%',
+									selector: 'img',
+									styles: {
+										'width': '50%',
+										'height': 'auto',
+										'float': 'left',
+										'margin': '0 10px 0 0'
+									}
+								},
+								{
+									title: 'align rigth 33%',
+									selector: 'img',
+									styles: {
+										'width': '33%',
+										'float': 'right',
+										'height': 'auto',
+										'margin': '0 0 0 10px'
+									}
+								},
+								{
+									title: 'align rigth 50%',
+									selector: 'img',
+									styles: {
+										'width': '50%',
+										'float': 'right',
+										'height': 'auto',
+										'margin': '0 0 0  10px'
+									}
+								},
+								{
+									title: '100%',
+									selector: 'img',
+									styles: {
+										'width': '100%',
+										'height': 'auto',
+										'margin': '10px 0'
+									}
+								}
+							]
+						},
+
+					],
 					save_enablewhendirty: true,
 					save_onsavecallback: function () {
 						var content = tinyMCE.get('content-html').getContent();
@@ -809,11 +902,11 @@ function addMobileMenu() {
 				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_cogs.png" id="site-admin-icon">';
 			}
 			if (role_cms >= 3) {
-				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_edit.png" id="site-edit-icon" data-id="'+pages_id+'">';
-				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_inline_edit.png" id="site-inline-edit-icon" data-id="'+pages_id+'">';
+				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_edit.png" id="site-edit-icon" data-id="' + pages_id + '">';
+				newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_inline_edit.png" id="site-inline-edit-icon" data-id="' + pages_id + '">';
 			}
-			newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_user.png" id="site-user-icon" data-id="'+pages_id+'">';	
-		} 
+			newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_user.png" id="site-user-icon" data-id="' + pages_id + '">';
+		}
 
 		$(".mobile-buttons").append(newdata);
 		$("#site-navigation-mobile").addClass("flexnav");
@@ -880,22 +973,13 @@ function getFileBaseName(filename) {
 	return filename.split('.').shift();
 }
 
-
-
-
-
-
-
-
-
-
+// parallax
 // root element html
 var doc = document.documentElement;
 var h = window.screen.height;
 
+let parallax_scroll = document.querySelector("#parallax_scroll").value;
 let parallaxImages = document.querySelectorAll(".parallax");
-
-
 
 // save initial images heights
 let parallaxImagesHeight = [];
@@ -905,32 +989,46 @@ parallaxImages.forEach(element => {
 	parallaxImagesHeight.push(height);
 })
 
-	// first image fit height
-	let rect = parallaxImages[0].getBoundingClientRect();
-	console.log("h1", h, parallaxImages[0], rect, window.innerHeight);
-	parallaxImages[0].style.height = window.innerHeight - rect.y - 50 + "px";
+// first image fit height
+let rect = parallaxImages[0].getBoundingClientRect();
 
+var initialHeight = window.innerHeight - rect.y;
+parallaxImages[0].style.height = initialHeight + "px";
+
+if (parallaxImagesHeight[0] > initialHeight) {
+	parallaxImagesHeight[0] = initialHeight;
+}
 
 window.addEventListener('load', (event) => {
 
 	// first image fit height
 	let rect = parallaxImages[0].getBoundingClientRect();
-	console.log("h2", h, parallaxImages[0], rect);
-	
+
+	// initial scroll
+	var scrolled = false;
 
 	window.addEventListener("scroll", function (event) {
-		showParallax(parallaxImages);
-	});	
+		if (!scrolled) {
+			parallaxImages[0].style.height = initialHeight + "px";
+			scrolled = true;
+		}
+		if (parallax_scroll == 1) {
+			showParallax(parallaxImages, initialHeight);
+		}
+	});
 });
 
-function showParallax(elements) {
+function showParallax(elements, initialHeight) {
 	if (elements.length === 0) {
 		return;
 	}
 	let i = 0;
 	elements.forEach(element => {
 		let result = isInView(element);
-		
+		if (result.rectangle.height > initialHeight) {
+			result.rectangle.height = initialHeight;
+		}
+
 		if (result.rectangle.top < -result.rectangle.height || result.rectangle.top > result.rectangle.height) {
 			return;
 		}
@@ -938,10 +1036,9 @@ function showParallax(elements) {
 			element.style.height = parallaxImagesHeight[i] + (result.rectangle.top * 0.5) + "px";
 		} else if (result.check === true) {
 			element.style.height = parallaxImagesHeight[i] + "px";
-		} 
+		}
 		i++;
 	});
-
 }
 
 function isInView(element) {
@@ -957,10 +1054,29 @@ function isInView(element) {
 	return result;
 }
 
-
-
 // swap settings
-let swapSlideshowCycleImagesTime = 6000;
+let swapSlideshowCycleImagesTime = parseInt(document.querySelector("#header_image_timeout").value);
+swapSlideshowCycleImagesTime = swapSlideshowCycleImagesTime < 5000 ? 8000 : swapSlideshowCycleImagesTime;
+let swapSlideshowCycleImagesFadeStep = 0.01;
+let swapSlideshowCycleImagesFade = document.querySelector("#header_image_fade").value;
+switch (swapSlideshowCycleImagesFade) {
+	case "super slow":
+		swapSlideshowCycleImagesFadeStep = 0.0025;
+		break;
+	case "slow":
+		swapSlideshowCycleImagesFadeStep = 0.005;
+		break;
+	case "normal":
+		swapSlideshowCycleImagesFadeStep = 0.01;
+		break;
+	case "fast":
+		swapSlideshowCycleImagesFadeStep = 0.02;
+		break;
+	case "super fast":
+		swapSlideshowCycleImagesFadeStep = 0.05;
+		break;
+}
+
 let swapSlideshowCycleImagesStart = true;
 
 // swap images
@@ -979,9 +1095,6 @@ function fadeSlideshowCycleImages() {
 		return
 	}
 
-	// get wrappers
-	// let wrappers = document.querySelectorAll(".slideshow-cycle-wrapper");
-
 	// get images
 	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
 
@@ -996,7 +1109,11 @@ function fadeSlideshowCycleImages() {
 	// prepare
 	swapSideshowCycleImagesStart = false;
 	let currentOpacity = 1;
-	let step = 0.005;
+	let step = swapSlideshowCycleImagesFadeStep;
+
+	// show caption
+	let showCaptionValue = document.querySelector("#header_caption_show").value;
+	var showCaption = showCaptionValue == 1 ? true : false;
 
 	// change opacity
 	let swapIntervalId = setInterval(function () {
@@ -1018,7 +1135,9 @@ function fadeSlideshowCycleImages() {
 			swapSlideshowCycleImagesStart = true;
 
 			// caption
-			//swapSlideshowCycleImageCaption(parent);
+			if (showCaption) {
+				swapSlideshowCycleImageCaption(parent);
+			}
 
 		} else {
 
@@ -1033,28 +1152,25 @@ function fadeSlideshowCycleImages() {
 function swapSlideshowCycleImageCaption(element) {
 
 	// get cycle images
-	let images = element.querySelectorAll(".slideshow-cycle-image");
+	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
 
 	// get last image caption
 	let caption = images[images.length - 1].getAttribute("data-caption");
+	let captionAlign = images[images.length - 1].getAttribute("data-caption-align");
 
 	if (caption.length === 0) {
-		return
+		return;
 	};
 
-	// get caption position
-	let position = images[images.length - 1].getAttribute("data-caption-align");
-
 	// get element
-	let elementCaption = document.querySelector("#slideshow-cycle-caption");
+	let elementCaption = document.querySelector("#site-header-caption");
 
 	// show caption
-	elementCaption.style.textAlign = position;
 	elementCaption.innerHTML = caption;
+	elementCaption.style.textAlign = captionAlign;
 	elementCaption.style.filter = "opacity(1)";
 
 	setTimeout(function () {
 		elementCaption.style.filter = "opacity(0)";
 	}, swapSlideshowCycleImagesTime - 2000);
 }
-

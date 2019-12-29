@@ -148,7 +148,7 @@ ______________________________________________________________________________ *
 	div#site-navigation-identity img {width:50%; margin:20px 10px 0 10px}
 	div#site-slogan-heading {}
 	div#site-navigation-cms { right:0; display: none}
-	div#site-header {width:100%; }
+	div#site-header-image {width:100%; }
 	div#site-header-alt-caption {}
 	nav#site-navigation-header { position: inherit; top:inherit;right: inherit}
 	div#site-navigation-root {display: none}
