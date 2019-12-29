@@ -22,10 +22,6 @@ div.site_content_custom_page { width: 100%; height: 130px;padding:35px 5px 5px 5
 
 
 
-
-
-
-
 /* START front-end default styles
 use a theme to override settings
 ------------------------- 
@@ -70,23 +66,31 @@ div.column-having-right-sidebar {padding-right: 20px; border-right: 1px solid bl
 /* #site-header img { width: 100%  }
 #site-header img.first { display: block} 
  */
- #site-header {
+#wrapper-site-header-image {position: relative;}
+#site-header-image {
 
-	height: 800px;
+	height: 400px;
+	max-height: 400px;
 	position: relative;
 	overflow: hidden;
 	background-size: 100%;
 	width: 100%;
    
 }
- 
-#site-header img.slideshow-cycle-image {
+
+.landing-page #site-header-image {
+	height: 100vmin;
+	max-height: 100vmin;
+}
+
+
+#site-header-image img.slideshow-cycle-image {
 	position: absolute;
 	width: 100%;
 	opacity: 1;
 }
 
-#site-header video {
+#site-header-image video {
 	position: absolute;
 	width: 100%;
 	opacity: 1;
@@ -94,7 +98,18 @@ div.column-having-right-sidebar {padding-right: 20px; border-right: 1px solid bl
 
 
 
-#site-header-alt-caption {  }
+#site-header-caption { 
+	position: absolute; 
+	top: 30%; 
+	left: 10%; 
+	width: 80%;
+	z-index: 9; 
+	font-size: 3em;
+	transition: ease-in-out 2s;
+	-webkit-text-fill-color: white;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-stroke-color: black;
+}
 a#site-name-link h1 {display: none}
 #site-navigation-header ul { margin: 0 auto; padding: 0; list-style: none }
 #site-navigation-header ul li { float: left; margin: 0 0 0 10px; border-right:1px solid black;}
@@ -108,9 +123,9 @@ div#site-navigation-cms a {color: black; padding:10px;}
 ------------------------- */
 #site-search { position: absolute; top: 25px; margin: 0 0 0 277px;  padding: 10px;  }
 
-#site-header #site-search-page {
+#site-header-image #site-search-page {
 	position: absolute;
-	bottom: 30%;
+	bottom: 10%;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
@@ -579,7 +594,8 @@ div.site_content_target { width: 52px; height: 44px; float: left; background: ur
 div.site_header:hover, div.site_footer:hover, div.site_content:hover, div.site_content_target:hover, div.site_sidebar_left:hover, div.site_sidebar_target_left:hover, div.site_sidebar_right:hover, div.site_sidebar_target_right:hover { border: 1px solid #000; background: #FFFFFF; }
 
 div.header-images {width:100%; height:100px; background-size: 100%; position:relative}
-div.header-images input {width:200px;position:absolute; top:20px; right:-230px;}
+div.header-images input[type=text] {width:300px;position:absolute; top:10px; left:102%;}
+div.header-images input[type=range] {width:60px;position:absolute; top:40px; left:140%;}
 
 table.code-hints th, table.code-hints td { text-align:left; background-color:#fafafa; padding:5px; }
 table.code-hints { border:1px dashed #A5A5A5; width:100%; margin:5px 0; }
@@ -701,8 +717,8 @@ div#ajax_status_register  { font-size: 125%; }
 ul.cms-version { list-style:none;}
 
 #directory_view {border:1px dashed #000;margin:10px;overflow:auto;max-height:600px;padding:20px;float:left; }
-#directory_view_slides {border:1px dashed #000;margin:10px;overflow:visible;min-height:200px;max-height:600px;padding:5px;float:left; width:60%;}
-#directory_view_slides div {margin:5px 0; max-height: 200px;}
+#directory_view_slides {border:1px dashed #000;margin:10px 0;overflow:visible;min-height:200px;max-height:600px;padding:5px;float:left; width:50%;}
+#directory_view_slides div {margin:5px 0; max-height: 200px;background-repeat: no-repeat;border:1px solid black}
 div.select_items {margin: 10px 0;}
 #tabs-publish > a > span  { display:inline-block; height: 12px; margin-bottom:4px; }
 #status > span {display:inline-block; }
@@ -876,9 +892,9 @@ div.stories-cell:nth-child(3n) {margin-right: 0;}
 div.stories-cell div.stories-content {margin:10px;flex: 0 1 auto;}
 
 
-
-#site-header  img.first { display: block }
-
+/* 
+#site-header-image  img.first { display: block }
+ */
 
 
 @media (min-width: 320px) and (max-width: 567px) {
@@ -1106,10 +1122,10 @@ and (min-device-width : 768px)
 and (max-device-width : 1024px) and (orientation : portrait) {
 
 	body { max-width: 100%; margin:0 auto }
-
-	#site-header img { display: none  }
-	#site-header img.first { display: block }
-
+/* 
+	#site-header-image img { display: none  }
+	#site-header-image img.first { display: block }
+ */
 
 	div#site-navigation-top { width:100%; padding: 2px 0px; }
 	div#site-navigation-root { width:100%; }
@@ -1152,10 +1168,10 @@ and (min-device-width : 768px)
 and (max-device-width : 1024px) and (orientation : landscape) {
 
 	body { max-width: 100%; margin:0 auto }
-
-	#site-header img { display: none  }
-	#site-header img.first { display: block }
-
+/* 
+	#site-header-image img { display: none  }
+	#site-header-image img.first { display: block }
+ */
 	div#site-navigation-top { width:100%; padding: 2px 0px; }
 	div#site-navigation-root { width:100%; }
 	div#wrapper-main {width: 100%;float:none;}
@@ -1265,7 +1281,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
 	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
-	#site-header { width: 100%; height: 320px; overflow: hidden }
+	#site-header-image { width: 100%; /* height: 320px; */ overflow: hidden }
 
 	ul#navigation-root { width: 100%; padding:0; margin: 0; list-style: none;}
 	ul#navigation-root li { float: left; margin-left: 5px; }
@@ -1319,7 +1335,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
 	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
-	#site-header { width: 100%; min-height: 400px; overflow: hidden }
+	#site-header-image { width: 100%; /* min-height: 400px; */ overflow: hidden }
 
 	ul#navigation-root { width: 100%; padding:0; margin: 0; list-style: none;}
 	ul#navigation-root li { float: left; margin-left: 5px; }
@@ -1336,7 +1352,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 }
 
 @media (min-width: 1600px)  {
-	#site-header { width: 100%; min-height: 400px; overflow: hidden }
+	#site-header-image { width: 100%; /* min-height: 400px; */ overflow: hidden }
 }
 
 

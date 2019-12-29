@@ -549,13 +549,16 @@ class Site extends Database
      */
     public function setSiteUpdateAlterAddColumn($sql)
     {
+        // ..... MySQL error #1067 - run cmd: SET sql_mode = '';
+        $sql_mode = "SET sql_mode = ''";
+        $stmt = $this->db->prepare($sql_mode);
+        $stmt->execute();
+        // .....
         $sql_check = 'SELECT COUNT(*) AS total FROM information_schema.columns WHERE TABLE_SCHEMA = "' . DB_NAME . '" AND COLUMN_NAME = "' . $sql['col_name'] . '" AND TABLE_NAME = "' . $sql['tbl_name'] . '"';
         $sql_alter_add_column = 'ALTER TABLE `' . $sql['tbl_name'] . '` ADD COLUMN `' . $sql['col_name'] . '` ' . $sql['column_definition'] . '';
-
         $stmt = $this->db->prepare($sql_check);
         $stmt->execute();
         $check = $stmt->fetch(PDO::FETCH_ASSOC);
-
         // run alter cmd if column does´nt exist
         if ($check['total'] <= 0) {
             try {

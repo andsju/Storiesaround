@@ -224,8 +224,10 @@ if ($arr['template'] == 6) {
     die();
 }
 
+$add_class_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
+print_r2($add_class_landing_page);
 ?>
-<body>
+<body class="<?php echo $add_class_landing_page;?>">
     <?php 
     print_noscript($languages); 
     
@@ -401,7 +403,10 @@ if ($arr['template'] == 6) {
     <input type="hidden" name="role_cms" id="role_cms" value="<?php if (isset($_SESSION['role_CMS'])) { echo $_SESSION['role_CMS']; }?>">
     <input type="hidden" name="site_language" id="site_language" value="<?php echo $_SESSION['site_language'];?>">
     <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
-    <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height'];?>">
+    <input type="hidden" name="parallax_scroll" id="parallax_scroll" value="<?php echo $arr['parallax_scroll'];?>">
+    <input type="hidden" name="header_caption_show" id="header_caption_show" value="<?php echo $arr['header_caption_show'];?>">
+    <input type="hidden" name="header_image_timeout" id="header_image_timeout" value="<?php echo $arr['header_image_timeout'];?>">
+    <input type="hidden" name="header_image_fade" id="header_image_fade" value="<?php echo $arr['header_image_fade'];?>">
 
     <?php
     $js_files = array_unique($js_files);

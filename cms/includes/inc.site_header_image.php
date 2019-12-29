@@ -1,21 +1,22 @@
 <?php if (!defined('VALID_INCL')) {die();} ?>
-<div id="site-header" class="slideshow-cycle-wrapper parallax">
+<div id="site-header-image" class="slideshow-cycle-wrapper parallax">
 <?php
 $header_image = json_decode($arr['header_image']);
 $header_caption = json_decode($arr['header_caption']);
+$header_caption_align = json_decode($arr['header_caption_align']);
 //print_r($header_image);
 if (count($header_image)) {
 
 	for ($i = 0; $i < count($header_image); $i++) {
 		$parts = explode(".", $header_image[$i]);
 		//print_r($parts);
-
+		$caption = $arr['header_caption_show'] == 1 ? $header_caption[$i] : "";
+		$caption_align = $header_caption_align[$i];
 		if ($parts[1] == "mp4") {
-			echo '<video class="slideshow-cycle-image" autoplay loop muted><source src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'"></video>';	
+			echo '<video class="slideshow-cycle-image" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" autoplay loop muted><source src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'"></video>';	
 		} else {
 			$class = $i == 0 ? "first" : "";
-			$caption = $arr['header_caption_show'] == 1 ? $header_captionc : "";
-			echo '<img src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'" alt="'. $caption .'" data-cl="'. $class .'" class="slideshow-cycle-image">';	
+			echo '<img src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'" alt="'. $caption .'" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" class="slideshow-cycle-image">';	
 		}
 
 	}
@@ -31,4 +32,4 @@ if ($arr['search_field_area'] == 2) {
 }
 ?>
 </div>
-<div id="site-header-alt-caption"></div>
+<div id="site-header-caption"></div>
