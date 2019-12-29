@@ -1166,15 +1166,19 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_show, $header_image_timeout, $utc_modified)
+    public function updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_align, $header_caption_show, $header_image_timeout, $header_image_fade, $landing_page, $parallax_scroll, $utc_modified)
     {
         try {
-            $stmt = $this->db->prepare("UPDATE pages SET header_image =:header_image, header_caption =:header_caption, header_caption_show =:header_caption_show, header_image_timeout =:header_image_timeout, utc_modified = :utc_modified WHERE pages_id =:pages_id");
+            $stmt = $this->db->prepare("UPDATE pages SET header_image =:header_image, header_caption =:header_caption, header_caption_align =:header_caption_align, header_caption_show =:header_caption_show, header_image_timeout =:header_image_timeout, header_image_fade =:header_image_fade, landing_page =:landing_page, parallax_scroll =:parallax_scroll, utc_modified = :utc_modified WHERE pages_id =:pages_id");
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":header_image", $header_image, PDO::PARAM_STR);
             $stmt->bindParam(":header_caption", $header_caption, PDO::PARAM_STR);
+            $stmt->bindParam(":header_caption_align", $header_caption_align, PDO::PARAM_STR);
             $stmt->bindParam(":header_caption_show", $header_caption_show, PDO::PARAM_INT);
             $stmt->bindParam(":header_image_timeout", $header_image_timeout, PDO::PARAM_INT);
+            $stmt->bindParam(":header_image_fade", $header_image_fade, PDO::PARAM_STR);
+            $stmt->bindParam(":landing_page", $landing_page, PDO::PARAM_INT);
+            $stmt->bindParam(":parallax_scroll", $parallax_scroll, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
 
@@ -1604,6 +1608,34 @@ class Pages extends Database
             return false;
         }
     }
+
+
+    /**
+     * @param int $pages_id
+     * @param int $landing_page
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function setPagesLandingPage($pages_id, $landing_page, $utc_modified)
+    {
+        try {
+            $sql_update = "UPDATE pages
+			SET landing_page = :landing_page,
+			utc_modified = :utc_modified
+			WHERE pages_id = :pages_id";
+
+            $stmt = $this->db->prepare($sql_update);
+            $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
+            $stmt->bindParam(':landing_page', $landing_page, PDO::PARAM_INT);
+            $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
 
 
     /**

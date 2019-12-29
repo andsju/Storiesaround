@@ -914,10 +914,26 @@ foreach ( $js_files as $js ): ?>
 			$("input[name='header_caption[]'").each(function (){
 				header_caption.push($(this).val());
 			});
+			var header_caption_align = [];
+			$("input[name='header_caption_align[]'").each(function (){
+				let value = $(this).val();
+				let cssValue;
+				if (value == 0) {
+					cssValue = "left";
+				} else if (value == 1) {
+					cssValue = "center";
+				} else {
+					cssValue = "right";
+				}
+				header_caption_align.push(cssValue);
+			});
 			
-			var header_image_timeout = $("#header_image_timeout").val();
 			var header_caption_show = $('input:checkbox[name=header_caption_show]').is(':checked') ? 1 : 0;
-			
+			var header_image_timeout = $("#header_image_timeout").val();
+			var header_image_fade = $("#header_image_fade").val();
+			var landing_page = $('input:checkbox[name=landing_page]').is(':checked') ? 1 : 0;
+			var parallax_scroll = $('input:checkbox[name=parallax_scroll]').is(':checked') ? 1 : 0;
+
 			if (header_image.length === 0) {
 				return;
 			}
@@ -929,7 +945,9 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					header_image: header_image, header_caption: header_caption, header_caption_show: header_caption_show, header_image_timeout: header_image_timeout
+					header_image: header_image, header_caption: header_caption, header_caption_align: header_caption_align, header_caption_show: header_caption_show, 
+					header_image_timeout: header_image_timeout, header_image_fade: header_image_fade,
+					landing_page: landing_page, parallax_scroll: parallax_scroll 
 				},
 				success: function(newdata){
 					ajaxReply('','#ajax_status_header_image');
@@ -945,9 +963,9 @@ foreach ( $js_files as $js ): ?>
 			var image = "";
 			var video = $(this).attr("data-video");
 			if (video == "false") {
-				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"></div>';
+				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
 			} else {
-				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:360px;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"></div>';
+				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:100%;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
 				// image = '<div data-image=\"'+filename+'\" class="header-images"><video data-image=\"'+filename+'\" style=\"width:360px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"></div>';
 			}
 			var isFile = false;
@@ -977,6 +995,30 @@ foreach ( $js_files as $js ): ?>
 			}
 
 		});		
+
+
+		$('#btn_landing_page').click(function(event){
+			event.preventDefault();
+			var action = "save_landing_page";
+			var token = $("#token").val();
+			var users_id = $("#users_id").val();
+			var pages_id = $("#pages_id").val();			
+			var landing_page = $('input:checkbox[name=landing_page]').is(':checked') ? 1 : 0;
+			$.ajax({
+				beforeSend: function() { loading = $('#ajax_spinner_landing_page').show()},
+				complete: function(){ loading = setTimeout("$('#ajax_spinner_landing_page').hide()",700)},
+				type: 'POST',
+				url: 'pages_edit_ajax.php',
+				data: { 
+					action: action, token: token, users_id: users_id, pages_id: pages_id,
+					landing_page: landing_page
+				},
+				success: function(message){
+					ajaxReply(message,'#ajax_status_landing_page');
+				},
+			});
+		});
+
 
 		$('#btn_site_selections').click(function(event){
 			event.preventDefault();
@@ -2686,22 +2728,104 @@ if(is_array($check_edit)) {
 			</table>
 			
 		</div>
+
+		
+		<div class="">
 			
+			<table border="0" style="width:100%;">
+				<tr>
+					<td width="25%" style="vertical-align:top;">
+						<h4><i class="fas fa-eye" aria-hidden="true"></i> Header settings</h4>
+
+						<p>
+							<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
+							<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
+							<span id="ajax_status_header_image" style="display:none;"></span>
+						</p>
+
+
+						<span class="toolbar"><button id="btn_landing_page">Save setting</button></span>
+						<span id="ajax_spinner_landing_page" style="display:none;"><img src="css/images/spinner.gif"></span>
+						<span id="ajax_status_landing_page" style="display:none;"></span>
+					</td>
+					<td style="vertical-align:top">&nbsp;
+						<div style="margin:5px 0;">
+							<input type="checkbox" name="landing_page" id="landing_page" value="1" <?php if ($arr['landing_page'] == 1) { echo ' checked';}?>> Apply CSS class 'landing-page" to body element (use full size header image)
+						</div>
+						<div style="margin:5px 0;">
+							<input type="checkbox" name="parallax_scroll" id="parallax_scroll" value="1" <?php if ($arr['parallax_scroll'] == 1) { echo ' checked';}?>> Apply parallax scrolling effect to header content
+ 						</div>
+						<div style="margin:5px 0;">
+							<input type="checkbox" name="header_caption_show" <?php if ($arr['header_caption_show'] == 1) { echo ' checked';}?> value="1"> Show media caption
+						</div>
+						<div style="margin:5px 0;">
+							<select id="header_image_timeout">
+							<?php 
+							$timeouts = array(8000, 10000, 12000, 15000, 20000, 30000);						
+							foreach ($timeouts as $timeout) {
+								$sec = $timeout / 1000;
+								echo '<option value="'.$timeout.'"';
+								if ($arr['header_image_timeout'] == $timeout) {
+									echo ' selected';
+								}
+								echo '>'.$sec.' sec</option>';
+							}
+							?>
+							</select> Swap media 
+						</div>
+						<div style="margin:5px 0;">
+							<select id="header_image_fade">
+							<?php 
+							$speeds = array("super slow", "slow", "normal", "fast", "super fast");						
+							foreach ($speeds as $speed) {	
+								echo '<option value="'.$speed.'"';
+								if ($arr['header_image_fade'] == $speed) {
+									echo ' selected';
+								}
+								echo '>'.$speed.'</option>';
+							}
+							?>
+							</select> Fade duration
+						</div>
+
+					</td>
+					<td width="25%" align="right">
+						<?php 			
+						echo '<div id="box_site_preview_header" style="width:180px;height:120px;margin:10px 0">';
+						?>
+						<img src="css/images/template-landing-page.png">
+						<?php
+						echo '</div>';				
+						?>				
+					</td>
+
+				</tr>
+			</table>
+			
+		</div>
+
+
 		<div class="admin-panel">
 			
 			<table border="0" style="width:100%;">
 				<tr>
 					<td width="25%" style="vertical-align:top;" rowspan="2">
-						<h4><i class="fas fa-image" aria-hidden="true"></i> Header image</h4>
+						<h4><i class="fas fa-image" aria-hidden="true"></i> Header media</h4>
+							
 						<p>
-							<span class="toolbar"><button id="btn_site_header_image">Show selectable images</button></span>
+							Choose matching height (equal) 
 						</p>
-
+						<!--
+						<p>
+							<span class="toolbar"><button id="btn_site_header_image">Show selectable images, movies</button></span>
+						</p>
+						-->
 						<div id="directory_view" style="max-height:400px;overflow:auto;">					
 						<?php
 
 							$header_image = json_decode($arr['header_image']);
 							$header_caption = json_decode($arr['header_caption']);
+							$header_caption_align= json_decode($arr['header_caption_align']);
 
 							$dir = '/content/uploads/header';
 																
@@ -2733,7 +2857,8 @@ if(is_array($check_edit)) {
 
 
 					</td>
-					<td style="vertical-align:top;">
+					<td style="vertical-align:top;padding:20px 0">
+
 						<?php
 						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';						
 						echo '<div class="cycle-slideshow" id="site-header-edit" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-edit-alt-caption">';
@@ -2762,36 +2887,19 @@ if(is_array($check_edit)) {
 					<td style="vertical-align:top">
 					
 						<p>
-							<input type="checkbox" name="header_caption_show" <?php if ($arr['header_caption_show'] == 1) { echo ' checked';}?> value="1"> Show caption
-						</p>
-						<p>
-							<select id="header_image_timeout">
-							<?php 
-							$timeouts = array(8000, 10000, 12000, 15000, 20000);						
-							foreach ($timeouts as $timeout) {
-								$sec = $timeout / 1000;
-								echo '<option value="'.$timeout.'"';
-								if ($arr['header_image_timeout'] == $timeout) {
-									echo ' selected';
-								}
-								echo '>'.$sec.' sec</option>';
-							}
-							?>
-							</select> Slideshow timeout
-						</p>
-						<p>
 							<div id="directory_view_slides">
 							<?php
 							if (is_array($header_image)) {
 								$dir = '/content/uploads/header';
 								if (is_dir(CMS_ABSPATH . '/'. $dir)) {
 									$countHeader = 0;
-									foreach ($header_image as $image) {																
+									foreach ($header_image as $image) { 
 										$ext = getFileExtension($image);
+										$align_value = getCaptionAlignAsInteger($header_caption_align[$countHeader]);
 										if ($ext == "mp4") {
-											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:360px; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"></div>';
+											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:100%; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
 										} else {
-											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"></div>';
+											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
 										}
 										$countHeader++;
 									}
@@ -2799,12 +2907,6 @@ if(is_array($check_edit)) {
 							}
 							?>
 							</div>
-						</p>
-
-						<p>
-							<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
-							<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
-							<span id="ajax_status_header_image" style="display:none;"></span>
 						</p>
 
 					</td>
