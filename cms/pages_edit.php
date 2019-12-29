@@ -996,30 +996,6 @@ foreach ( $js_files as $js ): ?>
 
 		});		
 
-
-		$('#btn_landing_page').click(function(event){
-			event.preventDefault();
-			var action = "save_landing_page";
-			var token = $("#token").val();
-			var users_id = $("#users_id").val();
-			var pages_id = $("#pages_id").val();			
-			var landing_page = $('input:checkbox[name=landing_page]').is(':checked') ? 1 : 0;
-			$.ajax({
-				beforeSend: function() { loading = $('#ajax_spinner_landing_page').show()},
-				complete: function(){ loading = setTimeout("$('#ajax_spinner_landing_page').hide()",700)},
-				type: 'POST',
-				url: 'pages_edit_ajax.php',
-				data: { 
-					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					landing_page: landing_page
-				},
-				success: function(message){
-					ajaxReply(message,'#ajax_status_landing_page');
-				},
-			});
-		});
-
-
 		$('#btn_site_selections').click(function(event){
 			event.preventDefault();
 			var action = "save_site_selections";
@@ -2736,17 +2712,11 @@ if(is_array($check_edit)) {
 				<tr>
 					<td width="25%" style="vertical-align:top;">
 						<h4><i class="fas fa-eye" aria-hidden="true"></i> Header settings</h4>
-
 						<p>
 							<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
 							<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
 							<span id="ajax_status_header_image" style="display:none;"></span>
 						</p>
-
-
-						<span class="toolbar"><button id="btn_landing_page">Save setting</button></span>
-						<span id="ajax_spinner_landing_page" style="display:none;"><img src="css/images/spinner.gif"></span>
-						<span id="ajax_status_landing_page" style="display:none;"></span>
 					</td>
 					<td style="vertical-align:top">&nbsp;
 						<div style="margin:5px 0;">

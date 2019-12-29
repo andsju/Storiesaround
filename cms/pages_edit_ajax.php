@@ -178,27 +178,6 @@ if (isset($_POST['token'])) {
 				break;
 
 
-				case 'save_landing_page':
-				
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$landing_page = filter_input(INPUT_POST, 'landing_page', FILTER_VALIDATE_INT) ? $_POST['landing_page'] : 0;
-					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-
-					if($pages_id) {
-					
-						$result = $pages->setPagesLandingPage($pages_id, $landing_page, $utc_modified);
-						if($result) {
-							echo $result;
-							$history = new History();
-							$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'landing_page', $landing_page, $_SESSION['token'], $utc_modified);
-						}
-					}
-
-				break;
-
-
-
-
 				case 'save_seo_link':
 					
 					$pages_id_link = filter_var(trim($_POST['pages_id_link']), FILTER_SANITIZE_STRING);
