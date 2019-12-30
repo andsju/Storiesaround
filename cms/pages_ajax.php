@@ -43,6 +43,7 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 				$pages_id = isset($_POST['pages_id']) ? trim($_POST['pages_id']) : 0;
 				$limit_tree = isset($_POST['limit_tree']) ? $_POST['limit_tree'] : 0;
 				$rows = $pages->getPagesSearchWordsRelevanceSummary($s, $status=2, $pages_id, $limit_tree);
+				//write_debug(json_encode($rows));
 				echo json_encode($rows);
 			break;
 			
@@ -66,6 +67,7 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 						//$heading = isValidString($a[0], 'characters') ? highlight($row['title'], $a) : $row['title'];
 						$html .= '<div>';
 						$html .= '<a href="pages.php?id='.$row['pages_id'].'" class="search"><h3>'.$row['title'].'</h3></a>';
+						$html .= '<span>'.$row['category'].'</span>';
 						$text = substr(strip_tags($row['content']),0,300);
 						$text = substr($text,0,strrpos($text," ")) . ' ...';
 						//$text_highlighted = isValidString($a[0], 'characters') ? highlight($text, $a) : $text;
