@@ -268,10 +268,12 @@ print_r2($add_class_landing_page);
         <?php include_once_customfile('includes/inc.site_header_image.php', $arr, $languages); ?>
     </div>
     <?php
+    print_r2($arr['search_field_area']);
     if ($arr['search_field_area'] == 3) {
         print_search_field_area_page($languages);
     }
     ?>
+
     <div id="wrapper-top">
         <?php
         
@@ -290,6 +292,8 @@ print_r2($add_class_landing_page);
             }                            
         }
         print_selection("selection-header-below", $selection_area['header_below']); 
+        if ($arr['search_field_area'] <= 3) { 
+            print_search_field_result($languages); }
         ?>
         <div id="top-grid"><?php print_grid($arr, 0);?></div>
     </div>

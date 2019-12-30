@@ -12,8 +12,8 @@
                         <h1 id="content-title" class="editable"><?php echo $page_title_body .' '.$icon; ?></h1>                        
                     </header>
                     <?php } ?>
-                    <?php if ($arr['search_field_area'] == 3) { print_search_field_area_page($languages); } ?>
-                    <?php if ($arr['search_field_area'] > 0) { print_search_field_result($languages); } ?>
+                    <?php if ($arr['search_field_area'] == 4) { print_search_field_area_page($languages); } ?>
+                    <?php if ($arr['search_field_area'] == 4) { print_search_field_result($languages); } ?>
                     <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>
                     <div id="content-html" class="editable container"> 
                         <?php echo $arr['content'];?>
