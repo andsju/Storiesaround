@@ -29,6 +29,7 @@ $(document).ready(function () {
 	languages["search_page"] = ["Search page", "Sök sida"];
 	languages["search_page_not_found"] = ["No pages found", "Ingen sida hittades"];
 	languages["search_page_click_search"] = ["Click Search button to se all matches", "Klicka Sök för att se alla träffar"];
+	languages["More"] = ["More pages...", "Fler sidor..."];
 
 	var limit_page_result = 10;
 
@@ -159,8 +160,10 @@ $(document).ready(function () {
 			var count = 0;
 			$.each(items, function (index, item) {
 				var li;
+				var category;
 				if (item.category != currentCategory) {
-					ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+					category = item.category.length > 0 ? item.category : languages["More"][lang];
+					ul.append("<li class='ui-autocomplete-category'>" + category + "</li>");
 					currentCategory = item.category;
 				}
 				li = that._renderItemData(ul, item);
