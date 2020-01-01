@@ -877,7 +877,7 @@ foreach ( $js_files as $js ): ?>
 						var caption = $( this ).attr("alt");
 						if (filename != tmp_filename) {
 							filenames.push(filename);
-							var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\" value=\"'+caption+'\"></div>';
+							var image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\" value=\"'+caption+'\" maxlength="100"></div>';
 							$("#directory_view_slides").append(image);
 							tmp_filename = filename;
 						}
@@ -912,7 +912,9 @@ foreach ( $js_files as $js ): ?>
 
 			var header_caption = [];
 			$("input[name='header_caption[]'").each(function (){
-				header_caption.push($(this).val());
+				let captionText = $(this).val();
+				captionText = captionText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+				header_caption.push(captionText);
 			});
 			var header_caption_align = [];
 			$("input[name='header_caption_align[]'").each(function (){
@@ -952,7 +954,7 @@ foreach ( $js_files as $js ): ?>
 				success: function(newdata){
 					ajaxReply('','#ajax_status_header_image');
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#setup';
-					location.reload(true);
+					//location.reload(true);
 				}
 			});
 			
@@ -963,10 +965,9 @@ foreach ( $js_files as $js ): ?>
 			var image = "";
 			var video = $(this).attr("data-video");
 			if (video == "false") {
-				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\"><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
+				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><input type=\"text\" name=\"header_caption[]\" maxlength="100"><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
 			} else {
-				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:100%;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
-				// image = '<div data-image=\"'+filename+'\" class="header-images"><video data-image=\"'+filename+'\" style=\"width:360px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\"></div>';
+				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:100%;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><input type=\"text\" name=\"header_caption[]\" maxlength="100"><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
 			}
 			var isFile = false;
 			$("#directory_view_slides div, #directory_view_slides video").each(function(){
@@ -2828,35 +2829,17 @@ if(is_array($check_edit)) {
 
 					</td>
 					<td style="vertical-align:top;padding:20px 0">
-
-						<?php
-						echo '<p><code style="padding:0px;margin:0px;">'.CMS_DIR .'/content/uploads/header/'. $header_image[0] .'</code><p>';						
-						echo '<div class="cycle-slideshow" id="site-header-edit" data-cycle-log="false" data-cycle-caption-template="{{alt}}" data-cycle-caption="#site-header-edit-alt-caption">';
-						$n = 0;
-						if (count($header_image)) {
-							foreach($header_image as $image) {
-								$caption = $arr['header_caption_show'] == 1 ? $header_caption[$n] : "";
-								echo '<img alt="'.$caption.'" data-filename="'.$image.'" data-cycle-timeout="'.$arr['header_image_timeout'].'" id="site_header_image_chosen" src="'.CMS_DIR .'/content/uploads/header/'.$image.'" style="width:100%;height:auto;border:1px solid #D0D0D0;" />';
-								$n++;
-							}
-						}
-						echo '<div id="site-header-edit-alt-caption"></div>';
-						echo '</div>';
-						
-						?>
-					</td>
-					<td width="25%" align="right">
-						<?php 			
-						echo '<div id="box_site_preview_header" style="width:180px;height:120px;">';
-						echo '<img id="site_preview" src="css/images/template_header.png">';
-						echo '</div>';				
-						?>				
-					</td>
-				</tr>
-				<tr>
-					<td style="vertical-align:top">
-					
-						<p>
+						<table width="100%">
+							<tr>
+								<td width="50%">
+									<b>Selected media</b>
+								</td>
+								<td>
+									<b>Caption (max 100 char) | text-align</b>
+								</td>
+							</tr>
+						</table>
+							<p>
 							<div id="directory_view_slides">
 							<?php
 							if (is_array($header_image)) {
@@ -2867,9 +2850,9 @@ if(is_array($check_edit)) {
 										$ext = getFileExtension($image);
 										$align_value = getCaptionAlignAsInteger($header_caption_align[$countHeader]);
 										if ($ext == "mp4") {
-											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:100%; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
+											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:100%; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'" maxlength="100"><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
 										} else {
-											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'"><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
+											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><input type="text" name="header_caption[]" value="'.$header_caption[$countHeader].'" maxlength="100"><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
 										}
 										$countHeader++;
 									}
@@ -2880,10 +2863,15 @@ if(is_array($check_edit)) {
 						</p>
 
 					</td>
-					<td style="vertical-align:top;float:right">&nbsp;
-					
+					<td width="25%" align="right" style="vertical-align:top;">
+						<?php 			
+						echo '<div id="box_site_preview_header" style="width:180px;height:120px;margin:20px 0">';
+						echo '<img id="site_preview" src="css/images/template_header.png">';
+						echo '</div>';				
+						?>				
 					</td>
 				</tr>
+
 			</table>
 			
 		</div>
