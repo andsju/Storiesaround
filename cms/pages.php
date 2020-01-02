@@ -225,7 +225,6 @@ if ($arr['template'] == 6) {
 }
 
 $add_class_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
-print_r2($add_class_landing_page);
 ?>
 <body class="<?php echo $add_class_landing_page;?>">
     <?php 
@@ -246,23 +245,25 @@ print_r2($add_class_landing_page);
     print_selection("selection-header-above", $selection_area['header_above']);
     ?>
 
-    <header id="wrapper-site-header">
+    <div id="wrapper-site-header"> 
+        <header id="site-header">
 
-        <?php
-        if (strlen($selection_area['header'])) {
-            print_selection("selection-header-above", $selection_area['header']);
-        } else {
-            include_once_customfile('includes/inc.site_header.php', $arr, $languages); 
-        }
-        ?>
-
-        <nav id="site-navigation-header">
             <?php
-            print_menu($pages, $id, $seo, $href, $open, $sample);
+            if (strlen($selection_area['header'])) {
+                print_selection("selection-header-above", $selection_area['header']);
+            } else {
+                include_once_customfile('includes/inc.site_header.php', $arr, $languages); 
+            }
             ?>
-        </nav>
 
-    </header>
+            <nav id="site-navigation-header">
+                <?php
+                print_menu($pages, $id, $seo, $href, $open, $sample);
+                ?>
+            </nav>
+
+        </header>
+    </div>
 
     <div id="wrapper-site-header-image">
         <?php include_once_customfile('includes/inc.site_header_image.php', $arr, $languages); ?>
