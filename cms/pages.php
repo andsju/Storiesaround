@@ -166,11 +166,6 @@ $js_files = array(
 
 $js_files = add_js_language_files($js_files);
 
-
-
-
-
-
 $wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editors, $_SESSION['site_wysiwyg']) :  null;
 // javascript files... add wysiwyg file
 if (is_array($wysiwyg_editor)) {
@@ -269,7 +264,6 @@ $add_class_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
         <?php include_once_customfile('includes/inc.site_header_image.php', $arr, $languages); ?>
     </div>
     <?php
-    print_r2($arr['search_field_area']);
     if ($arr['search_field_area'] == 3) {
         print_search_field_area_page($languages);
     }

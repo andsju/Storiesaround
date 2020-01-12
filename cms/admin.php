@@ -115,7 +115,34 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var token = $("#token").val();
 			var dir = $("#dir").val()
 			var overwrite = $('input:checkbox[name=overwrite]').is(':checked') ? 1 : 0;
-			$.colorbox({width:"640px", height:"300px", iframe:true, href:"admin_upload.php?token="+token+"&folder="+dir+"&overwrite="+overwrite});
+			$.colorbox({width:"640px", height:"300px", iframe:true, href:"admin_upload.php?token="+token+"&folder="+dir+"&overwrite="+overwrite+""});
+		});
+
+		$("#btn_upload_logotype").click(function(event) {
+			var token = $("#token").val();
+			var folder = $("#folder_logotype").val();
+			var overwrite = 1;
+			$.colorbox({width:"640px", height:"300px", iframe:true, href:"admin_upload_logotype.php?token="+token+"&folder="+folder+"&overwrite="+overwrite});
+		});
+
+		$("#btn_refresh_logotype").click(function(event) {
+			window.location.reload();
+		});
+
+		$("#btn_delete_logotype").click(function(event) {
+			var token = $("#token").val();
+			var action = "delete_site_logotype";
+			$.ajax({
+				type: 'POST',
+				url: 'admin_edit_ajax.php',
+				data: { 
+					action: action, token: token
+				},
+				success: function(message){	
+					window.location.reload();
+				}
+			});
+
 		});
 
 		$("body").delegate(".delete_file", "click", function() {
@@ -212,6 +239,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var token = $("#token").val();
 			var site_id = $("#site_id").val();
 			var site_wrapper_page_width = $("#site_wrapper_page_width").val();
+			var site_logotype = $("#site_logotype").val();
 			var site_theme = $("#site_theme option:selected").val();
 			var site_ui_theme = $("#site_ui_theme option:selected").val();
 			var site_template_default = $('input:radio[name=site_template_default]:checked').val();
@@ -226,7 +254,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 				type: 'POST',
 				url: 'admin_edit_ajax.php',				
 				data: { 
-					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
+					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_logotype: site_logotype, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
 					site_template_sidebar_width: site_template_sidebar_width, site_template_default: site_template_default, site_template_sidebar_width: site_template_sidebar_width,  
 					site_navigation_horizontal: site_navigation_horizontal, site_navigation_vertical: site_navigation_vertical, site_navigation_vertical_sidebar: site_navigation_vertical_sidebar
 				},
@@ -628,6 +656,12 @@ switch($t) {
 
 						<div class="admin-panel">
 
+							<div style="float:right">
+								<span id="ajax_spinner_site_design" style='display:none'><img src="css/images/spinner.gif"></span>&nbsp;
+								<span id="ajax_status_site_design" style='display:none'></span>&nbsp;
+								<span class="toolbar_save"><button id="btn_site_design" style="float:right;margin:0px;">Save</button></span>
+							</div>
+
 							<h3 class="admin_heading">Site width (helper)</h3>
 							<p class="admin-text">
 								Set this width to match settings in css (widest). Setting is used in repsonsive webdesign to display images in a proper way
@@ -637,15 +671,28 @@ switch($t) {
 								
 						</div>
 
+						<div class="admin-panel">
+
+							<h3 class="admin_heading">Site logotype</h3>
+							<p class="admin-text">
+								Add site logotype - uploading new image replaces previous image. Logotype image is displayed as background image.
+							</p>
+							
+							<?php if (strlen($_SESSION['site_logotype'])) {?>
+								<img id="site-preview-logotype" src="<?php echo CMS_DIR;?>/content/uploads/logotype/<?php echo $_SESSION['site_logotype']?>">
+							<?php }?>
+
+							<span class="toolbar"><button id="btn_upload_logotype">Upload logotype</button></span>
+							<span class="toolbar"><button id="btn_refresh_logotype">Refresh logotype</button></span>
+							<span class="toolbar"><button id="btn_delete_logotype">Delete logotype</button></span>
+							<input type="hidden" name="folder_logotype" id="folder_logotype" value="<?php echo CMS_DIR . '/content/uploads/logotype'?>">
+							<input type="hidden" name="site_logotype" id="site_logotype" value="<?php echo $_SESSION['site_logotype']; ?>">
+
+						</div>
 
 
 						<div class="admin-panel">
 
-							<div style="float:right">				
-								<span id="ajax_spinner_site_design" style='display:none'><img src="css/images/spinner.gif"></span>&nbsp;
-								<span id="ajax_status_site_design" style='display:none'></span>&nbsp;
-								<span class="toolbar_save"><button id="btn_site_design" style="float:right;margin:0px;">Save</button></span>
-							</div>
 							<h3 class="admin_heading">Site theme</h3>
 							<p class="admin-text">
 								A theme will override default css setting 

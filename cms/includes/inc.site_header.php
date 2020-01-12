@@ -2,8 +2,9 @@
 
 <div id="site-navigation-identity">
 	<a id="site-name-link" href="<?php echo $_SESSION['site_domain_url']; ?>">
-		<h1 id="site-name"><?php echo $_SESSION['site_name']; ?></h1>
-		<img src="../content/themes/mountain/images/GF_logotype_1rad.png">
+		<!--<div id="site-logotype" style="background-image:url('<?php echo CMS_DIR . '/content/uploads/logotype/'. $_SESSION['site_logotype']; ?>')"></div>-->
+		<img id="site-logotype" src="<?php echo CMS_DIR . '/content/uploads/logotype/'. $_SESSION['site_logotype']; ?>" alt="">
+		<span id="site-name"><?php echo $_SESSION['site_name']; ?></span>
 	</a>
 	<?php if(isset($_SESSION['site_slogan'])) { ?>
 	<div id="site-slogan-heading"><?php echo $_SESSION['site_slogan']; ?></div>

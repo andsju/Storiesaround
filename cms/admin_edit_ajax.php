@@ -53,6 +53,7 @@ if (isset($_POST['token'])){
 
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_wrapper_page_width = filter_input(INPUT_POST, 'site_wrapper_page_width', FILTER_VALIDATE_INT);
+				$site_logotype = filter_var(trim($_POST['site_logotype']), FILTER_SANITIZE_STRING);
 				$site_theme = filter_var(trim($_POST['site_theme']), FILTER_SANITIZE_STRING);
 				$site_ui_theme = filter_var(trim($_POST['site_ui_theme']), FILTER_SANITIZE_STRING);
 				$site_template_default = filter_input(INPUT_POST, 'site_template_default', FILTER_VALIDATE_INT);
@@ -62,10 +63,10 @@ if (isset($_POST['token'])){
 				$site_navigation_vertical = filter_input(INPUT_POST, 'site_navigation_vertical', FILTER_VALIDATE_INT);
 				$site_navigation_vertical_sidebar = filter_input(INPUT_POST, 'site_navigation_vertical_sidebar', FILTER_VALIDATE_INT);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-				
 				$site = new Site();
-				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
+				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_logotype, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
 				if($result) {
+					$_SESSION['site_logotype'] = $site_logotype;
 					$_SESSION['site_theme'] = $site_theme;
 					$_SESSION['site_wrapper_page_width'] = $site_wrapper_page_width;
 					$_SESSION['site_ui_theme'] = $site_ui_theme;
@@ -80,8 +81,6 @@ if (isset($_POST['token'])){
 					$history = new History();
 					$history->setHistory($site_id, 'site_id', 'UPDATE', describe('site general design', $site_id), $_SESSION['users_id'], $_SESSION['token'], $utc_modified);
 
-				} else {
-					//echo 'Grrrrrrr';
 				}
 				
 			break;	
@@ -469,6 +468,13 @@ if (isset($_POST['token'])){
 				}
 			break;
 
+			case 'delete_site_logotype';
+				$path_and_file = CMS_ABSPATH .'/content/uploads/logotype/' . $_SESSION['site_logotype'];
+				if(is_file($path_and_file)) {
+					unlink($path_and_file);
+					$_SESSION['site_logotype'] = "";
+				}
+			break;
 
 			case 'edit_files_css';
 
