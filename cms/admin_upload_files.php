@@ -163,6 +163,21 @@ if(isset($_REQUEST['token'])){
                     }
 				}
 				
+				if ($_REQUEST['logo'] == "true") { 
+
+					// delete file(s) in folder logotype
+					$filelist = glob($uploadDirectory.'*'); 
+					foreach($filelist as $myfiles){ 
+					  if(is_file($myfiles))
+						unlink($myfiles); 
+					}
+
+					// set filename to logotype (extension can be images)
+					$filename = "logotype";
+					$_SESSION['site_logotype'] = $filename . '.' . $ext;
+				}
+
+				
 				if ($this->file->save($uploadDirectory . $filename . '.' . $ext)){
 										
 					return array('success'=>true,'dir'=>$uploadDirectory,'filename'=>$filename . '.' . $ext);
