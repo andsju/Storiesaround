@@ -118,7 +118,9 @@ div.column-having-right-sidebar {padding-right: 20px; border-right: 1px solid bl
 	font-size: 2rem;
 }
 
-a#site-name-link h1 {display: none}
+div#site-logotype {display:inline-block; width: 100px; height: 100px; background-repeat: no-repeat; background-size: 100%;background-position: 50%;}
+a#site-name-link span {font-size: 2.5em; color: black}
+a#site-name-link:hover {text-decoration: none;}
 #site-navigation-header ul { margin: 0 auto; padding: 0; list-style: none }
 #site-navigation-header ul li { float: left; margin: 0 0 0 10px; border-right:1px solid black;}
 #site-navigation-header ul li:hover { background-color: lightblue }
@@ -600,6 +602,7 @@ div.site_sidebar_target_left, div.site_sidebar_target_right { width: 24px; heigh
 div.site_content { width: 52px; height: 44px; float: left; background: url(images/site_bg_grey.png) repeat-x; border: 1px solid #FFF; }
 div.site_content_target { width: 52px; height: 44px; float: left; background: url(images/site_bg_grey-yellow.png) repeat-x; border: 1px solid #FFF;text-align:center;line-height:60px; }
 div.site_header:hover, div.site_footer:hover, div.site_content:hover, div.site_content_target:hover, div.site_sidebar_left:hover, div.site_sidebar_target_left:hover, div.site_sidebar_right:hover, div.site_sidebar_target_right:hover { border: 1px solid #000; background: #FFFFFF; }
+img#site-preview-logotype {width: auto;height: 100px;}
 
 div.header-images {width:100%; height:100px; background-size: 100%; position:relative}
 div.header-images input[type=text] {width:300px;position:absolute; top:10px; left:102%;}
@@ -1151,7 +1154,7 @@ and (max-device-width : 1024px) and (orientation : portrait) {
 	ul#navigation-root a { float: left; display: block; text-decoration: none; padding: 5px;}
 	ul#navigation-root a span {  }
 
-	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
+	a#site-name-link img {height: 100px; width:auto; margin-left:0;}
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 
 	/* sidebar menu - reset nav-tree */
@@ -1198,7 +1201,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 	ul#navigation-root a span {  }
 
 	div#site-navigation-identity {padding-top: 10px}
-	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
+	a#site-name-link img {height: 100px; width:auto; margin-left:0;}
 	div#site-navigation-cms {position: absolute; top:0;right:0; padding-top: 10px}
 
 	/* sidebar menu - reset nav-tree */
@@ -1293,7 +1296,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 	div#site-navigation-identity {}
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
-	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
+	a#site-name-link img {height: 100px; width:auto; margin-left:0;}
 	#site-header-image { width: 100%; /* height: 320px; */ overflow: hidden }
 
 	ul#navigation-root { width: 100%; padding:0; margin: 0; list-style: none;}
@@ -1338,7 +1341,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 
 
 	#wrapper-site-header-image {width: 100%;}
-	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
+	a#site-name-link img {height: 100px; width:auto; margin-left:0;}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
 	
 
@@ -1347,7 +1350,7 @@ and (max-device-width : 1024px) and (orientation : landscape) {
 	div#site-navigation-identity {}
 	div#site-navigation-cms {position: absolute; top:0;right:0}
 	#site-navigation-header { position: absolute; top: 50px; right: 0;  }
-	a#site-name-link img {width: 400px; height: auto; margin-left:0;}
+	a#site-name-link img {height: 100px; width:auto; margin-left:0;}
 	#site-header-image { width: 100%; /* min-height: 400px; */ overflow: hidden }
 
 	ul#navigation-root { width: 100%; padding:0; margin: 0; list-style: none;}

@@ -2788,6 +2788,7 @@ if(is_array($check_edit)) {
 								</td>
 								<td>
 									<b>Caption (max 100 char) | text-align</b>
+									<p>Markdown code supports h1 tags</p>
 								</td>
 							</tr>
 						</table>

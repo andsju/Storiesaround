@@ -402,6 +402,7 @@ CREATE TABLE IF NOT EXISTS `site` (
   `site_domain` varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'friendly domain name',
   `site_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
   `site_copyright` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
+  `site_logotype` varchar(25) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'site logotype',
   `site_theme` varchar(25) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'css theme if set',
   `site_ui_theme` varchar(25) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'set new jquery-ui theme',
   `site_wrapper_page_width` int(4) UNSIGNED NOT NULL DEFAULT '1280' COMMENT 'template wrapper helper width',
