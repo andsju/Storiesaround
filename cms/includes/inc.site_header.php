@@ -2,7 +2,6 @@
 
 <div id="site-navigation-identity">
 	<a id="site-name-link" href="<?php echo $_SESSION['site_domain_url']; ?>">
-		<!--<div id="site-logotype" style="background-image:url('<?php echo CMS_DIR . '/content/uploads/logotype/'. $_SESSION['site_logotype']; ?>')"></div>-->
 		<img id="site-logotype" src="<?php echo CMS_DIR . '/content/uploads/logotype/'. $_SESSION['site_logotype']; ?>" alt="">
 		<span id="site-name"><?php echo $_SESSION['site_name']; ?></span>
 	</a>

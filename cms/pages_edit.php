@@ -2688,7 +2688,7 @@ if(is_array($check_edit)) {
 						<div style="margin:5px 0;">
 							<select id="header_image_timeout">
 							<?php 
-							$timeouts = array(8000, 10000, 12000, 15000, 20000, 30000);						
+							$timeouts = array(5000, 6000, 7000, 8000, 9000, 10000, 12000, 14000, 16000, 18000, 20000, 25000, 30000);						
 							foreach ($timeouts as $timeout) {
 								$sec = $timeout / 1000;
 								echo '<option value="'.$timeout.'"';
@@ -2788,7 +2788,7 @@ if(is_array($check_edit)) {
 								</td>
 								<td>
 									<b>Caption (max 100 char) | text-align</b>
-									<p>Markdown code supports h1 tags</p>
+									<p>Supports h1 and p tags as markdown code</p>
 								</td>
 							</tr>
 						</table>
