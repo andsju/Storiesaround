@@ -869,13 +869,13 @@ switch($t) {
 									</td>
 									<td>
 										<div style="box-sizing:border-box;width:100%;padding:0 20px;height:280px;overflow-y: hidden;overflow:auto;background:#FCFCFC;border: 1px dashed #D0D0D0;">
-											<div class="page_templates"><input type="radio" name="site_template_default" value="0" <?php if($site['site_template_default'] == 0) {echo 'checked';}?>> "Sidebars"<img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
-											<div class="page_templates"><input type="radio" name="site_template_default" value="1" <?php if($site['site_template_default'] == 1) {echo 'checked';}?>> "Left sidebar"<img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
-											<div class="page_templates"><input type="radio" name="site_template_default" value="2" <?php if($site['site_template_default'] == 2) {echo 'checked';}?>> "Right sidebar"<img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
-											<div class="page_templates"><input type="radio" name="site_template_default" value="3" <?php if($site['site_template_default'] == 3) {echo 'checked';}?>> "Panorama"<img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
-											<div class="page_templates"><input type="radio" name="site_template_default" value="4" <?php if($site['site_template_default'] == 4) {echo 'checked';}?>> "Sidebars joined"<img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
-											<div class="page_templates"><input type="radio" name="site_template_default" value="5" <?php if($site['site_template_default'] == 5) {echo 'checked';}?>> Custom "main"<img src="css/images/template_panorama_custom_main.png" style="margin-top:10px;height:75px;"></div>
-											<div class="page_templates"><input type="radio" name="site_template_default" value="6" <?php if($site['site_template_default'] == 6) {echo 'checked';}?>> Custom "page"<img src="css/images/template_panorama_custom_page.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="0" <?php if($site['site_template_default'] == 0) {echo 'checked';}?>> "Sidebars"<br><img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="1" <?php if($site['site_template_default'] == 1) {echo 'checked';}?>> "Left sidebar"<br><img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="2" <?php if($site['site_template_default'] == 2) {echo 'checked';}?>> "Right sidebar"<br><img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="3" <?php if($site['site_template_default'] == 3) {echo 'checked';}?>> "Panorama"<br><img src="css/images/template_panorama.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="4" <?php if($site['site_template_default'] == 4) {echo 'checked';}?>> "Sidebars joined"<br><img src="css/images/template_sidebars_close.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="5" <?php if($site['site_template_default'] == 5) {echo 'checked';}?>> Custom "main"<br><img src="css/images/template_panorama_custom_main.png" style="margin-top:10px;height:75px;"></div>
+											<div class="page_templates"><input type="radio" name="site_template_default" value="6" <?php if($site['site_template_default'] == 6) {echo 'checked';}?>> Custom "page"<br><img src="css/images/template_panorama_custom_page.png" style="margin-top:10px;height:75px;"></div>
 										</div>
 
 									<td>

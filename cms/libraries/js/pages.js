@@ -1031,7 +1031,6 @@ function showParallax(elements, initialHeight) {
 		if (result.rectangle.height > initialHeight) {
 			result.rectangle.height = initialHeight;
 		}
-
 		if (result.rectangle.top < -result.rectangle.height || result.rectangle.top > result.rectangle.height) {
 			return;
 		}
@@ -1096,19 +1095,29 @@ function fadeSlideshowCycleImages() {
 
 	// check if ready
 	if (swapSlideshowCycleImagesStart === false) {
-		return
+		return;
 	}
 
 	// get images
 	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
-
-	// no images
+	
+	// just one image
 	if (images.length <= 1) {
-		return
+		return;
 	}
 
 	// last image
 	let image = images[images.length - 1];
+
+	// let second last image
+	let second_image = images[images.length - 2];
+
+	// if video - play
+	if (second_image.tagName === "VIDEO") {
+		second_image.pause();
+		second_image.currentTime = 0;
+		second_image.play();
+	}
 
 	// prepare
 	swapSideshowCycleImagesStart = false;
@@ -1118,6 +1127,7 @@ function fadeSlideshowCycleImages() {
 	// show caption
 	let showCaptionValue = document.querySelector("#header_caption_show").value;
 	var showCaption = showCaptionValue == 1 ? true : false;
+	let pauseStart = false;
 
 	// change opacity
 	let swapIntervalId = setInterval(function () {
@@ -1137,6 +1147,13 @@ function fadeSlideshowCycleImages() {
 
 			// done
 			swapSlideshowCycleImagesStart = true;
+
+			// if video rewind and pause
+			if (image.tagName === "VIDEO") {
+				image.pause();
+				image.currentTime = 0;
+				startPause = false;
+			}
 
 			// caption
 			if (showCaption) {
