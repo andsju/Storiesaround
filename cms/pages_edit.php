@@ -885,7 +885,20 @@ foreach ( $js_files as $js ): ?>
 				}
 				header_caption_align.push(cssValue);
 			});
-			
+
+			var header_caption_vertical_align = [];
+			$("input[name='header_caption_vertical_align[]'").each(function (){
+				let value = $(this).val();
+				let cssValue;
+				if (value == 0) {
+					cssValue = "top";
+				} else if (value == 1) {
+					cssValue = "middle";
+				} else {
+					cssValue = "bottom";
+				}
+				header_caption_vertical_align.push(cssValue);
+			});
 			var header_caption_show = $('input:checkbox[name=header_caption_show]').is(':checked') ? 1 : 0;
 			var header_image_timeout = $("#header_image_timeout").val();
 			var header_image_fade = $("#header_image_fade").val();
@@ -903,7 +916,9 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					header_image: header_image, header_caption: header_caption, header_caption_align: header_caption_align, header_caption_show: header_caption_show, 
+					header_image: header_image, header_caption: header_caption, 
+					header_caption_align: header_caption_align, header_caption_vertical_align: header_caption_vertical_align, 
+					header_caption_show: header_caption_show, 
 					header_image_timeout: header_image_timeout, header_image_fade: header_image_fade,
 					landing_page: landing_page, parallax_scroll: parallax_scroll 
 				},
@@ -921,9 +936,9 @@ foreach ( $js_files as $js ): ?>
 			var image = "";
 			var video = $(this).attr("data-video");
 			if (video == "false") {
-				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><textarea name="header_caption[]"></textarea><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
+				image = '<div data-image=\"'+filename+'\" style=\"background-image:url(../content/uploads/header/'+ filename + ');\" class="header-images"><textarea name="header_caption[]"></textarea><input type=\"range\" name=\"header_caption_align[]\" class=\"header_caption_align\" min=\"0\" max=\"2\" value=\"1\"><input type=\"range\" name=\"header_caption_vertical_align[]\" class=\"header_caption_vertical_align\" min=\"0\" max=\"2\" value=\"1\"></div>';
 			} else {
-				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:100%;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><textarea name="header_caption[]"></textarea><input type=\"range\" name=\"header_caption_align[]\" min=\"0\" max=\"2\" value=\"1\"></div>';
+				image = '<div data-image=\"'+filename+'\" class="header-images"><video style=\"width:100%;max-height:100px\" class="header-images" controls muted><source src="../content/uploads/header/'+ filename + '"></video><textarea name="header_caption[]"></textarea><input type=\"range\" name=\"header_caption_align[]\" class=\"header_caption_align\" min=\"0\" max=\"2\" value=\"1\"><input type=\"range\" name=\"header_caption_vertical_align[]\" class=\"header_caption_vertical_align\" min=\"0\" max=\"2\" value=\"1\"></div>';
 			}
 			var isFile = false;
 			$("#directory_view_slides div, #directory_view_slides video").each(function(){
@@ -2748,7 +2763,8 @@ if(is_array($check_edit)) {
 
 							$header_image = json_decode($arr['header_image']);
 							$header_caption = json_decode($arr['header_caption']);
-							$header_caption_align= json_decode($arr['header_caption_align']);
+							$header_caption_align = json_decode($arr['header_caption_align']);
+							$header_caption_vertical_align = json_decode($arr['header_caption_vertical_align']);
 
 							$dir = '/content/uploads/header';
 																
@@ -2802,10 +2818,11 @@ if(is_array($check_edit)) {
 									foreach ($header_image as $image) { 
 										$ext = getFileExtension($image);
 										$align_value = getCaptionAlignAsInteger($header_caption_align[$countHeader]);
+										$vertical_align_value = getCaptionVerticalAlignAsInteger($header_caption_vertical_align[$countHeader]);
 										if ($ext == "mp4") {
-											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:100%; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><textarea name="header_caption[]">'.$header_caption[$countHeader].'</textarea><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
+											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:100%; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><textarea name="header_caption[]">'.$header_caption[$countHeader].'</textarea><input type="range" name="header_caption_align[]" class="header_caption_align" value="'.$align_value.'" min="0" max="2"><input type="range" name="header_caption_vertical_align[]" class="header_caption_vertical_align" value="'.$vertical_align_value.'" min="0" max="2"></div>';
 										} else {
-											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><textarea name="header_caption[]">'.$header_caption[$countHeader].'</textarea><input type="range" name="header_caption_align[]" value="'.$align_value.'" min="0" max="2"></div>';
+											echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><textarea name="header_caption[]">'.$header_caption[$countHeader].'</textarea><input type="range" name="header_caption_align[]" class="header_caption_align" value="'.$align_value.'" min="0" max="2"><input type="range" name="header_caption_vertical_align[]" class="header_caption_vertical_align" value="'.$vertical_align_value.'" min="0" max="2"></div>';
 										}
 										$countHeader++;
 									}

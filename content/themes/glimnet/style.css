@@ -102,10 +102,8 @@ span#storiesaround {display:none}
 
 div#site-search-page {border-top-color: black;}
 div#site-search-page {border-bottom-color: black;}
-#site-search-page label {color:whitesmoke}
 div#site-search-page input[type='checkbox'] {display: none}
 span#search-page-limit-tree-helper {display:none}
-#site-search-page label {}
 
 .smartsign {
     width: 1920px;
@@ -168,7 +166,6 @@ ______________________________________________________________________________ *
 
 	div#wrapper-top {width:100%}
 	div#site-search-page { }
-	div#site-search-page label {}
 	div#site-search-page input[type="text"] {width:50%;}
 	div#site-search-page input[type="checkbox"] {display: none}
 	span#search-page-limit-tree-helper {display: none}

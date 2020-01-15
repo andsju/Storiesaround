@@ -81,6 +81,7 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "landing_p
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_image_fade", "column_definition" => "varchar(25) COLLATE utf8_unicode_ci DEFAULT 'normal' COMMENT 'header image fade' AFTER `header_image_timeout`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "parallax_scroll", "column_definition" => "tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '0:none, 1:scroll' AFTER `header_image_timeout`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'left, center, right' AFTER `header_caption`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_vertical_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'top, middle, bottom' AFTER `header_caption_align`");
 //2012-01-12
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_logotype", "column_definition" => "varchar(25) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'site logotype' AFTER `site_copyright`");
 ?>

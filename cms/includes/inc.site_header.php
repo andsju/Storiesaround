@@ -3,7 +3,7 @@
 <div id="site-navigation-identity">
 	<a id="site-name-link" href="<?php echo $_SESSION['site_domain_url']; ?>">
 		<img id="site-logotype" src="<?php echo CMS_DIR . '/content/uploads/logotype/'. $_SESSION['site_logotype']; ?>" alt="">
-		<span id="site-name"><?php echo $_SESSION['site_name']; ?></span>
+		<div id="site-name"><?php echo $_SESSION['site_name']; ?></div>
 	</a>
 	<?php if(isset($_SESSION['site_slogan'])) { ?>
 	<div id="site-slogan-heading"><?php echo $_SESSION['site_slogan']; ?></div>
