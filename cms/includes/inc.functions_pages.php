@@ -420,11 +420,10 @@ function print_meta($utc_modified, $dtz, $languages)
 function print_search_field_area_header($languages)
 {
     $html = '<div id="site-search-header">';
-    $html .= '<label for="search"><i class="fas fa-search" aria-hidden="true"></i></label>'; 
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
-    $html .= '<button id="btn-site-search-page">'. translate("Search", "site_search", $languages) .'</button>';
+    $html .= '<button id="btn-site-search-page"><i class="fas fa-search" aria-hidden="true"></i> '. translate("Search", "site_search", $languages) .'</button>';
     $html .= '</div>';
     echo $html;
 }
@@ -439,12 +438,11 @@ function print_search_field_area_header($languages)
 function print_search_field_area_page($languages)
 {
     $html = '<div id="site-search-page">';
-    $html .= '<label for="search-page"><i class="fas fa-search" aria-hidden="true"></i></label>'; 
     $html .= '<input type="text" name="search-page" placeholder="'. translate("Search", "site_search_pages", $languages) .'" id="search-page" class="search" value="" style="z-index:999">';
     $html .= '<span id="ajax_spinner_search" style="display:none"><img src="'.CMS_DIR.'/cms/css/images/spinner.gif"></span>';
     $html .= '<input type="hidden" id="pid" value="0">';
-    $html .= '<button id="btn-site-search-page">'. translate("Search", "site_search", $languages) .'</button>';
-    $html .= '<input type="checkbox" name="search-page-limit-tree" id="search-page-limit-tree"> <span id="search-page-limit-tree-helper">'. translate("Search", "site_search_limit", $languages) . '</span>';
+    $html .= '<button id="btn-site-search-page"><i class="fas fa-search" aria-hidden="true"></i> '. translate("Search", "site_search", $languages) .'</button>';
+    // $html .= '<input type="checkbox" name="search-page-limit-tree" id="search-page-limit-tree"> <span id="search-page-limit-tree-helper">'. translate("Search", "site_search_limit", $languages) . '</span>';
     $html .= '</div>';
     echo $html;
 }
@@ -3090,4 +3088,19 @@ function getCaptionAlignAsInteger($value) {
     }
     return $n;
 }
+
+/**
+ * @param $value
+ * @return integer
+ */
+function getCaptionVerticalAlignAsInteger($value) {
+    $n = 0;
+    if ($value == "middle") {
+        $n = 1;
+    } else if ($value == "bottom") {
+        $n = 2;
+    }
+    return $n;
+}
+
 ?>

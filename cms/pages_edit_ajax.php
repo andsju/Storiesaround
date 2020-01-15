@@ -8,22 +8,17 @@ if(!get_role_CMS('user') == 1) {die;}
 $pages = new Pages();
 
 if (isset($_POST['token'])) {
-		
 	if ($_POST['token'] == $_SESSION['token']) {
-
 		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_STRING);
 
 		// check client user-agent, prevent session been hijacked
 		if($_SESSION['HTTP_USER_AGENT'] != $_SERVER['HTTP_USER_AGENT']) {
 			die('User agent fail. Please logout and login again.');
 		}
-	
 		$users_id = filter_input(INPUT_POST, 'users_id', FILTER_VALIDATE_INT) ? $_POST['users_id'] : 0;
 
 		if(!get_role_CMS('contributor') == 1) { die; }
-
 		if ($pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT)) { 
-			
 			if($_SESSION['role_CMS'] <= 2) {	
 				$acc_edit = false;
 				$pages_rights = new PagesRights();
@@ -993,8 +988,7 @@ if (isset($_POST['token'])) {
 					$header_image = json_encode($_POST['header_image']);
 					$header_caption = json_encode($_POST['header_caption']);
 					$header_caption_align = json_encode($_POST['header_caption_align']);
-					//$header_caption_show = filter_input(INPUT_POST, 'header_caption_show', FILTER_VALIDATE_INT) ? $_POST['header_caption_show'] : 0;
-					//$header_image_timeout = filter_input(INPUT_POST, 'header_image_timeout', FILTER_VALIDATE_INT) ? $_POST['header_image_timeout'] : 10000;
+					$header_caption_vertical_align = json_encode($_POST['header_caption_vertical_align']);					
 					$header_caption_show = filter_input(INPUT_POST, 'header_caption_show', FILTER_VALIDATE_INT) ? $_POST['header_caption_show'] : 0;
 					$header_image_timeout = $_POST['header_image_timeout'];
 					$header_image_fade = $_POST['header_image_fade'];
@@ -1002,7 +996,7 @@ if (isset($_POST['token'])) {
 					$parallax_scroll = filter_input(INPUT_POST, 'parallax_scroll', FILTER_VALIDATE_INT) ? $_POST['parallax_scroll'] : 0;
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_align, $header_caption_show, $header_image_timeout, $header_image_fade, $landing_page, $parallax_scroll, $utc_modified);
+					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $header_image_timeout, $header_image_fade, $landing_page, $parallax_scroll, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('site header image', $header_image), $users_id, $_SESSION['token'], $utc_modified);

@@ -219,9 +219,9 @@ if ($arr['template'] == 6) {
     die();
 }
 
-$add_class_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
+$add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
 ?>
-<body class="<?php echo $add_class_landing_page;?>">
+<body id="<?php echo $add_id_landing_page;?>">
     <?php 
     print_noscript($languages); 
     
