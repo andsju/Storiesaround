@@ -185,6 +185,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `header_image` varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'Set static header image',
   `header_caption` varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'header image caption',
   `header_caption_align` varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'left, center, right',
+  `header_caption_vertical_align` varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'top, middle, bottom',
   `header_caption_show` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'show header image caption',
   `header_image_timeout` int(5) UNSIGNED NOT NULL DEFAULT '10000' COMMENT 'header image timeout',
   `header_image_fade` varchar(25) COLLATE utf8_unicode_ci DEFAULT 'normal' COMMENT 'header image fade',

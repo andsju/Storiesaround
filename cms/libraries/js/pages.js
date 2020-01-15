@@ -45,7 +45,6 @@ $(document).ready(function () {
 		},
 		focus: function (e, ui) {
 			if ($(menu).get(0) !== $(ui).get(0).item.parent().get(0)) {
-				console.log("A");
 				$(this).menu("option", "position", {
 					my: "left top",
 					at: "right top"
@@ -454,7 +453,6 @@ $(document).ready(function () {
 		if (w < 320) {
 			w = 480;
 		}
-		console.log(w);
 		var h = screen.height - 50;
 		window.resizeTo(w, h);
 		window.focus()
@@ -888,11 +886,9 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 
 
 function addMobileMenu() {
-	var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	var w = document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
-
 	if (w <= 1024) {
-
 		var cms_dir = $("#cms_dir").val();
 		var pages_id = $("#pages_id").val();
 		var role_cms = $("#role_cms").val();
@@ -927,7 +923,6 @@ function addMobileMenu() {
 
 function refresh() {
 	var w = $("#browser_size").slider("value");
-	console.log(w);
 	$("body").css("width", +w + "px");
 	$("#browser_size_px").text("Browser width: " + w + "px");
 }
@@ -992,14 +987,19 @@ parallaxImages.forEach(element => {
 	parallaxImagesHeight.push(height);
 })
 
-// first image fit height
+// if body has class 'landing_page' first image fit height
+let checkLandingPage = document.querySelector("#landing-page");
 let rect = parallaxImages[0].getBoundingClientRect();
-
-var initialHeight = window.innerHeight - rect.y;
-parallaxImages[0].style.height = initialHeight + "px";
-
-if (parallaxImagesHeight[0] > initialHeight) {
-	parallaxImagesHeight[0] = initialHeight;
+var initialHeight = 0;
+if (checkLandingPage === null || checkLandingPage === undefined) {
+	initialHeight = rect.height;
+	parallaxImages[0].style.height = initialHeight + "px";
+} else {
+	initialHeight = window.innerHeight - rect.y;
+	parallaxImages[0].style.height = initialHeight + "px";
+ 	if (parallaxImagesHeight[0] > initialHeight) {
+		parallaxImagesHeight[0] = initialHeight;
+	}
 }
 
 window.addEventListener('load', (event) => {
@@ -1178,6 +1178,7 @@ function swapSlideshowCycleImageCaption() {
 	// get last image caption
 	let caption = images[images.length - 1].getAttribute("data-caption");
 	let captionAlign = images[images.length - 1].getAttribute("data-caption-align");
+	let captionVerticalAlign = images[images.length - 1].getAttribute("data-caption-vertical-align");
 
 	if (caption.length === 0) {
 		return;
@@ -1189,8 +1190,14 @@ function swapSlideshowCycleImageCaption() {
 	// show caption
 	elementCaption.innerHTML = parseMarkdownCode(caption);
 	elementCaption.style.textAlign = captionAlign;
+	let posY = 10;
+	if (captionVerticalAlign == "middle") {
+		posY = 30;
+	} else if (captionVerticalAlign == "bottom") {
+		posY = 50;
+	}
+	elementCaption.style.top = posY + "%";
 	elementCaption.style.filter = "opacity(1)";
-	
 	setTimeout(function () {
 		elementCaption.style.filter = "opacity(0)";
 	}, swapSlideshowCycleImagesTime - 2000);
@@ -1202,10 +1209,11 @@ function parseMarkdownCode(text) {
 	rows.forEach(row => {
 		let pattern = row.indexOf("# ");
 		if (pattern >= 0) {
-			result += "<h1>" + row.substring(2, row.length) + "</h1>";	
+			result += "<div><h1>" + row.substring(2, row.length) + "</h1></div>";	
 		} else {
-			result += "<p>" + row + "</p>";
+			result += "<div><p>" + row + "</p></div>";
 		}
+		result += "<br>";
 	})
 	return result;
 }
