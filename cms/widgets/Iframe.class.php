@@ -39,7 +39,7 @@ class Iframe extends Widgets {
 		return $help;
    }
 	
-	public function Iframe($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
+	public function run($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
 		// return objects in an associative array
 		$objects = json_decode($action, true);
 		$defaults = json_decode($this->default_objects(), true);

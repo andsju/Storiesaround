@@ -60,7 +60,7 @@ class PagesWidgets extends Widgets
             $w = new $row['widgets_class'];
             $widgets_action = $row['widgets_action'];
             $html .= '<div class="widgets-header">' . $row['widgets_header'] . '</div>';
-            $html .= $w->{$row['widgets_class']}($widgets_action, $pages_widgets_id, $pages_id, $width);
+            $html .= $w->run($widgets_action, $pages_widgets_id, $pages_id, $width);
             $html .= '<div class="widgets-footer">' . $row['widgets_footer'] . '</div>';
         }
         echo $html;
