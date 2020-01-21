@@ -39,7 +39,7 @@ class Vimeo extends Widgets {
 		return $help;
    }
 	
-	public function Vimeo($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
+	public function run($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
 		$objects = json_decode($action, true);
 		$defaults = json_decode($this->default_objects(), true);
 		$videoID = isset($objects['videoID']) ? $objects['videoID'] : $defaults['videoID'];

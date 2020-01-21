@@ -389,11 +389,12 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
         <div id="site-contact"></div>
         <div id="site-rss"></div>
     </footer>
+    <a id="page-bottom" href="#top"><i class="fas fa-angle-up"></i></a>
+
     <?php
         $str = aboutCookies($languages);
         echo $str;
     ?>
-
 
     <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>">
     <input type="hidden" name="cms_dir" id="cms_dir" value="<?php echo CMS_DIR;?>">
