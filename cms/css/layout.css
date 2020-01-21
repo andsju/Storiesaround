@@ -2487,7 +2487,7 @@ div.grid_images div.widgets-grid-cell:nth-child(3n) {
 div.grid_images div.image-holder {
     float: left;
     width: 30%;
-    display: grid;
+    display: inline-table;
     padding: 2px
 }
 div.grid_images div.image-holder img {
