@@ -1198,6 +1198,7 @@ function swapSlideshowCycleImageCaption() {
 	}
 	elementCaption.style.top = posY + "%";
 	elementCaption.style.filter = "opacity(1)";
+
 	setTimeout(function () {
 		elementCaption.style.filter = "opacity(0)";
 	}, swapSlideshowCycleImagesTime - 2000);
@@ -1217,3 +1218,9 @@ function parseMarkdownCode(text) {
 	})
 	return result;
 }
+
+$(window).scroll(function() {
+	if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {		
+		$("#page-bottom").show();
+	}
+});

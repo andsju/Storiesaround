@@ -2,7 +2,7 @@
   
 /* site status (development = false)
 -------------------------------------------------- */
-define('LIVE', false);
+define('LIVE', true);
 
 /* custom css settings, available in some select lists
 -------------------------------------------------- */
