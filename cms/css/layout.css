@@ -3479,7 +3479,7 @@ meta tag width=device-width,initial-scale=1.0
         height: 46px
     }
     nav#site-navigation-mobile {
-        display: initial;
+        display: none;
     }
     .menu-button .touch-button .navicon {
         font-size: 24px;
