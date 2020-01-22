@@ -2841,8 +2841,8 @@ function print_grid($arr, $area)
 
 
 function print_mobile_menu($pages, $id, $seo, $href) 
-{
-    if ($_SESSION['layoutType'] == "mobile") {
+{       
+    // if ($_SESSION['layoutType'] == "mobile") {
         echo '<div id="wrapper-mobile-site-navigation">';
             echo '<div class="mobile-buttons"></div><div class="menu-button"></div>';               
                 echo '<nav id="site-navigation-mobile">';
@@ -2851,7 +2851,7 @@ function print_mobile_menu($pages, $id, $seo, $href)
                 $parent_id = 0;
                 get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo, $href, $open, $depth=0, $show_pages_id = false);									
         echo '</div>';
-    }
+    //}
 }
 
 
