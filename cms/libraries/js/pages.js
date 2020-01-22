@@ -889,6 +889,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 
 
 function addMobileMenu() {
+	console.log("mobile menu");
 	var w = document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
 	if (w <= 1024) {
@@ -896,7 +897,7 @@ function addMobileMenu() {
 		var pages_id = $("#pages_id").val();
 		var role_cms = $("#role_cms").val();
 		var newdata = '<img class="mobile-menu-icon" src="' + cms_dir + '/content/favicon.png" id="site-icon">';
-		newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_search.png" style="" id="search-site-icon">';
+		// newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_search.png" style="" id="search-site-icon">';
 		if (!logged_in) {
 			newdata += '<img class="mobile-menu-icon" src="' + cms_dir + '/cms/css/images/icon_login.png" id="site-login-icon">';
 		} else {
