@@ -991,7 +991,7 @@ parallaxImages.forEach(element => {
 	parallaxImagesHeight.push(height);
 })
 
-// if body has class 'landing_page' first image fit height
+// set image heights
 let checkLandingPage = document.querySelector("#landing-page");
 let rect = parallaxImages[0].getBoundingClientRect();
 var initialHeight = 0;
@@ -1006,10 +1006,15 @@ if (checkLandingPage === null || checkLandingPage === undefined) {
 	}
 }
 
+
+
 window.addEventListener('load', (event) => {
 
 	// first image fit height
 	let rect = parallaxImages[0].getBoundingClientRect();
+
+	// set parent element container
+	var parentElement = parallaxImages[0].parentElement;
 
 	// initial scroll
 	var scrolled = false;
@@ -1020,12 +1025,12 @@ window.addEventListener('load', (event) => {
 			scrolled = true;
 		}
 		if (parallax_scroll == 1) {
-			showParallax(parallaxImages, initialHeight);
+			showParallax(parallaxImages, initialHeight, parentElement);
 		}
 	});
 });
 
-function showParallax(elements, initialHeight) {
+function showParallax(elements, initialHeight, parentElement) {
 	if (elements.length === 0) {
 		return;
 	}
@@ -1040,8 +1045,10 @@ function showParallax(elements, initialHeight) {
 		}
 		if (result.rectangle.top <= 0 && result.rectangle.height >= 0) {
 			element.style.height = parallaxImagesHeight[i] + (result.rectangle.top * 0.5) + "px";
+			parentElement.style.height = parallaxImagesHeight[i] + (result.rectangle.top * 0.5) + "px";
 		} else if (result.check === true) {
 			element.style.height = parallaxImagesHeight[i] + "px";
+			parentElement.style.height = parallaxImagesHeight[i] + "px";
 		}
 		i++;
 	});
