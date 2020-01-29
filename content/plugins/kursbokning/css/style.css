@@ -116,13 +116,11 @@ div#prioritera_tips { font-size:1.2em; padding:5px;font-style:italic;}
 @media (min-width: 320px) and (max-width: 567px) {
 
 	body {font-size: 1em;}
-	body {max-width:480px; width:100%;}
 	#course_booking { margin: 0; border: 0; }
 }
 @media (min-width: 568px) and (max-width: 767px) {
 
 	body {font-size: 1em;}
-	body {max-width:568px; width:100%;}
 	#course_booking { margin: 0; border: 0; }
 	
 }
