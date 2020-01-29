@@ -32,8 +32,6 @@ div#content-html ul li {
 
 
 
-
-
 /* top navigation
 ------------------------- */
 
@@ -96,6 +94,16 @@ div#site-search-page {
     background-repeat: repeat;
     border: 1px solid grey;
 }
+
+
+
+
+/* footer 
+------------------------- */
+footer p {
+    margin:0
+}
+
 
 
 

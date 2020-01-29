@@ -3542,6 +3542,12 @@ meta tag width=device-width,initial-scale=1.0
     #site-header-image {
         height: 380px;
     }
+
+    #wrapper-site-header {
+        padding: 0 50px;
+    }
+
+
 }
 
 @media (min-width: 1920px) {
