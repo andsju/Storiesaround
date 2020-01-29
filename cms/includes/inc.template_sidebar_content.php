@@ -6,14 +6,14 @@
                 <div id="content-top-selections"><?php print_selection("selection-content-above", $selection_area['content_above']); ?></div>
                 <div id="content-top-grid"><?php print_grid($arr, 1);?></div>
                 <div id="content-breadcrumb"><?php print_breadcrumb($id, $arr['breadcrumb']); ?></div>
+                <?php if ($arr['search_field_area'] == 4) { print_search_field_area_page($languages); } ?>
+                <?php if ($arr['search_field_area'] == 4) { print_search_field_result($languages); } ?>
                 <article>
                     <?php if ($arr['title_hide'] == 0) { ?>
                     <header>
                         <h1 id="content-title" class="editable"><?php echo $page_title_body .' '.$icon; ?></h1>                        
                     </header>
                     <?php } ?>
-                    <?php if ($arr['search_field_area'] == 4) { print_search_field_area_page($languages); } ?>
-                    <?php if ($arr['search_field_area'] == 4) { print_search_field_result($languages); } ?>
                     <?php print_selection("selection-content-inside", $selection_area['content_inside']); ?>
 
                     <div id="content-html" class="editable"> 

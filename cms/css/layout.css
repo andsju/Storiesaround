@@ -112,7 +112,8 @@ header#site-header {
 
 #site-header-image img.slideshow-cycle-image {
     position: absolute;
-    width: 100%;
+    /*     width: 100%;
+ */
     opacity: 1;
 }
 
@@ -239,7 +240,7 @@ div#site-navigation-cms a {
     font-size: 1.4em
 }
 #site-search-page {
-    margin: 20px 0;
+    margin: 0;
     padding: 10px;
     position: relative;
     text-align: center;
@@ -2615,6 +2616,7 @@ div.stories-cell div.stories-content {
 meta tag width=device-width,initial-scale=1.0
 ------------------------------------------- */
 
+
 /*  0 (320px) -> 
 |-------------------------------------------|
 |                  top                      |
@@ -2643,7 +2645,7 @@ meta tag width=device-width,initial-scale=1.0
         float: none;
     }
     div#wrapper-top {
-        padding: 10px 20px 
+        padding: 10px 20px
     }
     div#wrapper-page {
         padding: 20px
@@ -2716,13 +2718,22 @@ meta tag width=device-width,initial-scale=1.0
         height: 100%
     }
     #site-header-image {
-        height: 160px;
+        height: 200px;
     }
+
     #site-header-image img, #site-header-image video {
-        width: 640px !important;
+        width: 600px;
         height: auto;
         left: 50%;
-        margin-left: -320px;
+        margin-left: -300px;
+    }
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+        width: 800px;
+        height: auto;
+        left: 50%;
+        margin-left: -400px;
+        top: 25%;
+        margin-top: -150px;
     }
 
     #site-header-image #site-search-page {
@@ -2902,6 +2913,8 @@ meta tag width=device-width,initial-scale=1.0
 
 
 
+
+
 /*  568px ->
 |-------------------------------------------|
 |                   top                     |
@@ -2942,10 +2955,18 @@ meta tag width=device-width,initial-scale=1.0
         height: 200px;
     }
     #site-header-image img, #site-header-image video {
-        width: 768px !important;
+        width: 800px;
         height: auto;
         left: 50%;
-        margin-left: -384px;
+        margin-left: -400px;
+    }
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+        width: 1200px;
+        height: auto;
+        left: 50%;
+        margin-left: -600px;
+        top: 25%;
+        margin-top: -250px;
     }
 
     div#site-search-page input {
@@ -3087,14 +3108,21 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     #site-header-image {
-        max-height: 100vmin;
+        width: 100%;
+        overflow: hidden;
+        height: 200px;
     }
+
     #site-header-image img, #site-header-image video {
-        width: 100% !important;
+        width: 1000px;
         height: auto;
-        left: 0;
-        margin-left: 0;
+        left: 50%;
+        margin-left: -500px;
     }
+
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+    }
+
 
     div#site-search-page input {
         width: 50% !important
@@ -3186,10 +3214,10 @@ meta tag width=device-width,initial-scale=1.0
         background-color: black;
     }
     #wrapper-site-header-image {
-        width: 1280px;
+        width: 100%;
     }
     #wrapper-page {
-        width: 1280px;
+        width: 1024px;
         min-height: 10px;
         margin: 0 auto;
         padding: 20px;
@@ -3199,11 +3227,11 @@ meta tag width=device-width,initial-scale=1.0
         border-right: 1px solid black
     }
     #wrapper-top {
-        width: 1280px;
+        width: 1024px;
         margin: 0 auto
     }
     #wrapper-bottom, #wrapper-site-footer {
-        width: 1280px;
+        width: 1024px;
         margin: 20px auto
     }
     #wrapper-left-sidebar {
@@ -3290,21 +3318,42 @@ meta tag width=device-width,initial-scale=1.0
 
 
     header#site-header {
-        width: 1280px;
+        width: 100%;
         position: relative;
-        margin-top: 40px
+        margin-top: 0
     }
 
     #site-header-image {
         width: 100%;
-        overflow: hidden; 
-        height: 320px;
+        overflow: hidden;
+        height: 250px;
     }
+
+
+    #site-header-image img, #site-header-image video {
+
+
+        width: 100%;
+        height: auto;
+        left: 0;
+        margin-left: 0;
+
+
+    }
+
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+        width: 1600px;
+        height: auto;
+        left: 50%;
+        margin-left: -800px;
+        top: 25%;
+        margin-top: -350px;
+    }
+
 
     div#site-search-page {
-        width: 1280px
+        width: 100%
     }
-
 
     #site-header-caption div {
         padding: 2px 5px 4px 5px;
@@ -3342,7 +3391,7 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     div#top-grid {
-        margin-top: 20px;   
+        margin-top: 20px;
     }
 
 
@@ -3466,6 +3515,48 @@ meta tag width=device-width,initial-scale=1.0
 }
 
 
+@media (min-width: 1366px) {
+
+    #site-header-image {
+        height: 340px; 
+    }
+}
+
+
+@media (min-width: 1440px) {
+
+    #site-header-image {
+        height: 360px;
+    }
+
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+        width: 2000px;
+        height: auto;
+        left: 50%;
+        margin-left: -1000px;
+        top: 25%;
+        margin-top: -400px;
+    }
+}
+
+@media (min-width: 1600px) {
+
+    #site-header-image {
+        height: 380px;
+    }
+}
+
+@media (min-width: 1920px) {
+
+    #site-header-image {
+        height: 480px;
+    }
+}
+
+
+
+
+
 
 /* mobiles | tablets | <= 1024 px top menu  
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -3550,4 +3641,66 @@ meta tag width=device-width,initial-scale=1.0
         width: 80px !important
     }
 
+}
+
+
+/* mobile orientations  
+
+/*  320px -> 568
+|-------------------------------|
+|            top                |
+|-------------------------------|
+|           header              |
+|-------------------------------|
+|           sidebar             |
+|-------------------------------|
+|           content             |
+|          ---------            |
+|            grid               |
+|-------------------------------|
+|           sidebar             |
+|-------------------------------|
+|           footer              |
+|-------------------------------|
+*/
+
+
+/* mobile portrait mode */
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (orientation: portrait) {
+
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+        top: 25%;
+        margin-top: -220px;
+
+    }
+}
+
+
+/*  320px -> 568
+|---------------------------------------------------------------------------------------------|
+|                                            top                                              |
+|---------------------------------------------------------------------------------------------|
+|                                           header                                            |
+|---------------------------------------------------------------------------------------------|
+|                                          sidebar                                            |
+|---------------------------------------------------------------------------------------------|
+|                                          content                                            |
+|                                         ---------                                           |
+|                                           grid                                              |
+|---------------------------------------------------------------------------------------------|
+|                                          sidebar                                            |
+|---------------------------------------------------------------------------------------------|
+|                                          footer                                             |
+|---------------------------------------------------------------------------------------------|
+*/
+
+
+/* mobile landscape mode */
+@media only screen and (min-device-width: 568px) and (max-device-width: 812px) and (orientation: landscape) {
+
+    body#landing-page #site-header-image img, body#landing-page #site-header-image video {
+        top: 25%;
+        margin-top: -400px;
+
+    }
 }
