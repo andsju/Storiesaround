@@ -790,7 +790,6 @@ ul#navigation-root a:hover {}
 ul#navigation-root li.node-open a {
     background: #FFF;
     color: #000;
-    text-decoration: underline
 }
 ul#navigation-root li:last-child {
     border-right: 0
@@ -3129,7 +3128,7 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     #site-header-image #site-search-page {
-        bottom: 0;
+        bottom: 10px;
         max-width: 250px;
         opacity: 0.4;
         margin: 0 auto
@@ -3302,7 +3301,6 @@ meta tag width=device-width,initial-scale=1.0
     }
     ul#navigation-root li {
         float: left;
-        margin-left: 5px;
     }
     ul#navigation-root a {
         float: left;
