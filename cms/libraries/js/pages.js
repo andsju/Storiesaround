@@ -999,6 +999,7 @@ if (checkLandingPage === null || checkLandingPage === undefined) {
 	initialHeight = rect.height;
 	parallaxImages[0].style.height = initialHeight + "px";
 } else {
+	console.log(window.innerHeight, rect.y);
 	initialHeight = window.innerHeight - rect.y;
 	parallaxImages[0].style.height = initialHeight + "px";
  	if (parallaxImagesHeight[0] > initialHeight) {
@@ -1031,6 +1032,7 @@ window.addEventListener('load', (event) => {
 });
 
 function showParallax(elements, initialHeight, parentElement) {
+	
 	if (elements.length === 0) {
 		return;
 	}
@@ -1205,7 +1207,7 @@ function swapSlideshowCycleImageCaption() {
 	if (captionVerticalAlign == "middle") {
 		posY = 30;
 	} else if (captionVerticalAlign == "bottom") {
-		posY = 50;
+		posY = 60;
 	}
 	elementCaption.style.top = posY + "%";
 	elementCaption.style.filter = "opacity(1)";
