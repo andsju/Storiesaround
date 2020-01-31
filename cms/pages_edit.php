@@ -2778,7 +2778,10 @@ if(is_array($check_edit)) {
 										
 											$ext = pathinfo($dir.'/'.$file, PATHINFO_EXTENSION);
 											if(in_array($ext, $images_ext)) {
-												$checked = in_array($file, $header_image) ? " checked" : "";
+												$checked = "";
+												if (is_array($header_image)) {
+													$checked = in_array($file, $header_image) ? " checked" : "";
+												}
 												if ($ext != 'mp4') {
 													echo '<div class="code" style="position:relative"><img alt="'.$file.'" src="../content/uploads/header/'. $file .'" data-filename="'.$file.'" width="150px" style="margin-bottom:10px;" /><input type="checkbox" '.$checked.' class="image_mark" data-file="'.$file.'" data-video="false" style="position:absolute;top:2px;left:2px;transform:scale(2);"></div>';
 												} else {

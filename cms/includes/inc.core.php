@@ -129,13 +129,18 @@ function write_debug($s)
 {
 
     $file = CMS_ABSPATH . '/log/php_debug.txt';
-    // new message
-    if (is_array($s)) {
-        $contents = serialize($s) ."\r\n";
-    } else {
-        $contents = $s ."\r\n";
+    $contents = "";
+    $number_of_arguments = func_num_args();
+    $arguments = func_get_args();
+    for ($i = 0; $i < $number_of_arguments; $i++) {
+
+        if (is_array($arguments[$i])) {
+            $contents = $contents . serialize($arguments[$i]) ."\r\n";
+        } else {
+            $contents = $contents . $arguments[$i] ."\r\n";
+        }    
     }
-    
+
     file_put_contents($file, $contents, FILE_APPEND | LOCK_EX);
 }
 

@@ -42,8 +42,10 @@
     ?>
     <link rel="icon" type="image/png" href="<?php echo CMS_DIR; ?>/content/favicon.png">
     <?php
-    foreach ($og_properties as $key => $value) {
-        echo "\n\t" . '<meta property="og:'. $key .'" content="'.$value.'">';
+    if (count($og_properties) > 0) {
+        foreach ($og_properties as $key => $value) {
+            echo "\n\t" . '<meta property="og:'. $key .'" content="'.$value.'">';
+        }
     }
     echo "\n\t";    
     include_once_customfile('includes/inc.head_elements.php', $arr, $languages);
