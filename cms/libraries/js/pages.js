@@ -889,7 +889,6 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 
 
 function addMobileMenu() {
-	console.log("mobile menu");
 	var w = document.documentElement.clientWidth || document.body.clientWidth;
 	var logged_in = document.querySelector("#user-toolbar");
 	if (w <= 1024) {
@@ -1187,6 +1186,10 @@ function swapSlideshowCycleImageCaption() {
 
 	// get cycle images
 	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
+
+	if (images === undefined || images.length === 0) {
+		return;
+	}
 
 	// get last image caption
 	let caption = images[images.length - 1].getAttribute("data-caption");
