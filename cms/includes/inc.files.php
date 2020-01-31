@@ -47,6 +47,7 @@ if (!get_role_CMS('administrator') == 1) {
 
 $folders = array(
     CMS_DIR . "/cms/css/images" => "cms/css/images",
+    CMS_DIR . "/content/sample" => "content/sample",
     CMS_DIR . "/content/uploads/files" => "content/uploads/files",
     CMS_DIR . "/content/uploads/header" => "content/uploads/header",
     CMS_DIR . "/content/uploads/html" => "content/uploads/html",

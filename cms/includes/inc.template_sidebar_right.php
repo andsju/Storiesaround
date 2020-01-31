@@ -45,13 +45,11 @@
         <div id="wrapper-right-sidebar" class="column" style="width:<?php echo $right_sidebar_percent_width;?>%;min-height:1px">
             <?php print_selection("selection-right-sidebar-top", $selection_area['right_sidebar_top']); ?>
             <?php
-            //if($_SESSION['site_navigation_vertical_sidebar'] == 1) {
-                echo '<nav id="nav-site-navigation-vertical">';
-                if (!isset($_GET['sample'])) {
-                    get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo=true, $href, $open, $depth=0, $show_pages_id = false);
-                }
-                echo '</nav>';
-            //}
+            echo '<nav id="nav-site-navigation-vertical">';
+            if (!isset($_GET['sample'])) {
+                get_pages_tree_sitemap($parent_id, $id, $path=get_breadcrumb_path_array($id), $a=true, $a_add_class=false, $seo=true, $href, $open, $depth=0, $show_pages_id = false);
+            }
+            echo '</nav>';
             ?>
             <aside id="right-sidebar-widgets"><?php if($rows_widgets){ 
                 show_widgets_content($rows_widgets, "widgets_right_sidebar", $wrapper_right_sidebar_width);} ?></aside>

@@ -389,7 +389,10 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
         <div id="site-contact"></div>
         <div id="site-rss"></div>
     </footer>
-    <a id="page-bottom" href="#top"><i class="fas fa-angle-up"></i></a>
+    <div id="wrapper-page-bottom">
+        <a id="page-bottom" href="#wrapper-site-header"><i class="fas fa-angle-up"></i></a>
+    </div>
+    
 
     <?php
         $str = aboutCookies($languages);
