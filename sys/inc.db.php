@@ -7,7 +7,7 @@
 define('DB_HOST', 'localhost');
 
 // database name
-define('DB_NAME', 'db_gitstoriesaround');
+define('DB_NAME', 'db_gitstoriesaround1');
 
 // database username
 define('DB_USER', 'root');
