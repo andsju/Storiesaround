@@ -79,7 +79,7 @@ include_once 'includes/inc.header_minimal.php';
 			autoresize_max_height: 900,
 			
 			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css','css/wysiwyg_editor.css'],
-			plugins : "advlist anchor autoresize charmap code hr image imagetools link lists media paste searchreplace table template visualblocks wordcount moxiemanager",
+			plugins : "advlist anchor autoresize charmap code hr image imagetools link lists media paste searchreplace table template visualblocks wordcount",
 			toolbar: "undo redo | removeformat | styleselect | bold italic",
 			menubar: "view edit",
 			image_advtab: true,
