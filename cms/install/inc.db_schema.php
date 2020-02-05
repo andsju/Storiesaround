@@ -1,7 +1,8 @@
 <?php
 
 
-$charset_collate = "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+// $charset_collate = "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+$charset_collate = "ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
 $sql_tables = array();
 
