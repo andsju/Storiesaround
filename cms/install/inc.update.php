@@ -13,8 +13,6 @@ $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_templ
 // 20150320
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_autosave", "column_definition" => "int(6) unsigned NOT NULL DEFAULT '120000' COMMENT 'set autosave interval' AFTER `site_seo_url`");
 //20150728
-$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, story_content, story_wide_content, tag)";
-$sqls[] = "ALTER TABLE users ADD FULLTEXT INDEX users_index (first_name, last_name, email, user_name)";
 $sqls_alter_modify_column[] = array("tbl_name" => "pages", "col_name" => "header", "column_definition" => "varchar(100) DEFAULT '' COMMENT 'Set static header image' AFTER `tag`");
 // 20150804
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_ui_theme", "column_definition" => "varchar(25) DEFAULT '' COMMENT 'set new jquery-ui theme' AFTER `site_theme`");
@@ -41,16 +39,14 @@ $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "stories_child_area", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:none, 1:left sidebar, 2:right sidebar, 3-6:content' AFTER `stories_columns`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "stories_equal_height", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:no, 1:yes' AFTER `stories_css_class`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "template_custom", "column_definition" => "varchar(100) DEFAULT '' COMMENT 'custom template' AFTER `template`");
-$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "header", "col_name_new" => "header_image", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'Set static header image' AFTER `tag`");
-$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'header image caption' AFTER `header_image`");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "header", "col_name_new" => "header_image", "column_definition" => "varchar(255) DEFAULT '[]' COMMENT 'Set static header image' AFTER `tag`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption", "column_definition" => "varchar(255) DEFAULT '[]' COMMENT 'header image caption' AFTER `header_image`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_show", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'show header image caption' AFTER `header_caption`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_image_timeout", "column_definition" => "int(5) unsigned NOT NULL DEFAULT '10000' COMMENT 'header image timeout' AFTER `header_caption_show`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_template_default", "column_definition" => "tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT 'default page template' AFTER `site_wrapper_page_width`");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads_limit");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "ads_filter");
-//$sqls[] = "DROP INDEX pages_index ON pages";
-//$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, grid_content, story_content, tag, pages_id_link)";
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_feed");
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_feed_interval");
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_limit_stories");
@@ -58,7 +54,18 @@ $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_flas
 $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_title_position");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_header_image", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'default header image' AFTER `site_navigation_vertical_sidebar`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_404", "column_definition" => "text DEFAULT '' COMMENT '404 page not found' AFTER `site_header_image`");
+
 // CREATE TABLE IF NOT EXISTS `pages_categories`
+$sqls[] = "
+CREATE TABLE IF NOT EXISTS `pages_categories` (
+    `pages_categories_id` int(3) NOT NULL,
+    `category` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+    `position` int(3) NOT NULL DEFAULT 0,
+    `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+    `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+    PRIMARY KEY (`pages_categories_id`)
+);";
+
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "category", "column_definition" => "varchar(50) DEFAULT '' COMMENT 'page category' AFTER `lang`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "category_position", "column_definition" => "int(2) DEFAULT '99' COMMENT 'page category position' AFTER `lang`");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "story_wide_content");
@@ -74,14 +81,59 @@ $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "title_alt
 $sqls_alter_add_column[] = array("tbl_name" => "pages_images", "col_name" => "caption_extended", "column_definition" => "varchar(1000) DEFAULT '' COMMENT 'extended caption' AFTER `caption`");
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_about_cookies_url", "column_definition" => "varchar(255) DEFAULT '' COMMENT 'read about cookies url' AFTER `site_404`");
 //2019-12-28
-$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "story_event_date", "col_name_new" => "story_event_date", "column_definition" => "DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'story event date'");
-$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "utc_created", "col_name_new" => "utc_created", "column_definition" => "DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created'");
-$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "utc_modified", "col_name_new" => "utc_modified", "column_definition" => "DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'modified'");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "story_event_date", "col_name_new" => "story_event_date", "column_definition" => "datetime NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'story event date'");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "utc_created", "col_name_new" => "utc_created", "column_definition" => "datetime NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'created'");
+$sqls_alter_change_column[] = array("tbl_name" => "pages", "col_name" => "utc_modified", "col_name_new" => "utc_modified", "column_definition" => "datetime NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'modified'");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "landing_page", "column_definition" => "tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0:none, 1:set CSS class' AFTER `category`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_image_fade", "column_definition" => "varchar(25) COLLATE utf8_unicode_ci DEFAULT 'normal' COMMENT 'header image fade' AFTER `header_image_timeout`");
 $sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "parallax_scroll", "column_definition" => "tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '0:none, 1:scroll' AFTER `header_image_timeout`");
-$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'left, center, right' AFTER `header_caption`");
-$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_vertical_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'top, middle, bottom' AFTER `header_caption_align`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '[]' COMMENT 'left, center, right' AFTER `header_caption`");
+$sqls_alter_add_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_vertical_align", "column_definition" => "varchar(255) COLLATE utf8_unicode_ci DEFAULT '[]' COMMENT 'top, middle, bottom' AFTER `header_caption_align`");
 //2012-01-12
 $sqls_alter_add_column[] = array("tbl_name" => "site", "col_name" => "site_logotype", "column_definition" => "varchar(25) COLLATE utf8_unicode_ci DEFAULT 'logotype.png' COMMENT 'site logotype' AFTER `site_copyright`");
+
+// 2020-02-05
+$sqls[] = "ALTER TABLE `calendar_categories` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `calendar_categories` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `calendar_events` MODIFY `event_date` date NOT NULL DEFAULT '1000-01-01';";
+$sqls[] = "ALTER TABLE `calendar_events` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `calendar_events` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `calendar_views` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',;";
+$sqls[] = "ALTER TABLE `calendar_views` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `groups` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `groups` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `groups_default` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `groups_default` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `history` MODIFY `utc_datetime` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `history_email` MODIFY `utc_datetime` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages` MODIFY `story_event_date` datetime NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'story event date';";
+$sqls[] = "ALTER TABLE `pages` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'created';";
+$sqls[] = "ALTER TABLE `pages` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'modified';";
+$sqls[] = "ALTER TABLE `pages_categories` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_categories` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_images` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_images` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_plugins` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_plugins` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_selections` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_selections` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_widgets` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `pages_widgets` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `plugins` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `plugins` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `site` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `tags` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `tags` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `users` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `users` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `users` MODIFY `utc_lastvisit` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `widgets` MODIFY `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+$sqls[] = "ALTER TABLE `widgets` MODIFY `utc_modified` datetime NOT NULL DEFAULT '1000-01-01 00:00:00';";
+
+
+$sqls[] = "DROP INDEX pages_index ON pages;";
+$sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, grid_content, story_content, tag, pages_id_link);";
+$sqls[] = "DROP INDEX users_index ON users;";
+$sqls[] = "ALTER TABLE users ADD FULLTEXT INDEX users_index (first_name, last_name, email, user_name);";
+
 ?>

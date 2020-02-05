@@ -108,7 +108,9 @@ if (isset($_POST['token'])){
 				// sql cmd in array $sqls_alter_change_column
 				if(is_array($sqls_alter_change_column)) {
 					foreach($sqls_alter_change_column as $sql_alter_change_column) {
+						write_debug($sql_alter_change_column);
 						$result = $site->setSiteUpdateAlterChangeColumn($sql_alter_change_column);
+						write_debug($result);
 						$reply = $result ? date("H:i:s") .' | success' : null;
 						if($result) {
 							$i++;

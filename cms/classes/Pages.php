@@ -76,12 +76,12 @@ class Pages extends Database
      * @param int $stories_columns
      * @return integer
      */
-    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns)
+    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template, $stories_columns)
     {
         try {
             $sql_insert = "INSERT INTO pages 
-			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_show, template, stories_columns) VALUES
-			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_show, :template, :stories_columns)";
+			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template, stories_columns) VALUES
+			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_align, :header_caption_vertical_align, :header_caption_show, :template, :stories_columns)";
 
             $stmt = $this->db->prepare($sql_insert);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -99,6 +99,8 @@ class Pages extends Database
             $stmt->bindParam(':selections', $selections, PDO::PARAM_STR);
             $stmt->bindParam(':header_image', $header_image, PDO::PARAM_STR);
             $stmt->bindParam(':header_caption', $header_caption, PDO::PARAM_STR);
+            $stmt->bindParam(':header_caption_align', $header_caption_align, PDO::PARAM_STR);
+            $stmt->bindParam(':header_caption_vertical_align', $header_caption_vertical_align, PDO::PARAM_STR);
             $stmt->bindParam(':header_caption_show', $header_caption_show, PDO::PARAM_INT);
             $stmt->bindParam(':template', $template, PDO::PARAM_INT);
             $stmt->bindParam(':stories_columns', $stories_columns, PDO::PARAM_INT);
@@ -2579,7 +2581,7 @@ class Pages extends Database
     public function getPagesAsTemplate($id)
     {
         $rows = null;
-        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_show, template, stories_columns, stories_filter, selections
+        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template, stories_columns, stories_filter, selections
 		FROM pages 
 		WHERE pages_id = :pages_id";
 

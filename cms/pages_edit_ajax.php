@@ -2318,21 +2318,23 @@ if (isset($_POST['token'])) {
 				$header_caption_show = $template = $stories_columns = 0;
 				$header_image = $header_caption = json_encode(array());
 
+
 				$r = $pages->getPagesAsTemplate($parent_id);
 				if($r) {
-
 					$meta_additional = $r['meta_additional'];
 					$meta_robots = $r['meta_robots'];
 					$tag = $r['tag'];
 					$header_image = $r['header_image'];
 					$header_caption = $r['header_caption'];
+					$header_caption_align = $r['header_caption_align'];
+					$header_caption_vertical_align = $r['header_caption_vertical_align'];
 					$header_caption_show = $r['header_caption_show'];					
 					$template = $r['template'];
 					$stories_columns = $r['stories_columns'];
 					$stories_filter = $r['stories_filter'];
 					$selections = $r['selections'];
 					
-					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_show, $template, $stories_columns);
+					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template, $stories_columns);
 					
 					if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
 						mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);

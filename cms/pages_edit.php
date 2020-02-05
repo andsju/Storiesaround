@@ -2968,7 +2968,7 @@ if(is_array($check_edit)) {
 								<option value="99"></option>
 							</select>
 							<?php
-							echo ' (weight: '. $arr['category_position'] .')';
+							//echo ' (weight: '. $arr['category_position'] .')';
 							?>
 						</p>
 												
