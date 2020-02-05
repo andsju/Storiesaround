@@ -2,7 +2,6 @@
 content/includes/
 content/plugins/
 content/rss/
-
 log/
 sys/inc.db.php
 _tmp/
