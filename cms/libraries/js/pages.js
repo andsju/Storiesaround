@@ -1092,11 +1092,24 @@ switch (swapSlideshowCycleImagesFade) {
 }
 
 let swapSlideshowCycleImagesStart = true;
+let swapSlideshowIntervalId = 0;
+
+// function to disable slideshow when window loses focus
+function onChangeFocus() {
+
+	// console.log("changed visibility", arguments);
+	clearInterval(swapSlideshowIntervalId);
+}
 
 // swap images
 window.addEventListener('load', (event) => {
+
 	swapSlideshowCycleImageCaption();
-	setInterval(function () {
+
+	document.addEventListener("visibilitychange", onChangeFocus);
+
+	swapSlideshowIntervalId = setInterval(function () {
+
 		fadeSlideshowCycleImages();
 	}, swapSlideshowCycleImagesTime);
 });
