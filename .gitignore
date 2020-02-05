@@ -2,15 +2,15 @@
 content/includes/
 content/plugins/
 content/rss/
-# content/uploads/files/**
-# content/uploads/header/**
-# content/uploads/html/**
-# content/uploads/images/**
-# content/uploads/logotype/**
-# content/uploads/media/**
-# content/uploads/misc/**
-# content/uploads/pages/**
-# content/uploads/plugins/
+content/uploads/files/**
+content/uploads/header/**
+content/uploads/html/**
+content/uploads/images/**
+content/uploads/logotype/**
+content/uploads/media/**
+content/uploads/misc/**
+content/uploads/pages/**
+content/uploads/plugins/
 log/
 sys/inc.db.php
 _tmp/
