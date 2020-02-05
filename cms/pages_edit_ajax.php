@@ -2034,8 +2034,12 @@ if (isset($_POST['token'])) {
 				case 'pages_rights_save':
 					// this can be made less database intensive... fix arrays one sunny day
 					// pages_rights_id
-					$r_id = $_POST['r_id'];
-					
+
+					if (!isset($_POST['r_id']) ) {
+						return;
+					}
+
+					$r_id = $_POST['r_id'];					
 					$r_read = $_POST['r_read'];
 					$r_edit = $_POST['r_edit'];
 					$r_create = $_POST['r_create'];
