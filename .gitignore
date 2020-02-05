@@ -1,7 +1,7 @@
 # ignore version control
 content/includes/
+content/plugins/
 content/rss/
-content/uploads/ads/**
 content/uploads/files/**
 content/uploads/header/**
 content/uploads/html/**
