@@ -7,11 +7,11 @@
 			mode : "specific_textareas",
 			selector : "textarea#content, textarea#story_content, textarea#content_html, textarea#site_404",
 			autoresize_max_height: 900,
-			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css','css/wysiwyg_editor.css'],
+			content_css : ['css/layout.css','../content/themes/'+theme+'/style.css'],
 			// plugins : " stories",
-			plugins : "advlist anchor autoresize charmap code hr image imagetools link lists media paste searchreplace table template visualblocks wordcount moxiemanager",
+			plugins : "advlist anchor autoresize charmap code hr image imagetools link lists media paste searchreplace table template visualblocks wordcount",
 			toolbar: "undo redo | removeformat | styleselect | bold italic | bullist numlist | outdent indent | link | image",
-			menubar: "view edit insert tools",
+			menubar: "view edit insert tools image",
 			image_advtab: true,
 			style_formats_merge: true,
 			style_formats: [
@@ -45,6 +45,6 @@
 				{title: 'Lorem ipsum 1', description: 'Dummy text', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae suscipit velit, a blandit augue. Quisque eu condimentum tellus. Pellentesque luctus, tortor non consectetur convallis, urna magna suscipit tortor, id commodo elit magna sit amet eros. Quisque eget interdum risus. Vestibulum nec lectus sit amet diam lacinia sollicitudin eget ac magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque purus ipsum, porttitor eget vestibulum et, congue eget ipsum. Curabitur sagittis est mi, et molestie ipsum porttitor ac.'}, 
 				{title: 'Lorem ipsum 5', description: 'Dummy text', url: 'libraries/tinymce/template_lorem.html'} 
 			],
-			image_list: "includes/inc.image_list.php"
+			image_list: "editor_image_list.php"
 		});
 	});
