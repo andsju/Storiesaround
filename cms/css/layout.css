@@ -2784,7 +2784,6 @@ meta tag width=device-width,initial-scale=1.0
     }
     ul.nav-tree li {
         margin: 0;
-        padding: 0 !important;
     }
     .node {
         margin: 0;
@@ -3017,7 +3016,7 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     div.grid_images div.widgets-grid-cell {
-        width: 100%;
+        width: 30%;
     }
 
     div.grid-cell, div.stories-cell {
