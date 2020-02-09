@@ -1319,19 +1319,17 @@ li.toolbar-icons {
     float: left;
 }
 #menu li {
-    padding: 5px;
-    margin: 0px;
-}
-#menu>li li {
-    width: 100%;
-    padding: 7px;
+    padding: 3px 0 0 0;
+    margin: 2px 0 0 0;
+    background: linear-gradient(0deg, rgb(240,240,240), rgb(250,250,250));
 }
 #menu .ui-menu {
-    min-width: 200px;
+    min-width: 280px;
     max-width: 300px;
 }
 #menu li a {
     text-decoration: none;
+    color: navy;
 }
 #menu li a:hover {}
 #menu .ui-state-active,
