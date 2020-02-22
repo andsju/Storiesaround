@@ -12,5 +12,6 @@ content/uploads/misc/**
 content/uploads/pages/**
 content/uploads/plugins/
 log/
-sys/inc.db.php
+_docs/
 _tmp/
+sys/inc.db.php
