@@ -5,6 +5,6 @@ Licensed using GPL3
 
 Based on HTML5, PHP, MySQL || MariaDB
 
-[storiesaround.com](https:://storiesaround.com)
+[Storiesaround website](https://storiesaround.com)
 
 Maintained by andsju 2020
