@@ -1,4 +1,10 @@
 # Storiesaround
-Storiesaround is a Content Management System, released 2020 and licensed using GPL3
-Based on PHP, MySQL || MariaDB
-Github andsju 2020
+Storiesaround is a Content Management System
+
+Licensed using GPL3
+
+Based on HTML5, PHP, MySQL || MariaDB
+
+[storiesaround.com](https:://storiesaround.com)
+
+Maintained by andsju 2020
