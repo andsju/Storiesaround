@@ -1,8 +1,0 @@
-Before Git release
-
-inc.footer.php includes ending body and html tag
-
-remove banners from CMS, datatables and functionality - > should be a plugin
-exclude plugins in release
-
-check image functionality - 222, 474, 726 ...
