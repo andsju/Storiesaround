@@ -14,4 +14,5 @@ content/uploads/plugins/
 log/
 _docs/
 _tmp/
+.idea/
 sys/inc.db.php
