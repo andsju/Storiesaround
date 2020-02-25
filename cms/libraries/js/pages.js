@@ -470,12 +470,9 @@ $(document).ready(function () {
 		$medias.each(function () {
 			$(this)
 				.attr('data-ratio', this.height / this.width)
-				.removeAttr('height')
-				.removeAttr('width')
 				.width(newWidth)
 				.height(newWidth * $(this).data('ratio'));
 		});
-
 		var $videos = $(".grid-video iframe");
 		var $fluidEl = $(".grid-video");
 		var newWidth = $fluidEl.width();
@@ -1001,7 +998,7 @@ if (checkLandingPage === null || checkLandingPage === undefined) {
 	console.log(window.innerHeight, rect.y);
 	initialHeight = window.innerHeight - rect.y;
 	parallaxImages[0].style.height = initialHeight + "px";
- 	if (parallaxImagesHeight[0] > initialHeight) {
+	if (parallaxImagesHeight[0] > initialHeight) {
 		parallaxImagesHeight[0] = initialHeight;
 	}
 }
@@ -1031,7 +1028,7 @@ window.addEventListener('load', (event) => {
 });
 
 function showParallax(elements, initialHeight, parentElement) {
-	
+
 	if (elements.length === 0) {
 		return;
 	}
@@ -1125,7 +1122,7 @@ function fadeSlideshowCycleImages() {
 
 	// get images
 	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
-	
+
 	// just one image
 	if (images.length <= 1) {
 		return;
@@ -1239,11 +1236,11 @@ function parseMarkdownCode(text) {
 	rows.forEach(row => {
 		// let pattern = row.indexOf("# ");
 		if (row.indexOf("### ") >= 0) {
-			result += "<div><h3>" + row.substring(4, row.length) + "</h3></div>";	
+			result += "<div><h3>" + row.substring(4, row.length) + "</h3></div>";
 		} else if (row.indexOf("## ") >= 0) {
 			result += "<div><h2>" + row.substring(3, row.length) + "</h2></div>";
 		} else if (row.indexOf("# ") >= 0) {
-			result += "<div><h1>" + row.substring(2, row.length) + "</h1></div>";		
+			result += "<div><h1>" + row.substring(2, row.length) + "</h1></div>";
 		} else {
 			result += "<div><p>" + row + "</p></div>";
 		}
@@ -1252,8 +1249,8 @@ function parseMarkdownCode(text) {
 	return result;
 }
 
-$(window).scroll(function() {
-	if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {		
+$(window).scroll(function () {
+	if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
 		$("#page-bottom").show();
 	}
 });
