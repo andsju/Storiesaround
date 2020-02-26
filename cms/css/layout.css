@@ -3700,7 +3700,7 @@ meta tag width=device-width,initial-scale=1.0
 
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
         top: 25%;
-        margin-top: -220px;
+        /* margin-top: -220px; */
     }
 }
 
@@ -3746,7 +3746,7 @@ meta tag width=device-width,initial-scale=1.0
 
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
         top: 25%;
-        margin-top: -400px;
+        /* margin-top: -400px; */
 
     }
 }
