@@ -21,7 +21,7 @@
 					$caption_vertical_align = $header_caption_vertical_align[$i];
 					if ($parts[1] == "mp4") {
 						// black loading: poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
-						echo '<video class="slideshow-cycle-image" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" data-caption-vertical-align="'. $caption_vertical_align .'" autoplay loop muted poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="><source src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'"></video>';
+						echo '<video class="slideshow-cycle-image" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" data-caption-vertical-align="'. $caption_vertical_align .'" autoplay loop muted><source src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'"></video>';
 					} else {
 						echo '<img src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'" alt="'. $caption .'" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" data-caption-vertical-align="'. $caption_vertical_align .'" class="slideshow-cycle-image">';	
 					}
