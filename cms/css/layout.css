@@ -912,7 +912,7 @@ div.wrapper-grid-padding {
 a.link-look-alike-button {
     text-decoration: none;
     display: inline-block;
-    padding: 4px 16px 4px 4px;
+    padding: 4px 16px;
     border-style: solid;
     border-width: 2px;
     border-color: ButtonHighLight ButtonShadow ButtonShadow ButtonHighLight;

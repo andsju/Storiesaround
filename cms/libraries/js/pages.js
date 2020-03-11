@@ -796,6 +796,11 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 									inline: 'span',
 									classes: 'small-caps'
 								},
+								{
+									title: 'Button look-alike',
+									selector: 'a',
+									classes: 'link-look-alike-button'
+								}
 							]
 						},
 						{
