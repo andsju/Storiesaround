@@ -7,4 +7,4 @@ Based on HTML5, PHP, MySQL || MariaDB
 
 [Storiesaround website](https://storiesaround.com)
 
-Maintained by andsju 2020
+Maintained by andsju 2023
