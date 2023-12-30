@@ -1,0 +1,39 @@
+version: '3'
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ./app/public:/var/www/html
+            - ./configurations/php.ini:/usr/local/etc/php/php.ini
+            - ./configurations/apache2.conf:/etc/apache2/apache2.conf
+            
+            # SSL certificate (mkcert)
+            - ./app/ssl:/etc/apache2/ssl
+            - ./configurations/000-default.conf:/etc/apache2/sites-available/000-default.conf
+        ports:
+            - 8092:80
+            - 443:443
+    mysql:
+        image: mariadb:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: db_root_password
+            MYSQL_USER: db_user
+            MYSQL_PASSWORD: db_password
+            MYSQL_DATABASE: db_storiesaround
+        volumes:
+            - mysqldata:/var/lib/mysql
+        ports:
+            - 33062:3306
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8093:80
+        environment:
+            - PMA_ARBITRARY=1
+        depends_on:
+            - mysql            
+volumes:
+    mysqldata: {}
