@@ -9,6 +9,7 @@ app/public/content/uploads/images/**
 app/public/content/uploads/logotype/**
 app/public/content/uploads/media/**
 app/public/content/uploads/misc/**
+app/public/content/uploads/models/**
 app/public/content/uploads/pages/**
 app/public/content/uploads/plugins/
 app/public/sys/inc.db.php

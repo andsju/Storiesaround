@@ -42,7 +42,6 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/js/functions.js'
-	//CMS_DIR.'/cms/libraries/tinymce/plugins/moxiemanager/js/moxman.loader.min.js'
 );
 
 // javascript files... add wysiwyg file
