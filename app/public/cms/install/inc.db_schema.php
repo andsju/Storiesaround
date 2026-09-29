@@ -449,7 +449,7 @@ CREATE TABLE `users` (
   `first_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `user_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `user_name` varchar(100) COLLATE utf8_unicode_ci NULL,
   `pass_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'salted & hashed password using crypt()',
   `activation_code` char(32) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'user account activated - null, registration results in a md5 hash value',
   `utc_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',

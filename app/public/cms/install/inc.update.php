@@ -136,4 +136,6 @@ $sqls[] = "ALTER TABLE pages ADD FULLTEXT INDEX pages_index (title, content, gri
 $sqls[] = "DROP INDEX users_index ON users;";
 $sqls[] = "ALTER TABLE users ADD FULLTEXT INDEX users_index (first_name, last_name, email, user_name);";
 
+// 2026-09-29
+$sqls[] = "ALTER TABLE `users` CHANGE `user_name` `user_name` VARCHAR(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL;"
 ?>
