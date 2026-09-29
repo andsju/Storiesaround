@@ -93,7 +93,7 @@ class Groups extends Users
     public function getGroupsDefaultSearchWords($search)
     {
         $query_parts = array();
-        $words = preg_replace('/\s+/', ' ', $search);
+        $words = is_null($search) ? "" : preg_replace('/\s+/', ' ', $search);
         $words = explode(" ", $words);
         foreach ($words as $word) {
             $query_parts[] = "'%" . $word . "%'";
@@ -108,7 +108,6 @@ class Groups extends Users
 		LIMIT 1000";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

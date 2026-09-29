@@ -81,6 +81,7 @@ $form = false;
 $large_table = false;
 $class_create = "hide";
 $title = $description = false;
+$reply = "";
 
 // handle form 
 if (isset($_POST['btn_create_group'])) {
