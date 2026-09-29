@@ -56,7 +56,7 @@ $_SESSION['CMS_URL'] = CMS_URL;
 define('ROOT', realpath(dirname(__FILE__)) . '/');
 
 // CMS protocol
-$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') == true ? 'https://' : 'http://';
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
 define('CMS_PROTOCOL', $protocol);
 
 /* CMS

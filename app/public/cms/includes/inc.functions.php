@@ -958,4 +958,172 @@ function getFileExtension($file_and_path)
     return pathinfo($file_and_path, PATHINFO_EXTENSION);
 }
 
+/**
+ * build sql WHERE conditions matching a set of search words across a set of columns using LIKE
+ * each word is matched with OR across $arr_cols, words are combined with AND/OR depending on $bol_match_all_words
+ * appends WHERE (or AND if a WHERE clause already exists in $sql_select) and returns the extended query
+ * @param array|null $arr_words search words
+ * @param array $arr_cols columns to search in
+ * @param bool $bol_match_all_words true = require all words (AND), false = match any word (OR)
+ * @param string $sql_select existing sql select string, e.g. "SELECT * FROM history"
+ * @return string
+ */
+function getSQLsearch($arr_words, $arr_cols, $bol_match_all_words, $sql_select)
+{
+    if (!is_array($arr_words) || empty($arr_words) || !is_array($arr_cols) || empty($arr_cols)) {
+        return $sql_select;
+    }
+
+    $dbh = db_connect();
+    $word_glue = $bol_match_all_words ? ' AND ' : ' OR ';
+    $arr_word_conditions = array();
+
+    foreach ($arr_words as $word) {
+        $word = trim($word);
+        if (strlen($word) == 0) {
+            continue;
+        }
+        // quote() escapes and adds surrounding quotes, protects against SQL injection
+        $word_quoted = $dbh->quote('%' . $word . '%');
+        $arr_col_conditions = array();
+        foreach ($arr_cols as $col) {
+            $arr_col_conditions[] = $col . ' LIKE ' . $word_quoted;
+        }
+        $arr_word_conditions[] = '(' . implode(' OR ', $arr_col_conditions) . ')';
+    }
+    $dbh = null;
+
+    if (empty($arr_word_conditions)) {
+        return $sql_select;
+    }
+
+    $sql_select .= (strpos($sql_select, 'WHERE') === false) ? ' WHERE ' : ' AND ';
+    $sql_select .= implode($word_glue, $arr_word_conditions);
+
+    return $sql_select;
+}
+
+/**
+ * build sql "ORDER BY column ASC|DESC" from $_REQUEST['orderby'] / $_REQUEST['sort'],
+ * validated against $allowed_orderby, falling back to $default_orderby / $default_sort
+ * @param string $default_orderby
+ * @param array $allowed_orderby
+ * @param string $default_sort
+ * @param string $table
+ * @param string $sql_select
+ * @return string
+ */
+function getSQLorder($default_orderby, $allowed_orderby, $default_sort, $table, $sql_select)
+{
+    $orderby = $default_orderby;
+    if (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], $allowed_orderby, true)) {
+        $orderby = $_REQUEST['orderby'];
+    }
+
+    $sort = $default_sort;
+    if (isset($_REQUEST['sort'])) {
+        $sort = (strtolower($_REQUEST['sort']) == 'asc') ? 'ASC' : 'DESC';
+    }
+
+    $sql_select .= ' ORDER BY ' . $orderby . ' ' . $sort;
+
+    return $sql_select;
+}
+
+/**
+ * render a paged, sortable html table (header/rows/footer) from a TablePager instance and its fetched rows
+ * $arrcols rows: array(friendly_name, mysql_column, align, valign, width, date_format|'timeago'|null, replace_map|null)
+ * @param TablePager $TablePager
+ * @param array $rows fetched rows, PDO::FETCH_ASSOC
+ * @param string $bookmark anchor appended to paging/sort links
+ * @param string $token CSRF token added to edit/view links
+ * @param string $table_description table caption
+ * @param bool $table_row_checkbox show a row checkbox column
+ * @param bool $table_row_view show a view link column
+ * @param bool $table_row_edit show an edit link column
+ * @param string $table_row_edit_link base url for edit link
+ * @param string $table_row_edit_link_css_class css class for edit link anchor
+ * @param string $table_row_view_link base url for view link
+ * @param string $table_row_view_link_css_class css class for view link anchor
+ * @param string $bookmark_edit_form_id form id, used to scope row checkbox names
+ * @param string $table_id row primary key column name
+ * @param string $css css class for table/th/td
+ * @param string $dtz DateTimeZone identifier
+ * @param bool $form show row checkboxes for bulk actions
+ * @param array $arrcols column configuration
+ */
+function getSQLtable($TablePager, $rows, $bookmark, $token, $table_description, $table_row_checkbox, $table_row_view, $table_row_edit, $table_row_edit_link, $table_row_edit_link_css_class, $table_row_view_link, $table_row_view_link_css_class, $bookmark_edit_form_id, $table_id, $css, $dtz, $form, $arrcols)
+{
+    echo '<table class="' . $css . '" width="100%">';
+    echo '<caption>' . htmlspecialchars((string)$table_description) . '</caption>';
+
+    echo '<thead>';
+    echo '<tr class="ui-widget ui-widget-header">';
+    if ($table_row_checkbox) {
+        echo '<th class="' . $css . '"><span class="toggleboxes"><img src="css/images/check.png" /></span></th>';
+    }
+    foreach ($arrcols as $col) {
+        echo '<th class="' . $css . '" style="text-align:' . $col[2] . ';width:' . $col[4] . ';">';
+        echo $TablePager->getColumnSorter($col[0], $col[1], $bookmark);
+        echo '</th>';
+    }
+    if ($table_row_view) {
+        echo '<th class="' . $css . '">view</th>';
+    }
+    if ($table_row_edit) {
+        echo '<th class="' . $css . '">edit</th>';
+    }
+    echo '</tr>';
+    echo '</thead>';
+
+    echo '<tbody>';
+    $row_class = 'even';
+    if (is_array($rows)) {
+        foreach ($rows as $row) {
+            $row_class = ($row_class == 'even') ? 'odd' : 'even';
+            echo '<tr class="' . $css . '_' . $row_class . '">';
+
+            if ($table_row_checkbox) {
+                echo '<td class="' . $css . '"><input type="checkbox" name="' . $bookmark_edit_form_id . '_checkbox[]" value="' . htmlspecialchars((string)$row[$table_id]) . '" /></td>';
+            }
+
+            foreach ($arrcols as $col) {
+                $value = array_key_exists($col[1], $row) ? $row[$col[1]] : null;
+
+                if ($col[5] == 'timeago') {
+                    $date = get_utc_dtz($value, $dtz, 'Y-m-d H:i:s');
+                    $value = '<abbr class="timeago" title="' . htmlspecialchars((string)$date) . '">' . htmlspecialchars((string)$date) . '</abbr>';
+                } elseif (!empty($col[5])) {
+                    $value = htmlspecialchars((string)utc_dtz($value, $dtz, $col[5]));
+                } else {
+                    if (is_array($col[6])) {
+                        $value = get_value_explained($value, $col[6]);
+                    }
+                    $value = htmlspecialchars((string)$value);
+                }
+
+                echo '<td class="' . $css . '" style="text-align:' . $col[2] . ';vertical-align:' . $col[3] . ';">' . $value . '</td>';
+            }
+
+            if ($table_row_view) {
+                echo '<td class="' . $css . '"><a href="' . htmlspecialchars($table_row_view_link) . '?id=' . htmlspecialchars((string)$row[$table_id]) . '&token=' . htmlspecialchars($token) . '" class="' . $table_row_view_link_css_class . '">view</a></td>';
+            }
+
+            if ($table_row_edit) {
+                echo '<td class="' . $css . '"><a href="' . htmlspecialchars($table_row_edit_link) . '?id=' . htmlspecialchars((string)$row[$table_id]) . '&token=' . htmlspecialchars($token) . '" class="' . $table_row_edit_link_css_class . '">edit</a></td>';
+            }
+
+            echo '</tr>';
+        }
+    }
+    echo '</tbody>';
+    echo '</table>';
+
+    echo '<div class="' . $css . '_footer">';
+    echo '<span class="' . $css . '_range">' . $TablePager->getRangeDescription() . '</span>';
+    echo '<span class="' . $css . '_split">' . $TablePager->getSplitOptions($css, $bookmark) . '</span>';
+    echo '<span class="' . $css . '_numbers">' . $TablePager->getNumberLinks($css, $css, $css . '_active', $css . '_active', $bookmark, $TablePager->pageIndex) . '</span>';
+    echo '</div>';
+}
+
 ?>

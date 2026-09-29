@@ -943,8 +943,9 @@ class Pages extends Database
                 $html .= "\n\t<li" . $class . ">";
 
                 // use seo pages_id_link if set
+
                 if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
-                    $html .= '<a href="http://' . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
+                    $html .= '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
                 } else {
                     $html .= '<a href="' . $script . '?id=' . $row['pages_id'] . '">';
                 }

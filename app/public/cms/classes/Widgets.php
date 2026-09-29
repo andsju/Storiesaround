@@ -434,6 +434,10 @@ class Widgets extends Database
                     echo '</td>';
                     echo '<td class="paging" style="text-align:right;">';
                     $id = $this->getWidgetsDatabaseId($classname);
+                    // widget class file has no matching row yet (not installed)
+                    if (!$id) {
+                        $id = array('widgets_id' => null, 'widgets_active' => 0);
+                    }
                     // print_r2($id);
                     $c = $this->getWidgetsCount($id['widgets_id']);
                     echo count($c);

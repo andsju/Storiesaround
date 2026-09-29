@@ -59,15 +59,13 @@
                     </footer>
                 </article>
                 <div id="content-bottom-grid"></div>
-                <aside id="content-bottom-widgets"></aside>
-                <aside id="content-bottom-stories"></aside>
                 <div id="content-bottom-selections"></div>
             </main>
+            <aside id="content-bottom-widgets"></aside>
+            <aside id="content-bottom-stories"></aside>
         </div>
         <div id="wrapper-right-sidebar" class="column">
             <!-- left sidebar layout -->
             <img src="css/images/ordmoln_glimakra.png" style="width:100%">
-            
-            
         </div>
     </div>

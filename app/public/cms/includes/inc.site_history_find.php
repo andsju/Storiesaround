@@ -171,7 +171,7 @@ $id = array_key_exists('id', $_GET) ? $_GET['id'] : 0;
 	$sql_select = getSQLsearch($arr_words, $arr_cols, $bol_match_all_words, $sql_select);
 	
 		
-	if(strlen($module) > 0) {
+	if(strlen((string)$module) > 0) {
 		$module = $_REQUEST['module'];
 		if(strrpos($sql_select, "WHERE") == false) {
 			$sql_select .= " WHERE ";
@@ -181,7 +181,7 @@ $id = array_key_exists('id', $_GET) ? $_GET['id'] : 0;
 		$sql_select .= " field = '$module'";
 	}
 
-	if(strlen($action) > 0) {
+	if(strlen((string)$action) > 0) {
 		if(strrpos($sql_select, "WHERE") == false) {
 			$sql_select .= " WHERE ";
 		} else {

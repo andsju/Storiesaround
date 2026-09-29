@@ -19,8 +19,9 @@ class TablePager
 
     /**
      * TablePager constructor
+     * @param string $sql
      */
-    public function __construct()
+    public function __construct($sql)
     {
         $this->sql = $sql;
         $index = isset($_REQUEST[$this->page]) ? $_REQUEST[$this->page] : 1;

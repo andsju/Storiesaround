@@ -1437,7 +1437,7 @@ switch($t) {
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="sub-tabs ui-tabs ui-widget" style="float:right;margin-top:22px;padding: 0em;">';
-				get_tab_menu_jquery_ui_look_alike($this_url, array("browse","edit_css","edit_files","filemanager","?"), array("Browse directory","Edit css","Edit files","CMS Filemanager","?"), "tf", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
+				get_tab_menu_jquery_ui_look_alike($this_url, array("browse","edit_css","edit_files","?"), array("Browse directory","Edit css","Edit files","?"), "tf", "&raquo;&raquo;&raquo;", null, $ui_ul_add_class="ui-three", $ui_a_add_class="ui-show");
 			echo '</div>';	
 		echo '</div>';
 

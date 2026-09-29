@@ -2559,6 +2559,28 @@ div.stories-cell div.stories-content {
 }
 
 
+div#wrapper-page {
+    position: relative;
+}
+
+#webgl {
+    width: 100%;
+    height: 100%;
+    /* max-width: fit-content !important; */
+    /* max-height: 400px !important; */
+    display: block;
+    z-index: auto;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9;
+}
 
 /* END back-end styles
 ------------------------- 

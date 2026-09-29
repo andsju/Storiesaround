@@ -1,4 +1,3 @@
-version: '3'
 services:
     php:
         build:
@@ -8,10 +7,7 @@ services:
             - ./app/public:/var/www/html
             - ./configurations/php.ini:/usr/local/etc/php/php.ini
             - ./configurations/apache2.conf:/etc/apache2/apache2.conf
-            
-            # SSL certificate (mkcert)
-            - ./app/ssl:/etc/apache2/ssl
-            - ./configurations/000-default.conf:/etc/apache2/sites-available/000-default.conf
+            - ./configurations/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf
         ports:
             - 8092:80
             - 443:443
