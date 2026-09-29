@@ -97,7 +97,6 @@ class Plugins extends Database
     {
         $sql = "SELECT plugins_id, plugins_class, plugins_active, utc_created, utc_modified FROM plugins";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':classname', $classname, PDO::PARAM_STR);
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $row;

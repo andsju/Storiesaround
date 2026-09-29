@@ -1,6 +1,7 @@
 <?php
 
 $calendar_area = null;
+$wrapper_content_width = 500;
 if($arr['events']) {
 
 	$calendar = new Calendar();

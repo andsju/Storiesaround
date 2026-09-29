@@ -22,7 +22,7 @@ class Calendar extends Database
     {
         try {
             $sql = "INSERT INTO calendar_views 
-			(name) VALUES (:name)";
+			(name, description) VALUES (:name, '')";
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
@@ -144,7 +144,7 @@ class Calendar extends Database
     public function getCalendarSearchWords($search)
     {
         $query_parts = array();
-        $words = preg_replace('/\s+/', ' ', $search);
+        $words = is_null($search) ? "" : preg_replace('/\s+/', ' ', $search);
         $words = explode(" ", $words);
         foreach ($words as $word) {
             $query_parts[] = "'%" . $word . "%'";
@@ -159,7 +159,6 @@ class Calendar extends Database
 		LIMIT 1000";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -172,7 +171,7 @@ class Calendar extends Database
     public function getCalendarViewsSearchWords($search)
     {
         $query_parts = array();
-        $words = preg_replace('/\s+/', ' ', $search);
+        $words = is_null($search) ? "" : preg_replace('/\s+/', ' ', $search);
         $words = explode(" ", $words);
         foreach ($words as $word) {
             $query_parts[] = "'%" . $word . "%'";
@@ -187,7 +186,6 @@ class Calendar extends Database
 		LIMIT 1000";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -201,8 +199,8 @@ class Calendar extends Database
     {
         try {
             $sql = "INSERT INTO calendar_categories 
-			(category) VALUES
-			(:category)";
+			(category, description) VALUES
+			(:category, '')";
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':category', $category, PDO::PARAM_STR);
@@ -1706,6 +1704,7 @@ class Calendar extends Database
                 break;
             }
         }
+        return '';
     }
 
     /**

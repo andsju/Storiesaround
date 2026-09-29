@@ -2634,7 +2634,7 @@ if(is_array($check_edit)) {
 						</p>
 					</td>
 					<td style="padding-bottom:10px;">
-						<div style="float:right;width:100%;height:260px;overflow-y: hidden;overflow:auto;">
+						<div style="width:100%;height:260px;overflow-y: hidden;overflow:auto;display:grid;grid-template-columns: repeat(5, 1fr);">
 							<div class="page_templates"><input type="radio" name="setup_template" value="0" <?php if($arr['template'] == 0) {echo 'checked';}?>>"Sidebars"<br><img src="css/images/template_sidebars.png" style="margin-top:10px;height:75px;"></div>
 							<div class="page_templates"><input type="radio" name="setup_template" value="1" <?php if($arr['template'] == 1) {echo 'checked';}?>>"Left sidebar"<br><img src="css/images/template_sidebar_left.png" style="margin-top:10px;height:75px;"></div>
 							<div class="page_templates"><input type="radio" name="setup_template" value="2" <?php if($arr['template'] == 2) {echo 'checked';}?>>"Right sidebar"<br><img src="css/images/template_sidebar_right.png" style="margin-top:10px;height:75px;"></div>

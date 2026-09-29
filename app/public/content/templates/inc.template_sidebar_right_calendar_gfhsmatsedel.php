@@ -4,6 +4,7 @@ $calendar_area = null;
 if($arr['events']) {
 
 	$calendar = new Calendar();
+    
 	$cal = $calendar->getPagesCalendar($id);
 	if($cal) {
 		$calendar_area = $cal['calendar_area'];
@@ -65,6 +66,7 @@ function lux($text) {
                     <?php
 
                     $rowsMultiple = $calendar->getCalendarEventsMultiple([3,4], date('Y-m-d'), "2weeks");
+                    
 
                     if ($rowsMultiple) {
 

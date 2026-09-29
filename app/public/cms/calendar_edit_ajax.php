@@ -37,7 +37,7 @@ if (isset($_GET['token'])){
 											PHP_EOL,
 											$line_break
 					);
-					$string = preg_replace($patterns, $replacements, $string);
+					$string = preg_replace($patterns, $replacements, (string)$string);
 					return $string;
 				}
 								
