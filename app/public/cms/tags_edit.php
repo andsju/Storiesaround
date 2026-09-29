@@ -78,6 +78,7 @@ foreach ( $js_files as $js ): ?>
 			},
 			text: true
 		});
+
 	
 		$('#btn_delete_tag').click(function(event){
 			event.preventDefault();
@@ -88,8 +89,7 @@ foreach ( $js_files as $js ): ?>
 			var users_id = $("#users_id").val();
 			var tags_pages = $("#tags_pages").val();
 			var tags_images = $("#tags_images").val();
-			var tags_banners = $("#tags_banners").val();
-			if(tags_pages!=0 || tags_images!=0 || tags_banners!=0) {
+			if(tags_pages!=0 || tags_images!=0) {
 				alert('Please remove this tag from content below');
 				var deletable = false;
 			}

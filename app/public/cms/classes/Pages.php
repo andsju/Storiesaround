@@ -831,7 +831,6 @@ class Pages extends Database
 		LIMIT 50";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -2660,7 +2659,6 @@ class Pages extends Database
 		LIMIT 100";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->execute();
 
         $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
