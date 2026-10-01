@@ -380,6 +380,7 @@ class Plugins extends Database
                     echo '</td>';
                     echo '<td class="paging" style="text-align:right;">';
                     $id = $this->getPluginsDatabaseId($classname);
+                    if ($id === false) $id = ['plugins_id' => 0, 'plugins_active' => 0];
                     $c = $this->getPluginsCount($id['plugins_id']);
                     echo count($c);
                     echo '</td>';

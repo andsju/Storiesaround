@@ -58,7 +58,7 @@ class ImageGalleryGrid extends Widgets {
 		// return objects in an associative array
 		$objects = json_decode($action, true);
 		$defaults = json_decode($this->default_objects(), true);
-		$ratio = isset($objects['ratio']) ? $objects['ratio'] : $defaults['ratio'];
+		$ratio = isset($objects['ratio']) ? $objects['ratio'] : ($defaults['ratio'] ?? '1:1');
 		if(strstr($ratio,':')) {
 			$wh = explode(':', $ratio);
 			$wish_ratio = $wh[1]/$wh[0];

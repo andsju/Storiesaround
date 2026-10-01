@@ -213,10 +213,10 @@ class Image
 
         if ($original_aspect >= $thumb_aspect) {
             $new_height = $thumb_height;
-            $new_width = $width / ($height / $thumb_height);
+            $new_width = (int) round($width / ($height / $thumb_height));
         } else {
             $new_width = $thumb_width;
-            $new_height = $height / ($width / $thumb_width);
+            $new_height = (int) round($height / ($width / $thumb_width));
         }
 
         $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
@@ -224,8 +224,8 @@ class Image
         // resize and crop
         imagecopyresampled($thumb,
             $img,
-            0 - ($new_width - $thumb_width) / 2, // Center the image horizontally
-            0 - ($new_height - $thumb_height) / 2, // Center the image vertically
+            (int) (0 - ($new_width - $thumb_width) / 2), // Center the image horizontally
+            (int) (0 - ($new_height - $thumb_height) / 2), // Center the image vertically
             0, 0,
             $new_width, $new_height,
             $width, $height);

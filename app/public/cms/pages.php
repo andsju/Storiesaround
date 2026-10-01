@@ -374,6 +374,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
             $content_percent_width = 100;
             $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
             $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
             if (is_file(CMS_ABSPATH.'/content/templates/' . $arr['template_custom'])) {
                 include CMS_ABSPATH.'/content/templates/' . $arr['template_custom'];
             } else {

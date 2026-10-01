@@ -727,6 +727,7 @@ if (isset($_POST['token'])) {
 					}					
 					
 					$try = rename_file($file_new, $file);
+					$ext = pathinfo($file, PATHINFO_EXTENSION);
 
 					if($try) {
 
