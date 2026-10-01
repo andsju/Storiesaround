@@ -1,6 +1,6 @@
 # ignore version control
 app/public/content/includes/**
-app/public/content/plugins/**
+# app/public/content/plugins/**
 app/public/content/rss/**
 app/public/content/uploads/files/**
 app/public/content/uploads/header/**
@@ -15,8 +15,6 @@ app/public/content/uploads/plugins/
 app/public/sys/inc.db.php
 app/public/log/**
 app/public/sys/inc.db.php
-configurations/mkcert/**
-app/ssl/**
 _docs/
 _tmp/
 .idea/
