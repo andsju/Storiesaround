@@ -1194,9 +1194,10 @@ if (isset($_POST['token'])) {
 								});
 
 								$('#btn_save_widget').click(function(event){
-									event.preventDefault();									
+									event.preventDefault();					
+													
 									var querystring = $("#widgets_form").serialize();
-									
+									console.log("querystring", querystring);
 									$.ajax({
 										beforeSend: function() { loading = $('.ajax_spinner_widgets_edit').show()},
 										complete: function(){ loading = setTimeout("$('.ajax_spinner_widgets_edit').hide()",700)},
@@ -1555,7 +1556,7 @@ if (isset($_POST['token'])) {
 					
 						$title = $result['story_custom_title'];
 						$title_value = strlen($result['story_custom_title_value']) > 0 ? $result['story_custom_title_value'] : $result['title'];
-						$img = str_replace('_100.','_726.',$result['filename']);
+						$img = str_replace('_100.','_726.', (string) ($result['filename'] ?? ''));
 						$img ='../content/uploads/pages/'.$pages_id.'/'.$img;
 						$pages_id = $result['pages_id'];
 						$ratio = $result['ratio'];

@@ -1,8 +1,8 @@
 <?php
+session_start();
 
 /* enable sessions
 -------------------------------------------------- */
-session_start();
 
 
 error_reporting(E_ALL);

@@ -326,6 +326,7 @@ qq.FileUploaderBasic.prototype = {
     },
     _createUploadButton: function(element){
         var self = this;
+        // console.log("btn");
 
         var button = new qq.UploadButton({
             element: element,
@@ -523,6 +524,8 @@ qq.FileUploader = function(o){
     // call parent constructor
     qq.FileUploaderBasic.apply(this, arguments);
 
+    
+
     // additional options
     qq.extend(this._options, {
         element: null,
@@ -530,6 +533,8 @@ qq.FileUploader = function(o){
         listElement: null,
         dragText: 'Drop files here to upload',
         uploadButtonText: 'Upload a file',
+        // shown in its own element, not inside the button; set to '' to hide it
+        extensionsText: 'Allowed file types: {extensions}',
         cancelButtonText: 'Cancel',
         failUploadText: 'Upload failed',
         hideShowDropArea: true,
@@ -537,6 +542,7 @@ qq.FileUploader = function(o){
         template: '<div class="qq-uploader">' +
                 '<div class="qq-upload-drop-area"><span>{dragText}</span></div>' +
                 '<div class="qq-upload-button">{uploadButtonText}</div>' +
+                '<div class="qq-upload-extensions">{extensionsText}</div>' +
                 '<ul class="qq-upload-list"></ul>' +
              '</div>',
 
@@ -553,6 +559,7 @@ qq.FileUploader = function(o){
         classes: {
             // used to get elements from templates
             button: 'qq-upload-button',
+            extensions: 'qq-upload-extensions',
             drop: 'qq-upload-drop-area',
             dropActive: 'qq-upload-drop-area-active',
             dropDisabled: 'qq-upload-drop-area-disabled',
@@ -574,8 +581,10 @@ qq.FileUploader = function(o){
 
     // overwrite the upload button text if any
     // same for the Cancel button and Fail message text
+    var extensionsText = this._options.extensionsText.replace(/\{extensions\}/g, this._options.allowedExtensions.join(', '));
     this._options.template     = this._options.template.replace(/\{dragText\}/g, this._options.dragText);
     this._options.template     = this._options.template.replace(/\{uploadButtonText\}/g, this._options.uploadButtonText);
+    this._options.template     = this._options.template.replace(/\{extensionsText\}/g, extensionsText);
     this._options.fileTemplate = this._options.fileTemplate.replace(/\{cancelButtonText\}/g, this._options.cancelButtonText);
     this._options.fileTemplate = this._options.fileTemplate.replace(/\{failUploadtext\}/g, this._options.failUploadText);
 

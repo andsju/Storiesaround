@@ -174,7 +174,7 @@ if(isset($_REQUEST['token'])){
 		}
 
 		// list of valid extensions, ex. array("jpeg", "xml", "bmp")
-		$allowedExtensions = array('pdf', 'doc', 'docx', 'xls', 'xlsx', 'html', 'ppt', 'pptx', 'txt', 'mp3', 'mp4', 'ogg', 'oga', 'm4a', 'm4v', 'ogv', 'webm');
+		$allowedExtensions = array('pdf', 'doc', 'docx', 'xls', 'xlsx', 'html', 'ppt', 'pptx', 'txt', 'mp3', 'mp4', 'ogg', 'oga', 'm4a', 'm4v', 'ogv', 'webm', 'glb');
 		// max file size in bytes
 		$sizeLimit = 10 * 1024 * 1024;
 

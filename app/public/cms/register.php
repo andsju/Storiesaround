@@ -204,6 +204,7 @@ echo '<h2 class="admin-heading">' .$_SESSION['site_name'].' - '.translate("Regis
 						action: action, token: token, 						
 						first_name: first_name, last_name: last_name, user_name: user_name, email: email, password: password
 					},
+					
 					success: function(reply){	
 						var jsonified = JSON.parse(reply);
 						var result = jsonified.result;

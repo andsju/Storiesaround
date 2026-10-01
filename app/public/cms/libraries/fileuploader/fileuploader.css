@@ -19,6 +19,11 @@
 .qq-upload-button-focus {
 	outline: 1px dotted #000000;
 }
+.qq-upload-extensions {
+	font-size: 0.8em;
+	color: #888;
+	padding: 4px 0;
+}
 .qq-upload-drop-area, .qq-upload-extra-drop-area {
 	position: absolute;
 	top: 0;

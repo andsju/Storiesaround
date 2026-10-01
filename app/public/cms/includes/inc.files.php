@@ -53,7 +53,8 @@ $folders = array(
     CMS_DIR . "/content/uploads/html" => "content/uploads/html",
     CMS_DIR . "/content/uploads/images" => "content/uploads/images",
     CMS_DIR . "/content/uploads/media" => "content/uploads/media",
-    CMS_DIR . "/content/uploads/media" => "content/uploads/misc"
+    CMS_DIR . "/content/uploads/media" => "content/uploads/misc",
+    CMS_DIR . "/content/uploads/models" => "content/uploads/models"
 );
 
 ?>

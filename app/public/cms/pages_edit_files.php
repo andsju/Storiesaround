@@ -96,7 +96,7 @@ if (isset($_GET['token'])){
 					multiple: true,
 					element: document.getElementById('file-uploader'),
 					action: 'pages_files_upload.php',
-					allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'html', 'ppt', 'pptx', 'txt', 'mp3', 'mp4', 'ogg', 'oga', 'm4a', 'm4v', 'ogv', 'webm'],
+					allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'html', 'ppt', 'pptx', 'txt', 'mp3', 'mp4', 'ogg', 'oga', 'm4a', 'm4v', 'ogv', 'webm', 'glb'],
 					//debug: true,
 					params: {token: ''+token+'', pages_folder: ''+pages_folder+''},
 					sizeLimit: 10520000,
