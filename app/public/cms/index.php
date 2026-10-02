@@ -6,6 +6,7 @@ if(!isset($_SESSION['site_id'])) {
 	die();
 }
 
+
 if(isset($_SESSION['site_domain_url'])) {	
 	if($_SESSION['site_domain_url'] != CMS_URL) {
 		header('Location: '. $_SESSION['site_domain_url']);

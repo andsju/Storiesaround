@@ -102,12 +102,12 @@ class Site extends Database
      * @return string
      */
 
-    public function setSiteInstall($site_name, $site_domain_url, $site_domain, $site_email, $site_copyright, $site_language, $site_timezone, $site_wysiwyg, $site_theme, $site_ui_theme, $site_header_image, $site_logotype, $utc_modified)
+    public function setSiteInstall($site_name, $site_domain_url, $site_domain, $site_email, $site_copyright, $site_language, $site_timezone, $site_wysiwyg, $site_theme, $site_ui_theme, $site_header_image, $site_logotype, $site_seo_url, $utc_modified)
     {
         try {
             $sql = "INSERT INTO site 
-			(site_name, site_domain_url, site_domain, site_email, site_copyright, site_language, site_timezone, site_wysiwyg, site_theme, site_ui_theme, site_header_image, site_logotype, utc_modified) VALUES
-			(:site_name, :site_domain_url, :site_domain, :site_email, :site_copyright, :site_language, :site_timezone, :site_wysiwyg, :site_theme, :site_ui_theme, :site_header_image, :site_logotype, :utc_modified)";
+			(site_name, site_domain_url, site_domain, site_email, site_copyright, site_language, site_timezone, site_wysiwyg, site_theme, site_ui_theme, site_header_image, site_logotype, site_seo_url, utc_modified) VALUES
+			(:site_name, :site_domain_url, :site_domain, :site_email, :site_copyright, :site_language, :site_timezone, :site_wysiwyg, :site_theme, :site_ui_theme, :site_header_image, :site_logotype, :site_seo_url, :utc_modified)";
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':site_name', $site_name, PDO::PARAM_STR);
@@ -122,7 +122,9 @@ class Site extends Database
             $stmt->bindParam(':site_timezone', $site_timezone, PDO::PARAM_STR);
             $stmt->bindParam(':site_wysiwyg', $site_wysiwyg, PDO::PARAM_STR);
             $stmt->bindParam(':site_logotype', $site_logotype, PDO::PARAM_STR);
+            $stmt->bindParam(':site_seo_url', $site_seo_url, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
+
             $stmt->execute();
             return $this->db->lastInsertId('site_id');
 

@@ -46,6 +46,7 @@ if (isset($_POST['token'])){
 				$user_name = filter_var(trim($_POST['user_name']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$password = $_POST['password'];
+				$site_seo_url = 1;
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 				// check if email address is available
@@ -53,6 +54,7 @@ if (isset($_POST['token'])){
 				$check = $users->getUsersEmail($email);
 
 				if($check) { echo 'You have entered an email address that is already registered: <b>'.$email.'</b>. Please change email or delete current user. Reload browser and try again.'; die();}
+
 
 				$site = new Site();				
 				$site_language = 'english';
@@ -67,7 +69,7 @@ if (isset($_POST['token'])){
 				$icon_check = '<span class="ui-icon ui-icon-check" style="display:inline-block;"></span>';
 				$icon_notice = '<span class="ui-icon ui-icon-notice" style="display:inline-block;"></span>';
 				
-				$result = $site->setSiteInstall($site_name, $site_domain_url, $site_domain, $site_email, $site_copyright, $site_language, $site_timezone, $site_wysiwyg, $site_theme, $site_ui_theme, $site_header_image, $site_logotype, $utc_modified);
+				$result = $site->setSiteInstall($site_name, $site_domain_url, $site_domain, $site_email, $site_copyright, $site_language, $site_timezone, $site_wysiwyg, $site_theme, $site_ui_theme, $site_header_image, $site_logotype, $site_seo_url, $utc_modified);
 				
 				if($result) {
 
@@ -81,6 +83,7 @@ if (isset($_POST['token'])){
 					$_SESSION['site_header_image'] = $site_header_image;
 					$_SESSION['site_timezone'] = $site_timezone;
 					$_SESSION['site_wysiwyg'] = $site_wysiwyg;
+					$_SESSION['site_seo_url'] = $site_seo_url;					
 					
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$history = new History();
@@ -104,6 +107,7 @@ if (isset($_POST['token'])){
 						$s .= '<h3>Done!</h3>';
 						$s .= '<p>When you click the link below you will proceed to '.$site_domain_url.'</p>'; 
 						$s .= '<p>Login with your username and password to start publish content - <a href="'.CMS_DIR.'/cms/pages.php?id=1" class="obvious">take me to '.$site_domain_url.'</a></b></p>';
+						$s .= '<p><strong>Rename file "./cms/install/install.php" to avoid running a new installation setup...</strong></p>'; 
 						
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 						$history = new History();

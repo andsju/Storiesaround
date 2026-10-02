@@ -70,6 +70,109 @@ define('CMS_HOME', 'http://storiesaround.com');
 require_once CMS_ABSPATH . '/cms/includes/inc.version.php';
 
 
+
+// use error handler
+set_error_handler('my_error_handler');
+
+/* include default language file
+-------------------------------------------------- */
+if (isset($_SESSION['language']) && strlen($_SESSION['language']) > 0) {
+    $language = ($_SESSION['language']);
+} else {
+    $language = isset($_SESSION['site_language']) ? $_SESSION['site_language'] : 'english';
+}
+
+if (is_file(CMS_ABSPATH . '/cms/languages/' . $language . '.php')) {
+    require_once CMS_ABSPATH . '/cms/languages/' . $language . '.php';
+} else {
+    require_once CMS_ABSPATH . '/cms/languages/english.php';
+}
+
+/* include important file 
+-------------------------------------------------- */
+require_once CMS_ABSPATH . '/sys/inc.config.php';
+require_once 'inc.functions.php';
+require_once 'inc.functions_pages.php';
+
+
+
+// register classes
+spl_autoload_register('autoload_default');
+spl_autoload_register('autoload_widgets');
+spl_autoload_register('autoload_plugins');
+
+// include database configuration
+require_once CMS_ABSPATH . '/sys/inc.db.php';
+
+// detect mobil device - choose mobile or classic layout
+if (!isset($_SESSION['layoutType']) || $_SESSION['layoutType'] == "") {
+    $detect = new Mobile_Detect();
+    $_SESSION['layoutType'] = $detect->isMobile() ? "mobile" : "classic";
+}
+
+// load sessions from site class
+if (!isset($_SESSION['site_id'])) {
+    $z = new Site();
+    $site = $z->getSite();
+    if ($site) {
+
+        // set site session variables
+        // exclude site_smtp_server, site_smtp_port, site_smtp_username, site_smtp_password, site_smtp_authentication, utc_modified
+        $excl = array('site_smtp_server', 'site_smtp_port', 'site_smtp_username', 'site_smtp_password', 'site_smtp_authentication', 'utc_modified', 'site_maintenance_message', 'site_error_mode', 'site_history_max');
+        foreach ($site as $key => $value) {
+            if (!in_array($key, $excl)) {
+                $_SESSION[$key] = $value;
+            }
+        }
+
+        // $_SESSION['site_domain'] must be set to avoid error logs
+        if (!isset($_SESSION['site_domain'])) {
+            $_SESSION['site_domain'] = '';
+        }
+
+        // default html lang attribute is none
+        $_SESSION['site_lang'] = '';
+        $site = null;
+        // set user agent session variable
+        $_SESSION['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    } else {
+        print_r("Storiesaround CMS - site is not set");
+    }
+}
+
+
+/* initiate variable $lang - can be changed from a page
+-------------------------------------------------- */
+$lang = isset($_SESSION['site_lang']) ? $_SESSION['site_lang'] : '';
+
+
+/* datetime zone 
+-------------------------------------------------- */
+$dtz = isset($_SESSION['site_timezone']) ? $_SESSION['site_timezone'] : 'Europe/Stockholm';
+
+
+/* cookie info 
+-------------------------------------------------- */
+if (!isset($_SESSION['accept_cookies'])) {
+    $_SESSION['accept_cookies'] = false;
+}
+
+
+/* function PDO database connection, constants from configuration file
+-------------------------------------------------- */
+function db_connect()
+{
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME;
+    try {
+        $dbh = new PDO($dsn, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return ($dbh);
+    } catch (PDOException $e) {
+        echo '<p>Database connection failed...</p>';
+        die;
+    }
+}
+
 /* handle PDOException
 -------------------------------------------------- */
 function handle_pdo_exception($script, $e)
@@ -144,31 +247,6 @@ function write_debug($s)
     file_put_contents($file, $contents, FILE_APPEND | LOCK_EX);
 }
 
-
-// use error handler
-set_error_handler('my_error_handler');
-
-/* include default language file
--------------------------------------------------- */
-if (isset($_SESSION['language']) && strlen($_SESSION['language']) > 0) {
-    $language = ($_SESSION['language']);
-} else {
-    $language = isset($_SESSION['site_language']) ? $_SESSION['site_language'] : 'english';
-}
-
-if (is_file(CMS_ABSPATH . '/cms/languages/' . $language . '.php')) {
-    require_once CMS_ABSPATH . '/cms/languages/' . $language . '.php';
-} else {
-    require_once CMS_ABSPATH . '/cms/languages/english.php';
-}
-
-/* include important file 
--------------------------------------------------- */
-require_once CMS_ABSPATH . '/sys/inc.config.php';
-require_once 'inc.functions.php';
-require_once 'inc.functions_pages.php';
-
-
 /* define autoload function for classes 
 -------------------------------------------------- */
 
@@ -197,80 +275,6 @@ function autoload_plugins($class_name)
     $file = CMS_ABSPATH . '/content/plugins/' . $class_name . '.class.php';
     if (file_exists($file)) {
         include($file);
-    }
-}
-
-// register classes
-spl_autoload_register('autoload_default');
-spl_autoload_register('autoload_widgets');
-spl_autoload_register('autoload_plugins');
-
-// include database configuration
-require_once CMS_ABSPATH . '/sys/inc.db.php';
-
-// detect mobil device - choose mobile or classic layout
-if (!isset($_SESSION['layoutType']) || $_SESSION['layoutType'] == "") {
-    $detect = new Mobile_Detect();
-    $_SESSION['layoutType'] = $detect->isMobile() ? "mobile" : "classic";
-}
-
-// load sessions from site class
-if (!isset($_SESSION['site_id'])) {
-    $z = new Site();
-    $site = $z->getSite();
-    if ($site) {
-
-        // set site session variables
-        // exclude site_smtp_server, site_smtp_port, site_smtp_username, site_smtp_password, site_smtp_authentication, utc_modified
-        $excl = array('site_smtp_server', 'site_smtp_port', 'site_smtp_username', 'site_smtp_password', 'site_smtp_authentication', 'utc_modified', 'site_maintenance_message', 'site_error_mode', 'site_history_max');
-        foreach ($site as $key => $value) {
-            if (!in_array($key, $excl)) {
-                $_SESSION[$key] = $value;
-            }
-        }
-        // $_SESSION['site_domain'] must be set to avoid error logs
-        if (!isset($_SESSION['site_domain'])) {
-            $_SESSION['site_domain'] = '';
-        }
-
-        // default html lang attribute is none
-        $_SESSION['site_lang'] = '';
-        $site = null;
-        // set user agent session variable
-        $_SESSION['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-    }
-}
-
-
-/* initiate variable $lang - can be changed from a page
--------------------------------------------------- */
-$lang = isset($_SESSION['site_lang']) ? $_SESSION['site_lang'] : '';
-
-
-/* datetime zone 
--------------------------------------------------- */
-$dtz = isset($_SESSION['site_timezone']) ? $_SESSION['site_timezone'] : 'Europe/Stockholm';
-
-
-/* cookie info 
--------------------------------------------------- */
-if (!isset($_SESSION['accept_cookies'])) {
-    $_SESSION['accept_cookies'] = false;
-}
-
-
-/* function PDO database connection, constants from configuration file
--------------------------------------------------- */
-function db_connect()
-{
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME;
-    try {
-        $dbh = new PDO($dsn, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return ($dbh);
-    } catch (PDOException $e) {
-        echo '<p>Database connection failed...</p>';
-        die;
     }
 }
 

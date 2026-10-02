@@ -6,6 +6,7 @@ if(!isset($_SESSION['site_id'])) { die;}
 
 if($_SESSION['site_maintenance'] == 1 && $_SESSION['role_CMS'] < 4) { header('Location: maintenance.php');}
 
+
 // seo friendly url 
 $request = substr($_SERVER['REQUEST_URI'], strlen(CMS_DIR.'/'));
 $request_parts = explode('/', $request);
@@ -35,6 +36,7 @@ if(isset($id)) {
     }
 }
 
+
 // no $id and request parts exists ->  show 404 error and default content from site ...
 // no $id and no request parts -> get default startpage 
 // $id but no published page exists in database - > get default startpage 
@@ -42,25 +44,26 @@ if(isset($id)) {
 
 // default
 $arr = null;
+$just_installed = false;
 
 //access page as known or unknown user to get page content
 $users_id = (isset($_SESSION['users_id'])) ? $_SESSION['users_id'] : null;
 
 function getStartPage() {
     
-    // just installed Storiesaround
+    // just installed Storiesaround -> don't redirect, let caller show default/welcome content
     if ($_SESSION['site_domain_url'] == CMS_URL) {
-        //print_r2("please set a startpage in site_domain_url");
-    } else {
-        header('Location: '. $_SESSION['site_domain_url']);
-        exit;            
+        return false;
     }
+    header('Location: '. $_SESSION['site_domain_url']);
+    exit;
 }
 
 function getPagesContentDefault($page404, $acc_read) {
 
     if (!$page404) {
-        return getStartPage();
+        // exits via redirect unless just installed, in which case falls through
+        getStartPage();
     }
     $site = new Site();
     $arr = $site->getSiteColumnNames("pages");
@@ -83,22 +86,30 @@ function getAccessMsg() {
 }
 
 
-if ($id == null && count($request_parts)) {
 
+
+if ($id == null && count($request_parts)) {
+    
     // pages.php
     // pages.php?iddds
     // pages/lorem-ipsum
     // pages/lorem-ipsum<script>alert()</script>
-
     $pattern = '/^(?=^.{1,128}$)([a-z-])*$/';
     $page404 = preg_match($pattern, $request_parts[1]) ? true : false;
     $page404 = $request_parts[1] === 'pages.php' ? true : false;
     $arr = getPagesContentDefault($page404, $acc_read=true);
 
+    // no page404 and no startpage configured yet -> fresh install, show welcome hints
+    $just_installed = !$page404 && $_SESSION['site_domain_url'] == CMS_URL;
+
 } elseif ($id == null) {
-    header('Location: '. $_SESSION['site_domain_url']);
-    exit;
+
+    print_r("Default start page missing...");
+    die();
+
 } else {
+
+
     $arr = $pages->getPagesContent($id);
     
     // page found
@@ -120,8 +131,6 @@ if ($id == null && count($request_parts)) {
 
 $sample = false;
 
-// print_r2($arr);
-// die();
 
 // get this page widgets
 $pages_widgets = new PagesWidgets();
@@ -278,16 +287,16 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
     <div id="wrapper-top">
         <?php
         
-        if ($arr == null) {
+        if ($just_installed) {
             $hint[0] = "<h1>Welcome to CMS Storiesaround</h1>";
             $hint[1] = "<p>If this is a new installation, please follow these instructions:</p>";
             $hint[2] = "<ul>";
-            $hint[3] = $users_id == null ? "<li><a href='login.php' target='_blank'>Login</a></li>" : "";
-            $hint[4] = "<li><a href='admin.php?t=pages&tp=add' target='_blank'>Create</a> a page</li>";
+            $hint[3] = $users_id == null ? "<li><a href='/cms/login.php' target='_blank'>Login</a></li>" : "";
+            $hint[4] = "<li>Create a page</li>";
             $hint[5] = "<li>Publish the page</li>"; 
-            $hint[6] = "<li>Set the new page as startpage, and save as <a href='admin.php?t=site&tg=settings' target='_blank'>Site domain url</a></li>";
+            $hint[6] = "<li>Set the new page as startpage, and save as <a href='/cms/admin.php?t=site&tg=settings' target='_blank'>Site domain url</a></li>";
             $hint[7] = "</ul>";
-            $hint[8] = "<p><a href='admin.php' target='_blank'>For more settings go to admin.php</a></p>";
+            $hint[8] = "<p><a href='/cms/admin.php' target='_blank'>For more settings go to admin.php</a></p>";
             for ($i = 0; $i < count($hint); $i++) {
                 echo $hint[$i];
             }                            
