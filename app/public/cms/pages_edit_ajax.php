@@ -9,13 +9,13 @@ $pages = new Pages();
 
 if (isset($_POST['token'])) {
 	if ($_POST['token'] == $_SESSION['token']) {
-		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$action = filter_var(trim($_POST['action'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		// check client user-agent, prevent session been hijacked
 		if($_SESSION['HTTP_USER_AGENT'] != $_SERVER['HTTP_USER_AGENT']) {
 			die('User agent fail. Please logout and login again.');
 		}
-		$users_id = filter_input(INPUT_POST, 'users_id', FILTER_VALIDATE_INT) ? $_POST['users_id'] : 0;
+		$users_id = (int) filter_input(INPUT_POST, 'users_id', FILTER_VALIDATE_INT);
 
 		if(!get_role_CMS('contributor') == 1) { die; }
 		if ($pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT)) { 
@@ -59,22 +59,22 @@ if (isset($_POST['token'])) {
 
 				case 'update':
 
-					if (strlen(trim($_POST['pages_title'])) > 0) {
-						$pages_title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					if (strlen(trim($_POST['pages_title'] ?? '')) > 0) {
+						$pages_title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					}
 					
 					if ($pages_title){
 					
-						$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-						$content = trim($_POST['content']);
-						$title_hide = filter_input(INPUT_POST, 'title_hide', FILTER_VALIDATE_INT) ? $_POST['title_hide'] : 0;
-						$content_author = trim($_POST['content_author']);
-						$rss_promote = filter_input(INPUT_POST, 'rss_promote', FILTER_VALIDATE_INT) ? $_POST['rss_promote'] : 0;
+						$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+						$content = trim($_POST['content'] ?? '');
+						$title_hide = (int) filter_input(INPUT_POST, 'title_hide', FILTER_VALIDATE_INT);
+						$content_author = trim($_POST['content_author'] ?? '');
+						$rss_promote = (int) filter_input(INPUT_POST, 'rss_promote', FILTER_VALIDATE_INT);
 						// $rss_description = !is_null($_POST['rss_description']) ? trim($_POST['rss_description']) : "";
 						$rss_description = "";
-						$events = filter_input(INPUT_POST, 'events', FILTER_VALIDATE_INT) ? $_POST['events'] : 0;
-						$reservations = filter_input(INPUT_POST, 'reservations', FILTER_VALIDATE_INT) ? $_POST['reservations'] : 0;
-						$plugins = filter_input(INPUT_POST, 'plugins', FILTER_VALIDATE_INT) ? $_POST['plugins'] : 0;
+						$events = (int) filter_input(INPUT_POST, 'events', FILTER_VALIDATE_INT);
+						$reservations = (int) filter_input(INPUT_POST, 'reservations', FILTER_VALIDATE_INT);
+						$plugins = (int) filter_input(INPUT_POST, 'plugins', FILTER_VALIDATE_INT);
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 						
 						$result = $pages->updatePagesContent($pages_id, $pages_title, $pages_title_alternative, $title_hide, $content, $content_author, $rss_promote, $rss_description, $events, $reservations, $plugins, $utc_modified);
@@ -130,7 +130,7 @@ if (isset($_POST['token'])) {
 
 				case 'update_content_only':
 									
-					$content = trim($_POST['content']);
+					$content = trim($_POST['content'] ?? '');
 					if (strlen($content)) {
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');						
 						$result = $pages->updatePagesContentOnly($pages_id, $content, $utc_modified);
@@ -145,7 +145,7 @@ if (isset($_POST['token'])) {
 
 				case 'update_title_only':
 					
-					$title = trim($_POST['title']);
+					$title = trim($_POST['title'] ?? '');
 					if (strlen($title)) {
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');						
 						$result = $pages->updatePagesTitleOnly($pages_id, $title, $utc_modified);
@@ -160,7 +160,7 @@ if (isset($_POST['token'])) {
 				
 				case 'update_author_only':
 					
-					$author = trim($_POST['author']);
+					$author = trim($_POST['author'] ?? '');
 					if (strlen($author)) {
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');			
 						$result = $pages->updatePagesAuthorOnly($pages_id, $author, $utc_modified);
@@ -176,7 +176,7 @@ if (isset($_POST['token'])) {
 
 				case 'save_seo_link':
 					
-					$pages_id_link = filter_var(trim($_POST['pages_id_link']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$pages_id_link = filter_var(trim($_POST['pages_id_link'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					$result = $pages->updatePagesSeoLink($pages_id, $pages_id_link, $utc_modified);
@@ -193,10 +193,10 @@ if (isset($_POST['token'])) {
 
 				case 'save_meta':
 					
-					$meta_keywords = filter_var(trim($_POST['meta_keywords']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$meta_description = filter_var(trim($_POST['meta_description']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$meta_keywords = filter_var(trim($_POST['meta_keywords'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$meta_description = filter_var(trim($_POST['meta_description'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$meta_robots = $_POST['meta_robots'];
-					$meta_additional = filter_var(trim($_POST['meta_additional']), FILTER_SANITIZE_ADD_SLASHES);
+					$meta_additional = filter_var(trim($_POST['meta_additional'] ?? ''), FILTER_SANITIZE_ADD_SLASHES);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					$result = $pages->updatePagesMeta($pages_id, $meta_keywords, $meta_description, $meta_robots, $meta_additional, $utc_modified);
@@ -225,9 +225,9 @@ if (isset($_POST['token'])) {
 					
 				case 'update_parent_id':
 					
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$parent_id = filter_input(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT) ? $_POST['parent_id'] : null;
-					$new_parent_id = filter_input(INPUT_POST, 'new_parent_id', FILTER_VALIDATE_INT) ? $_POST['new_parent_id'] : 0;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$parent_id = (int) filter_input(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+					$new_parent_id = (int) filter_input(INPUT_POST, 'new_parent_id', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					if($new_parent_id !== $pages_id) {
 					
@@ -252,8 +252,8 @@ if (isset($_POST['token'])) {
 
 				case 'remove_hierarchy':
 					
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$parent_id = filter_input(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT) ? $_POST['parent_id'] : null;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$parent_id = (int) filter_input(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$result = $pages->updatePagesRemoveHierarchy($pages_id, $parent_id);
 					
@@ -381,8 +381,8 @@ if (isset($_POST['token'])) {
 
 
 				case 'save_plugins':
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$plugins_id = filter_input(INPUT_POST, 'plugins_id', FILTER_VALIDATE_INT) ? $_POST['plugins_id'] : 0;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$plugins_id = (int) filter_input(INPUT_POST, 'plugins_id', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					if($pages_id) {
 						
@@ -404,8 +404,8 @@ if (isset($_POST['token'])) {
 					
 				case 'use_plugins':
 				
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$plugins = filter_input(INPUT_POST, 'plugins', FILTER_VALIDATE_INT) ? $_POST['plugins'] : 0;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$plugins = (int) filter_input(INPUT_POST, 'plugins', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 					if($pages_id) {
@@ -424,11 +424,11 @@ if (isset($_POST['token'])) {
 
 				case 'plugin_arguments':
 				
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
 					
 					//$plugin_arguments = filter_var($_POST['plugin_arguments'], FILTER_VALIDATE_REGEXP, array("options"=>array('regexp'=>'/^(?=^.{1,128}$)([A-Za-z0-9]|[ ":{}])*$/')));
 					//$plugin_arguments = isset($_POST['plugin_arguments']) ? json_encode($_POST['plugin_arguments']) : '';
-					$plugin_arguments = trim($_POST['plugin_arguments']);
+					$plugin_arguments = trim($_POST['plugin_arguments'] ?? '');
 					//$plugin_arguments = json_decode($_POST['plugin_arguments']);
 					//$plugin_arguments = filter_var(trim($_POST['plugin_arguments']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -448,7 +448,7 @@ if (isset($_POST['token'])) {
 
 				case 'teaser_image_reset':
 
-					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
+					$pages_images_id = (int) filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					if($pages_images_id) {
@@ -479,10 +479,6 @@ if (isset($_POST['token'])) {
 							$checked = isset($class) ? ' checked' : null;
 							$teaser = isset($class) ? ' <abbr>&nbsp;story teaser</abbr><span class="toolbar_reset_teaser" style="padding:0 20px;"><button class="btn_reset_teaser" value="'. $row['pages_images_id'] .'">&nbsp;</button></span>' : null;
 							echo '<li id='. $row['filename'] .' '.$class .'>';
-								// trash icon to handle click events, 
-								// set button value and id to filename without fileextension (i.e no dot!)
-								// in order to remove # id -> $('#'+img).closest('li').remove();
-								// jquery id - get filename without extension
 
 								$output = preg_replace("/\\.[^.\\s]{3,4}$/", "", $row['filename']);
 								echo '<div style="float:left;width:50px;">';
@@ -490,7 +486,7 @@ if (isset($_POST['token'])) {
 								echo '</div>';
 								$link = $p . $row['filename'];
 								$title = $row['filename'];
-								if(strlen($row['copyright'])) {
+								if(strlen($row['copyright'] ?? '')) {
 									$title .=  ' / '.$row['copyright'];
 								}
 								?>
@@ -565,7 +561,6 @@ if (isset($_POST['token'])) {
 							$('.btn_delete_image').click(function(event){
 								event.preventDefault();
 								var img = $(this).val();
-								// get id from jQuery, use event.currentTarget.id instead of event.target.id
 								var id = event.currentTarget.id;
 								$("#dialog_delete_image").dialog("open");
 								$("#dialog_delete_image").dialog({
@@ -608,15 +603,13 @@ if (isset($_POST['token'])) {
 
 				case 'image_rotate':				
 
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$pages_images_id = (int) filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT);
 
 					$pages = new Pages();
 					$row = $pages->getPagesImagesMeta($pages_images_id);
 
 					$filename = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/'. $row['filename'];
-
-
 					$extension = pathinfo($_SERVER['DOCUMENT_ROOT'] . $filename, PATHINFO_EXTENSION);
 					$ext = strlen($extension);
 					$width_ext = $ext + 4;
@@ -624,23 +617,13 @@ if (isset($_POST['token'])) {
 									
 					// biggest possible
 					$filename = $pre.'726.'.$extension;	
-					
-					//echo $filename;
-					
-					$rotate = filter_input(INPUT_POST, 'rotate', FILTER_VALIDATE_INT) ? $_POST['rotate'] : 0;
-
-					//$path = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/';
-					//$dst_path = CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/';
-					
+										
+					$rotate = (int) filter_input(INPUT_POST, 'rotate', FILTER_VALIDATE_INT);
 					
 					$image = new Image();
 					$img = $image->image_rotate($filename, $rotate);
 					
-
 					$file = substr($filename, strlen(CMS_ABSPATH.'/content/uploads/pages/'. $pages_id .'/'));
-					//echo $file;
-					
-					//echo $file;
 					echo CMS_DIR.'/content/uploads/pages/'. $pages_id .'/'.$file;
 				
 				
@@ -648,8 +631,8 @@ if (isset($_POST['token'])) {
 				
 				case 'image_apply_filter':				
 
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$pages_images_id = (int) filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT);
 					$filter = filter_input(INPUT_POST, 'filter', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ? $_POST['filter'] : '';
 
 					$pages = new Pages();
@@ -675,7 +658,6 @@ if (isset($_POST['token'])) {
 					}
 					// apply filter
 					$img = $image->image_filter($path, $filename, $new_filename_prefix, $filter);
-
 					
 					//echo new image file as path and filename;
 					if(!$img) {
@@ -688,8 +670,8 @@ if (isset($_POST['token'])) {
 				
 				case 'image_save_new':				
 
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$pages_images_id = (int) filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT);
 
 					$ratio = filter_input(INPUT_POST, 'ratio', FILTER_VALIDATE_FLOAT) ? $_POST['ratio'] : 0;
 					
@@ -746,7 +728,6 @@ if (isset($_POST['token'])) {
 							$image->image_resize($f . $filename .'.'. $ext, $f . $filename_base . $size .'.'. $ext, $size);
 						}
 						
-						// update db
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');						
 						$result = $pages->updatePagesImagesCrop($pages_images_id, $ratio, $utc_modified);
 					}
@@ -757,19 +738,19 @@ if (isset($_POST['token'])) {
 				break;
 				
 				case 'image_crop':
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : null;
-					$pages_images_id = filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT) ? $_POST['pages_images_id'] : null;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$pages_images_id = (int) filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT);
 
 					// crop values
 					$dst_x = 0;
 					$dst_y = 0;
-					$src_x = filter_input(INPUT_POST, 'left', FILTER_VALIDATE_INT) ? $_POST['left'] : 0;
-					$src_y = filter_input(INPUT_POST, 'top', FILTER_VALIDATE_INT) ? $_POST['top'] : 0;
-					$dst_w = filter_input(INPUT_POST, 'width', FILTER_VALIDATE_INT) ? $_POST['width'] : 0;
-					$dst_h = filter_input(INPUT_POST, 'height', FILTER_VALIDATE_INT) ? $_POST['height'] : 0;
-					$src_w = filter_input(INPUT_POST, 'width', FILTER_VALIDATE_INT) ? $_POST['width'] : 0;
-					$src_h = filter_input(INPUT_POST, 'height', FILTER_VALIDATE_INT) ? $_POST['height'] : 0;
-					$width_edited_image = filter_input(INPUT_POST, 'width_edited_image', FILTER_VALIDATE_INT) ? $_POST['width_edited_image'] : 0;
+					$src_x = (int) filter_input(INPUT_POST, 'left', FILTER_VALIDATE_INT);
+					$src_y = (int) filter_input(INPUT_POST, 'top', FILTER_VALIDATE_INT);
+					$dst_w = (int) filter_input(INPUT_POST, 'width', FILTER_VALIDATE_INT);
+					$dst_h = (int) filter_input(INPUT_POST, 'height', FILTER_VALIDATE_INT);
+					$src_w = (int) filter_input(INPUT_POST, 'width', FILTER_VALIDATE_INT);
+					$src_h = (int) filter_input(INPUT_POST, 'height', FILTER_VALIDATE_INT);
+					$width_edited_image = (int) filter_input(INPUT_POST, 'width_edited_image', FILTER_VALIDATE_INT);
 					
 					// set scale - if window size is smaller than max image 
 					$scale = round($width_edited_image/$src_w, 3);
@@ -914,12 +895,6 @@ if (isset($_POST['token'])) {
 						// delete database saved sizes, includes original image if exists 
 						$pages = new Pages();
 						$rows = $pages->getPagesImagesSizes($filename, $pages_id);
-						// ...
-						// if ($rows) {
-						// 	foreach($rows as $row) {
-						// 		$sizes_in_db = $row['sizes'];
-						// 	}
-						// }
 						$sizes = explode(",", $sizes_in_db);
 						foreach ($sizes as $size) {
 							$f = substr($filename, 0, $pos) .'_'.$size . $ext;
@@ -992,11 +967,11 @@ if (isset($_POST['token'])) {
 					$header_caption = json_encode($_POST['header_caption']);
 					$header_caption_align = json_encode($_POST['header_caption_align']);
 					$header_caption_vertical_align = json_encode($_POST['header_caption_vertical_align']);					
-					$header_caption_show = filter_input(INPUT_POST, 'header_caption_show', FILTER_VALIDATE_INT) ? $_POST['header_caption_show'] : 0;
+					$header_caption_show = (int) filter_input(INPUT_POST, 'header_caption_show', FILTER_VALIDATE_INT);
 					$header_image_timeout = $_POST['header_image_timeout'];
 					$header_image_fade = $_POST['header_image_fade'];
-					$landing_page = filter_input(INPUT_POST, 'landing_page', FILTER_VALIDATE_INT) ? $_POST['landing_page'] : 0;
-					$parallax_scroll = filter_input(INPUT_POST, 'parallax_scroll', FILTER_VALIDATE_INT) ? $_POST['parallax_scroll'] : 0;
+					$landing_page = (int) filter_input(INPUT_POST, 'landing_page', FILTER_VALIDATE_INT);
+					$parallax_scroll = (int) filter_input(INPUT_POST, 'parallax_scroll', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $header_image_timeout, $header_image_fade, $landing_page, $parallax_scroll, $utc_modified);
@@ -1040,14 +1015,12 @@ if (isset($_POST['token'])) {
 
 				case 'save_stories_settings':
 
-					$stories_equal_height = $_POST['stories_equal_height'];
-					$stories_last_modified = $_POST['stories_last_modified'];
-					$stories_image_copyright = $_POST['stories_image_copyright'];
-					$stories_wide_teaser_image_width = filter_input(INPUT_POST, 'stories_wide_teaser_image_width', FILTER_VALIDATE_INT);
-					$stories_wide_teaser_image_align = filter_input(INPUT_POST, 'stories_wide_teaser_image_align', FILTER_VALIDATE_INT);					
+					$stories_equal_height = (int) filter_input(INPUT_POST, 'stories_equal_height', FILTER_VALIDATE_INT);
+					$stories_image_copyright = (int) filter_input(INPUT_POST, 'stories_image_copyright', FILTER_VALIDATE_INT);
+					$stories_last_modified = (int) filter_input(INPUT_POST, 'stories_last_modified', FILTER_VALIDATE_INT);
+					$stories_wide_teaser_image_align = (int) filter_input(INPUT_POST, 'stories_wide_teaser_image_align', FILTER_VALIDATE_INT);		
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					$stories_css_class = $_POST['stories_css_class'];
-					$result = $pages->setPagesSetupStoriesSettings($pages_id, $stories_equal_height, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_width, $stories_wide_teaser_image_align, $stories_css_class, $utc_modified);
+					$result = $pages->setPagesSetupStoriesSettings($pages_id, $stories_equal_height, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_align, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'stories_settings', $users_id, $_SESSION['token'], $utc_modified);						
@@ -1082,7 +1055,7 @@ if (isset($_POST['token'])) {
 
 					$stories_promoted = $_POST['stories_promoted'];	
 					$stories_promoted_area = $_POST['stories_promoted_area'];					
-					$stories_filter = filter_var(trim($_POST['stories_filter']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$stories_filter = filter_var(trim($_POST['stories_filter'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$stories_limit = $_POST['stories_limit'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
@@ -1105,8 +1078,8 @@ if (isset($_POST['token'])) {
 
 				case 'save_stories_event_dates':
 
-					$stories_event_dates = filter_input(INPUT_POST, 'stories_event_dates', FILTER_VALIDATE_INT) ? $_POST['stories_event_dates'] : 0;					
-					$stories_event_dates_filter = filter_var(trim($_POST['stories_event_dates_filter']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$stories_event_dates = (int) filter_input(INPUT_POST, 'stories_event_dates', FILTER_VALIDATE_INT);					
+					$stories_event_dates_filter = filter_var(trim($_POST['stories_event_dates_filter'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					$result = $pages->setPagesSetupStoriesEventDates($pages_id, $stories_event_dates, $stories_event_dates_filter, $utc_modified);
@@ -1302,13 +1275,13 @@ if (isset($_POST['token'])) {
 
 				case 'pages_publish':
 					
-					$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT) ? $_POST['access'] : 0;
-					$title_tag = filter_var(trim($_POST['title_tag']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
-					$pages_title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$content = trim($_POST['content']);
-					$content_author = trim($_POST['content_author']);
-					$pages_id_link = filter_var(trim($_POST['pages_id_link']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$access = (int) filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT);
+					$title_tag = filter_var(trim($_POST['title_tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
+					$pages_title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$content = trim($_POST['content'] ?? '');
+					$content_author = trim($_POST['content_author'] ?? '');
+					$pages_id_link = filter_var(trim($_POST['pages_id_link'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$datetime_start = isValidDateTime($_POST["datetime_start"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_start"])) : null; 
 					$datetime_end = isValidDateTime($_POST["datetime_end"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_end"])) : null;
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -1469,9 +1442,9 @@ if (isset($_POST['token'])) {
 				
 				case 'seo_link':
 					
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-					$title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$remove_stopwords = filter_input(INPUT_POST, 'stopwords', FILTER_VALIDATE_INT) ? $_POST['stopwords'] : 0;
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$remove_stopwords = (int) filter_input(INPUT_POST, 'stopwords', FILTER_VALIDATE_INT);
 					
 					include_once 'includes/inc.seo_link.php';
 
@@ -1488,10 +1461,10 @@ if (isset($_POST['token'])) {
 				
 				case 'suggest_meta_keywords':
 					
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-					$title = filter_var(trim($_POST['pages_title']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$story = filter_var(trim($_POST['story_content']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$content = filter_var(trim($_POST['content']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$story = filter_var(trim($_POST['story_content'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$content = filter_var(trim($_POST['content'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					// strip_tags, keep leading words from fields, 					
 					$story = strip_tags($story);
 					$content = strip_tags($content);
@@ -1512,13 +1485,13 @@ if (isset($_POST['token'])) {
 					
 				case 'pages_settings':
 					
-					$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-					$lang = filter_var(trim($_POST['lang']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$lang = filter_var(trim($_POST['lang'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$search_field_area = $_POST['search_field_area'];
-					$category = filter_var(trim($_POST['category']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$category = filter_var(trim($_POST['category'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$category_position = $_POST['category_position'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					$breadcrumb = filter_input(INPUT_POST, 'breadcrumb', FILTER_VALIDATE_INT) ? $_POST['breadcrumb'] : 0;
+					$breadcrumb = (int) filter_input(INPUT_POST, 'breadcrumb', FILTER_VALIDATE_INT);
 					
 					$result = $pages->setPagesSettings($pages_id, $breadcrumb, $lang, $search_field_area, $category, $category_position, $utc_modified);
 					if($result) {
@@ -1530,20 +1503,20 @@ if (isset($_POST['token'])) {
 
 				
 				case 'pages_story':
-					
-					$story_content = trim($_POST['story_content']);
+
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+					$story_content = trim($_POST['story_content'] ?? '');
 					$tag = isset($_POST['tag']) ? implode(",", $_POST['tag']) : "";
-					$story_css_class = trim($_POST['story_css_class']);
-					$story_custom_title = filter_input(INPUT_POST, 'story_custom_title', FILTER_VALIDATE_INT) ? $_POST['story_custom_title'] : 0;
-					$story_custom_title_value = filter_var(trim($_POST['story_custom_title_value']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$story_wide_teaser_image = filter_input(INPUT_POST, 'story_wide_teaser_image', FILTER_VALIDATE_INT) ? $_POST['story_wide_teaser_image'] : 0;
-					$story_promote = filter_input(INPUT_POST, 'story_promote', FILTER_VALIDATE_INT) ? $_POST['story_promote'] : 0;	
-					$story_link = filter_input(INPUT_POST, 'story_link', FILTER_VALIDATE_INT) ? $_POST['story_link'] : 0;	
-					$story_event = filter_input(INPUT_POST, 'story_event', FILTER_VALIDATE_INT) ? $_POST['story_event'] : 0;
-					$story_event_date = isValidDateTime($_POST["story_event_datetime"]) ? date("Y-m-d H:i:s", strtotime($_POST["story_event_datetime"])) : null; 
+					$story_custom_title = (int) filter_input(INPUT_POST, 'story_custom_title', FILTER_VALIDATE_INT);
+					$story_custom_title_value = filter_var(trim($_POST['story_custom_title_value'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$story_wide_teaser_image = (int) filter_input(INPUT_POST, 'story_wide_teaser_image', FILTER_VALIDATE_INT);
+					$story_promote = (int) filter_input(INPUT_POST, 'story_promote', FILTER_VALIDATE_INT);	
+					$story_link = (int) filter_input(INPUT_POST, 'story_link', FILTER_VALIDATE_INT);	
+					$story_event = (int) filter_input(INPUT_POST, 'story_event', FILTER_VALIDATE_INT);
+					$story_event_date = isValidDateTime($_POST["story_event_datetime"]) ? date("Y-m-d H:i:s", strtotime($_POST["story_event_datetime"])) : '1000-01-01 00:00:00';
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					$result = $pages->setPagesStory($pages_id, $story_content, $tag, $story_promote, $story_link, $story_event, $story_event_date, $story_css_class, $story_custom_title, $story_custom_title_value, $story_wide_teaser_image, $utc_modified);
+					$result = $pages->setPagesStory($pages_id, $story_content, $tag, $story_promote, $story_link, $story_event, $story_event_date, $story_custom_title, $story_custom_title_value, $story_wide_teaser_image, $utc_modified);
 					if($result) {
 						$history = new History();
 						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'story', $users_id, $_SESSION['token'], $utc_modified);
@@ -1556,18 +1529,17 @@ if (isset($_POST['token'])) {
 					if($is_story) {
 					
 						$title = $result['story_custom_title'];
-						$title_value = strlen($result['story_custom_title_value']) > 0 ? $result['story_custom_title_value'] : $result['title'];
+						$title_value = strlen($result['story_custom_title_value'] ?? '') > 0 ? $result['story_custom_title_value'] : $result['title'];
 						$img = str_replace('_100.','_726.', (string) ($result['filename'] ?? ''));
 						$img ='../content/uploads/pages/'.$pages_id.'/'.$img;
 						$pages_id = $result['pages_id'];
 						$ratio = $result['ratio'];
-						$css_class = strlen($result['story_css_class'])>0 ? $result['story_css_class'] : 'stories-content';
 						$story = $result['story_content'];
 						$utc = new DateTime($result['utc_start_publish']);
 						$date = $utc->format('Y-m-d H:i');
 						$caption = isset($result['filename']) ? $result['caption'] : '';
 						
-						function preview_story($w, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified) {
+						function preview_story($w, $img, $pages_id, $ratio, $title, $title_value, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified) {
 
 							$title_value = isset($title) ? $title_value : null;
 							echo '<div style="float:left;margin:20px;"<span style="font-size:0.8em;">'.$w.'px</span>';
@@ -1577,11 +1549,11 @@ if (isset($_POST['token'])) {
 								switch($w) {
 									case 138:
 										echo '<a class="stories" href="#">';
-										echo '<div class="'.$css_class.'" style="padding:0;">';
+										echo '<div class="" style="padding:0;">';
 										if(isset($img)) {
 											echo '<img src="'.$img.'" class="fluid" alt="'.$caption.'" />';
 										}
-										echo '<div class="'.$css_class.'" style="border:0;">';
+										echo '<div class="" style="border:0;">';
 										if($title == 0) {
 
 											echo '<h4 class="stories-title" >'.$title_value.'</h4>';
@@ -1594,11 +1566,11 @@ if (isset($_POST['token'])) {
 									break;
 									case 222:
 										echo '<a class="stories" href="#">';
-										echo '<div class="'.$css_class.'" style="padding:0;">';
+										echo '<div class="" style="padding:0;">';
 										if(isset($img)) {
 											echo '<img src="'.$img.'" class="fluid" alt="'.$caption.'" />';
 										}
-										echo '<div class="'.$css_class.'" style="border:0;">';
+										echo '<div class="" style="border:0;">';
 										if($title == 0) {
 											echo '<h3 class="stories-title">'.$title_value.'</h3>';
 										}
@@ -1610,11 +1582,11 @@ if (isset($_POST['token'])) {
 									break;
 									case 306:
 										echo '<a class="stories" href="#">';
-										echo '<div class="'.$css_class.'" style="padding:0;">';
+										echo '<div class="" style="padding:0;">';
 										if(isset($img)) {
 											echo '<img src="'.$img.'" class="fluid" alt="'.$caption.'" />';
 										}
-										echo '<div class="'.$css_class.'" style="border:0;">';
+										echo '<div class="" style="border:0;">';
 										if($title == 0) {
 											echo '<h3 class="stories-title">'.$title_value.'</h3>';
 										}
@@ -1629,7 +1601,7 @@ if (isset($_POST['token'])) {
 										switch($story_wide_teaser_image) {
 											case 0:
 												echo '<a class="stories" href="#">';
-												echo '<div class="'.$css_class.'">';
+												echo '<div class="">';
 												if($title == 0) {
 													echo '<h3 class="stories-title">'.$title_value.'</h3>';
 												}
@@ -1642,7 +1614,7 @@ if (isset($_POST['token'])) {
 											case 1:
 												echo '<a class="stories" href="#">';
 												echo '<img src="'.$img.'" width="'.$w.'" height="'.$height.'" alt="'.$caption.'" />';
-												echo '<div class="'.$css_class.'">';
+												echo '<div class="">';
 												if($title == 0) {
 													echo '<h3 class="stories-title">'.$title_value.'</h3>';
 												}
@@ -1655,25 +1627,25 @@ if (isset($_POST['token'])) {
 											case 2:
 												
 												// 80px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='right');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='right');
 												// 120px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='right');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='right');
 												// 160px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='right');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='right');
 												// 200px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='right');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='right');
 												
 											break;
 											case 3:
 
 												// 80px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='left');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='left');
 												// 120px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='left');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='left');
 												// 160px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='left');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='left');
 												// 200px
-												preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='left');
+												preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='left');
 											
 											break;
 											
@@ -1683,7 +1655,7 @@ if (isset($_POST['token'])) {
 									case 726:
 										switch($story_wide_teaser_image) {
 											case 0:
-												echo '<div class="'.$css_class.'">';
+												echo '<div class="">';
 												if($title == 0) {
 													echo '<h3 class="stories-title">'.$title_value.'</h3>';
 												}
@@ -1695,7 +1667,7 @@ if (isset($_POST['token'])) {
 											break;
 											case 1:
 												echo '<img src="'.$img.'" width="'.$w.'" height="'.$height.'" alt="'.$caption.'" />';
-												echo '<div class="'.$css_class.'">';
+												echo '<div class="">';
 												if($title == 0) {
 													echo '<h2 class="stories-title">'.$title_value.'</h2>';
 												}
@@ -1708,25 +1680,25 @@ if (isset($_POST['token'])) {
 											case 2:
 
 												// 80px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='right');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='right');
 												// 120px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='right');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='right');
 												// 160px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='right');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='right');
 												// 200px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='right');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='right');
 												
 											break;
 											case 3:
 
 												// 80px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='left');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=80, $teaser_image_align='left');
 												// 120px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='left');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=120, $teaser_image_align='left');
 												// 160px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='left');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=160, $teaser_image_align='left');
 												// 200px
-												preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='left');
+												preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story, $teaser_image_width=200, $teaser_image_align='left');
 												
 											break;
 											
@@ -1738,9 +1710,9 @@ if (isset($_POST['token'])) {
 						}
 
 
-						function preview_story_image_align($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width, $teaser_image_align) {
+						function preview_story_image_align($title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width, $teaser_image_align) {
 							echo '<a class="stories" href="#">';
-							echo '<div class="'.$css_class.'">';
+							echo '<div class="">';
 							if($title == 0) {
 								echo '<h3 class="stories-title">'.$title_value.'</h3>';
 							}
@@ -1754,9 +1726,9 @@ if (isset($_POST['token'])) {
 							echo '</div></a>';
 						}
 
-						function preview_story_image_align_big($css_class, $title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width, $teaser_image_align) {
+						function preview_story_image_align_big($title, $title_value, $stories_last_modified, $date, $img, $caption, $story_wide, $teaser_image_width, $teaser_image_align) {
 							$teaser_image_margins = $teaser_image_align == 'left' ? '0 20px 20px 0;' : '0 0 20px 20px;';
-							echo '<div class="'.$css_class.'">';
+							echo '<div class="">';
 							echo '<div style="width:'.$teaser_image_width.'px;float:'.$teaser_image_align.';margin:'.$teaser_image_margins.'"><img src="'.$img.'" class="fluid" alt="'.$caption.'" /></div>';
 							if($title == 0) {
 								echo '<h3 class="stories-title">'.$title_value.'</h3>';
@@ -1771,11 +1743,11 @@ if (isset($_POST['token'])) {
 						}
 
 						
-						preview_story(138, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(222, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(306, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(474, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
-						preview_story(726, $img, $pages_id, $ratio, $title, $title_value, $css_class, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(138, $img, $pages_id, $ratio, $title, $title_value, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(222, $img, $pages_id, $ratio, $title, $title_value, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(306, $img, $pages_id, $ratio, $title, $title_value, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(474, $img, $pages_id, $ratio, $title, $title_value, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
+						preview_story(726, $img, $pages_id, $ratio, $title, $title_value, $story, $story_wide_teaser_image, $caption, $date, $stories_last_modified=0);
 						echo '<div style="clear:both"></div>';
 					}
 					
@@ -1825,20 +1797,18 @@ if (isset($_POST['token'])) {
 
 				case 'stories_new':
 					// validate stories_id
-					$stories_id = filter_input(INPUT_POST, 'stories_id', FILTER_VALIDATE_INT) ? $_POST['stories_id'] : null;					
-					$container = filter_var(trim($_POST['container']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
+					$stories_id = filter_input(INPUT_POST, 'stories_id', FILTER_VALIDATE_INT);
+					$stories_id = is_int($stories_id) ? $stories_id : null;
+					$container = filter_var(trim($_POST['container'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
 					$sort_id = 1;					
 					
-					// insert story and return lastInsertId
 					if(isset($stories_id)) {
 						$pages_stories_id = $pages->updatePagesStories($pages_id, $stories_id, $container, $sort_id);
 					}
 					
 					if(isset($pages_stories_id)) {
-						// get story title 
 						$row = $pages->getPagesStory($pages_stories_id);						
 						$story_title = (strlen($row['title']) > 0) ? $row['title'] : "Added story...";
-						// print story
 						get_stories_box($pages_stories_id, $story_title, "");
 					}
 
@@ -1846,16 +1816,11 @@ if (isset($_POST['token'])) {
 
 				case 'stories_save':
 
-					$container = filter_var(trim($_POST['id']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$container = filter_var(trim($_POST['id'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					// counter
 					$sort_id = 1;
 					foreach($_POST['result'] as $key => $value) {
-						// delete stories if not in use (side column)
 						$pages->updatePagesStoriesLayout($container, $sort_id, $value);
-						//echo is_numeric($pages_id);
-						//echo $value;
-						//echo '<br />';
-						//echo $sort_id;
 						$sort_id++;
 					}
 				
@@ -1864,7 +1829,7 @@ if (isset($_POST['token'])) {
 
 				case 'stories_delete':
 
-					$container = filter_var(trim($_POST['id']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$container = filter_var(trim($_POST['id'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					// counter
 					$sort_id = 1;
 					foreach($_POST['result'] as $key => $value) {
@@ -1902,13 +1867,10 @@ if (isset($_POST['token'])) {
 				break;
 
 				case 'get_stories_promoted':
-					//echo 'Aloha';	
 
 					$dynamic_content = $_POST['dynamicContent'];
 					$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ? $_POST['dynamicContentFilter'] : '';
-					$limit = filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT) ? $_POST['dynamicContentLimit'] : 0;
-					//echo "$stories_filter: ". $stories_filter;
-					//echo "$limit:" . $limit;
+					$limit = (int) filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT);
 					$rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
 					if($rows_promoted) {
 						echo json_encode($rows_promoted);
@@ -1920,7 +1882,7 @@ if (isset($_POST['token'])) {
 
 					$dynamic_content = $_POST['dynamicContent'];
 					$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ? $_POST['dynamicContentFilter'] : '';
-					$limit = filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT) ? $_POST['dynamicContentLimit'] : 0;
+					$limit = (int) filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT);
 					$rows = array();
 					switch ($dynamic_content) {
 						case "story-promoted":
@@ -1947,12 +1909,12 @@ if (isset($_POST['token'])) {
 
 				case 'save_grid':
 
-					$grid_active = filter_input(INPUT_POST, 'grid_active', FILTER_VALIDATE_INT) ? $_POST['grid_active'] : 0;
-					$grid_area = filter_input(INPUT_POST, 'grid_area', FILTER_VALIDATE_INT) ? $_POST['grid_area'] : 0;
-					$grid_cell_template = filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT) ? $_POST['grid_cell_template'] : 0;
-					$grid_cell_image_height = filter_input(INPUT_POST, 'grid_cell_image_height', FILTER_VALIDATE_INT) ? $_POST['grid_cell_image_height'] : 0;
-					$grid_custom_classes = filter_var(trim($_POST['grid_custom_classes']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$grid_content = trim($_POST['grid_content']);
+					$grid_active = (int) filter_input(INPUT_POST, 'grid_active', FILTER_VALIDATE_INT);
+					$grid_area = (int) filter_input(INPUT_POST, 'grid_area', FILTER_VALIDATE_INT);
+					$grid_cell_template = (int) filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT);
+					$grid_cell_image_height = (int) filter_input(INPUT_POST, 'grid_cell_image_height', FILTER_VALIDATE_INT);
+					$grid_custom_classes = filter_var(trim($_POST['grid_custom_classes'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$grid_content = trim($_POST['grid_content'] ?? '');
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 					$result = $pages->setPagesGrid($pages_id, $grid_active, $grid_area, $grid_custom_classes, $grid_content, $grid_cell_template, $grid_cell_image_height, $utc_modified);
@@ -1970,10 +1932,6 @@ if (isset($_POST['token'])) {
 
 				case 'pages_rights_add_users':
 					
-					// get users_id from POST users_meta
-					// users_meta contains: first_name last_name, email
-					// we only need email to get users_id
-					// use explode to split
 					$pieces = explode(",", $_POST['users_meta']);
 					if(is_array($pieces)) {
 						$i = count($pieces);
@@ -2019,9 +1977,6 @@ if (isset($_POST['token'])) {
 							// insert into pages_rights
 							$row = $rights->setPagesGroupsRightsNew($pages_id, $groups_id);
 							echo $row;
-							if($row) {
-								//echo 'saved';
-							}
 						}
 						
 					}
@@ -2047,9 +2002,6 @@ if (isset($_POST['token'])) {
 					$r_read = $_POST['r_read'];
 					$r_edit = $_POST['r_edit'];
 					$r_create = $_POST['r_create'];
-					
-					// check if we have rights to set
-					//$r_id = explode(",",$r_id);
 					
 					if(is_array($r_id)) {
 						$rights = new PagesRights();
@@ -2155,8 +2107,8 @@ if (isset($_POST['token'])) {
 					$widgets_action = json_encode($act);
 					$pages_widgets_id = $_POST['pages_widgets_id'];
 					
-					$widgets_header = filter_var(trim($_POST['widgets_header']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$widgets_footer = filter_var(trim($_POST['widgets_footer']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$widgets_header = filter_var(trim($_POST['widgets_header'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$widgets_footer = filter_var(trim($_POST['widgets_footer'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 					if(isset($pages_widgets_id)) {
 						$pw = new PagesWidgets();
@@ -2175,7 +2127,7 @@ if (isset($_POST['token'])) {
 
 				case 'widgets_delete':
 
-					$column = (isset($_POST['column'])) ? filter_var(trim($_POST['column']), FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
+					$column = (isset($_POST['column'])) ? filter_var(trim($_POST['column'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS) : null;
 					
 					if(isset($column)) {
 						$sort_id = 1;
@@ -2213,15 +2165,17 @@ if (isset($_POST['token'])) {
 				break;	
 					
 				case 'widgets_area':
-					// validate pages_widgets_id
-					$pages_widgets_id = filter_input(INPUT_POST, 'pages_widgets_id', FILTER_VALIDATE_INT) ? $_POST['pages_widgets_id'] : null;
-					$widgets_area_target = filter_var(trim($_POST['widgets_area_target']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
+
+					$pages_widgets_id = filter_input(INPUT_POST, 'pages_widgets_id', FILTER_VALIDATE_INT);
+					$pages_widgets_id = is_int($pages_widgets_id) ? $pages_widgets_id : null;
+					$widgets_area_target = filter_var(trim($_POST['widgets_area_target'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
 					$sort_id = 1;
 					
 					if(isset($pages_widgets_id)) {
 
 						$w = new PagesWidgets();
 						$w->updatePagesWidgetsArea($pages_widgets_id, $widgets_area_target);
+						
 						// prevent duplicates...
 						$row = $w->viewPagesWidgets($pages_widgets_id);
 						$title = $row['widgets_class'];
@@ -2233,7 +2187,7 @@ if (isset($_POST['token'])) {
 
 				case 'widgets_save':
 
-					$area = filter_var(trim($_POST['id']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$area = filter_var(trim($_POST['id'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$position = 1;
 					foreach($_POST['result'] as $key => $value) {
 						
@@ -2253,15 +2207,15 @@ if (isset($_POST['token'])) {
 		
 		if ($action == 'save_pages_images_meta') { 
 			
-			$pages_images_id = filter_var(trim($_POST['pages_images_id']), FILTER_VALIDATE_INT);
-			$caption = filter_var(trim($_POST['caption']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$caption_extended = trim($_POST['caption_extended']);
-			$alt = filter_var(trim($_POST['alt']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$title = filter_var(trim($_POST['title']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$creator = filter_var(trim($_POST['creator']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$copyright = filter_var(trim($_POST['copyright']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$pages_images_id = filter_var(trim($_POST['pages_images_id'] ?? ''), FILTER_VALIDATE_INT);
+			$caption = filter_var(trim($_POST['caption'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$caption_extended = trim($_POST['caption_extended'] ?? '');
+			$alt = filter_var(trim($_POST['alt'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$title = filter_var(trim($_POST['title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$creator = filter_var(trim($_POST['creator'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$copyright = filter_var(trim($_POST['copyright'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$tag = $_POST['tag'];
-			$promote = filter_input(INPUT_POST, 'promote', FILTER_VALIDATE_INT) ? $_POST['promote'] : 0;
+			$promote = (int) filter_input(INPUT_POST, 'promote', FILTER_VALIDATE_INT);
 
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			
@@ -2283,17 +2237,17 @@ if (isset($_POST['token'])) {
 			$access= 0;
 			$status = 1;
 			$template = is_numeric($_SESSION['site_template_default']) ? $_SESSION['site_template_default'] : 0;
-			$title = filter_var(trim($_POST['title_toplevel_page']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$title = filter_var(trim($_POST['title_toplevel_page'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$lastInsertId = $pages->setPagesAddToplevelPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $template, $utc_modified);
-			// echo 7;
-			// create folder
+
 			if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
 				mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);
 			}			
 			
 			// set users rights - read, edit, create
 			$rights = new PagesRights();
+			
 			// insert into pages_rights, skip check existing posts since its just created
 			$result = $rights->setPagesUsersRightsNewReadEditCreate($lastInsertId, $users_id);
 			
@@ -2313,14 +2267,13 @@ if (isset($_POST['token'])) {
 				$category_position = 99;
 				$status = 1;
 				$parent = 0;				
-				$title = filter_var(trim($_POST['title_child_page']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$title = filter_var(trim($_POST['title_child_page'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 				// get parent page common settings as template
 				$meta_additional = $meta_robots = $tag = $stories_filter = $selections = null;
 				$header_caption_show = $template = $stories_columns = 0;
 				$header_image = $header_caption = json_encode(array());
-
 
 				$r = $pages->getPagesAsTemplate($parent_id);
 				if($r) {
@@ -2362,7 +2315,7 @@ if (isset($_POST['token'])) {
 		
 		if ($action == 'pages_category_add') { 
 			
-			$category = filter_var(trim($_POST['category']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$category = filter_var(trim($_POST['category'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$position = filter_input(INPUT_POST, 'position', FILTER_VALIDATE_INT);
 			$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$pages_category = new PagesCategories();
@@ -2386,7 +2339,7 @@ if (isset($_POST['token'])) {
 			
 			$pages_categories_id = filter_input(INPUT_POST, 'pages_categories_id', FILTER_VALIDATE_INT);
 			$position = filter_input(INPUT_POST, 'position', FILTER_VALIDATE_INT);
-			$category = filter_var(trim($_POST['category']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$category = filter_var(trim($_POST['category'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$pages_category = new PagesCategories();
 			
@@ -2414,7 +2367,7 @@ if (isset($_POST['token'])) {
 
 		if ($action == 'pages_add_tag') { 
 			
-			$tag = filter_var(trim($_POST['tag']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$tag = filter_var(trim($_POST['tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$tags = new Tags();
 
@@ -2435,7 +2388,7 @@ if (isset($_POST['token'])) {
 
 		if ($action == 'pages_delete_tag') { 
 
-			$tags_id = filter_input(INPUT_POST, 'tags_id', FILTER_VALIDATE_INT) ? $_POST['tags_id'] : 0;
+			$tags_id = (int) filter_input(INPUT_POST, 'tags_id', FILTER_VALIDATE_INT);
 			$tags = new Tags();
 			$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
@@ -2487,8 +2440,8 @@ if (isset($_POST['token'])) {
 			$external_css = filter_input(INPUT_POST,'external_css',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$content_html = $_POST['content_html'];
 			$content_code = $_POST['content_code'];
-			$grid_content = trim($_POST['grid_content']);
-			$grid_cell_template = filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT) ? $_POST['grid_cell_template'] : 0;
+			$grid_content = trim($_POST['grid_content'] ?? '');
+			$grid_cell_template = (int) filter_input(INPUT_POST, 'grid_cell_template', FILTER_VALIDATE_INT);
 			$grid_custom_classes = $_POST['grid_custom_classes'];
 			$grid_cell_image_height = filter_input(INPUT_POST, 'grid_cell_image_height', FILTER_VALIDATE_INT);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -2543,8 +2496,8 @@ if (isset($_POST['token'])) {
 				$pages_ids = filter_var_array($_POST['pages_ids'], FILTER_VALIDATE_INT);					
 				$datetime_start = isValidDateTime($_POST["datetime_start"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_start"])) : null; 
 				$datetime_end = isValidDateTime($_POST["datetime_end"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_end"])) : null;
-				$access = filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT) ? $_POST['access'] : 0;
-				$status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT) ? $_POST['status'] : 0;
+				$access = (int) filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT);
+				$status = (int) filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);
 				
 				if($pages_ids) {
 					

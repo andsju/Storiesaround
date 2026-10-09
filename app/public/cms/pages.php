@@ -310,14 +310,18 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
 
     <?php
 
+    // 2.3.0
+    $wrapper_content_width = 1280;
+
     // handle template, set wrapper-content width
     $content_percent_width = 100;
     
     // remove site_template_content_padding?
-    $template_content_padding = is_numeric($_SESSION['site_template_content_padding']) ? $_SESSION['site_template_content_padding'] : 0;
+    // $template_content_padding = is_numeric($_SESSION['site_template_content_padding']) ? $_SESSION['site_template_content_padding'] : 0;
     
     // sidebar width between 20-33%
-    $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
+    // $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
+    $sidebar_percent_width = 25;
 
     // get stories before template renders
     $limit_stories = $arr['stories_limit'];
@@ -332,7 +336,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
             // sidebars
             $content_percent_width = 100 - ($sidebar_percent_width * 2); 
             $left_sidebar_percent_width = $right_sidebar_percent_width = $sidebar_percent_width;
-            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
             include 'includes/inc.template_sidebars.php';
         break;
@@ -341,7 +345,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
             $content_percent_width = 100 - $sidebar_percent_width;
             $left_sidebar_percent_width = $sidebar_percent_width;
             $right_sidebar_percent_width = 0;
-            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_left_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
             $wrapper_right_sidebar_width = 0;
             include 'includes/inc.template_sidebar_left.php';
@@ -352,7 +356,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
             $content_percent_width = 100 - $sidebar_percent_width;
             $right_sidebar_percent_width = $sidebar_percent_width;
             $left_sidebar_percent_width = 0;
-            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
             $wrapper_left_sidebar_width = 0;
             include 'includes/inc.template_sidebar_right.php';
@@ -362,7 +366,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
             // panorama
             $content_percent_width = 100;
             $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
-            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
             include 'includes/inc.template_panorama.php';
 
@@ -370,7 +374,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
         case 4:
             // sidebars right joined
             $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
-            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $right_sidebar_percent_width = $sidebar_percent_width;
             $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
             $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
@@ -382,7 +386,7 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
             // custom
             $content_percent_width = 100;
             $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
-            $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
+            // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
             $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
             if (is_file(CMS_ABSPATH.'/content/templates/' . $arr['template_custom'])) {
                 include CMS_ABSPATH.'/content/templates/' . $arr['template_custom'];

@@ -590,53 +590,7 @@ echo "\n".'<div id="wrapper-site">';
 			// handle template, set wrapper-content width
 			$content_width = 100;
 			$css_content_width = $css_content_width_padding = '';
-			
-			$template_content_padding = is_numeric($_SESSION['site_template_content_padding']) ? $_SESSION['site_template_content_padding'] : 0;
-			
-			// sidebar width between 20-33%
-			$sidebar_width = $_SESSION['site_template_sidebar_width'];
-			
-			switch ($arr['template']) {	
-				case 0:
-				case 1:
-					// sidebars
-					$content_width = 100 - ($sidebar_width * 2); 
-					$left_sidebar_width = $right_sidebar_width = $sidebar_width;
-					$css_content_width = $content_width.'%';
-					$css_content_width_padding = '';					
-				break;
-				case 2:
-				case 3:
-					// left sidebar
-					$content_width = 100 - $sidebar_width;
-					$left_sidebar_width = $sidebar_width;
-					$css_content_width = $content_width - $template_content_padding .'px';
-					$css_content_width_padding = 'padding-right:'.$template_content_padding.'px';
-				break;
-				case 4:
-				case 5:
-					// right sidebar
-					$content_width = 100 - $sidebar_width;
-					$right_sidebar_width = $sidebar_width;
-					$css_content_width = $content_width - $template_content_padding .'px';
-					$css_content_width_padding = 'padding-left:'.$template_content_padding.'px';
-				break;
-				case 6:
-					// panorama
-					$content_width = 100; 
-					$css_content_width = $content_width - ($template_content_padding * 2) .'px';
-					$css_content_width_padding = 'padding-left:'.$template_content_padding.'px;padding-right:'.$template_content_padding.'px';
-				break;
-				case 7:
-					// sidebars right joined
-					$content_width = 100 - ($sidebar_width + $sidebar_width * 0.67);
-					$right_sidebar_width = $sidebar_width;
-					$left_sidebar_width = $sidebar_width * 0.67;
-					$css_content_width = $content_width - $template_content_padding .'px';
-					$css_content_width_padding = 'padding-left:'.$template_content_padding.'px';
-				break;					
-			}
-			
+												
 			// use template settings
 			if($arr['template']==0 || $arr['template']==1 || $arr['template']==2 || $arr['template']==3) { ?>
 			
@@ -940,11 +894,11 @@ echo "\n".'<div id="wrapper-site">';
 								if($arr['stories_promoted_area'] == 3 || $arr['stories_promoted_area'] == 4) {								
 									echo '<div id="stories-promoted-masonry" style="margin:0 auto;clear:both;">';
 										$layoutbox = $arr['stories_promoted_area'] == 3 ? 1 : 2;
-										get_box_story_content_child_floats($rows_promoted, $content_width, $layoutbox, $css_class_uniformed=null, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
+										get_box_story_content_child_floats($rows_promoted, $content_width, $layoutbox, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
 									echo '</div>';
 								}
 								if($arr['stories_promoted_area'] == 5) {
-									get_box_story_content_child($rows_promoted, 474, $css_class_uniformed=null, $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
+									get_box_story_content_child($rows_promoted, 474, $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
 								}
 							echo '</div>';
 						}
@@ -1095,32 +1049,31 @@ echo "\n".'<div id="wrapper-site">';
 					if($arr['stories_child']) {
 
 						$rows_child = $pages->getPagesStoryContentPublishChild($id);
-						$css_class_uniformed = $arr['stories_css_class'];
 						echo '<div id="content-child-stories" style="width:100%;">';
 							echo '<div id="stories-child-masonry" style="margin:0 auto;clear:both;">';
 							echo '<div class="grid-sizer"></div>';
 							
 							switch($arr['stories_child_type']) {
 								case 1:
-									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=1, $css_class_uniformed, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
+									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=1, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
 								break;
 								case 2:
-									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=2, $css_class_uniformed, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
+									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=2, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
 								break;
 								case 3:
-									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=3, $css_class_uniformed, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
+									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=3, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
 								break;
 								case 4:
-									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=4, $css_class_uniformed, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
+									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=4, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=false);
 								break;
 								case 5:
-									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=5, $css_class_uniformed, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=true);
+									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=5, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=true);
 								break;
 								case 6:
-									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=6, $css_class_uniformed, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=true);
+									get_box_story_content_child_floats($rows_child, $content_width, $layoutbox=6, $arr['stories_image_copyright'], $arr['stories_last_modified'], $dtz, $randomize=true);
 								break;
 								case 7:
-									get_box_story_content_child($rows_child, 474, $css_class_uniformed, $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
+									get_box_story_content_child($rows_child, 474, $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
 								break;
 							}
 							echo '</div>';

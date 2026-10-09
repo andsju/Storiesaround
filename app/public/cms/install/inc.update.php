@@ -137,5 +137,12 @@ $sqls[] = "DROP INDEX users_index ON users;";
 $sqls[] = "ALTER TABLE users ADD FULLTEXT INDEX users_index (first_name, last_name, email, user_name);";
 
 // 2026-09-29
-$sqls[] = "ALTER TABLE `users` CHANGE `user_name` `user_name` VARCHAR(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL;"
+$sqls[] = "ALTER TABLE `users` CHANGE `user_name` `user_name` VARCHAR(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL;";
+
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_template_sidebar_width");
+$sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_template_content_padding");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_wide_teaser_image_width");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "story_css_class");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_css_class");
+
 ?>

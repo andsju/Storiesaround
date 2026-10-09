@@ -57,22 +57,18 @@ if (isset($_POST['token'])){
 				$site_theme = filter_var(trim($_POST['site_theme']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_ui_theme = filter_var(trim($_POST['site_ui_theme']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_template_default = filter_input(INPUT_POST, 'site_template_default', FILTER_VALIDATE_INT);
-				$site_template_content_padding = filter_input(INPUT_POST, 'site_template_content_padding', FILTER_VALIDATE_INT);
-				$site_template_sidebar_width = filter_input(INPUT_POST, 'site_template_sidebar_width', FILTER_VALIDATE_INT);
 				$site_navigation_horizontal = filter_input(INPUT_POST, 'site_navigation_horizontal', FILTER_VALIDATE_INT);
 				$site_navigation_vertical = filter_input(INPUT_POST, 'site_navigation_vertical', FILTER_VALIDATE_INT);
 				$site_navigation_vertical_sidebar = filter_input(INPUT_POST, 'site_navigation_vertical_sidebar', FILTER_VALIDATE_INT);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				$site = new Site();
-				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_logotype, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
+				$result = $site->setSiteDesign($site_id, $site_wrapper_page_width, $site_logotype, $site_theme, $site_ui_theme, $site_template_default, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified);
 				if($result) {
 					$_SESSION['site_logotype'] = $site_logotype;
 					$_SESSION['site_theme'] = $site_theme;
 					$_SESSION['site_wrapper_page_width'] = $site_wrapper_page_width;
 					$_SESSION['site_ui_theme'] = $site_ui_theme;
 					$_SESSION['site_template_default'] = $site_template_default;
-					$_SESSION['site_template_sidebar_width'] = $site_template_sidebar_width;
-					$_SESSION['site_template_content_padding'] = $site_template_content_padding;
 					$_SESSION['site_navigation_horizontal'] = $site_navigation_horizontal;
 					$_SESSION['site_navigation_vertical'] = $site_navigation_vertical;
 					$_SESSION['site_navigation_vertical_sidebar'] = $site_navigation_vertical_sidebar;

@@ -42,6 +42,7 @@ if($_SESSION['role_CMS'] <= 2) {
 $pages = new Pages();
 $arr = $pages->getPagesEditContent($id);
 
+
 // wysiwyg editor
 $wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editors, $_SESSION['site_wysiwyg']) :  null;
 
@@ -1170,11 +1171,6 @@ foreach ( $js_files as $js ): ?>
 			});	
 		});
 		
-		$(document).on('click', '#set_custom_css div', function (e) {
-			var css = $( this ).data("css");
-			$('#story_css_class').val(css).hide().fadeIn(500);			
-		});
-
 		$('#btn_save_stories').click(function(event){
 			event.preventDefault();
 			var stories_column_saved = false;
@@ -1340,6 +1336,7 @@ foreach ( $js_files as $js ): ?>
 			});
 		});
 		
+		
 		$('#btn_stories_settings').click(function(event){
 			event.preventDefault();
 			var action = "save_stories_settings";
@@ -1349,9 +1346,7 @@ foreach ( $js_files as $js ): ?>
 			var token = $("#token").val();
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
-			var stories_wide_teaser_image_width = $("#stories_wide_teaser_image_width").val();
 			var stories_wide_teaser_image_align = $('input:radio[name=stories_wide_teaser_image_align]:checked').val();
-			var stories_css_class = $("#stories_css_class").val();
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_stories_modified').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_stories_modified').hide()",700)},
@@ -1359,8 +1354,8 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id, stories_equal_height: stories_equal_height,
-					stories_wide_teaser_image_width: stories_wide_teaser_image_width, stories_wide_teaser_image_align: stories_wide_teaser_image_align,
-					stories_last_modified: stories_last_modified, stories_image_copyright: stories_image_copyright, stories_css_class: stories_css_class
+					stories_wide_teaser_image_align: stories_wide_teaser_image_align,
+					stories_last_modified: stories_last_modified, stories_image_copyright: stories_image_copyright
 				},
 				success: function(message){
 					ajaxReply('','#ajax_status_stories_settings');
@@ -1551,7 +1546,6 @@ foreach ( $js_files as $js ): ?>
 			
 			var story_custom_title = $('input:checkbox[name=story_custom_title]').is(':checked') ? 1 : 0;
 			var story_custom_title_value = $("#story_custom_title_value").val();
-			var story_css_class = $("#story_css_class").val();
 			var story_wide_teaser_image = $('input:radio[name=story_wide_teaser_image]:checked').val();
 			var story_promote = $('input:checkbox[name=story_promote]').is(':checked') ? 1 : 0;
 			var story_link = $('input:checkbox[name=story_link]').is(':checked') ? 1 : 0;
@@ -1562,6 +1556,17 @@ foreach ( $js_files as $js ): ?>
 			var story_event_datetime = (story_event_date==null) ?  null : story_event_date +' '+ story_event_time;
 
 			var pages_id = $("#pages_id").val();
+
+
+			var obj = { 
+					action: action, token: token, users_id: users_id, pages_id: pages_id, story_content: story_content, 
+					tag: tag, story_custom_title: story_custom_title, story_custom_title_value: story_custom_title_value, 
+					story_wide_teaser_image: story_wide_teaser_image, story_promote: story_promote, story_link: story_link, 
+					story_event: story_event, story_event_datetime: story_event_datetime 
+				}
+			console.log(obj);
+
+
 			$.ajax({
 				beforeSend: function() { loading = $('#ajax_spinner_story').show()},
 				complete: function(){ loading = setTimeout("$('#ajax_spinner_story').hide()",700)},
@@ -1569,16 +1574,18 @@ foreach ( $js_files as $js ): ?>
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id, story_content: story_content, 
-					tag: tag, story_custom_title: story_custom_title, 
-					story_custom_title_value: story_custom_title_value, story_css_class: story_css_class, 
+					tag: tag, story_custom_title: story_custom_title, story_custom_title_value: story_custom_title_value, 
 					story_wide_teaser_image: story_wide_teaser_image, story_promote: story_promote, story_link: story_link, 
 					story_event: story_event, story_event_datetime: story_event_datetime 
 				},
 				success: function(newdata){	
-					ajaxReply('','#ajax_status_story');
+					ajaxReply(newdata,'#ajax_status_story');
 					$("#story_samples").empty().append('<h4>Samples:</h4>'+newdata).hide().fadeIn('fast');
 				},
 			});
+
+
+
 		});
 		
 		$('#btn_save_meta').click(function(event){
@@ -2333,20 +2340,7 @@ foreach ( $js_files as $js ): ?>
 			
 			window.open('http://storiesaround.com/help/'+link, '_blank');
 		});
-		
-		var slider_width_value = $("#stories_wide_teaser_image_width_slider_value").val();
-		
-		$("#stories_wide_teaser_image_width_slider").slider({
-			value: slider_width_value,
-			min: 10,
-			max: 50,
-			step: 1,
-			slide: function( event, ui ) {
-				$( "#stories_wide_teaser_image_width" ).val( ui.value );
-			}
-		});
-		$("#stories_wide_teaser_image_width").val($("#stories_wide_teaser_image_width_slider").slider("value"));
-		
+				
 		var slider_align_value = $("#stories_wide_teaser_image_align_slider_value").val();
 		$("#stories_wide_teaser_image_align_slider" ).slider({
 			value: slider_align_value,
@@ -3393,43 +3387,7 @@ if(is_array($check_edit)) {
 			<?php
 
 			$content_percent_width = 100;						
-			// sidebar width between 20-33%
-			$sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
 			$class_editor = $wysiwyg_editor['css-class'];
-
-			switch ($arr['template']) {
-				case 0:
-					// sidebars
-					$content_percent_width = 100 - ($sidebar_percent_width * 2); 
-					$css_content_width = 'width:'.$content_percent_width.'%;';
-					break;
-				case 1:
-					// left sidebar
-					$content_percent_width = 100 - $sidebar_percent_width;
-					$css_content_width = 'width:'.$content_percent_width.'%;';
-				case 2:
-					// right sidebar
-					$content_percent_width = 100 - $sidebar_percent_width;
-					$css_content_width = 'width:'.$content_percent_width.'%;';
-					break;
-				
-				case 3:
-					// panorama
-					$content_percent_width = 100; 
-					$css_content_width = 'width:'.$content_percent_width.'%;';
-					break;
-				case 4:
-		            // sidebars right joined
-        		    $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
-					$css_content_width = 'width:'.$content_percent_width.'%;';
-					break;
-				case 5:
-				case 6:
-					// custom
-					$content_percent_width = 100;
-					$css_content_width = 'width:'.$content_percent_width.'%;';
-					break;
-			}
 			
 			if(!isset($_SESSION['site_wysiwyg'])) {
 				$class_editor = null;
@@ -3440,7 +3398,7 @@ if(is_array($check_edit)) {
 			<p>
 				<label for="pages_title">Title: </label>
 				<br />
-				<input type="text" name="pages_title" id="pages_title" title="Enter title" style="font-size:2.14em;<?php echo $css_content_width; ?>" maxlength="100" value="<?php if(isset($arr['title'])){echo $arr['title'];}?>" />
+				<input type="text" name="pages_title" id="pages_title" title="Enter title" style="font-size:2.14em;" maxlength="100" value="<?php if(isset($arr['title'])){echo $arr['title'];}?>" />
 			</p>
 
 			<a href="#" id="link_title_alternative">Alternative title</a>
@@ -3451,7 +3409,7 @@ if(is_array($check_edit)) {
 				<p>
 					<label for="pages_title_alternative">Alternativt title: </label>
 					<br />
-					<input type="text" name="pages_title_alternative" id="pages_title_alternative" title="Enter alternative title" style="font-size:2.14em;<?php echo $css_content_width; ?>" maxlength="100" value="<?php if(isset($arr['title_alternative'])){echo $arr['title_alternative'];}?>" />
+					<input type="text" name="pages_title_alternative" id="pages_title_alternative" title="Enter alternative title" style="font-size:2.14em;" maxlength="100" value="<?php if(isset($arr['title_alternative'])){echo $arr['title_alternative'];}?>" />
 				</p>
 			</div>
 
@@ -3459,7 +3417,7 @@ if(is_array($check_edit)) {
 				<label for="content">Content: </label>
 				<br />
 				<div>
-					<textarea name="content" id="content" class="<?php echo $class_editor; ?>" style="<?php echo $css_content_width; ?>"><?php echo $arr['content'];?></textarea>
+					<textarea name="content" id="content" class="<?php echo $class_editor; ?>" style=""><?php echo $arr['content'];?></textarea>
 				</div>
 			</p>
 			<p>
@@ -3541,32 +3499,11 @@ if(is_array($check_edit)) {
 								<td style="width: 20%">
 									<input type="radio" name="stories_wide_teaser_image_align" value="0" <?php if($arr['stories_wide_teaser_image_align'] == 0) {echo 'checked';}?> style="margin-right:10px;"> left  |  right <input type="radio" name="stories_wide_teaser_image_align" value="1" <?php if($arr['stories_wide_teaser_image_align'] == 1) {echo 'checked';}?> style="margin-left:10px;"> 
 								</td>
-								<td style="width:10%;text-align:right">
-									Width %:
-								</td>
-								<td style="width: 10%">
-									<div id="stories_wide_teaser_image_width_slider" style="width:100%;"></div>
-								</td>
-								<td style="width:25%;padding-left:20px;">
-									<input type="text" id="stories_wide_teaser_image_width" style="width:25px;" disabled>
-								</td>
 							</tr>
 						</table>						
 					</p>
 					<p>
-						<label for="stories_css_class">Set stories css class (override):</label><br />
-						<select id="stories_css_class" name="stories_css_class" class="code">
-							<option value=""></option>
-							<?php 
-							get_css_class($css_custom, $input=$arr['stories_css_class']);
-							?>
-						</select>
-					</p>
-					<p>
-						<input type="hidden" id="stories_wide_teaser_image_width_slider_value" value="<?php echo $arr['stories_wide_teaser_image_width']; ?>" />
 						<input type="hidden" id="stories_wide_teaser_image_align_slider_value" value="<?php echo $arr['stories_wide_teaser_image_align']; ?>" />
-						
-
 						<span class="toolbar"><button id="btn_stories_settings" name="btn_stories_settings" style="margin-left:10px;">Save</button><span class="toolbar">
 						<span id="ajax_spinner_stories_modified" style='display:none'><img src="css/images/spinner.gif"></span>
 						<span id="ajax_status_stories_settings" style='display:none'></span>								
@@ -3883,28 +3820,29 @@ if(is_array($check_edit)) {
 				switch ($arr['template']) {	
 					case 0:
 						// sidebars 
-						$sidebar_percent_width  = $sidebar_percent_width - 2;
-						$css_left_sidebar_width = $css_right_sidebar_width = "width:" . $sidebar_percent_width  . "%";						
+						// $sidebar_percent_width  = $sidebar_percent_width - 2;
+						// $css_left_sidebar_width = $css_right_sidebar_width = "width:" . $sidebar_percent_width  . "%";
+						$css_left_sidebar_width = $css_right_sidebar_width = 'width:25%';						
 						break;
 					case 1:
 						// left sidebar
 					case 2:
 						// right sidebar
-						$sidebar_percent_width  = $sidebar_percent_width - 2;
-						$css_left_sidebar_width = $css_right_sidebar_width = 'width:'.$sidebar_percent_width.'%;';
+						// $sidebar_percent_width  = $sidebar_percent_width - 2;
+						$css_left_sidebar_width = $css_right_sidebar_width = 'width:25%';
 						break;			
 					case 3:
 						// panorama
 						break;
 					case 4:
 						// joined sidebars
-						$content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
-						$right_sidebar_width = $sidebar_percent_width;
-						$left_sidebar_width = $right_sidebar_width * 0.67;
-						$right_sidebar_width = $right_sidebar_width - 2;
-						$left_sidebar_width = $left_sidebar_width - 2;
-						$css_left_sidebar_width = 'width:'.$left_sidebar_width.'%;';
-						$css_right_sidebar_width = 'width:'.$right_sidebar_width.'%;';
+						// $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
+						// $right_sidebar_width = $sidebar_percent_width;
+						// $left_sidebar_width = $right_sidebar_width * 0.67;
+						// $right_sidebar_width = $right_sidebar_width - 2;
+						// $left_sidebar_width = $left_sidebar_width - 2;
+						$css_left_sidebar_width = 'width:25%';
+						$css_right_sidebar_width = 'width:25%';
 						break;
 						case 5:
 						case 6:
@@ -3943,7 +3881,7 @@ if(is_array($check_edit)) {
 				
 				<?php } ?>
 				
-				<div class="content_wrapper_edit" style="float:left;<?php echo $css_content_width;?>;">
+				<div class="content_wrapper_edit" style="float:left;">
 					<div class="column_description ui-state-disabled" style="height:20px;border:1px dashed grey;">content</div>
 					<div class="area_space_edit"></div>
 						
@@ -4297,36 +4235,6 @@ if(is_array($check_edit)) {
 					<input type="text" size="25" id="story_custom_title_value" title="use default page title or set a custom story title" value="<?php echo $arr['story_custom_title_value']; ?>">
 					</td>
 					<td>
-					</td>
-			</table>
-			
-		</div>
-
-
-		<div class="admin-panel">
-
-			<table style="width:100%;" class="page-settings">
-				<tr>
-					<td style="width:33%;">
-						<label for="story_css_class">Background css class:</label><br />
-						<input type="text" id="story_css_class" name="story_css_class" class="code" value="<?php echo $arr['story_css_class']; ?>">
-					</td>
-					<td>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-					<div style="width:100%;overflow:auto;" id="set_custom_css">
-					<?php
-
-					foreach($css_custom as $key => $value) {
-						echo '<div class="'.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;padding:10px" title="'.$value.'">';
-							echo '<p>'.$value.'</p>';
-						echo '</div>';
-					}
-					?>
-					</div>
-					
 					</td>
 			</table>
 			
@@ -4723,5 +4631,12 @@ if(is_array($check_edit)) {
 </div>
 
 <?php include_once 'includes/inc.footer_cms.php'; ?>
+
+
+<?php
+// print_r2($arr);
+?>
+
+
 </body>
 </html>

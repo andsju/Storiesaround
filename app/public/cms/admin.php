@@ -242,8 +242,6 @@ include_once 'includes/inc.site_active_user_administration.php';
 			var site_theme = $("#site_theme option:selected").val();
 			var site_ui_theme = $("#site_ui_theme option:selected").val();
 			var site_template_default = $('input:radio[name=site_template_default]:checked').val();
-			var site_template_content_padding = $("#site_template_content_padding option:selected").val();
-			var site_template_sidebar_width = $("#site_template_sidebar_width").val();
 			var site_navigation_horizontal = $("#site_navigation_horizontal").val();
 			var site_navigation_vertical = $("#site_navigation_vertical").val();
 			var site_navigation_vertical_sidebar = $("#site_navigation_vertical_sidebar").val();
@@ -253,8 +251,8 @@ include_once 'includes/inc.site_active_user_administration.php';
 				type: 'POST',
 				url: 'admin_edit_ajax.php',				
 				data: { 
-					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_logotype: site_logotype, site_theme: site_theme, site_ui_theme: site_ui_theme, site_template_content_padding: site_template_content_padding,
-					site_template_sidebar_width: site_template_sidebar_width, site_template_default: site_template_default, site_template_sidebar_width: site_template_sidebar_width,  
+					action: action, token: token, site_id: site_id, site_wrapper_page_width: site_wrapper_page_width, site_logotype: site_logotype, site_theme: site_theme, site_ui_theme: site_ui_theme, 
+					site_template_default: site_template_default,  
 					site_navigation_horizontal: site_navigation_horizontal, site_navigation_vertical: site_navigation_vertical, site_navigation_vertical_sidebar: site_navigation_vertical_sidebar
 				},
 				success: function(message){	
@@ -506,19 +504,7 @@ include_once 'includes/inc.site_active_user_administration.php';
 			},
 			text: true
 		});	
-		
-		$( "#sidebar_slider" ).slider({
-			value: <?php echo $_SESSION['site_template_sidebar_width']; ?>,
-			min: 20,
-			max: 33,
-			step: 1,
-			slide: function( event, ui ) {
-				$( "#site_template_sidebar_width" ).val( ui.value );
-			}
-		});
-
-		$( "#site_template_sidebar_width" ).val( $( "#sidebar_slider" ).slider( "value" ) );
-		
+				
 		$("#dir_header_view").delegate(".header_image", "click", function() {
 			var image = $(this).attr("data-image");
 			$("#site_header_image").val(image);
@@ -716,26 +702,9 @@ switch($t) {
 							echo '</select>';
 							?>
 							<a href="admin.php?t=files&tf=edit_css"> &raquo;&nbsp;edit css theme</a>
-							<p class="admin-text">
-								
+							<p class="admin-text">				
+								Page template dependency (no sidebar, one sidebar or joined sidebars). Adjust if background color / image / graphic / borders appears close content.
 							</p>
-							<label for="site_theme" class="admin-text">Set content padding</label><br />
-
-							<?php							
-							echo '<select id="site_template_content_padding">';
-								echo '<option value="">0</option>';
-								for($i=1;$i<=90;$i++) {
-									echo '<option value="'.$i.'"';
-										if(isset($_SESSION['site_template_content_padding'])) {
-											if($_SESSION['site_template_content_padding'] == $i) {
-												echo ' selected';
-											}
-										}
-									echo '>'.$i.'</option>';									
-								}
-							echo '</select>';
-							?>
-							Page template dependency (no sidebar, one sidebar or joined sidebars). Adjust if background color / image / graphic / borders appears close content.
 						</div>
 
 
@@ -856,14 +825,6 @@ switch($t) {
 										<p>
 											Set default template &raquo;
 										</p>
-
-										<p>
-											Set value for sidebar width (if sidebar exists in choosen template). Applies to <b>all pages in this site</b>.
-										</p>
-										<p>Default sidebar width: 25%</p>
-
-										<input type="text" id="site_template_sidebar_width" readonly style="border:0; font-weight:bold;background:#f8f8f8;">%
-										<div id="sidebar_slider" style="width:150px;"></div>
 										
 									</td>
 									<td>

@@ -329,7 +329,17 @@ function highlight($content, array $keywords)
 /**
  * set utc datetime from datetime value: such as UTC_TIMESTAMP() (MySQL) and gmdate (PHP)
  * $utc = datetime, $dtz = DateTimeZone (Europe/Stockholm | Europe/London), $format = string like 'Y-m-d H:i:s' (http://www.php.net/manual/en/function.date.php)
- * returns string '----' if date not validates (like MySQL default value 0000-00-00 00:00:00)
+ * returns string '----' only if $utc itself is not a valid datetime (like MySQL default value 0000-00-00 00:00:00)
+ *
+ * Always returns a non-empty string. Never returns null, false or '',
+ * since the result is routinely written into NOT NULL datetime columns
+ * (an invalid/empty $dtz, e.g. from an unset site_timezone, previously
+ * caused either an uncaught DateTimeZone exception or a falsy return
+ * value that MySQL rejected with "Incorrect datetime value: ''"). If
+ * timezone conversion fails but $utc is valid, $utc is reformatted
+ * without timezone conversion instead, so callers that always pass a
+ * valid $utc (e.g. gmdate('Y-m-d H:i:s')) for utc_modified/utc_created
+ * still get a SQL-safe datetime string.
  *
  * @param $utc
  * @param $dtz
@@ -338,16 +348,29 @@ function highlight($content, array $keywords)
  */
 function utc_dtz($utc, $dtz, $format)
 {
-    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format))) {
-        if (isValidDateTime($utc)) {
+    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format)) && isValidDateTime($utc)) {
+        try {
             $dt = new DateTime($utc);
-            $dtz = new DateTimeZone($dtz);
-            $dt->setTimezone($dtz);
-            return $dt->format($format);
-        } else {
-            return '----';
+            $dt->setTimezone(new DateTimeZone($dtz));
+            $result = $dt->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // invalid timezone or formatting failure - fall back below
+        }
+
+        try {
+            $result = (new DateTime($utc))->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // $format itself is unusable - fall through to the sentinel below
         }
     }
+
+    return '----';
 }
 
 

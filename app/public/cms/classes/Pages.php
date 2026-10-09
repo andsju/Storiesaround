@@ -338,14 +338,13 @@ class Pages extends Database
      * @param int $story_link
      * @param int $story_event
      * @param string $story_event_date
-     * @param string $story_css_class
      * @param string $story_custom_title
      * @param string $story_custom_title_value
      * @param int $story_wide_teaser_image
      * @param string $utc_modified
      * @return bool
      */
-    public function setPagesStory($pages_id, $story_content, $tag, $story_promote, $story_link, $story_event, $story_event_date, $story_css_class, $story_custom_title, $story_custom_title_value, $story_wide_teaser_image, $utc_modified)
+    public function setPagesStory($pages_id, $story_content, $tag, $story_promote, $story_link, $story_event, $story_event_date, $story_custom_title, $story_custom_title_value, $story_wide_teaser_image, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
@@ -355,7 +354,6 @@ class Pages extends Database
 			story_link = :story_link,
 			story_event = :story_event,
 			story_event_date = :story_event_date,
-			story_css_class = :story_css_class,
 			story_custom_title = :story_custom_title,
 			story_custom_title_value = :story_custom_title_value,
 			story_wide_teaser_image = :story_wide_teaser_image,
@@ -370,11 +368,13 @@ class Pages extends Database
             $stmt->bindParam(":story_link", $story_link, PDO::PARAM_INT);
             $stmt->bindParam(":story_event", $story_event, PDO::PARAM_INT);
             $stmt->bindParam(":story_event_date", $story_event_date, PDO::PARAM_STR);
-            $stmt->bindParam(":story_css_class", $story_css_class, PDO::PARAM_STR);
             $stmt->bindParam(":story_custom_title", $story_custom_title, PDO::PARAM_INT);
             $stmt->bindParam(":story_custom_title_value", $story_custom_title_value, PDO::PARAM_STR);
             $stmt->bindParam(":story_wide_teaser_image", $story_wide_teaser_image, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
+
+            // echo $story_promote;
+            // die();
             return $stmt->execute();
 
         } catch (PDOException $e) {
@@ -1254,21 +1254,18 @@ class Pages extends Database
      * @param int $pages_id
      * @param int $stories_last_modified
      * @param int $stories_image_copyright
-     * @param int $stories_wide_teaser_image_width
      * @param int $stories_wide_teaser_image_align
      * @param string $utc_modified
      * @return bool
      */
-    public function setPagesSetupStoriesSettings($pages_id, $stories_equal_height, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_width, $stories_wide_teaser_image_align, $stories_css_class, $utc_modified)
+    public function setPagesSetupStoriesSettings($pages_id, $stories_equal_height, $stories_last_modified, $stories_image_copyright, $stories_wide_teaser_image_align, $utc_modified)
     {
         try {
             $sql_update = "UPDATE pages
 			SET stories_last_modified = :stories_last_modified,
             stories_equal_height = :stories_equal_height,
-			stories_image_copyright = :stories_image_copyright,
-			stories_wide_teaser_image_width = :stories_wide_teaser_image_width, 
+			stories_image_copyright = :stories_image_copyright, 
 			stories_wide_teaser_image_align = :stories_wide_teaser_image_align,
-            stories_css_class = :stories_css_class,
 			utc_modified = :utc_modified
 			WHERE pages_id = :pages_id";
 
@@ -1276,9 +1273,7 @@ class Pages extends Database
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":stories_equal_height", $stories_equal_height, PDO::PARAM_INT);
             $stmt->bindParam(":stories_image_copyright", $stories_image_copyright, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_wide_teaser_image_width", $stories_wide_teaser_image_width, PDO::PARAM_INT);
             $stmt->bindParam(":stories_wide_teaser_image_align", $stories_wide_teaser_image_align, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_css_class", $stories_css_class, PDO::PARAM_STR);
             $stmt->bindParam(":stories_last_modified", $stories_last_modified, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
@@ -1294,7 +1289,6 @@ class Pages extends Database
      * @param int $pages_id
      * @param int $stories_child
      * @param int $stories_child_area
-     * @param string $stories_css_class
      * @param string $utc_modified
      * @return bool
      */
@@ -1924,7 +1918,7 @@ class Pages extends Database
     {
 
         $sql = "
-		SELECT pages.pages_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages_images.story_teaser, pages_images.filename, pages_images.caption, pages_images.ratio
+		SELECT pages.pages_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages_images.story_teaser, pages_images.filename, pages_images.caption, pages_images.ratio
 		FROM pages
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.pages_id = $id
@@ -1932,7 +1926,7 @@ class Pages extends Database
 		
 		UNION
 
-		SELECT pages.pages_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, null AS story_teaser, null AS filename, null AS caption, null AS ratio
+		SELECT pages.pages_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, null AS story_teaser, null AS filename, null AS caption, null AS ratio
 		FROM pages
 		WHERE pages.pages_id = $id
 		";
@@ -1949,7 +1943,7 @@ class Pages extends Database
      */
     public function getPagesStoryContentPublish($id)
     {
-        $sql = "SELECT pages.pages_id, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.ratio
+        $sql = "SELECT pages.pages_id, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.ratio
 		FROM pages 
 		INNER JOIN pages_stories
 		ON pages.pages_id=pages_stories.stories_id
@@ -1980,14 +1974,14 @@ class Pages extends Database
     public function getPagesStoryContentPublishAll($id)
     {
         $sql =
-            "SELECT pages.pages_id, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, null AS filename, null AS story_teaser, null AS caption, null AS ratio
+            "SELECT pages.pages_id, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, null AS filename, null AS story_teaser, null AS caption, null AS ratio
 		FROM pages, pages_stories
 		WHERE pages.pages_id=pages_stories.stories_id
 		AND pages_stories.pages_id = $id
 		AND pages_stories.stories_id NOT IN 
 		( SELECT pages_images.pages_id FROM pages_images )
 		UNION
-		SELECT pages.pages_id, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.ratio
+		SELECT pages.pages_id, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.ratio
 		FROM pages 
 		INNER JOIN pages_stories
 		ON pages.pages_id=pages_stories.stories_id
@@ -2025,7 +2019,7 @@ class Pages extends Database
             "SELECT * 
 		FROM
 		(
-			SELECT pages_stories.sort_id AS rank, pages.pages_id, pages.access, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+			SELECT pages_stories.sort_id AS rank, pages.pages_id, pages.access, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
 			FROM pages 
 			INNER JOIN pages_stories
 			ON pages.pages_id=pages_stories.stories_id
@@ -2037,7 +2031,7 @@ class Pages extends Database
 
 			UNION
 
-			SELECT pages_stories.sort_id AS rank, pages.pages_id, pages.access, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, null AS filename, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
+			SELECT pages_stories.sort_id AS rank, pages.pages_id, pages.access, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, null AS filename, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
 			FROM pages, pages_stories
 			WHERE pages.pages_id=pages_stories.stories_id
 			AND pages_stories.pages_id = $id
@@ -2072,7 +2066,7 @@ class Pages extends Database
             "
 		SELECT * FROM
 		(
-			SELECT pages.pages_id, pages.title, pages.access, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
+			SELECT pages.pages_id, pages.title, pages.access, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.story_teaser, pages_images.caption, pages_images.copyright, pages_images.ratio
 			FROM pages 
 			INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 			WHERE pages.pages_id IN ($ids)
@@ -2080,7 +2074,7 @@ class Pages extends Database
 
 			UNION
 				  
-			SELECT pages.pages_id, pages.title, pages.access, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
+			SELECT pages.pages_id, pages.title, pages.access, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS story_teaser, null AS caption, null AS copyright, null AS ratio
 			FROM pages
 			WHERE pages_id IN ($ids)		 
 		) AS tmp
@@ -2149,7 +2143,7 @@ class Pages extends Database
             "SELECT * 
 		FROM
 		(
-		SELECT pages.position AS position, pages.title AS title, pages.pages_id, pages.access, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, NULL AS filename, NULL AS caption, NULL AS copyright, NULL AS alt, NULL AS story_teaser, NULL AS ratio
+		SELECT pages.position AS position, pages.title AS title, pages.pages_id, pages.access, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, NULL AS filename, NULL AS caption, NULL AS copyright, NULL AS alt, NULL AS story_teaser, NULL AS ratio
 		FROM pages 
 		WHERE pages.parent_id = :pages_id
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
@@ -2157,7 +2151,7 @@ class Pages extends Database
 		AND pages.pages_id NOT IN 
 		( SELECT pages_images.pages_id FROM pages_images )
 		UNION
-		SELECT pages.position AS position, pages.title AS title, pages.pages_id, pages.access, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.alt, pages_images.story_teaser, pages_images.ratio
+		SELECT pages.position AS position, pages.title AS title, pages.pages_id, pages.access, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.alt, pages_images.story_teaser, pages_images.ratio
 		FROM pages 
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.parent_id = :pages_id
@@ -2191,7 +2185,7 @@ class Pages extends Database
             "SELECT * 
 		FROM 
 		(	
-		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.alt, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.alt, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
 		FROM pages
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.story_promote = 1
@@ -2200,7 +2194,7 @@ class Pages extends Database
 		AND pages.tag LIKE :search
 		AND pages_images.story_teaser = 1
 		UNION
-		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS alt, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS alt, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
 		FROM pages
 		WHERE pages.story_promote = 1
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
@@ -2236,7 +2230,7 @@ class Pages extends Database
             "SELECT * 
 		FROM 
 		(	
-		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.alt, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, pages_images.filename, pages_images.alt, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
 		FROM pages
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.story_promote = 1
@@ -2245,7 +2239,7 @@ class Pages extends Database
 		AND pages.tag LIKE :search
 		AND pages_images.story_teaser = 1
 		UNION
-		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS alt, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
+		SELECT pages.utc_start_publish AS rank, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.utc_start_publish, pages.utc_modified, pages.template, pages.story_wide_teaser_image, null AS filename, null AS alt, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
 		FROM pages
 		WHERE pages.story_promote = 1
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
@@ -2288,7 +2282,7 @@ class Pages extends Database
             "SELECT * 
 		FROM 
 		(		
-		SELECT pages.story_event_date AS rank, pages.story_event_date, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
+		SELECT pages.story_event_date AS rank, pages.story_event_date, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_images.filename, pages_images.caption, pages_images.copyright, pages_images.story_teaser, pages_images.ratio
 		FROM pages
 		INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
 		WHERE pages.story_event = 1
@@ -2298,7 +2292,7 @@ class Pages extends Database
 		AND pages_images.story_teaser = 1
 		AND pages.story_event_date $operator :date
 		UNION
-		SELECT pages.story_event_date AS rank, pages.story_event_date, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_css_class, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
+		SELECT pages.story_event_date AS rank, pages.story_event_date, pages.pages_id, pages.access, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, null AS filename, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
 		FROM pages
 		WHERE pages.story_event = 1
 		AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
