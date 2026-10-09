@@ -491,37 +491,65 @@ function print_author($author, $languages)
  * get breadcrumb from given id/parent_id
  *
  * @param int $parent_id
- * @param $delimiter config string delimiter
- * @param $trunc_length max length before truncate string
- * @param $clickable
+ * @param string $delimiter config string delimiter
+ * @param int $trunc_length max length before truncate string
+ * @param int|bool $clickable
  * @return mixed|string
  */
 function get_breadcrumb($parent_id, $delimiter, $trunc_length, $clickable)
 {
     $pages = new Pages();
     $row = $pages->getPagesParent($parent_id);
+
     if (is_array($row)) {
         $r = $row['title'];
-        $c = strlen($row['title']);
-        if (strlen($row['title']) > $trunc_length) {
-            $t = $c - $trunc_length;
-            $r = utf8_encode(substr(utf8_decode($row['title']), 0, -$t)) . '...';
+
+        if (mb_strlen($r, 'UTF-8') > $trunc_length) {
+            $r = mb_substr($r, 0, $trunc_length, 'UTF-8');
+
+            // Prevent truncation in the middle of an HTML entity.
+            $entity_position = mb_strrpos($r, '&', 0, 'UTF-8');
+            $semicolon_position = mb_strrpos($r, ';', 0, 'UTF-8');
+
+            if (
+                $entity_position !== false
+                && (
+                    $semicolon_position === false
+                    || $entity_position > $semicolon_position
+                )
+            ) {
+                $r = mb_substr($r, 0, $entity_position, 'UTF-8');
+            }
+
+            $r .= '...';
         }
 
-        // use seo pages_id_link if set
-        if (strlen($row['pages_id_link']) > 0) {            
-            $crumb = ($clickable == 1) ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>' : $r;
+        // Use SEO pages_id_link if set.
+        if (strlen($row['pages_id_link']) > 0) {
+            $crumb = ($clickable == 1)
+                ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>'
+                : $r;
         } else {
-            $crumb = ($clickable == 1) ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/cms/pages.php?id=' . $row['pages_id'] . '">' . $r . '</a>' : $r;
+            $crumb = ($clickable == 1)
+                ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/cms/pages.php?id=' . $row['pages_id'] . '">' . $r . '</a>'
+                : $r;
         }
 
         if ($row['parent_id'] == 0) {
             return $crumb;
-        } else {
-            return get_breadcrumb($row['parent_id'], $delimiter, $trunc_length, $clickable) . $delimiter . $crumb;
         }
+
+        return get_breadcrumb(
+            $row['parent_id'],
+            $delimiter,
+            $trunc_length,
+            $clickable
+        ) . $delimiter . $crumb;
     }
+
+    return '';
 }
+
 
 
 /**
@@ -2513,161 +2541,6 @@ function get_grid($pages_id, $grid_active, $grid_content, $grid_custom_classes, 
 
     return $html_grid;
 
-
-
-
-
-
-
-    /*
-    $pages = new Pages();
-    $imageClass = new Image();
-    $calendar = new Calendar();
-
-    $grid_content_json = json_decode($grid_content);
-    
-    // json to a multidimensional array
-    $result = array();
-    $index = -1;
-
-    if (!is_array($grid_content_json)) {return;}
-    foreach($grid_content_json as $key=>$val){
-        foreach($val as $k=>$v){
-            // first item value 'grid-image'
-            if ($v == 'grid-image') {
-                $index++;
-            }
-            $result[$index][] = $v;
-        }
-    }
-
-    $result_copy = $result;
-    $counter = 0;
-    // 0: grid-image, 2: grid-image-y, 4: heading, 6: video, 8: url, 10: link, 12: grid-content, 
-    // 14: css, 16: pages_id, 18: grid-dynamic-content, 20: grid-dynamic-content-filter, 22: grid-dynamic-content-limit
-    $add_wrapper_class = strlen($grid_custom_classes) ? "wrapper-grid-padding" : "";
-
-    $html_grid = '<div class="wrapper-grid '.$grid_custom_classes.' '.$add_wrapper_class.' clearfix">';
-
-    foreach($result as $key => $value) {
-        $header = "";
-        $image = "";
-
-        foreach ($value as $key2 => $value2) {
-
-            $a_href = strlen($result_copy[$counter][9]) ? $result_copy[$counter][9] : "";
-            $a_start = strlen($a_href) ? '<a href="'.$a_href.'">' : ""; 
-            $a_end = strlen($a_href) ? '</a>' : ""; 
-
-            switch ($key2) {
-                case "0":
-                $html_grid .= '<div class="grid-cell '.$result_copy[$counter][15].'">';
-                break;
-                case "1":
-                    if(strlen($value2)) {    
-                        $background_image_y = strlen($result_copy[$counter][3]) > 1 ? 'background-position-y:'. $result_copy[$counter][3] .'%': '';
-                        $image = $a_start . '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$value2.');'.$background_image_y.'"><span class="category">Folkhögskolan</span></div>' . $a_end;
-                    }
-                    
-                break;
-                case "5":
-                    if(strlen($value2)) {
-                        $header .= $a_start . '<h3 class="grid-heading">' . $value2 . '</h3>' . $a_end;
-                    }
-                    $html_grid .= $grid_cell_template == 0 ? $image . $header : $header . $image; 
-                break;
-                case "7":
-                    if(strlen($value2)) {
-                        $video = getVideoEmbed($value2);
-                        $html_grid .= '<div class="grid-video">' .$video . '</div>';
-                    }
-                    break;
-                case "11":
-                    break;
-                case "13":
-                    if(strlen($value2)) {
-                        $html_grid .= '<div class="grid-content">' . $value2 . '</div>';
-                    }
-                    break;
-                case "17":
-                    break;
-                case "19":
-
-                    if ($value2 != "none") {
-                        $html_grid .= '<div class="grid-dynamic-content">' ;
-                    }
-                    if ($value2 == "stories-child") {
-                        
-                        $p_id = (int)$result_copy[$counter][17];
-                        $rows_children = $pages->getPagesChildren($p_id);
-
-                        if ($rows_children) {
-                            $html_grid .= '<ul>';
-                            foreach ($rows_children as $row_child) {
-                                $html_grid .= '<li><a href="pages.php?pages_id='.$row_child['pages_id'].'">'.$row_child['title'].'</a></li>';
-                            }
-                            $html_grid .= '</ul>';								
-                        }
-                    }
-                    if ($value2 == "stories-promoted") {
-                        $stories_filter = (string)$result_copy[$counter][21];
-                        $limit = (int)$result_copy[$counter][23];
-                        $rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
-
-                        if ($rows_promoted) {
-                            foreach ($rows_promoted as $row_promoted) {
-                                $html_grid .= '<div class="story">';
-                                $optimzed_image = isset($row_promoted['filename']) ? $imageClass->get_optimzed_image(CMS_DIR . '/content/uploads/pages/' . $row_promoted['pages_id'] . '/' .  $row_promoted['filename'], 400) : '';
-                                $html_grid .= '<a href="pages.php?id='.$row_promoted['pages_id'].'"><h4>'.$row_promoted['title'] . '</h4></a>';
-                                $html_grid .= isset($row_promoted['filename']) ? '<img src="' . $optimzed_image . '" style="float:right;width:33%;margin-left:10px">' : '';
-                                $html_grid .= $row_promoted['story_content'];
-                                $html_grid .= '</div>';
-                            }                            
-                        }
-                    }
-                    
-                    if ($value2 == "calendar-events") {
-                        $search = (string)$result_copy[$counter][21];
-                        $limit = (int)$result_copy[$counter][23];
-                        $cal = $calendar->getCalendarCategoriesSearch($search);
-                        if($cal) {
-                            $calendar_categories_id = $cal[0]['calendar_categories_id'];
-                            $events = $calendar->getCalendarEvents($calendar_categories_id, $date = date('Y-m-d'), "2weeks");                            
-                            if ($events) {
-                                $count_events = 0;
-                                foreach ($events as $event) {
-                                    if ($limit > $count_events) {
-                                        $html_grid .= '<h5>'.transl(date('l',strtotime($event['event_date']))) .' '. strtolower(date('j',strtotime($event['event_date']))) .' '. strtolower(transl(date('F',strtotime($event['event_date'])))) .'</h5>';
-                                        $html_grid .= '<p>'.nl2br($event['event']) . '</p>';
-                                        $count_events++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    if ($value2 != "none") {$html_grid .= '</div>'; }
-
-                    break;
-                case "21":
-                    $link = strlen($result_copy[$counter][11]) ? $result_copy[$counter][11] : $result_copy[$counter][9];
-                    if (strlen($result_copy[$counter][9])) {
-                        $html_grid .= '<div class="grid-split"></div>';
-                        $html_grid .= strlen($link) ? '<div class="grid-link"><a href="'.$result_copy[$counter][9].'" class="read-more">'.$link.'</a></div>' : '';                            
-                    } else {
-                        $html_grid .= '<div class="grid-split"></div>';
-                    }
-                    $html_grid .= strlen($result_copy[$counter][15]) ? '<div class="grid-design '.$result_copy[$counter][15].'"></div>' : '';
-                    $html_grid .= '</div>';
-                break;
-            }
-        }
-        $counter++;
-    }
-    $html_grid .= '</div>';
-    return $html_grid;
-
-    */
 }
 
 

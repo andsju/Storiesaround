@@ -2811,7 +2811,7 @@ meta tag width=device-width,initial-scale=1.0
         display: none;
     }
     ul.nav-tree {
-        margin: 0 !important;
+        margin-top: 0.5rem
     }
     ul.nav-tree li {
         margin: 0;
@@ -3110,6 +3110,18 @@ meta tag width=device-width,initial-scale=1.0
     #wrapper-page.sidebar-left {
         display: grid;
         grid-template-columns: minmax(250px, 280px) auto;
+    }
+    #wrapper-page.panorama {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    #wrapper-page.sidebars {
+        display: grid;
+        grid-template-columns: minmax(200px, 200px) auto minmax(200px, 200px);
+    }
+    #wrapper-page.sidebars-joined {
+        display: grid;
+        grid-template-columns: auto minmax(150px, 150px) minmax(200px, 200px);
     }
 
 
