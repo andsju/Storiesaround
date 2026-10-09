@@ -1,6 +1,7 @@
 <?php
 // include core 
 include_once 'includes/inc.core.php';
+include_once 'includes/inc.functions.php';
 include_once 'includes/inc.functions_pages.php';
 
 if(!get_role_CMS('user') == 1) {die;}
@@ -175,6 +176,7 @@ if (isset($_POST['token'])) {
 
 
 				case 'save_seo_link':
+
 					
 					$pages_id_link = filter_var(trim($_POST['pages_id_link'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -1443,13 +1445,9 @@ if (isset($_POST['token'])) {
 				case 'seo_link':
 					
 					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
-					$title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$remove_stopwords = (int) filter_input(INPUT_POST, 'stopwords', FILTER_VALIDATE_INT);
-					
-					include_once 'includes/inc.seo_link.php';
+					$title = trim($_POST['pages_title'] ?? '');
+					$seo_link = friendly_string($title);
 
-					$seo_link = set_seo_title($title, $replace = "-", $remove_stopwords, $stopwords_array);
-					
 					// check if suggested seo_link is unique, exclude this page if already set
 					$result = $pages->checkPagesSeo($seo_link, $pages_id);
 					if(!$result) {

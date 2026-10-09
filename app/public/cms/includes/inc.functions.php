@@ -35,6 +35,60 @@ function replace_characters($string)
     return preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);~i', '$1', htmlentities($string, ENT_COMPAT, 'UTF-8'));
 }
 
+
+/**
+ * Translate accents and special characters.
+ * Friendly URLs and filenames.
+ *
+ * @param string $string
+ * @return string
+ */
+function friendly_string(string $string): string
+{
+    // Convert uppercase characters to lowercase.
+    $string = mb_strtolower($string, 'UTF-8');
+
+    // Replace special characters.
+    $characters = [
+        'å' => 'a',
+        'ä' => 'a',
+        'ö' => 'o',
+        'æ' => 'ae',
+        'œ' => 'oe',
+        'ø' => 'o',
+        'ß' => 'ss',
+        'þ' => 'th',
+        'ð' => 'd',
+        'ł' => 'l',
+        'đ' => 'd',
+    ];
+
+    $string = strtr($string, $characters);
+
+    // Transliterate remaining accented characters.
+    if (function_exists('iconv')) {
+        $converted = iconv(
+            'UTF-8',
+            'ASCII//TRANSLIT//IGNORE',
+            $string
+        );
+
+        if ($converted !== false) {
+            $string = $converted;
+        }
+    }
+
+    // Replace whitespace with hyphens.
+    $string = preg_replace('/\s+/', '-', $string) ?? $string;
+
+    // Collapse consecutive hyphens into one.
+    $string = preg_replace('/-+/', '-', $string) ?? $string;
+
+    // Remove leading and trailing hyphens.
+    return trim($string, '-');
+}
+
+
 /**
  * allow alphanumerics
  * @param $string
