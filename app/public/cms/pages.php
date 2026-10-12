@@ -10,7 +10,6 @@ if ($_SESSION['site_maintenance'] == 1 && $_SESSION['role_CMS'] < 4) {
     header('Location: maintenance.php');
 }
 
-
 // seo friendly url 
 $request = substr($_SERVER['REQUEST_URI'], strlen(CMS_DIR . '/'));
 $request_parts = explode('/', $request);
@@ -94,9 +93,9 @@ function getAccessMsg()
 }
 
 
-
-
 if ($id == null && count($request_parts)) {
+
+
 
     // pages.php
     // pages.php?iddds
@@ -315,7 +314,9 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
 
     <?php
 
+
     // 2.3.0
+    $wrapper_page_width = 1280;
     $wrapper_content_width = 1280;
 
     // handle template, set wrapper-content width
@@ -339,60 +340,60 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
     switch ($arr['template']) {
         case 0:
             // sidebars
-            $content_percent_width = 100 - ($sidebar_percent_width * 2);
-            $left_sidebar_percent_width = $right_sidebar_percent_width = $sidebar_percent_width;
+            // $content_percent_width = 100 - ($sidebar_percent_width * 2);
+            // $left_sidebar_percent_width = $right_sidebar_percent_width = $sidebar_percent_width;
             // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
-            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            // $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
             include 'includes/inc.template_sidebars.php';
             break;
         case 1:
             // left sidebar
-            $content_percent_width = 100 - $sidebar_percent_width;
-            $left_sidebar_percent_width = $sidebar_percent_width;
-            $right_sidebar_percent_width = 0;
+            // $content_percent_width = 100 - $sidebar_percent_width;
+            // $left_sidebar_percent_width = $sidebar_percent_width;
+            // $right_sidebar_percent_width = 0;
             // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
-            $wrapper_left_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
-            $wrapper_right_sidebar_width = 0;
+            // $wrapper_left_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            // $wrapper_right_sidebar_width = 0;
             include 'includes/inc.template_sidebar_left.php';
 
             break;
         case 2:
             // right sidebar
-            $content_percent_width = 100 - $sidebar_percent_width;
-            $right_sidebar_percent_width = $sidebar_percent_width;
-            $left_sidebar_percent_width = 0;
+            // $content_percent_width = 100 - $sidebar_percent_width;
+            // $right_sidebar_percent_width = $sidebar_percent_width;
+            // $left_sidebar_percent_width = 0;
             // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
-            $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
-            $wrapper_left_sidebar_width = 0;
+            // $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            // $wrapper_left_sidebar_width = 0;
             include 'includes/inc.template_sidebar_right.php';
 
             break;
         case 3:
             // panorama
-            $content_percent_width = 100;
-            $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
+            // $content_percent_width = 100;
+            // $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
             // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
-            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
+            // $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
             include 'includes/inc.template_panorama.php';
 
             break;
         case 4:
             // sidebars right joined
-            $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
+            // $content_percent_width = 100 - ($sidebar_percent_width + $sidebar_percent_width * 0.67);
             // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
-            $right_sidebar_percent_width = $sidebar_percent_width;
-            $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
-            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
+            // $right_sidebar_percent_width = $sidebar_percent_width;
+            // $left_sidebar_percent_width = $sidebar_percent_width * 0.67;
+            // $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = $wrapper_sidebar_width = $_SESSION['site_wrapper_page_width'] - $wrapper_content_width;
             include 'includes/inc.template_sidebars_joined.php';
 
             break;
         case 5:
         case 6:
             // custom
-            $content_percent_width = 100;
-            $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
+            // $content_percent_width = 100;
+            // $left_sidebar_percent_width = $right_sidebar_percent_width = 0;
             // $wrapper_content_width = round($_SESSION['site_wrapper_page_width'] * $content_percent_width / 100);
-            $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
+            // $wrapper_left_sidebar_width = $wrapper_right_sidebar_width = 0;
             if (is_file(CMS_ABSPATH . '/content/templates/' . $arr['template_custom'])) {
                 include CMS_ABSPATH . '/content/templates/' . $arr['template_custom'];
             } else {

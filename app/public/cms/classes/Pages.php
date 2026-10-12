@@ -670,6 +670,7 @@ class Pages extends Database
         // $stmt->bindParam(':limit_start', $limit_start, PDO::PARAM_INT);
         // $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
+        return [];
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

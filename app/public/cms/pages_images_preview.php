@@ -71,7 +71,7 @@ include_once 'includes/inc.header_minimal.php';
 		
 		var theme = $("#theme").val();
 		tinymce.init({
-			
+			entity_encoding: 'raw',
 			selector : "textarea.tinymce",
 			mode : "specific_textareas",
 			selector : "textarea#caption_extended",

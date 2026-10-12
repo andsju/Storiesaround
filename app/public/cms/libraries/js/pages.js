@@ -204,6 +204,7 @@ $(document).ready(function () {
 					s: request.term
 				},
 				success: function (data) {
+					console.log(data);
 					data = data.length > 0 ? data : [{
 						title: languages["search_page_not_found"][lang],
 						category: "",
@@ -671,6 +672,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 				});
 
 				tinymce.init({
+					entity_encoding: 'raw',
 					selector: 'h1.editable',
 					inline: true,
 					toolbar: 'undo redo | save',
@@ -700,6 +702,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 				});
 
 				tinymce.init({
+					entity_encoding: 'raw',
 					selector: 'div.editable_row',
 					inline: true,
 					toolbar: 'undo redo | save',
@@ -729,6 +732,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 				});
 
 				tinymce.init({
+					entity_encoding: 'raw',
 					selector: 'div.editable',
 					inline: true,
 					plugins: [

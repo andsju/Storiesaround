@@ -16,19 +16,19 @@ if (isset($_POST['token'])){
 		}
 	
 		// $action
-		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$action = filter_var(trim($_POST['action'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		
 		switch($action) {
 		
-			case 'save_site_general_settings';
+			case 'save_site_general_settings':
 		
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
-				$site_name = filter_var(trim($_POST['site_name']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_slogan = filter_var(trim($_POST['site_slogan']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_domain_url = filter_var(trim($_POST['site_domain_url']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_domain = filter_var(trim($_POST['site_domain']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_email = filter_var(trim($_POST['site_email']), FILTER_VALIDATE_EMAIL);
-				$site_copyright = filter_var(trim($_POST['site_copyright']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_name = filter_var(trim($_POST['site_name'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_slogan = filter_var(trim($_POST['site_slogan'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_domain_url = filter_var(trim($_POST['site_domain_url'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_domain = filter_var(trim($_POST['site_domain'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_email = filter_var(trim($_POST['site_email'] ?? ''), FILTER_VALIDATE_EMAIL);
+				$site_copyright = filter_var(trim($_POST['site_copyright'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
@@ -49,13 +49,13 @@ if (isset($_POST['token'])){
 				
 				break;
 
-			case 'save_site_design';
+			case 'save_site_design':
 
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_wrapper_page_width = filter_input(INPUT_POST, 'site_wrapper_page_width', FILTER_VALIDATE_INT);
-				$site_logotype = filter_var(trim($_POST['site_logotype']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_theme = filter_var(trim($_POST['site_theme']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_ui_theme = filter_var(trim($_POST['site_ui_theme']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_logotype = filter_var(trim($_POST['site_logotype'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_theme = filter_var(trim($_POST['site_theme'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_ui_theme = filter_var(trim($_POST['site_ui_theme'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_template_default = filter_input(INPUT_POST, 'site_template_default', FILTER_VALIDATE_INT);
 				$site_navigation_horizontal = filter_input(INPUT_POST, 'site_navigation_horizontal', FILTER_VALIDATE_INT);
 				$site_navigation_vertical = filter_input(INPUT_POST, 'site_navigation_vertical', FILTER_VALIDATE_INT);
@@ -81,10 +81,10 @@ if (isset($_POST['token'])){
 				
 			break;	
 				
-			case 'save_site_account_settings';
+			case 'save_site_account_settings':
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_account_registration = ($_POST['site_account_registration'] == 1) ? 1 : 0;
-				$site_account_welcome_message = filter_var(trim($_POST['site_account_welcome_message']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_account_welcome_message = filter_var(trim($_POST['site_account_welcome_message'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_groups_default_id = filter_input(INPUT_POST, 'site_groups_default_id', FILTER_VALIDATE_INT);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
@@ -103,13 +103,13 @@ if (isset($_POST['token'])){
 				
 			break;
 				
-			case 'save_site_content';
+			case 'save_site_content':
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
-				$site_header_image = filter_var(trim($_POST['site_header_image']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_header_image = filter_var(trim($_POST['site_header_image'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_404 = $_POST['site_404'];
-				$site_about_cookies_url = filter_var(trim($_POST['site_about_cookies_url']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_rss_description = filter_var(trim($_POST['site_rss_description']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_publish_guideline = filter_var(trim($_POST['site_publish_guideline']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_about_cookies_url = filter_var(trim($_POST['site_about_cookies_url'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_rss_description = filter_var(trim($_POST['site_rss_description'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_publish_guideline = filter_var(trim($_POST['site_publish_guideline'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
@@ -126,7 +126,7 @@ if (isset($_POST['token'])){
 				
 			break;
 
-		case 'save_site_script';
+		case 'save_site_script':
 			$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 			$site_script = $_POST['site_script'];
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -144,7 +144,7 @@ if (isset($_POST['token'])){
 			
 			break;
 			
-			case 'save_site_meta';
+			case 'save_site_meta':
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_meta_tags = $_POST['site_meta_tags'];
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -162,12 +162,12 @@ if (isset($_POST['token'])){
 				
 			break;
 				
-			case 'save_site_maintenance';
+			case 'save_site_maintenance':
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$site_maintenance = filter_input(INPUT_POST, 'site_maintenance', FILTER_VALIDATE_INT);
 				$site_error_mode = filter_input(INPUT_POST, 'site_error_mode', FILTER_VALIDATE_INT);
 				$site_history_max = filter_input(INPUT_POST, 'site_history_max', FILTER_VALIDATE_INT);
-				$site_maintenance_message = filter_var(trim($_POST['site_maintenance_message']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_maintenance_message = filter_var(trim($_POST['site_maintenance_message'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				
 				$site = new Site();
@@ -186,24 +186,24 @@ if (isset($_POST['token'])){
 				
 			break;
 				
-			case 'save_site_configuration';
+			case 'save_site_configuration':
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
-				$site_country = filter_var(trim($_POST['site_country']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_language = filter_var(trim($_POST['site_language']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_lang = filter_var(trim($_POST['site_lang']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_timezone = filter_var(trim($_POST['site_timezone']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_dateformat = filter_var(trim($_POST['site_dateformat']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_timeformat = filter_var(trim($_POST['site_timeformat']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_country = filter_var(trim($_POST['site_country'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_language = filter_var(trim($_POST['site_language'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_lang = filter_var(trim($_POST['site_lang'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_timezone = filter_var(trim($_POST['site_timezone'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_dateformat = filter_var(trim($_POST['site_dateformat'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_timeformat = filter_var(trim($_POST['site_timeformat'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_firstdayofweek = filter_input(INPUT_POST, 'site_firstdayofweek', FILTER_VALIDATE_INT);
-				$site_wysiwyg = filter_var(trim($_POST['site_wysiwyg']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_wysiwyg = filter_var(trim($_POST['site_wysiwyg'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_seo_url = filter_input(INPUT_POST, 'site_seo_url', FILTER_VALIDATE_INT);
 				$site_autosave = filter_input(INPUT_POST, 'site_autosave', FILTER_VALIDATE_INT);
 				$site_autosave = ($site_autosave >= 30 && $site_autosave <= 600) ? $site_autosave * 1000 : 120000;
 				$site_mail_method = filter_input(INPUT_POST, 'site_mail_method', FILTER_VALIDATE_INT);
-				$site_smtp_server = filter_var(trim($_POST['site_smtp_server']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_smtp_server = filter_var(trim($_POST['site_smtp_server'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_smtp_port = filter_input(INPUT_POST, 'site_smtp_port', FILTER_VALIDATE_INT);
-				$site_smtp_username = filter_var(trim($_POST['site_smtp_username']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$site_smtp_password = filter_var(trim($_POST['site_smtp_password']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_smtp_username = filter_var(trim($_POST['site_smtp_username'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$site_smtp_password = filter_var(trim($_POST['site_smtp_password'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$site_smtp_authentication = filter_input(INPUT_POST, 'site_smtp_authentication', FILTER_VALIDATE_INT);
 				$site_smtp_debug = filter_input(INPUT_POST, 'site_smtp_debug', FILTER_VALIDATE_INT);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -237,7 +237,7 @@ if (isset($_POST['token'])){
 				
 			break;
 
-			case 'check_smtp_settings';
+			case 'check_smtp_settings':
 
 				// include file
 				include_once 'includes/inc.send_a_mail.php';
@@ -246,7 +246,7 @@ if (isset($_POST['token'])){
 					die('Session site_email not set');
 				}
 			
-				$smtp_email_to = filter_var(trim($_POST['smtp_email_to']), FILTER_VALIDATE_EMAIL);
+				$smtp_email_to = filter_var(trim($_POST['smtp_email_to'] ?? ''), FILTER_VALIDATE_EMAIL);
 				$site_email_from = filter_var($_SESSION['site_email'], FILTER_VALIDATE_EMAIL);
 				
 				if($smtp_email_to && $site_email_from) {				
@@ -278,7 +278,7 @@ if (isset($_POST['token'])){
 			break;
 				
 
-			case 'history_keep';
+			case 'history_keep':
 				$site_id = filter_input(INPUT_POST, 'site_id', FILTER_VALIDATE_INT);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 				$site_history_max = filter_input(INPUT_POST, 'site_history_max', FILTER_VALIDATE_INT);
@@ -293,82 +293,8 @@ if (isset($_POST['token'])){
 				
 			break;
 
-	
-			case 'banners_save';
-				$name = filter_var(trim($_POST['banners_name']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$file = filter_var(trim($_POST['banners_file']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$banners_id = filter_input(INPUT_POST, 'banners_id', FILTER_VALIDATE_INT);
-				$area = filter_var(trim($_POST['banners_area']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$file = filter_var(trim($_POST['banners_file']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$tag = filter_var(trim($_POST['banners_tag']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$header = filter_var(trim($_POST['banners_header']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$url = filter_var(trim($_POST['banners_url']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$url_target = filter_input(INPUT_POST, 'banners_target', FILTER_VALIDATE_INT);
-				$width	= filter_input(INPUT_POST, 'banners_width', FILTER_VALIDATE_INT);
-				$height = filter_input(INPUT_POST, 'banners_height', FILTER_VALIDATE_INT);
-				$utc_start = filter_var(trim($_POST['datetime_start']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$utc_end = filter_var(trim($_POST['datetime_end']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$active = filter_input(INPUT_POST, 'banners_active', FILTER_VALIDATE_INT);
-				
-				
-				$banners = new Banners();
-				$result = $banners->setBanners($banners_id, $name, $file, $area, $header, $url, $url_target, $width, $height, $tag, $active, $utc_start, $utc_end);
-
-				if ($result) {
-				
-					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					$history = new History();
-					$history->setHistory($banners_id, 'banners_id', 'UPDATE', describe('file', $file), $_SESSION['users_id'], $_SESSION['token'], $utc_modified);							
-				
-				}
-				
-			break;
-				
-			case 'banners_delete';
-			
-				$file = filter_var(trim($_POST['banners_file']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$p = '../uploads/ads/';
-				if (is_file($p . $file)) {
-					// remove file
-					unlink($p . $file);
-				
-					// delete from database
-					$banners_id = filter_input(INPUT_POST, 'banners_id', FILTER_VALIDATE_INT);								
-					$banners = new Banners();
-					$result = $banners->deleteBanners($banners_id);
-
-					if ($result) {
-						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-						$history = new History();
-						$history->setHistory($banners_id, 'banners_id', 'DELETE', describe('file', $file), $_SESSION['users_id'], $_SESSION['token'], $utc_modified);							
-					}
-					
-				}
-				
-			break;
-
-				
-			case 'history_search';
-			
-				$s = filter_var(trim($_POST['s']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$banners = new History();
-				$rows = $banners->getHistorySearch($s);
-				echo json_encode($rows);
-				
-			break;
-				
-				
-			case 'banners_search';
-			
-				$s = filter_var(trim($_POST['s']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$banners = new Banners();
-				$rows = $banners->getBannersSearch($s);
-				echo json_encode($rows);
-				
-			break;
-
-				
-			case 'get_site_log_php';
+										
+			case 'get_site_log_php':
 
 				$log = null;
 				$logfile = '../log/php_error.txt';
@@ -380,7 +306,7 @@ if (isset($_POST['token'])){
 			break;
 				
 				
-			case 'get_site_log_pdo';
+			case 'get_site_log_pdo':
 
 				$log = null;
 				$logfile = '../log/pdo_exception.txt';
@@ -392,7 +318,7 @@ if (isset($_POST['token'])){
 			break;
 
 
-			case 'header_files';
+			case 'header_files':
 
 				$directory = $_POST['directory'];
 				$html = "";
@@ -413,7 +339,7 @@ if (isset($_POST['token'])){
 
 
 
-			case 'files';
+			case 'files':
 
 				$directory_value = $_POST['directory_value'];
 				$directory_text = $_POST['directory_text'];
@@ -457,14 +383,14 @@ if (isset($_POST['token'])){
 
 			break;
 
-			case 'delete_file';
+			case 'delete_file':
 				$file = $_POST['file'];
 				if(is_file($file)) {
 					unlink($file);
 				}
 			break;
 
-			case 'delete_site_logotype';
+			case 'delete_site_logotype':
 				$path_and_file = CMS_ABSPATH .'/content/uploads/logotype/' . $_SESSION['site_logotype'];
 				if(is_file($path_and_file)) {
 					unlink($path_and_file);
@@ -472,7 +398,7 @@ if (isset($_POST['token'])){
 				}
 			break;
 
-			case 'edit_files_css';
+			case 'edit_files_css':
 
 				$directory_value = $_POST['directory_value'];
 				$directory_text = $_POST['directory_text'];
@@ -538,7 +464,7 @@ if (isset($_POST['token'])){
 				
 			break;
 				
-			case 'edit_files';
+			case 'edit_files':
 
 				$directory_value = $_POST['directory_value'];
 				$directory_text = $_POST['directory_text'];
@@ -602,7 +528,7 @@ if (isset($_POST['token'])){
 			break;
 
 				
-			case 'save_files_css';
+			case 'save_files_css':
 
 				$css_file = $_POST['css_file'];
 				$css = strip_tags($_POST['css']);
@@ -616,7 +542,7 @@ if (isset($_POST['token'])){
 			break;
 				
 
-			case 'save_file_content';
+			case 'save_file_content':
 
 				$file = $_POST['file'];
 				$file_content = $_POST['file_content'];
@@ -630,7 +556,7 @@ if (isset($_POST['token'])){
 			break;
 
 				
-			case '';
+			case '':
 			break;
 		}		
 		

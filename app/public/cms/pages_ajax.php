@@ -7,11 +7,11 @@ $pages = new Pages();
 
 if (isset($_POST['token']) || isset($_GET['token'])){
 
-	$req =  isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
+	$req = $_POST['token'] ?? $_GET['token'];
 	
 	if ($req == $_SESSION['token'])  {
 
-		$action = filter_var(trim($_REQUEST['action']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$action = filter_var(trim($_REQUEST['action'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		
 		switch ($action) {
 		
@@ -39,19 +39,23 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 			break;
 			
 			case 'pages_search_extended_summary':
-				$s = isset($_POST['s']) ? trim($_POST['s']) : "";
-				$pages_id = isset($_POST['pages_id']) ? trim($_POST['pages_id']) : 0;
-				$limit_tree = isset($_POST['limit_tree']) ? $_POST['limit_tree'] : 0;
+				$s = trim($_POST['s'] ?? '');
+				$pages_id = trim($_POST['pages_id'] ?? '0');
+				$limit_tree = $_POST['limit_tree'] ?? 0;
+				// $limit_start = intval($_POST['limit_start']);
+				$limit_start = 0;
+				$limit = 10;
 				$rows = $pages->getPagesSearchWordsRelevanceSummary($s, $status=2, $pages_id, $limit_tree);
+				// $rows = $pages->getPagesSearchWordsRelevance($s, 2, $pages_id, $limit_tree, $limit_start, $limit);
 				//write_debug(json_encode($rows));
 				echo json_encode($rows);
 			break;
 			
 
 			case 'pages_search_extended':
-				$s = isset($_POST['s']) ? trim($_POST['s']) : "";	
-				$pages_id = isset($_POST['pages_id']) ? trim($_POST['pages_id']) : 0;
-				$limit_tree = isset($_POST['limit_tree']) ? $_POST['limit_tree'] : 0;
+				$s = trim($_POST['s'] ?? '');
+				$pages_id = trim($_POST['pages_id'] ?? '0');
+				$limit_tree = $_POST['limit_tree'] ?? 0;
 				$limit_start = intval($_POST['limit_start']);
 				$limit = 10;
 				$rows_total = $pages->getPagesSearchWordsRelevanceCount($s, $status=2, $pages_id, $limit_tree);
@@ -228,9 +232,9 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 				
 			case 'calendar_events':
 		
-				$calendar_categories_id = filter_input(INPUT_POST, 'calendar_categories_id', FILTER_VALIDATE_INT) ? $_POST['calendar_categories_id'] : 0;
-				$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-				$date = filter_var(trim($_POST['date']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$calendar_categories_id = (int) filter_input(INPUT_POST, 'calendar_categories_id', FILTER_VALIDATE_INT);
+				$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+				$date = filter_var(trim($_POST['date'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 				$calendar = new Calendar();
 				$d = null;
@@ -265,12 +269,12 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 							
 				$cal = new Calendar();
 
-				$date = filter_var(trim($_POST['date']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$date = filter_var(trim($_POST['date'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$date = (isValidDate($date)) ? $date : null;				
-				$period = filter_var(trim($_POST['period']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-				$calendar_categories_id = filter_input(INPUT_POST, 'calendar_categories_id', FILTER_VALIDATE_INT) ? $_POST['calendar_categories_id'] : 0;
-				$calendar_views_id = filter_input(INPUT_POST, 'calendar_views_id', FILTER_VALIDATE_INT) ? $_POST['calendar_views_id'] : 0;				
+				$period = filter_var(trim($_POST['period'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+				$calendar_categories_id = (int) filter_input(INPUT_POST, 'calendar_categories_id', FILTER_VALIDATE_INT);
+				$calendar_views_id = (int) filter_input(INPUT_POST, 'calendar_views_id', FILTER_VALIDATE_INT);
 
 				if($calendar_categories_id > 0) {
 					echo $cal->getCalendarCategoriesRights($date, $href=null, $calendar_categories_id, $period);
@@ -283,10 +287,10 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 			
 			case 'event_stories':
 		
-				$pages_id = filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT) ? $_POST['pages_id'] : 0;
-				$search = filter_var(trim($_POST['search']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$date = filter_var(trim($_POST['datetrigger']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$period = filter_var(trim($_POST['period']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
+				$search = filter_var(trim($_POST['search'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$date = filter_var(trim($_POST['datetrigger'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$period = filter_var(trim($_POST['period'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$rows_event_stories = $pages->getPagesStoryContentPublishEvent($search, $date, $period);
 				
 				$rows_event_stories_sorted = $period == 'previous' ? krsort($rows_event_stories) : $rows_event_stories;				
@@ -299,8 +303,8 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 			
 			case 'widget_images':
 
-				if ($pages_widgets_id = filter_input(INPUT_GET, 'pages_widgets_id', FILTER_VALIDATE_INT)) { 
-					$tag = isset($_GET['tag']) ? filter_var(trim($_GET['tag']), FILTER_SANITIZE_FULL_SPECIAL_CHARS) : '';
+				if ($pages_widgets_id = (int) filter_input(INPUT_GET, 'pages_widgets_id', FILTER_VALIDATE_INT)) { 
+					$tag = filter_var(trim($_GET['tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$width = intval($_GET['width']);
 					$rows = $pages->getPagesImagesSlideshowFeed($pages_widgets_id, $tag);
 					if($rows) {
@@ -324,11 +328,11 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 
 			case 'widget_show_page':
 			
-				$ids = filter_var(trim($_GET['ids']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$tag = filter_var(trim($_GET['tag']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$search = filter_var(trim($_GET['search']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ? $_GET['limit'] : 0;
-				$pages_id = filter_input(INPUT_GET, 'pages_id', FILTER_VALIDATE_INT) ? $_GET['pages_id'] : 0;
+				$ids = filter_var(trim($_GET['ids'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$tag = filter_var(trim($_GET['tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$search = filter_var(trim($_GET['search'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$limit = (int) filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT);
+				$pages_id = (int) filter_input(INPUT_GET, 'pages_id', FILTER_VALIDATE_INT);
 				
 				$ids = explode(",", $ids);
 
@@ -369,8 +373,8 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 
 			case 'getStories':
 		
-				$number = filter_input(INPUT_GET, 'number', FILTER_VALIDATE_INT) ? $_GET['number'] : 0;
-				$tag = filter_var(trim($_GET['tag']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$number = (int) filter_input(INPUT_GET, 'number', FILTER_VALIDATE_INT);
+				$tag = filter_var(trim($_GET['tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$a = array();
 				
 

@@ -175,7 +175,7 @@ function isValidString($string, $reg)
         // allowed string
         $allowed = array('username', 'strong_password', 'str', 'css', 'html', 'code', 'path', 'words', 'name', 'postnummer', 'personnummer', 'personnummerPTF', 'milliseconds', 'alpha', 'numerical', 'alphanumerical', 'ratio', 'email', 'sevendigits', '0-9', '1-20', 'date', 'ip', 'url', 'url_query', 'hex', 'php', 'boolean', 'any-all', 'characters', 'comma_separated_numbers', 'any');
         if (in_array($reg, $allowed)) {
-            $regex_string = Array(
+            $regex_string = array(
                 // username; letters, digits. Underscore is allowed if followed by one or more letters / digits. Minimum 4 character. Maximum 20 characters
                 'username' => '/^(?=.{4,20}$)[a-zA-Z][a-zA-Z0-9]*(?:_[a-zA-Z0-9]+)*$/',
                 // str, matches 1-128 alphanumerical and -+=%_~!@.,#* characters
@@ -249,7 +249,79 @@ function isValidString($string, $reg)
 }
 
 /**
- * generate a random string using echo rand_string(8);
+ * Strip all HTML tags.
+ *
+ * @param mixed $input
+ * @return string
+ */
+function sanitize_text(mixed $input): string
+{
+    if (!is_string($input)) {
+        return '';
+    }
+
+    return trim(strip_tags($input));
+}
+
+/**
+ * Allow HTML but remove disallowed tags
+ *
+ * @param mixed $input
+ * @return string
+ */
+function sanitize_html(mixed $input): string
+{
+    if (!is_string($input)) {
+        return '';
+    }
+
+    // Remove script and style elements and their contents.
+    $input = preg_replace(
+        '~<(script|style)\b[^>]*>.*?</\1\s*>~is',
+        '',
+        $input
+    ) ?? '';
+
+    // Remove remaining HTML tags.
+    return trim(strip_tags($input));
+}
+
+/**
+ * Allow specified HTML tags
+ *
+ * @param mixed $input
+ * @param mixed $allow_tags ['p','br', 'strong'];
+ * @return string
+ */
+function sanitize_html_tags(
+    mixed $input,
+    mixed $allow_tags
+): string {
+    if (!is_string($input)) {
+        return '';
+    }
+
+    if (!is_array($allow_tags)) {
+        return trim(strip_tags($input));
+    }
+
+    $tags = '';
+
+    foreach ($allow_tags as $tag) {
+        if (
+            is_string($tag)
+            && preg_match('/^[a-z][a-z0-9]*$/i', $tag) === 1
+        ) {
+            $tags .= '<' . $tag . '>';
+        }
+    }
+
+    return trim(strip_tags($input, $tags));
+}
+
+
+/**
+ * generate a random string using echo rand_string(8)
  * @param $length
  * @return string
  */
@@ -545,7 +617,6 @@ function get_tab_menu($s_tab_url, $a_tabs, $a_tab_descriptions, $s_tab_query, $s
             echo $a_tab_descriptions[$key];
             echo '</a></li>';
         }
-
     }
     echo '</ul>';
     echo '</span>';
@@ -602,11 +673,9 @@ function get_tab_menu_jquery_ui_look_alike($s_tab_url, $a_tabs, $a_tab_descripti
         }
         $str .= $a_tab_descriptions[$key];
         $str .= '</a></li>';
-
     }
     $str .= "\n\t" . '</ul>' . "\n";
     echo $str;
-
 }
 
 
@@ -671,7 +740,7 @@ function print_r2($val)
  */
 function print_r3($text, $val)
 {
-    echo '<div class="debug">' . $text . '</div>';    
+    echo '<div class="debug">' . $text . '</div>';
     echo '<pre class="debug">';
     print_r($val);
     echo '</pre>';
@@ -693,7 +762,7 @@ function recursiveArraySearch($haystack, $needle, $index = null)
     $aIt = new RecursiveArrayIterator($haystack);
     $it = new RecursiveIteratorIterator($aIt);
     while ($it->valid()) {
-        if (((isset($index) AND ($it->key() == $index)) OR (!isset($index))) AND ($it->current() == $needle)) {
+        if (((isset($index) and ($it->key() == $index)) or (!isset($index))) and ($it->current() == $needle)) {
             return $aIt->key();
             break;
         }
@@ -1202,5 +1271,3 @@ function getSQLtable($TablePager, $rows, $bookmark, $token, $table_description, 
     echo '<span class="' . $css . '_numbers">' . $TablePager->getNumberLinks($css, $css, $css . '_active', $css . '_active', $bookmark, $TablePager->pageIndex) . '</span>';
     echo '</div>';
 }
-
-?>

@@ -22,9 +22,9 @@
 				for ($i = 0; $i < count($header_image); $i++) {
 					$parts = explode(".", $header_image[$i]);
 					// $caption = $arr['header_caption_show'] == 1 ? $header_caption[$i] : "";
-					$caption = "";
-					$caption_align = $header_caption_align[$i];
-					$caption_vertical_align = $header_caption_vertical_align[$i];
+					$caption = count($header_caption) > 0 ? $header_caption[$i] : "";
+					$caption_align = count($header_caption_align) > 0 ? $header_caption_align[$i] : 'center';
+					$caption_vertical_align = count($header_caption_vertical_align) > 0 ? $header_caption_vertical_align[$i] : 'middle';
 					if ($parts[1] == "mp4") {
 						// black loading: poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
 						echo '<video class="slideshow-cycle-image" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" data-caption-vertical-align="'. $caption_vertical_align .'" autoplay loop muted><source src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'"></video>';

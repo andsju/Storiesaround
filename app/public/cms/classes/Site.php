@@ -122,7 +122,7 @@ class Site extends Database
             $stmt->bindParam(':site_timezone', $site_timezone, PDO::PARAM_STR);
             $stmt->bindParam(':site_wysiwyg', $site_wysiwyg, PDO::PARAM_STR);
             $stmt->bindParam(':site_logotype', $site_logotype, PDO::PARAM_STR);
-            $stmt->bindParam(':site_seo_url', $site_seo_url, PDO::PARAM_STR);
+            $stmt->bindParam(':site_seo_url', $site_seo_url, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
 
             $stmt->execute();
@@ -375,6 +375,32 @@ class Site extends Database
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
             $stmt->bindParam(":site_meta_tags", $site_meta_tags, PDO::PARAM_STR);
+            $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
+
+    /**
+     * @param int $site_id
+     * @param string $site_domain_url
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function setSiteDomainURL($site_id, $site_domain_url, $utc_modified)
+    {
+        try {
+            $sql = "UPDATE site
+			SET site_domain_url = :site_domain_url,
+			utc_modified = :utc_modified
+			WHERE site_id = :site_id";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
+            $stmt->bindParam(":site_domain_url", $site_domain_url, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {

@@ -17,9 +17,9 @@ if($arr['events']) {
 
 ?>
 
-    <div id="wrapper-page">
+    <div id="wrapper-page" class="sidebar-right">
     
-        <div id="wrapper-content" class="column column-having-right-sidebar" style="width:75%">
+        <div id="wrapper-content" class="column-having-right-sidebar">
             <main>
                 <?php print_selection("selection-content-above", $selection_area['content_above']); ?>
                 <div id="content-top-selections"></div>
@@ -48,6 +48,7 @@ if($arr['events']) {
                         <div id="content-author" class="editable_row"><?php echo $arr['content_author']; ?></div>
                         <div id="content-social-network"></div>
                     </footer>
+
                 </article>
                 <div id="content-bottom-grid"><?php print_grid($arr, 2);?></div>
                 <aside id="content-bottom-widgets">
@@ -59,7 +60,7 @@ if($arr['events']) {
             </main>
         </div>
 
-        <div id="wrapper-right-sidebar" class="column" style="width:25%;min-height:1px">
+        <div id="wrapper-right-sidebar">
             <?php print_selection("selection-right-sidebar-top", $selection_area['right_sidebar_top']); ?>
             <?php
             echo '<nav id="nav-site-navigation-vertical">';

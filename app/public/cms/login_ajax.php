@@ -27,7 +27,7 @@ if ($email_username = filter_input(INPUT_POST, 'email_username', FILTER_SANITIZE
 					$method = "getUsersLoginUsername";
 				}
 				
-				$passw = $_POST['passw'];
+				$passw = $_POST['passw'] ?? '';
 
 				// passwords are simple decoded in javascript using javascript function enc() bitwise XOR
 				// decode using last 2 numbers in string

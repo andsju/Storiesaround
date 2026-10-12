@@ -145,4 +145,28 @@ $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "story_css_class");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_css_class");
 
-?>
+$sqls[] = "ALTER TABLE `calendar_categories`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `calendar_categories_rights`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `calendar_events`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `calendar_views`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `calendar_views_members`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `groups`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `groups_default`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `groups_default_members`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `groups_members`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `history`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `history_email`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_calendars`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_categories`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_images`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_plugins`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_rights`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_selections`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_stories`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `pages_widgets`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `plugins`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `site`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `tags`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `users`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$sqls[] = "ALTER TABLE `widgets`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";

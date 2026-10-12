@@ -2369,6 +2369,7 @@ foreach ( $js_files as $js ): ?>
 	function activateEditor(editor) {
 		if (editor == "tinymce") {
 			tinymce.init({
+				entity_encoding: 'raw',
 				forced_root_block : "", 
 				mode : "specific_textareas",
 				editor_selector : "tinymce-grid",
@@ -2801,7 +2802,6 @@ if(is_array($check_edit)) {
 								</td>
 								<td>
 									<b>Caption (max 100 char) | text-align</b>
-									<p>Supports h1 and p tags as markdown code</p>
 								</td>
 							</tr>
 						</table>
@@ -2817,10 +2817,28 @@ if(is_array($check_edit)) {
 										$align_value = getCaptionAlignAsInteger($header_caption_align[$countHeader]);
 										$vertical_align_value = getCaptionVerticalAlignAsInteger($header_caption_vertical_align[$countHeader]);
 										if ($ext == "mp4") {
-											echo '<div data-image="'.$image.'" style="" class="header-images"><video style="width:100%; max-height:100px" class="header-images" controls muted><source src="..'.$dir.'/'.$image.'"></video><textarea name="header_caption[]">'.$header_caption[$countHeader].'</textarea><input type="range" name="header_caption_align[]" class="header_caption_align" value="'.$align_value.'" min="0" max="2"><input type="range" name="header_caption_vertical_align[]" class="header_caption_vertical_align" value="'.$vertical_align_value.'" min="0" max="2"></div>';
+
+										?>
+											<div data-image="<?= $image ?>" style="" class="header-images">
+												<video style="width:100%; max-height:100px" class="header-images" controls muted>
+													<source src="<?= $dir ?>/<?= $image ?>">
+												</video>
+												<textarea name="header_caption[]"><?= $header_caption[$countHeader] ?></textarea>
+												<input type="range" name="header_caption_align[]" class="header_caption_align" value="<?= $align_value ?>" min="0" max="2">
+												<input type="range" name="header_caption_vertical_align[]" class="header_caption_vertical_align" value="<?=  $vertical_align_value ?>" min="0" max="2">
+											</div>
+
+										<?php
 										} else {
-											// ...
-											// echo '<div data-image="'.$image.'" style="background-image:url(../content/uploads/header/'.$image.');" class="header-images"><textarea name="header_caption[]">'.$header_caption[$countHeader].'</textarea><input type="range" name="header_caption_align[]" class="header_caption_align" value="'.$align_value.'" min="0" max="2"><input type="range" name="header_caption_vertical_align[]" class="header_caption_vertical_align" value="'.$vertical_align_value.'" min="0" max="2"></div>';
+										?>
+											
+											<div data-image="<?= $image ?>" style="background-image:url(../content/uploads/header/<?= $image ?>);" class="header-images">
+												<textarea name="header_caption[]"><?= $header_caption[$countHeader] ?></textarea>
+												<input type="range" name="header_caption_align[]" class="header_caption_align" value="<?= $align_value ?>" min="0" max="2">
+												<input type="range" name="header_caption_vertical_align[]" class="header_caption_vertical_align" value="<?= $vertical_align_value ?>" min="0" max="2">
+											</div>
+
+										<?php
 										}
 										$countHeader++;
 									}
@@ -3534,12 +3552,9 @@ if(is_array($check_edit)) {
 										<option value="3" <?php if($arr['stories_child_area'] == 3) {echo 'selected';}?>>right sidebar | top image teaser</option>
 										<option value="4" <?php if($arr['stories_child_area'] == 4) {echo 'selected';}?>>right sidebar | align image teaser to story</option>
 										<option value="0"></option>
-										<option value="5" <?php if($arr['stories_child_area'] == 5) {echo 'selected';}?>>content | columns | top image teaser</option>
-										<option value="6" <?php if($arr['stories_child_area'] == 6) {echo 'selected';}?>>content | columns | align image teaser</option>
-										<option value="0"></option>
-										<option value="7" <?php if($arr['stories_child_area'] == 7) {echo 'selected';}?>>content | rows | align image teaser to title</option>
-										<option value="8" <?php if($arr['stories_child_area'] == 8) {echo 'selected';}?>>content | rows | align image teaser to story</option>										
-										<option value="9" <?php if($arr['stories_child_area'] == 9) {echo 'selected';}?>>content | rows | exclude image teaser</option>
+										<option value="5" <?php if($arr['stories_child_area'] == 7) {echo 'selected';}?>>content | rows | align image teaser to title</option>
+										<option value="6" <?php if($arr['stories_child_area'] == 8) {echo 'selected';}?>>content | rows | align image teaser to story</option>										
+										<option value="7" <?php if($arr['stories_child_area'] == 9) {echo 'selected';}?>>content | rows | exclude image teaser</option>
 									</select>
 									
 								</td>
@@ -3587,12 +3602,9 @@ if(is_array($check_edit)) {
 										<option value="3" <?php if($arr['stories_promoted_area'] == 3) {echo 'selected';}?>>right sidebar | top image teaser</option>
 										<option value="4" <?php if($arr['stories_promoted_area'] == 4) {echo 'selected';}?>>right sidebar | align image teaser to story</option>
 										<option value="0"></option>
-										<option value="5" <?php if($arr['stories_promoted_area'] == 5) {echo 'selected';}?>>content | columns | top image teaser</option>
-										<option value="6" <?php if($arr['stories_promoted_area'] == 6) {echo 'selected';}?>>content | columns | align image teaser</option>
-										<option value="0"></option>
-										<option value="7" <?php if($arr['stories_promoted_area'] == 7) {echo 'selected';}?>>content | rows | align image teaser to title</option>
-										<option value="8" <?php if($arr['stories_promoted_area'] == 8) {echo 'selected';}?>>content | rows | align image teaser to story</option>										
-										<option value="9" <?php if($arr['stories_promoted_area'] == 9) {echo 'selected';}?>>content | rows | exclude image teaser</option>
+										<option value="5" <?php if($arr['stories_promoted_area'] == 7) {echo 'selected';}?>>content | rows | align image teaser to title</option>
+										<option value="6" <?php if($arr['stories_promoted_area'] == 8) {echo 'selected';}?>>content | rows | align image teaser to story</option>										
+										<option value="7" <?php if($arr['stories_promoted_area'] == 9) {echo 'selected';}?>>content | rows | exclude image teaser</option>
 
 									</select>
 									<p>

@@ -197,12 +197,14 @@ $large_table = false;
 
 if (isset($_POST['btn_pages_search'])) {
     if (strlen($_POST['pages_find']) > 0) {
-        $search = filter_var($_POST['pages_find'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $search = sanitize_text($_POST['pages_find']);
     }
-    $form = true;
 
+    $form = true;
 }
+
 $status = isset($_POST['status']) ? $_POST['status'] : 0;
+
 ?>
 
 

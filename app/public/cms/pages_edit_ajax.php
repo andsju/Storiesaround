@@ -10,7 +10,7 @@ $pages = new Pages();
 
 if (isset($_POST['token'])) {
 	if ($_POST['token'] == $_SESSION['token']) {
-		$action = filter_var(trim($_POST['action'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$action = sanitize_text($_POST['action']);
 
 		// check client user-agent, prevent session been hijacked
 		if($_SESSION['HTTP_USER_AGENT'] != $_SERVER['HTTP_USER_AGENT']) {
@@ -61,12 +61,12 @@ if (isset($_POST['token'])) {
 				case 'update':
 
 					if (strlen(trim($_POST['pages_title'] ?? '')) > 0) {
-						$pages_title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+						$pages_title = sanitize_text($_POST['pages_title']);
 					}
 					
 					if ($pages_title){
 					
-						$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+						$pages_title_alternative = sanitize_text($_POST['pages_title_alternative']);
 						$content = trim($_POST['content'] ?? '');
 						$title_hide = (int) filter_input(INPUT_POST, 'title_hide', FILTER_VALIDATE_INT);
 						$content_author = trim($_POST['content_author'] ?? '');
@@ -178,7 +178,7 @@ if (isset($_POST['token'])) {
 				case 'save_seo_link':
 
 					
-					$pages_id_link = filter_var(trim($_POST['pages_id_link'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$pages_id_link = sanitize_text($_POST['pages_id_link']);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					$result = $pages->updatePagesSeoLink($pages_id, $pages_id_link, $utc_modified);
@@ -195,8 +195,8 @@ if (isset($_POST['token'])) {
 
 				case 'save_meta':
 					
-					$meta_keywords = filter_var(trim($_POST['meta_keywords'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$meta_description = filter_var(trim($_POST['meta_description'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$meta_keywords = sanitize_text($_POST['meta_keywords']);
+					$meta_description = sanitize_text($_POST['meta_description']);
 					$meta_robots = $_POST['meta_robots'];
 					$meta_additional = filter_var(trim($_POST['meta_additional'] ?? ''), FILTER_SANITIZE_ADD_SLASHES);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -426,13 +426,8 @@ if (isset($_POST['token'])) {
 
 				case 'plugin_arguments':
 				
-					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
-					
-					//$plugin_arguments = filter_var($_POST['plugin_arguments'], FILTER_VALIDATE_REGEXP, array("options"=>array('regexp'=>'/^(?=^.{1,128}$)([A-Za-z0-9]|[ ":{}])*$/')));
-					//$plugin_arguments = isset($_POST['plugin_arguments']) ? json_encode($_POST['plugin_arguments']) : '';
+					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);					
 					$plugin_arguments = trim($_POST['plugin_arguments'] ?? '');
-					//$plugin_arguments = json_decode($_POST['plugin_arguments']);
-					//$plugin_arguments = filter_var(trim($_POST['plugin_arguments']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 					if($pages_id) {
@@ -635,7 +630,7 @@ if (isset($_POST['token'])) {
 
 					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
 					$pages_images_id = (int) filter_input(INPUT_POST, 'pages_images_id', FILTER_VALIDATE_INT);
-					$filter = filter_input(INPUT_POST, 'filter', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ? $_POST['filter'] : '';
+					$filter = sanitize_text($_POST['filter']);
 
 					$pages = new Pages();
 					$row = $pages->getPagesImagesMeta($pages_images_id);
@@ -1057,7 +1052,7 @@ if (isset($_POST['token'])) {
 
 					$stories_promoted = $_POST['stories_promoted'];	
 					$stories_promoted_area = $_POST['stories_promoted_area'];					
-					$stories_filter = filter_var(trim($_POST['stories_filter'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$stories_filter = sanitize_text($_POST['stories_filter']);
 					$stories_limit = $_POST['stories_limit'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
@@ -1081,7 +1076,7 @@ if (isset($_POST['token'])) {
 				case 'save_stories_event_dates':
 
 					$stories_event_dates = (int) filter_input(INPUT_POST, 'stories_event_dates', FILTER_VALIDATE_INT);					
-					$stories_event_dates_filter = filter_var(trim($_POST['stories_event_dates_filter'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$stories_event_dates_filter = sanitize_text($_POST['stories_event_dates_filter']);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
 					$result = $pages->setPagesSetupStoriesEventDates($pages_id, $stories_event_dates, $stories_event_dates_filter, $utc_modified);
@@ -1278,12 +1273,12 @@ if (isset($_POST['token'])) {
 				case 'pages_publish':
 					
 					$access = (int) filter_input(INPUT_POST, 'access', FILTER_VALIDATE_INT);
-					$title_tag = filter_var(trim($_POST['title_tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);					
-					$pages_title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$pages_title_alternative = filter_var(trim($_POST['pages_title_alternative'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$title_tag = sanitize_text($_POST['title_tag']);
+					$pages_title = sanitize_text($_POST['pages_title']);
+					$pages_title_alternative = sanitize_text($_POST['pages_title_alternative']);
 					$content = trim($_POST['content'] ?? '');
 					$content_author = trim($_POST['content_author'] ?? '');
-					$pages_id_link = filter_var(trim($_POST['pages_id_link'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$pages_id_link = sanitize_text($_POST['pages_id_link']);
 					$datetime_start = isValidDateTime($_POST["datetime_start"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_start"])) : null; 
 					$datetime_end = isValidDateTime($_POST["datetime_end"]) ? date("Y-m-d H:i:s", strtotime($_POST["datetime_end"])) : null;
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -1460,13 +1455,11 @@ if (isset($_POST['token'])) {
 				case 'suggest_meta_keywords':
 					
 					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
-					$title = filter_var(trim($_POST['pages_title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$story = filter_var(trim($_POST['story_content'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$content = filter_var(trim($_POST['content'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					// strip_tags, keep leading words from fields, 					
+					$title = sanitize_text($_POST['pages_title']);
+					$story = sanitize_text($_POST['story_content']);
+					$content = sanitize_text($_POST['content']);
 					$story = strip_tags($story);
 					$content = strip_tags($content);
-					
 					
 					$remove_stopwords = 1;
 					$input = $title .' '.$story. ' '.$content;  
@@ -1484,9 +1477,9 @@ if (isset($_POST['token'])) {
 				case 'pages_settings':
 					
 					$pages_id = (int) filter_input(INPUT_POST, 'pages_id', FILTER_VALIDATE_INT);
-					$lang = filter_var(trim($_POST['lang'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$lang = sanitize_text($_POST['lang']);
 					$search_field_area = $_POST['search_field_area'];
-					$category = filter_var(trim($_POST['category'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$category =  sanitize_text($_POST['category']);
 					$category_position = $_POST['category_position'];
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$breadcrumb = (int) filter_input(INPUT_POST, 'breadcrumb', FILTER_VALIDATE_INT);
@@ -1506,7 +1499,7 @@ if (isset($_POST['token'])) {
 					$story_content = trim($_POST['story_content'] ?? '');
 					$tag = isset($_POST['tag']) ? implode(",", $_POST['tag']) : "";
 					$story_custom_title = (int) filter_input(INPUT_POST, 'story_custom_title', FILTER_VALIDATE_INT);
-					$story_custom_title_value = filter_var(trim($_POST['story_custom_title_value'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$story_custom_title_value = sanitize_text($_POST['story_custom_title_value']);
 					$story_wide_teaser_image = (int) filter_input(INPUT_POST, 'story_wide_teaser_image', FILTER_VALIDATE_INT);
 					$story_promote = (int) filter_input(INPUT_POST, 'story_promote', FILTER_VALIDATE_INT);	
 					$story_link = (int) filter_input(INPUT_POST, 'story_link', FILTER_VALIDATE_INT);	
@@ -1867,7 +1860,7 @@ if (isset($_POST['token'])) {
 				case 'get_stories_promoted':
 
 					$dynamic_content = $_POST['dynamicContent'];
-					$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ? $_POST['dynamicContentFilter'] : '';
+					$stories_filter = sanitize_text($_POST['dynamicContentFilter']);
 					$limit = (int) filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT);
 					$rows_promoted = $pages->getPagesStoryContentPublishPromoted($stories_filter, $limit);
 					if($rows_promoted) {
@@ -1879,7 +1872,7 @@ if (isset($_POST['token'])) {
 				case 'get_dynamic_stories':
 
 					$dynamic_content = $_POST['dynamicContent'];
-					$stories_filter = filter_input(INPUT_POST, 'dynamicContentFilter', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ? $_POST['dynamicContentFilter'] : '';
+					$stories_filter = sanitize_text($_POST['dynamicContentFilter']);
 					$limit = (int) filter_input(INPUT_POST, 'dynamicContentLimit', FILTER_VALIDATE_INT);
 					$rows = array();
 					switch ($dynamic_content) {
@@ -2105,8 +2098,8 @@ if (isset($_POST['token'])) {
 					$widgets_action = json_encode($act);
 					$pages_widgets_id = $_POST['pages_widgets_id'];
 					
-					$widgets_header = filter_var(trim($_POST['widgets_header'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$widgets_footer = filter_var(trim($_POST['widgets_footer'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$widgets_header = sanitize_text($_POST['widgets_header']);
+					$widgets_footer = sanitize_text($_POST['widgets_footer']);
 
 					if(isset($pages_widgets_id)) {
 						$pw = new PagesWidgets();
@@ -2206,12 +2199,12 @@ if (isset($_POST['token'])) {
 		if ($action == 'save_pages_images_meta') { 
 			
 			$pages_images_id = filter_var(trim($_POST['pages_images_id'] ?? ''), FILTER_VALIDATE_INT);
-			$caption = filter_var(trim($_POST['caption'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$caption = sanitize_text($_POST['caption']);
 			$caption_extended = trim($_POST['caption_extended'] ?? '');
-			$alt = filter_var(trim($_POST['alt'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$title = filter_var(trim($_POST['title'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$creator = filter_var(trim($_POST['creator'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$copyright = filter_var(trim($_POST['copyright'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$alt = sanitize_text($_POST['alt']);
+			$title = sanitize_text($_POST['title']);
+			$creator = sanitize_text($_POST['creator']);
+			$copyright = sanitize_text($_POST['copyright']);
 			$tag = $_POST['tag'];
 			$promote = (int) filter_input(INPUT_POST, 'promote', FILTER_VALIDATE_INT);
 
@@ -2235,7 +2228,7 @@ if (isset($_POST['token'])) {
 			$access= 0;
 			$status = 1;
 			$template = is_numeric($_SESSION['site_template_default']) ? $_SESSION['site_template_default'] : 0;
-			$title = filter_var(trim($_POST['title_toplevel_page'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$title = sanitize_text($_POST['title_toplevel_page']);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$lastInsertId = $pages->setPagesAddToplevelPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $template, $utc_modified);
 
@@ -2265,7 +2258,7 @@ if (isset($_POST['token'])) {
 				$category_position = 99;
 				$status = 1;
 				$parent = 0;				
-				$title = filter_var(trim($_POST['title_child_page'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$title = sanitize_text($_POST['title_child_page']);
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 				// get parent page common settings as template
@@ -2313,7 +2306,7 @@ if (isset($_POST['token'])) {
 		
 		if ($action == 'pages_category_add') { 
 			
-			$category = filter_var(trim($_POST['category'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$category = sanitize_text($_POST['category']);
 			$position = filter_input(INPUT_POST, 'position', FILTER_VALIDATE_INT);
 			$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$pages_category = new PagesCategories();
@@ -2337,7 +2330,7 @@ if (isset($_POST['token'])) {
 			
 			$pages_categories_id = filter_input(INPUT_POST, 'pages_categories_id', FILTER_VALIDATE_INT);
 			$position = filter_input(INPUT_POST, 'position', FILTER_VALIDATE_INT);
-			$category = filter_var(trim($_POST['category'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$category = sanitize_text($_POST['category']);
 			$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$pages_category = new PagesCategories();
 			
@@ -2365,7 +2358,7 @@ if (isset($_POST['token'])) {
 
 		if ($action == 'pages_add_tag') { 
 			
-			$tag = filter_var(trim($_POST['tag'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$tag = sanitize_text($_POST['tag']);
 			$utc_created = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 			$tags = new Tags();
 

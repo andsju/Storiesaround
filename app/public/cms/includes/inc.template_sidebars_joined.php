@@ -1,3 +1,7 @@
+<?php
+$wrapper_content_width = (int) $wrapper_page_width * 0.75;
+$wrapper_sidebar_width = (int) $wrapper_page_width * 0.25;
+?>
 
     <div id="wrapper-page" class="sidebars-joined">
     
@@ -33,11 +37,10 @@
             </aside>
             <aside id="content-bottom-stories">
                 <?php
-                print_story_events($pages, $languages, $cms_dir, $wrapper_content_width, $arr['stories_event_dates'], $arr['stories_event_dates_filter'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_last_modified'], $dtz);
-                print__story__promoted($rows_promoted, $languages, $cms_dir, $id, $wrapper_content_width, $stories_area = array(5,6,7,8,9), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
-                $this_width = $arr['stories_columns'] == 0 ? $wrapper_content_width : $wrapper_right_sidebar_width;
-                print__story__selected($rows_selected, $languages, $cms_dir, $id, $content_percent_width, $this_width, "main", $arr['stories_columns'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
-                print__story__child($rows_child, $languages, $cms_dir, $id, $wrapper_content_width, $stories_area = array(5,6,7,8,9), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+                print_story_events($pages, $languages, $wrapper_content_width, $arr['stories_event_dates'], $arr['stories_event_dates_filter'], $arr['stories_wide_teaser_image_align'], $arr['stories_last_modified'], $dtz);
+                print__story__promoted($rows_promoted, $languages, $id, $wrapper_content_width, $stories_area = array(5,6,7,8,9), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+                print__story__selected($rows_selected, $languages, $id, $wrapper_content_width, "main", $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+                print__story__child($rows_child, $languages, $id, $wrapper_content_width, $stories_area = array(5,6,7,8,9), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
                 ?>
             </aside>
         </div>
@@ -45,12 +48,12 @@
         <div id="wrapper-left-sidebar">
             <?php print_selection("selection-left-sidebar-top", $selection_area['left_sidebar_top']); ?>
             <aside id="left-sidebar-widgets"><?php if($rows_widgets){ 
-                show_widgets_content($rows_widgets, "widgets_left_sidebar", $wrapper_left_sidebar_width);} ?></aside>
+                show_widgets_content($rows_widgets, "widgets_left_sidebar", $wrapper_sidebar_width);} ?></aside>
             <aside id="left-sidebar-stories">
             <?php
-            print__story__promoted($rows_promoted, $languages, $cms_dir, $id, $wrapper_left_sidebar_width, $stories_area = array(2), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
-            print__story__selected($rows_selected, $languages, $cms_dir, $id, $wrapper_content_width, "left_sidebar", $arr['stories_columns'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
-            print__story__child($rows_child, $languages, $cms_dir, $id, $wrapper_left_sidebar_width, $stories_area = array(3,4), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__promoted($rows_promoted, $languages, $id, $wrapper_sidebar_width, $stories_area = array(2), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__selected($rows_selected, $languages, $id, $wrapper_sidebar_width, "left_sidebar", $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__child($rows_child, $languages, $id, $wrapper_sidebar_width, $stories_area = array(3,4), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
             ?>    
             </aside>        
             <?php print_selection("selection-left-sidebar-bottom", $selection_area['left_sidebar_bottom']); ?>
@@ -66,12 +69,12 @@
                 echo '</nav>';
             ?>
             <aside id="right-sidebar-widgets"><?php if($rows_widgets){ 
-                show_widgets_content($rows_widgets, "widgets_right_sidebar", $wrapper_right_sidebar_width);} ?></aside>
+                show_widgets_content($rows_widgets, "widgets_right_sidebar", $wrapper_sidebar_width);} ?></aside>
             <aside id="right-sidebar-stories">
             <?php
-            print__story__promoted($rows_promoted, $languages, $cms_dir, $id, $wrapper_right_sidebar_width, $stories_area = array(3,4), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
-            print__story__selected($rows_selected, $languages, $cms_dir, $id, $wrapper_content_width, "right_sidebar", $arr['stories_columns'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
-            print__story__child($rows_child, $languages, $cms_dir, $id, $wrapper_right_sidebar_width, $stories_area = array(3,4), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_wide_teaser_image_width'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__promoted($rows_promoted, $languages, $id, $wrapper_sidebar_width, $stories_area = array(3,4), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__selected($rows_selected, $languages, $id, $wrapper_content_width, "right_sidebar", $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__child($rows_child, $languages, $id, $wrapper_sidebar_width, $stories_area = array(3,4), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
             ?>
             </aside>
             <?php print_selection("selection-right-sidebar-bottom", $selection_area['right_sidebar_bottom']); ?>
