@@ -983,9 +983,8 @@ if (isset($_POST['token'])) {
 				case 'save_site_content_setup':
 
 					$comments = $_POST['comments'];
-					$stories_columns = $_POST['stories_columns'];
 
-					$result = $pages->updatePagesSetupSiteContent($pages_id, $comments,$stories_columns);
+					$result = $pages->updatePagesSetupSiteContent($pages_id, $comments);
 					if($result) {
 						$history = new History();
 						$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
@@ -1841,22 +1840,6 @@ if (isset($_POST['token'])) {
 					
 				break;
 
-
-				case 'stories_change_cols':
-
-					$stories_selected = filter_input(INPUT_POST, 'stories_selected', FILTER_VALIDATE_INT);
-					$stories_columns = filter_input(INPUT_POST, 'stories_columns', FILTER_VALIDATE_INT);
-					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					$result = $pages->updatePagesStoriesTemplate($pages_id, $stories_selected, $stories_columns, $utc_modified);
-					if($result) {
-						$history = new History();
-						$history->setHistory($pages_id, 'pages_id', 'UPDATE', 'stories column', $_SESSION['users_id'], $_SESSION['token'], $utc_modified);
-						echo 'saved template: '. date('H:i:s');
-					}
-					
-					
-				break;
-
 				case 'get_stories_promoted':
 
 					$dynamic_content = $_POST['dynamicContent'];
@@ -2263,7 +2246,7 @@ if (isset($_POST['token'])) {
 
 				// get parent page common settings as template
 				$meta_additional = $meta_robots = $tag = $stories_filter = $selections = null;
-				$header_caption_show = $template = $stories_columns = 0;
+				$header_caption_show = $template = 0;
 				$header_image = $header_caption = json_encode(array());
 
 				$r = $pages->getPagesAsTemplate($parent_id);
@@ -2277,11 +2260,10 @@ if (isset($_POST['token'])) {
 					$header_caption_vertical_align = $r['header_caption_vertical_align'];
 					$header_caption_show = $r['header_caption_show'];					
 					$template = $r['template'];
-					$stories_columns = $r['stories_columns'];
 					$stories_filter = $r['stories_filter'];
 					$selections = $r['selections'];
 					
-					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template, $stories_columns);
+					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template);
 					
 					if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
 						mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);

@@ -20,7 +20,9 @@ $wrapper_sidebar_width = (int) $wrapper_page_width * 0.25;
                 show_widgets_content($rows_widgets, "widgets_left_sidebar", $wrapper_sidebar_width);} ?></aside>
             <aside id="left-sidebar-stories">
             <?php
-            // ASJ...
+            print__story__promoted($rows_promoted, $languages, $id, $wrapper_sidebar_width, $stories_area = array(3,4), $arr['stories_promoted_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__selected($rows_selected, $languages, $id, $wrapper_content_width, "left_sidebar", $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
+            print__story__child($rows_child, $languages, $id, $wrapper_sidebar_width, $stories_area = array(3,4), $arr['stories_child_area'], $arr['stories_wide_teaser_image_align'], $arr['stories_image_copyright'], $arr['stories_last_modified'], $arr['stories_limit'], $arr['stories_filter'], $dtz);
             ?>    
             </aside>        
             <?php print_selection("selection-left-sidebar-bottom", $selection_area['left_sidebar_bottom']); ?>

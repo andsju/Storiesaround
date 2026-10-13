@@ -144,6 +144,9 @@ $sqls_alter_drop_column[] = array("tbl_name" => "site", "col_name" => "site_temp
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_wide_teaser_image_width");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "story_css_class");
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_css_class");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_columns");
+
+
 
 $sqls[] = "ALTER TABLE `calendar_categories`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 $sqls[] = "ALTER TABLE `calendar_categories_rights`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";

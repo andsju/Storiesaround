@@ -41,14 +41,13 @@ class Pages extends Database
             $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_INT);
             $stmt->bindParam(':parent', $parent, PDO::PARAM_INT);
             $stmt->bindParam(':position', $position, PDO::PARAM_INT);
-            $stmt->bindParam(':category_position', $category_position, PDO::PARAM_INT);            
+            $stmt->bindParam(':category_position', $category_position, PDO::PARAM_INT);
             $stmt->bindParam(':access', $access, PDO::PARAM_INT);
             $stmt->bindParam(':status', $status, PDO::PARAM_INT);
             $stmt->bindParam(':template', $template, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             $stmt->execute();
             return $this->db->lastInsertId('pages_id');
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -73,15 +72,14 @@ class Pages extends Database
      * @param string $header_caption
      * @param string $header_caption_show
      * @param int $template
-     * @param int $stories_columns
      * @return integer
      */
-    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template, $stories_columns)
+    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template)
     {
         try {
             $sql_insert = "INSERT INTO pages 
-			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template, stories_columns) VALUES
-			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_align, :header_caption_vertical_align, :header_caption_show, :template, :stories_columns)";
+			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template) VALUES
+			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_align, :header_caption_vertical_align, :header_caption_show, :template)";
 
             $stmt = $this->db->prepare($sql_insert);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -103,7 +101,6 @@ class Pages extends Database
             $stmt->bindParam(':header_caption_vertical_align', $header_caption_vertical_align, PDO::PARAM_STR);
             $stmt->bindParam(':header_caption_show', $header_caption_show, PDO::PARAM_INT);
             $stmt->bindParam(':template', $template, PDO::PARAM_INT);
-            $stmt->bindParam(':stories_columns', $stories_columns, PDO::PARAM_INT);
             $stmt->execute();
             return $this->db->lastInsertId('pages_id');
         } catch (PDOException $e) {
@@ -142,7 +139,7 @@ class Pages extends Database
      * @return bool
      *                 
      * public function setPagesPublish($pages_id, $status, $access, $title_tag, $datetime_start, $datetime_end, $utc_modified)
-    */
+     */
     public function setPagesPublish($pages_id, $status, $access, $title_tag, $pages_title, $pages_title_alternative, $content, $content_author, $pages_id_link, $datetime_start, $datetime_end, $utc_modified)
     {
         try {
@@ -206,7 +203,6 @@ class Pages extends Database
             $stmt->bindParam(":utc_end_publish", $datetime_end, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -238,7 +234,6 @@ class Pages extends Database
             $stmt->bindParam(":utc_start_publish", $datetime_start, PDO::PARAM_STR);
             $stmt->bindParam(":utc_end_publish", $datetime_end, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -262,7 +257,6 @@ class Pages extends Database
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":header_image", $header_image, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -281,7 +275,6 @@ class Pages extends Database
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":parent", $parent, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -376,7 +369,6 @@ class Pages extends Database
             // echo $story_promote;
             // die();
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -605,9 +597,11 @@ class Pages extends Database
     }
 
 
-    
+
 
     /**
+     * Search pages by words and calculate relevance.
+     *
      * @param string $search
      * @param int $status
      * @param int $pages_id
@@ -616,65 +610,224 @@ class Pages extends Database
      * @param int $limit
      * @return array
      */
-    public function getPagesSearchWordsRelevance($search, $status, $pages_id, $limit_tree, $limit_start, $limit)
-    {
-        $query_parts = array();
-        $words = preg_replace('/\s+/', ' ', $search);
-        $words = explode(" ", $words);
-        $limit_start = $limit_start;
-        foreach ($words as $word) {
-            $query_parts[] = "'%" . $word . "%'";
+    public function getPagesSearchWordsRelevance(
+        $search,
+        $status,
+        $pages_id,
+        $limit_tree,
+        $limit_start,
+        $limit
+    ) {
+        // Validate and normalize numeric parameters.
+        $status = (int) $status;
+        $pages_id = (int) $pages_id;
+        $limit_tree = (int) $limit_tree;
+        $limit_start = max(0, (int) $limit_start);
+        $limit = max(1, min(100, (int) $limit));
+
+        // Normalize search text.
+        $search = trim($search);
+
+        if ($search === '' || strlen($search) > 200) {
+            return [];
         }
-        $titles = implode(' AND title LIKE ', $query_parts);
-        $contents = implode(' AND content LIKE ', $query_parts);
-        $story_contents = implode(' AND story_content LIKE ', $query_parts);
-        $grid_content = implode(' AND grid_content LIKE ', $query_parts);
-        $tags = implode(' AND tag LIKE ', $query_parts);
-        $pages_id_links = implode(' AND pages_id_link LIKE ', $query_parts);
 
-        $ws = implode(' ', $words);
-        $ws = trim($ws);
+        $search = preg_replace('/\s+/u', ' ', $search);
 
-        $sql = "SELECT pages_id, title, content, category, tag, status, access, parent, utc_start_publish, utc_end_publish, utc_modified,  
-		MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
-		FROM pages 
-		WHERE 
-		( MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
-			OR title LIKE {$titles}
-			OR content LIKE {$contents} 
-			OR story_content LIKE {$story_contents} 
-            OR grid_content LIKE {$grid_content} 
-			OR tag LIKE {$tags} 
-            OR pages_id_link LIKE {$pages_id_links} 
-		)";
+        if ($search === null || $search === '') {
+            return [];
+        }
+
+        $words = preg_split(
+            '/\s+/u',
+            $search,
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        if ($words === false || count($words) === 0 || count($words) > 10) {
+            return [];
+        }
+
+        $params = [];
+
+        /*
+     * Build LIKE conditions using bound parameters.
+     *
+     * The ! character is used as the LIKE escape character,
+     * so user-supplied %, _ and ! are treated literally.
+     */
+        $build_like_conditions = function (
+            $column,
+            $prefix,
+            $words
+        ) use (&$params) {
+            $conditions = [];
+
+            foreach ($words as $index => $word) {
+                $placeholder = ':' . $prefix . '_' . $index;
+
+                $escaped_word = str_replace(
+                    ['!', '%', '_'],
+                    ['!!', '!%', '!_'],
+                    $word
+                );
+
+                $params[$placeholder] = '%' . $escaped_word . '%';
+
+                $conditions[] = $column
+                    . ' LIKE '
+                    . $placeholder
+                    . " ESCAPE '!'";
+            }
+
+            return implode(' AND ', $conditions);
+        };
+
+        // Build conditions for each searchable column.
+        $titles = $build_like_conditions(
+            'title',
+            'title_where',
+            $words
+        );
+
+        $contents = $build_like_conditions(
+            'content',
+            'content_where',
+            $words
+        );
+
+        $story_contents = $build_like_conditions(
+            'story_content',
+            'story_where',
+            $words
+        );
+
+        $grid_content = $build_like_conditions(
+            'grid_content',
+            'grid_where',
+            $words
+        );
+
+        $tags = $build_like_conditions(
+            'tag',
+            'tag_where',
+            $words
+        );
+
+        $pages_id_links = $build_like_conditions(
+            'pages_id_link',
+            'pages_link_where',
+            $words
+        );
+
+        // Use separate placeholders for the repeated ORDER BY conditions.
+        $title_order = $build_like_conditions(
+            'title',
+            'title_order',
+            $words
+        );
+
+        $tag_order = $build_like_conditions(
+            'tag',
+            'tag_order',
+            $words
+        );
+
+        // Bind the full-text search separately for each occurrence.
+        $fulltext_search = '(' . implode(' ', $words) . ')';
+
+        $params[':fulltext_select'] = $fulltext_search;
+        $params[':fulltext_where'] = $fulltext_search;
+
+        $sql = "
+        SELECT
+            pages_id,
+            title,
+            content,
+            category,
+            tag,
+            status,
+            access,
+            parent,
+            utc_start_publish,
+            utc_end_publish,
+            utc_modified,
+            MATCH(
+                title,
+                content,
+                story_content,
+                grid_content,
+                tag,
+                pages_id_link
+            ) AGAINST(
+                :fulltext_select IN NATURAL LANGUAGE MODE
+            ) AS relevance
+        FROM pages
+        WHERE (
+            MATCH(
+                title,
+                content,
+                story_content,
+                grid_content,
+                tag,
+                pages_id_link
+            ) AGAINST(
+                :fulltext_where IN NATURAL LANGUAGE MODE
+            )
+            OR {$titles}
+            OR {$contents}
+            OR {$story_contents}
+            OR {$grid_content}
+            OR {$tags}
+            OR {$pages_id_links}
+        )
+    ";
 
         if ($status > 0) {
-            $sql .= " AND status = $status ";
-        }
-        if ($limit_tree > 0) {
-            $sql .= " AND parent_id = $pages_id ";
+            $sql .= ' AND status = :status';
         }
 
-        $sql .= " ORDER BY ";
-        $sql .= " category_position ASC, ";
-        $sql .= " title LIKE {$titles} DESC, ";
-        $sql .= " relevance DESC, ";
-        $sql .= " tag LIKE {$tags} DESC ";
-        $sql .= " LIMIT $limit_start, $limit";
+        if ($limit_tree > 0) {
+            $sql .= ' AND parent_id = :pages_id';
+        }
+
+        $sql .= "
+        ORDER BY
+            category_position ASC,
+            {$title_order} DESC,
+            relevance DESC,
+            {$tag_order} DESC
+        LIMIT :limit_start, :limit
+    ";
 
         $stmt = $this->db->prepare($sql);
-        // $stmt->bindParam(':search', $search, PDO::PARAM_STR);
-        // $stmt->bindParam(':status', $status, PDO::PARAM_INT);
-        // $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
-        // $stmt->bindParam(':limit_tree', $limit_tree, PDO::PARAM_INT);
-        // $stmt->bindParam(':limit_start', $limit_start, PDO::PARAM_INT);
-        // $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+
+        // Bind all text parameters as strings.
+        foreach ($params as $placeholder => $value) {
+            $stmt->bindValue(
+                $placeholder,
+                $value,
+                PDO::PARAM_STR
+            );
+        }
+
+        // Bind numeric parameters with explicit integer types.
+        if ($status > 0) {
+            $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+        }
+
+        if ($limit_tree > 0) {
+            $stmt->bindValue(':pages_id', $pages_id, PDO::PARAM_INT);
+        }
+
+        $stmt->bindValue(':limit_start', $limit_start, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+
         $stmt->execute();
-        return [];
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
 
     /**
      * @param string $search
@@ -730,11 +883,13 @@ class Pages extends Database
         $sql .= " LIMIT 1000";
 
         $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
         $stmt->bindParam(':status', $status, PDO::PARAM_INT);
-                
+        $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
+        $stmt->bindParam(':limit_tree', $limit_tree, PDO::PARAM_INT);
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
     }
 
     /**
@@ -783,8 +938,8 @@ class Pages extends Database
         }
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':status', $status, PDO::PARAM_INT);        
-                
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -1187,7 +1342,6 @@ class Pages extends Database
             $stmt->bindParam(":parallax_scroll", $parallax_scroll, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1198,23 +1352,20 @@ class Pages extends Database
     /**
      * @param int $pages_id
      * @param int comments
-     * @param int $stories_columns
      * @return bool
      */
-    public function updatePagesSetupSiteContent($pages_id, $comments, $stories_columns)
+    public function updatePagesSetupSiteContent($pages_id, $comments)
     {
         try {
             $sql_update = "UPDATE pages
 			SET comments = :comments,
-			stories_columns = :stories_columns
 			WHERE pages_id = :pages_id";
 
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":comments", $comments, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_columns", $stories_columns, PDO::PARAM_INT);
-            return $stmt->execute();
 
+            return $stmt->execute();
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1243,7 +1394,6 @@ class Pages extends Database
             $stmt->bindParam(":template_custom", $template_custom, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1278,7 +1428,6 @@ class Pages extends Database
             $stmt->bindParam(":stories_last_modified", $stories_last_modified, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1308,7 +1457,6 @@ class Pages extends Database
             $stmt->bindParam(":stories_child_area", $stories_child_area, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1344,7 +1492,6 @@ class Pages extends Database
             $stmt->bindParam(":stories_limit", $stories_limit, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1374,7 +1521,6 @@ class Pages extends Database
             $stmt->bindParam(":stories_event_dates_filter", $stories_event_dates_filter, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1408,12 +1554,11 @@ class Pages extends Database
             $stmt->bindParam(":category_position", $category_position, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
         }
-    }    
+    }
 
     /**
      * @param int $pages_id
@@ -1460,7 +1605,6 @@ class Pages extends Database
             $stmt->bindParam(':plugins', $plugins, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1487,7 +1631,6 @@ class Pages extends Database
             $stmt->bindParam(':content', $content, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1514,7 +1657,6 @@ class Pages extends Database
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1540,13 +1682,12 @@ class Pages extends Database
             $stmt->bindParam(':author', $author, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
         }
     }
-    
+
     /**
      * @param int $pages_id
      * @param string $meta_keywords
@@ -1575,7 +1716,6 @@ class Pages extends Database
             $stmt->bindParam(':meta_additional', $meta_additional, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1602,7 +1742,6 @@ class Pages extends Database
             $stmt->bindParam(':pages_id_link', $pages_id_link, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1629,7 +1768,6 @@ class Pages extends Database
             $stmt->bindParam(':plugins', $plugins, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1656,7 +1794,6 @@ class Pages extends Database
             $stmt->bindParam(':plugin_arguments', $plugin_arguments, PDO::PARAM_STR);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -1691,7 +1828,6 @@ class Pages extends Database
             $this->db->exec("UPDATE pages SET parent = 1 WHERE pages_id = $new_parent_id");
             $this->db->commit();
             return $q;
-
         } catch (PDOException $e) {
             $this->db->rollBack();
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
@@ -1725,7 +1861,6 @@ class Pages extends Database
                 $this->db->commit();
                 return $q;
             }
-
         } catch (PDOException $e) {
             $this->db->rollBack();
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
@@ -1753,7 +1888,6 @@ class Pages extends Database
             }
             $this->db->commit();
             echo 'saved ';
-
         } catch (PDOException $e) {
             $this->db->rollBack();
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
@@ -1764,17 +1898,15 @@ class Pages extends Database
     /**
      * @param int $pages_id
      * @param int $stories_selected
-     * @param int $stories_columns
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesStoriesTemplate($pages_id, $stories_selected, $stories_columns, $utc_modified)
+    public function updatePagesStoriesTemplate($pages_id, $stories_selected, $utc_modified)
     {
         try {
-            $stmt = $this->db->prepare('UPDATE pages SET stories_selected =:stories_selected, stories_columns =:stories_columns, utc_modified = :utc_modified WHERE pages_id =:pages_id');
+            $stmt = $this->db->prepare('UPDATE pages SET stories_selected =:stories_selected, utc_modified = :utc_modified WHERE pages_id =:pages_id');
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(":stories_selected", $stories_selected, PDO::PARAM_INT);
-            $stmt->bindParam(":stories_columns", $stories_columns, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
             // echo 'stories template saved: ' . date('H:i:s');
@@ -1796,10 +1928,10 @@ class Pages extends Database
 		SELECT pages.title, pages.story_content 
 		FROM pages INNER JOIN pages_stories
 		ON pages.pages_id=pages_stories.stories_id
-		WHERE pages_stories.pages_stories_id = $pages_stories_id";
+		WHERE pages_stories.pages_stories_id = :pages_stories_id";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':pages_id', $pages_stories_id, PDO::PARAM_INT);
+        $stmt->bindParam(':pages_stories_id', $pages_stories_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -1960,7 +2092,6 @@ class Pages extends Database
         try {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return null;
@@ -1997,7 +2128,6 @@ class Pages extends Database
         try {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return null;
@@ -2025,7 +2155,7 @@ class Pages extends Database
 			INNER JOIN pages_stories
 			ON pages.pages_id=pages_stories.stories_id
 			INNER JOIN pages_images ON pages.pages_id = pages_images.pages_id
-			WHERE pages_stories.pages_id = $id
+			WHERE pages_stories.pages_id = :id
 			AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
 			OR NOW() > pages.utc_start_publish AND pages.utc_end_publish IS NULL) 
 			AND pages_images.story_teaser = 1
@@ -2035,7 +2165,7 @@ class Pages extends Database
 			SELECT pages_stories.sort_id AS rank, pages.pages_id, pages.access, pages_stories.pages_stories_id, pages.title, pages.story_link, pages.story_custom_title, pages.story_custom_title_value, pages.story_content, pages.story_wide_teaser_image, pages.utc_start_publish, pages.utc_modified, pages.template, pages_stories.container, null AS filename, null AS caption, null AS copyright, null AS story_teaser, null AS ratio
 			FROM pages, pages_stories
 			WHERE pages.pages_id=pages_stories.stories_id
-			AND pages_stories.pages_id = $id
+			AND pages_stories.pages_id = :id
 			AND (SELECT NOW() BETWEEN pages.utc_start_publish AND pages.utc_end_publish
 			OR NOW() > pages.utc_start_publish AND pages.utc_end_publish IS NULL) 
 			
@@ -2044,12 +2174,11 @@ class Pages extends Database
 		ORDER BY rank";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':pages_id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         try {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return null;
@@ -2088,7 +2217,6 @@ class Pages extends Database
         try {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return null;
@@ -2126,7 +2254,6 @@ class Pages extends Database
         try {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return null;
@@ -2428,7 +2555,6 @@ class Pages extends Database
                 $stmt->bindParam(':sort_id', $sort_id, PDO::PARAM_INT);
                 $stmt->execute();
                 return $this->db->lastInsertId('pages_stories_id');
-
             } catch (PDOException $e) {
                 handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
                 return false;
@@ -2451,7 +2577,6 @@ class Pages extends Database
             $stmt->bindParam(':container', $container, PDO::PARAM_STR);
             $stmt->bindParam(':sort_id', $sort_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2473,11 +2598,9 @@ class Pages extends Database
             $stmt->bindParam(':selections', $selections, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
-
         }
     }
 
@@ -2507,7 +2630,6 @@ class Pages extends Database
             $stmt = $this->db->prepare("DELETE FROM pages_stories WHERE pages_stories_id =:pages_stories_id");
             $stmt->bindParam(":pages_stories_id", $pages_stories_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2525,7 +2647,6 @@ class Pages extends Database
             $stmt = $this->db->prepare("DELETE FROM pages_stories WHERE pages_id =:pages_id");
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2543,7 +2664,6 @@ class Pages extends Database
             $stmt = $this->db->prepare("DELETE FROM pages_widgets WHERE pages_widgets_id =:pages_widgets_id");
             $stmt->bindParam(":pages_widgets_id", $pages_widgets_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2561,7 +2681,6 @@ class Pages extends Database
             $stmt = $this->db->prepare("DELETE FROM pages_widgets WHERE pages_id =:pages_id");
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2576,7 +2695,7 @@ class Pages extends Database
     public function getPagesAsTemplate($id)
     {
         $rows = null;
-        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template, stories_columns, stories_filter, selections
+        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template, stories_filter, selections
 		FROM pages 
 		WHERE pages_id = :pages_id";
 
@@ -2770,7 +2889,6 @@ class Pages extends Database
                 $stmt->bindParam(':sizes', $sizes, PDO::PARAM_STR);
                 $stmt->execute();
                 return $this->db->lastInsertId('pages_images_id');
-
             } catch (PDOException $e) {
                 handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
                 return false;
@@ -2804,14 +2922,13 @@ class Pages extends Database
             $stmt->bindParam(":story_teaser", $story_teaser, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
         }
     }
 
-  /**
+    /**
      * @param int $pages_images_id
      * @param string $caption
      * @param int $position
@@ -2838,7 +2955,6 @@ class Pages extends Database
             $stmt->bindParam(':artist', $artist, PDO::PARAM_STR);
             $stmt->bindParam(':xmpdata', $xmpdata, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2859,7 +2975,6 @@ class Pages extends Database
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":pages_images_id", $pages_images_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2906,7 +3021,6 @@ class Pages extends Database
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             $stmt->bindParam(":promote", $promote, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2932,7 +3046,6 @@ class Pages extends Database
             $stmt->bindParam(":ratio", $ratio, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2954,7 +3067,6 @@ class Pages extends Database
             $stmt->execute();
             $rows = $stmt->fetchALL(PDO::FETCH_ASSOC);
             return $rows;
-        
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2974,7 +3086,6 @@ class Pages extends Database
             $stmt->bindParam(":filename", $filename, PDO::PARAM_STR);
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -2992,7 +3103,6 @@ class Pages extends Database
             $stmt = $this->db->prepare("DELETE FROM pages_images WHERE pages_id = :pages_id");
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
             return $stmt->execute();
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
@@ -3027,13 +3137,9 @@ class Pages extends Database
             $stmt->bindParam(':utc_time', $utc_time, PDO::PARAM_STR);
             $stmt->execute();
             return $this->db->lastInsertId('pages_rights_id');
-
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
             return false;
         }
     }
-
 }
-
-?>

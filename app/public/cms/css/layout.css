@@ -3525,6 +3525,11 @@ meta tag width=device-width,initial-scale=1.0
         color: white;
         background-color: black;
     }
+
+    #wrapper-site-header, #wrapper-site-header-image {
+        width: 1270px;
+        margin: 0 auto
+    }
     #wrapper-page {
         width: 1270px;
         min-height: 10px;
@@ -3558,10 +3563,6 @@ meta tag width=device-width,initial-scale=1.0
         display: table
     }
 
-    #wrapper-site-header-image {
-        width: 100%;
-    }
-
 
 
     /* top 
@@ -3579,7 +3580,8 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     div#site-search-page {
-        width: 100%
+        width: 1270px;
+        margin: 0 auto;
     }
 
 

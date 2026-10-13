@@ -43,6 +43,8 @@ $pages = new Pages();
 $arr = $pages->getPagesEditContent($id);
 
 
+// print_r2($arr);
+
 // wysiwyg editor
 $wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editors, $_SESSION['site_wysiwyg']) :  null;
 
@@ -1173,7 +1175,7 @@ foreach ( $js_files as $js ): ?>
 		
 		$('#btn_save_stories').click(function(event){
 			event.preventDefault();
-			var stories_column_saved = false;
+			var stories_positions_saved = false;
 			$(".column_selected_stories").each(function(){
 				var result = $(this).sortable("toArray");
 				var token = $("#token").val();
@@ -1191,11 +1193,11 @@ foreach ( $js_files as $js ): ?>
 				}; 
 				if (result.length > 0){
 					$.post("pages_edit_ajax.php", items, function(){
-						var stories_column_saved = true;
+						var stories_positions_saved = true;
 					});
 				}
 			});
-			if(stories_column_saved = true) {
+			if(stories_positions_saved = true) {
 				$('#ajax_spinner_stories').show();
 				setTimeout("$('#ajax_spinner_stories').hide()",700);					
 				setTimeout("$('#ajax_status_stories').hide()",3000);
@@ -1464,13 +1466,12 @@ foreach ( $js_files as $js ): ?>
 			var users_id = $("#users_id").val();
 			var pages_id = $("#pages_id").val();
 			var stories_selected = $('input:checkbox[name=stories_selected]').is(':checked') ? 1 : 0;
-			var stories_columns = $('input:checkbox[name=stories_columns]').is(':checked') ? 1 : 0;
 			$.ajax({
 				type: 'POST',
 				url: 'pages_edit_ajax.php',
 				data: { 
 					action: action, token: token, users_id: users_id, pages_id: pages_id,
-					stories_selected: stories_selected, stories_columns: stories_columns
+					stories_selected: stories_selected
 				},
 				success: function(newdata){	
 					window.location.href = window.location.toString().indexOf("#") != -1 ? window.location.href : window.location.href + '#add_content';
@@ -3701,36 +3702,32 @@ if(is_array($check_edit)) {
 									<input type="checkbox" id="stories_selected" name="stories_selected" value="1" <?php if($arr['stories_selected'] > 0) {echo 'checked';}?>> 
 									Show selected pages as stories
 								</td>
-								<td>
-								
-								<input type="checkbox" id="stories_columns" name="stories_columns" value="1" <?php if($arr['stories_columns'] > 0) {echo 'checked';}?>> 								
-								Enable columns below content
-								<p>
-									<label for="search_story">Search story: </label><br />
-									<input id="search_story" style="width:300px;" />
-									<input type="hidden" id="pid" />				
-									<span class="toolbar_add"><button id="btn_new_pages_search_stories_id" value="btn_new_pages_search_stories_id">Add</button></span>
-								</p>
-								<p>
-									<span class="toolbar"><button id="btn_dialog_pages_sitetree">Show sitetree</button></span>
-								</p>
-								<span id="ajax_spinner_stories_select" style='display:none'><img src="css/images/spinner.gif"></span>
-								<span id="ajax_status_stories_select" style='display:none'></span>								
-								<div id="dialog_pages_sitetree" title="Sitetree" style="max-height:600px;overflow:auto;"></div>
-
+								<td>								
+									<p>
+										<label for="search_story">Search story: </label><br />
+										<input id="search_story" style="width:300px;" />
+										<input type="hidden" id="pid" />				
+										<span class="toolbar_add"><button id="btn_new_pages_search_stories_id" value="btn_new_pages_search_stories_id">Add</button></span>
+									</p>
+									<p>
+										<span class="toolbar"><button id="btn_dialog_pages_sitetree">Show sitetree</button></span>
+									</p>
+									<span id="ajax_spinner_stories_select" style='display:none'><img src="css/images/spinner.gif"></span>
+									<span id="ajax_status_stories_select" style='display:none'></span>								
+									<div id="dialog_pages_sitetree" title="Sitetree" style="max-height:600px;overflow:auto;"></div>
+								</td>
 								<td width="15%" align="right">
-								<span class="toolbar"><button id="btn_change_cols" value="btn_change_cols">Save</button></span>
+									<span class="toolbar"><button id="btn_change_cols" value="btn_change_cols">Save</button></span>
 								</td>
 								<td width="15%" align="right">
 
-								<div class="site_layout" class="clearfix">
-									<div class="site_header"></div>
-									<div class="site_sidebar_target_left">?</div>
-									<div class="site_content_target">?</div>
-									<div class="site_sidebar_target_right">?</div>
-									<div class="site_footer"></div>
-								</div>
-								</p>
+									<div class="site_layout" class="clearfix">
+										<div class="site_header"></div>
+										<div class="site_sidebar_target_left">?</div>
+										<div class="site_content_target">?</div>
+										<div class="site_sidebar_target_right">?</div>
+										<div class="site_footer"></div>
+									</div>
 								</td>
 							</tr>
 						</table>
@@ -3922,7 +3919,7 @@ if(is_array($check_edit)) {
 					
 					<div class="area_space_edit"></div>
 					<?php
-					$main_column_style = $arr['stories_columns'] == 1 ? "" : "width:100%";
+					$main_column_style = "width:100%";
 					?>
 					<div id="main" class="column_selected_stories" style="width:100%;"><?php get_box_content($rows, "main", $main_column_style); ?></div>
 

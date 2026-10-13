@@ -195,7 +195,6 @@ CREATE TABLE `pages` (
   `reservations` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0:false, 1:true',
   `comments` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0:false, 1:true',
   `functions` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0:false 1:true (custom functions)',
-  `stories_columns` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT 'stories columns',
   `stories_child_area` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0:none, 1:left sidebar, 2:right sidebar, 3-6:content',
   `stories_child` int(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT 'show child stories',
   `stories_promoted_area` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'show promoted stories in specified area',

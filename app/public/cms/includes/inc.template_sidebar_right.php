@@ -1,6 +1,7 @@
 <?php
 $wrapper_content_width = (int) $wrapper_page_width * 0.75;
 $wrapper_sidebar_width = (int) $wrapper_page_width * 0.25;
+// die();
 ?>
     <div id="wrapper-page" class="sidebar-right">
     

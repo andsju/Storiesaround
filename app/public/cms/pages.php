@@ -329,6 +329,8 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
     // $sidebar_percent_width = $_SESSION['site_template_sidebar_width'];
     $sidebar_percent_width = 25;
 
+    
+
     // get stories before template renders
     $limit_stories = $arr['stories_limit'];
     $rows_promoted = $arr['stories_promoted'] == 1 ? $pages->getPagesStoryContentPublishPromoted($arr['stories_filter'], $limit_stories) : null;

@@ -177,7 +177,7 @@ function set_plugin__values($id, $users_id, $plugin_settings)
             $plugin_info = $plugin_class->info();
 
             // get plugin css			
-            if(strlen(trim($plugin_info['css'])) > 0){
+            if (strlen($plugin_info['css'] ?? '') > 0){
                 $plugin_settings["css"] = $plugin_info['css'];
             }
 
@@ -234,7 +234,7 @@ function set_selection_values($pages_selections, $css_files, $js_files, $id, $pa
             $external_css_files = explode(" ", $s_row['external_css']);
             
             foreach($external_css_files as $external_css){
-                if(strlen(trim($external_css)) > 0){
+                if (strlen($external_css ?? '') > 0){
                     array_push($css_files, trim($external_css));
                 }
             }
@@ -303,7 +303,7 @@ function get_selection($div_id, $selection_area)
     if (is_null($selection_area)) {
         return;
     }
-    if (strlen($selection_area)) {
+    if (strlen($selection_area ?? '')) {
         $clear = $div_id == 'selection-content-inside' ? '' : ' clear';
         return '<div id="'.$div_id.'" class="site-selection'.$clear.'">'.$selection_area.'</div>';
     }
@@ -525,7 +525,7 @@ function get_breadcrumb($parent_id, $delimiter, $trunc_length, $clickable)
         }
 
         // Use SEO pages_id_link if set.
-        if (strlen($row['pages_id_link']) > 0) {
+        if (strlen($row['pages_id_link'] ?? '') > 0) {
             $crumb = ($clickable == 1)
                 ? '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">' . $r . '</a>'
                 : $r;
@@ -698,8 +698,8 @@ function get_pages_tree_sitemap($id, $array_path, $seo, $href, $depth, $show_pag
             echo '<li class="' . $class . '">';
             if ($a) {
 
-                $a_class = strlen($a_add_class) > 0 ? $a_add_class : "";
-                if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
+                $a_class = strlen($a_add_class ?? '') > 0 ? $a_add_class : "";
+                if (strlen($row['pages_id_link'] ?? '') > 0 && $seo == 1) {
                     echo '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $class . '">';
                 } else {
                     echo '<a href="' . $href . '?id=' . $row['pages_id'] . '" class="' . $class . '">';
@@ -754,7 +754,7 @@ function get_pages_tree_menu($id, $array_path, $seo, $href, $depth, $parent_id =
         foreach ($rows as $row) {
             $counter = $counter + 1;
             echo str_repeat("\t", $depth);
-            if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
+            if (strlen($row['pages_id_link'] ?? '') > 0 && $seo == 1) {
                 echo '<li><a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '">';
             } else {
                 echo '<li><a href="' . $href . '?id=' . $row['pages_id'] . '">';
@@ -808,8 +808,8 @@ function get_pages_tree_sitemap_all($id, $array_path, $seo, $href, $depth, $show
             echo "\t";
             echo '<li class="' . $class . '">';
             if ($a) {
-                $a_class = strlen($a_add_class) > 0 ? $a_add_class : "";
-                if (strlen($row['pages_id_link']) > 0 && $seo == 1) {
+                $a_class = strlen($a_add_class ?? '') > 0 ? $a_add_class : "";
+                if (strlen($row['pages_id_link'] ?? '') > 0 && $seo == 1) {
                     echo '<a href="' . CMS_PROTOCOL . $_SESSION['site_domain'] . '/pages/' . $row['pages_id_link'] . '" class="' . $a_class . '">';
                 } else {
                     echo '<a href="' . $href . '?id=' . $row['pages_id'] . '" class="' . $a_class . '">';
@@ -903,7 +903,7 @@ function get_pages_tree_jqueryui($id, $array_path, $href, $depth, $parent_id = 0
             if ($a) {
 
                 // use seo pages_id_link if set
-                if (strlen($row['pages_id_link']) > 0) {
+                if (strlen($row['pages_id_link'] ?? '') > 0) {
                     echo '<a href="#" id=' . $row['pages_id'] . '>';
                 } else {
                     echo '<a href="#" id=' . $row['pages_id'] . '>';
@@ -954,7 +954,7 @@ function get_pages_tree_jqueryui_published($id, $array_path, $href, $depth, $par
             $html .= str_repeat("\t", $depth);
             $html .= "\t<li" . $class . " id=" . $row['pages_id'] . ">";
             if ($a) {
-                if (strlen($row['pages_id_link']) > 0) {
+                if (strlen($row['pages_id_link'] ?? '') > 0) {
                     $html .= '<a href="' . $href . '?id=' . $row['pages_id'] . '" id=' . $row['pages_id'] . '>';
                 } else {
                     $html .= '<a href="' . $href . '?id=' . $row['pages_id'] . '" id=' . $row['pages_id'] . '>';
@@ -1078,7 +1078,7 @@ function get_box_story_content_selected($rows, $languages, $wrapper_width, $stor
             }
             if ($row['container'] == $stories_selected_area) {
                 $title = $row['story_custom_title'];
-                $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
+                $title_value = strlen($row['story_custom_title_value'] ?? '') > 0 ? $row['story_custom_title_value'] : $row['title'];
                 $pages_id = $row['pages_id'];
                 $story = $row['story_content'];
                 $story_wide_teaser_image = $row['story_wide_teaser_image'];
@@ -1203,7 +1203,7 @@ function get_box_story_events($rows_event_stories, $column_width, $stories_wide_
     $html = "";
     foreach ($rows_event_stories as $row) {
         $title = $row['story_custom_title'];
-        $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
+        $title_value = strlen($row['story_custom_title_value'] ?? '') > 0 ? $row['story_custom_title_value'] : $row['title'];
         $pages_id = $row['pages_id'];
         $ratio = $row['ratio'];
         $story = $row['story_content'];
@@ -1295,7 +1295,7 @@ function print__story__promoted($rows_promoted, $languages, $id, $wrapper_width,
 
 
 function print__story__child($rows_child, $languages, $id, $wrapper_width, $stories_area, $stories_child_area, $stories_wide_teaser_image_align, $stories_image_copyright, $stories_last_modified, $stories_limit, $stories_filter, $dtz)
-{
+{    
     if (!$rows_child) {return null;}
     if (in_array($stories_child_area, $stories_area)) {
         $html = '<div id="content-child-stories" class="clearfix">';
@@ -1445,7 +1445,7 @@ function get_box_story_content_child($rows, $wrapper_width, $stories_wide_teaser
             }
 
             $title = $row['story_custom_title'];
-            $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
+            $title_value = strlen($row['story_custom_title_value'] ?? '') > 0 ? $row['story_custom_title_value'] : $row['title'];
             $utc = $row['utc_modified'];
             $date = get_utc_dtz($utc, $dtz, 'Y-m-d H:i');
             $story = $row['story_content'];
@@ -1510,7 +1510,7 @@ function get_box_story_content_child_floats($rows, $content_width, $box_layout, 
             }
 
             $title = $row['story_custom_title'];
-            $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
+            $title_value = strlen($row['story_custom_title_value'] ?? '') > 0 ? $row['story_custom_title_value'] : $row['title'];
             $story = $row['story_content'];
             $story_wide_teaser_image = $row['story_wide_teaser_image'];
             $ratio = $row['ratio'];
@@ -1566,7 +1566,7 @@ function get_box_story_content_child_floats($rows, $content_width, $box_layout, 
                 echo '<img src="' . $img . '" class="fluid" alt="' . $caption . '" />';
             }
 
-            if (strlen($row['copyright']) && $show_image_copyright == 1) {
+            if (strlen($row['copyright'] ?? '') && $show_image_copyright == 1) {
                 echo '<div class="stories-image-meta">' . translate("Photo:", "site_photo", $languages) . ' ' . $row['copyright'] . '</div>';
             }
             if ($title == 0) {
@@ -1774,7 +1774,7 @@ function get_sample_array()
     $arr['stories_promoted'] = 1;
     $arr['title_tag'] = $arr['meta_keywords'] = $arr['meta_description'] = $arr['meta_robots'] = $arr['meta_additional'] = $arr['plugins'] = $arr['selections'] = $arr['lang'] = $arr['ads'] = $arr['events']
         = $arr['ads'] = $arr['stories_limit'] = $arr['stories_promoted_area'] = $arr['stories_wide_teaser_image_align'] = $arr['stories_wide_teaser_image_width'] = $arr['stories_last_modified'] = $arr['access']
-        = $arr['content_author'] = $arr['stories_event_dates'] = $arr['stories_columns'] = $arr['stories_child'] 
+        = $arr['content_author'] = $arr['stories_event_dates'] = $arr['stories_child'] 
         = $arr['header_caption']
         = $arr['breadcrumb']
         = $arr['utc_modified']
@@ -1836,7 +1836,7 @@ function get_box_story_content_promoted($rows, $col_width, $stories_last_modifie
                 }
             }
             $title = $row['story_custom_title'];
-            $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
+            $title_value = strlen($row['story_custom_title_value'] ?? '') > 0 ? $row['story_custom_title_value'] : $row['title'];
             $utc = $row['utc_modified'];
             $date = get_utc_dtz($utc, $dtz, 'Y-m-d H:i');
             $caption = $row['caption'];
@@ -1851,7 +1851,7 @@ function get_box_story_content_promoted($rows, $col_width, $stories_last_modifie
                 echo '<img src="' . $img . '"  class="fluid" alt="' . $caption . '" />';
             }
             echo '<div class="stories-content" style="border:0;">';
-            if (strlen($row['copyright']) && $show_image_copyright == 1) {
+            if (strlen($row['copyright'] ?? '') && $show_image_copyright == 1) {
                 echo '<div class="stories-image-meta">' . translate("Photo:", "site_photo", $languages) . ' ' . $row['copyright'] . '</div>';
             }
             if ($title == 0) {
@@ -1892,7 +1892,7 @@ function get_box_story_content_bycode($rows, $col_width, $stories_last_modified,
             }
 
             $title = $row['story_custom_title'];
-            $title_value = strlen($row['story_custom_title_value']) > 0 ? $row['story_custom_title_value'] : $row['title'];
+            $title_value = strlen($row['story_custom_title_value'] ?? '') > 0 ? $row['story_custom_title_value'] : $row['title'];
             $utc = $row['utc_modified'];
             $date = get_utc_dtz($utc, $dtz, 'Y-m-d H:i');
             $caption = $row['caption'];
@@ -1921,7 +1921,7 @@ function get_box_story_content_bycode($rows, $col_width, $stories_last_modified,
                 $str .= '<img src="' . $img . '"  class="fluid" alt="' . $caption . '" />';
             }
             $str .= '<div class="stories-content" style="border:0;">';
-            if (strlen($row['copyright']) && $show_image_copyright == 1) {
+            if (strlen($row['copyright'] ?? '') && $show_image_copyright == 1) {
                 $str .= '<div class="stories-image-meta">' . $row['copyright'] . '</div>';
             }
             if ($title == 0) {
@@ -2107,9 +2107,9 @@ function get_calendar($area, $cal, $id)
 function get_select_number($arrayOfNumbers, $current, $name, $id, $classes) 
 {
     if (is_array($arrayOfNumbers)) {
-        $name = strlen($name) ? ' name="'.$name.'"' : '';
+        $name = strlen($name ?? '') ? ' name="'.$name.'"' : '';
         $id = strlen($id) ? ' id="'.$id.'"' : '';
-        $classes = strlen($classes) ? ' class="'.$classes.'"' : '';
+        $classes = strlen($classes ?? '') ? ' class="'.$classes.'"' : '';
 
         $html = '<select '. $name . $id . $classes.'>';
         $selected = '';
@@ -2127,9 +2127,9 @@ function get_select_number($arrayOfNumbers, $current, $name, $id, $classes)
 function get_select_strings($arrayOfStrings, $current, $name, $id, $classes) 
 {
     if (is_array($arrayOfStrings)) {
-        $name = strlen($name) ? ' name="'.$name.'"' : '';
-        $id = strlen($id) ? ' id="'.$id.'"' : '';
-        $classes = strlen($classes) ? ' class="'.$classes.'"' : '';
+        $name = strlen($name ?? '') ? ' name="'.$name.'"' : '';
+        $id = strlen($id ?? '') ? ' id="'.$id.'"' : '';
+        $classes = strlen($classes ?? '') ? ' class="'.$classes.'"' : '';
 
         $html = '<select '. $name . $id . $classes.'>';
         $selected = '';
@@ -2209,9 +2209,9 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
         $dynamic_content = "";
         $dynamic_content_title = "";
         $dynamic_content_image = "";
-        $a_href = strlen($grid_data['url']) ? $grid_data['url'] : "";
-        $a_start = strlen($a_href) ?'<a href="'.$a_href.'">' : "";  
-        $a_end = strlen($a_href) ?'</a>' : "";
+        $a_href = strlen($grid_data['url'] ?? '') > 0 ? $grid_data['url'] : "";
+        $a_start = strlen($a_href ?? '') > 0 ? '<a href="'.$a_href.'">' : "";  
+        $a_end = strlen($a_href ?? '') > 0 ? '</a>' : "";
     
         // check if dynamic content
         switch ($grid_data['grid-dynamic-content']) {
@@ -2282,26 +2282,26 @@ function get_grid_edit($pages_id, $grid_active, $grid_content, $grid_custom_clas
         $html_grid_cell .= '<div class="grid-cell '.$grid_data['css'].' gridedit">';
         $html_grid_cell .= '<div class="grid-tools"><i class="far fa-save"></i><br><i class="far fa-edit" aria-hidden="true"></i><br><i class="fas fa-arrow-left" aria-hidden="true"></i><br><i class="fas fa-arrow-right" aria-hidden="true"></i><br><i class="far fa-trash-alt"></i></div>';
         $label = '<span class="grid-label">'. $grid_data['label'] .'</span>';
-        $image = strlen($dynamic_content_image) ? $dynamic_content_image : $grid_data['grid-image'];
-        $background_image_y = strlen($grid_data['grid-image-y']) > 1 ? 'background-position-y:'. $grid_data['grid-image-y'] .'%': '';
+        $image = strlen($dynamic_content_image ?? '') ? $dynamic_content_image : $grid_data['grid-image'];
+        $background_image_y = strlen($grid_data['grid-image-y'] ?? '') > 1 ? 'background-position-y:'. $grid_data['grid-image-y'] .'%': '';
         
-        $html_grid_cell .= strlen($image) ? $a_start . '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$image.');'.$background_image_y.'">'. $label.'</div>' . $a_end : "";
+        $html_grid_cell .= strlen($image ?? '') ? $a_start . '<div class="grid-image-crop" style="height:'.$grid_cell_image_height.'px;background-image: url('.$image.');'.$background_image_y.'">'. $label.'</div>' . $a_end : "";
 
         if ($grid_data['video']) {
             $video = getVideoEmbed($grid_data['video']);
             $html_grid_cell .= '<div class="grid-video">' .$video . '</div>';
         }
         
-        $html_grid_cell .= strlen($grid_data['heading']) ? $a_start . '<h3 class="grid-heading">' . $grid_data['heading'] . '</h3>' . $a_end : "";
-        $html_grid_cell .= strlen($grid_data['grid-content']) ?  '<div class="grid-content">' . $grid_data['grid-content'] . '</div>' : "";
+        $html_grid_cell .= strlen($grid_data['heading'] ?? '') ? $a_start . '<h3 class="grid-heading">' . $grid_data['heading'] . '</h3>' . $a_end : "";
+        $html_grid_cell .= strlen($grid_data['grid-content'] ?? '') ?  '<div class="grid-content">' . $grid_data['grid-content'] . '</div>' : "";
 
         // dynamic
-        $html_grid_cell .= strlen($dynamic_content_title) ? $a_start . '<h3 class="grid-heading">' . $dynamic_content_title . '</h3>' . $a_end : "";
-        $html_grid_cell .= strlen($dynamic_content) ?  '<div class="grid-content">' . $dynamic_content . '</div>' : "";
+        $html_grid_cell .= strlen($dynamic_content_title ?? '') ? $a_start . '<h3 class="grid-heading">' . $dynamic_content_title . '</h3>' . $a_end : "";
+        $html_grid_cell .= strlen($dynamic_content ?? '') ?  '<div class="grid-content">' . $dynamic_content . '</div>' : "";
 
         if (strlen($a_href)) {
             $html_grid_cell .= '<div class="grid-split"></div>';
-            $html_grid_cell .= strlen($grid_data['link']) ? '<div class="grid-link"><a href="'.$a_href.'" class="read-more">'.$grid_data['link'].'</a></div>' : '';
+            $html_grid_cell .= strlen($grid_data['link'] ?? '') ? '<div class="grid-link"><a href="'.$a_href.'" class="read-more">'.$grid_data['link'].'</a></div>' : '';
         }
 
         $grid_image_y = (int)$grid_data['grid-image-y'];

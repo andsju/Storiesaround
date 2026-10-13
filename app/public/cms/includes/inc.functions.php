@@ -505,6 +505,8 @@ function utc_dtz($utc, $dtz, $format)
  * $utc = datetime, $dtz = DateTimeZone (Europe/Stockholm | Europe/London), $format = string like 'Y-m-d H:i:s' (http://www.php.net/manual/en/function.date.php)
  * returns string '----' if date not validates (like MySQL default value 0000-00-00 00:00:00)
  *
+ * Invalid or empty timezones fall back to formatting the UTC value without conversion.
+ *
  * @param $utc
  * @param $dtz
  * @param $format
@@ -512,14 +514,30 @@ function utc_dtz($utc, $dtz, $format)
  */
 function get_utc_dtz($utc, $dtz, $format)
 {
-    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format))) {
-        if (isValidDateTime($utc)) {
+    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format)) && isValidDateTime($utc)) {
+        try {
             $dt = new DateTime($utc, new DateTimeZone($dtz));
             $offset = $dt->getOffset();
             $dt->modify('+' . intval($offset) . 'seconds');
-            return $dt->format($format);
+            $result = $dt->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // invalid timezone or formatting failure - fall back below
+        }
+
+        try {
+            $result = (new DateTime($utc))->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // $format itself is unusable - fall through to the sentinel below
         }
     }
+
+    return '----';
 }
 
 
