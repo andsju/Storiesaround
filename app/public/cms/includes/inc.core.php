@@ -176,10 +176,21 @@ function db_connect()
     }
 }
 
+/* ensure the log directory exists before writing to it
+-------------------------------------------------- */
+function ensure_log_dir_exists()
+{
+    $log_dir = CMS_ABSPATH . '/log';
+    if (!is_dir($log_dir)) {
+        mkdir($log_dir, 0755, true);
+    }
+}
+
 /* handle PDOException
 -------------------------------------------------- */
 function handle_pdo_exception($script, $e)
 {
+    ensure_log_dir_exists();
     $file = CMS_ABSPATH . '/log/pdo_exception.txt';
 
     $date = date('Y-m-d H:i:s');
@@ -209,6 +220,7 @@ function handle_pdo_exception($script, $e)
 function my_error_handler($errno, $errstr, $errfile, $errline)
 {
 
+    ensure_log_dir_exists();
     $file = CMS_ABSPATH . '/log/php_error.txt';
     // new message
     $date = date('Y-m-d H:i:s');
@@ -234,6 +246,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline)
 function write_debug($s)
 {
 
+    ensure_log_dir_exists();
     $file = CMS_ABSPATH . '/log/php_debug.txt';
     $contents = "";
     $number_of_arguments = func_num_args();
