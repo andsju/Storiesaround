@@ -44,7 +44,10 @@ define('CMS_DIR', substr(CMS_ABSPATH, strlen($_SERVER['DOCUMENT_ROOT'])));
 $_SESSION['CMS_DIR'] = CMS_DIR;
 
 // CMS_PATH
-define('CMS_PATH', $_SERVER['SERVER_NAME'] . CMS_DIR);
+// Use HTTP_HOST (not SERVER_NAME/SERVER_PORT) so the resulting URL includes the
+// port the client actually used (e.g. the 8092 dev port mapped by docker-compose),
+// since SERVER_PORT only reflects Apache's internal port inside the container.
+define('CMS_PATH', $_SERVER['HTTP_HOST'] . CMS_DIR);
 
 // CMS_URL
 define('CMS_URL', "http" . (($_SERVER['SERVER_PORT'] == 443) ? "s://" : "://") . CMS_PATH);

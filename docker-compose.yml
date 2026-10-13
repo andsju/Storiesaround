@@ -3,6 +3,11 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        environment:
+            # Set to "false" to allow plain HTTP during local development (skips the
+            # forced HTTPS redirect in app/public/.htaccess). Omit, or set to "true",
+            # to keep the default behaviour of always redirecting to HTTPS.
+            - FORCE_HTTPS=false
         volumes:
             - ./app/public:/var/www/html
             - ./configurations/php.ini:/usr/local/etc/php/php.ini

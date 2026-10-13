@@ -139,3 +139,26 @@ WHERE caption LIKE '%&Aring;%'
    OR caption LIKE '%&Ouml;%'
    OR caption LIKE '%&ouml;%';   
 ```
+
+
+
+Problembeskrivning
+
+Projektet dirigerar nu automatiskt till https
+Jag vill under utveckling av kod kunna använda http 
+
+Vilka filer påverkar nu vilket protokoll som är aktivt
+Hur kan jag på ett enkelt sätt konfigurera vilket protokoll som ska gälla
+
+Analysera koden och svara först vilka alternativ som finns
+
+---
+
+
+Jag startade om docker projektet och försökte accessa applikationen med http
+
+`http://localhost:8092/`
+
+En redirect i applikationen blev responsen och error connection refused, status 302
+
+`http://localhost/cms`
