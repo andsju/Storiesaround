@@ -959,24 +959,29 @@ if (isset($_POST['token'])) {
 				
 				
 				case 'save_site_header_setup_image':
-					
-					$header_image = json_encode($_POST['header_image']);
-					$header_caption = json_encode($_POST['header_caption']);
-					$header_caption_align = json_encode($_POST['header_caption_align']);
-					$header_caption_vertical_align = json_encode($_POST['header_caption_vertical_align']);					
-					$header_caption_show = (int) filter_input(INPUT_POST, 'header_caption_show', FILTER_VALIDATE_INT);
-					$header_image_timeout = $_POST['header_image_timeout'];
-					$header_image_fade = $_POST['header_image_fade'];
+				
+					$header = json_decode($_POST['header'], true);
+
+					if (!is_array($header)) {
+						http_response_code(400);
+						echo 'Invalid header data';
+						break;
+					}
+
+					$header = json_encode(
+						$header,
+						JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+					);
+
 					$landing_page = (int) filter_input(INPUT_POST, 'landing_page', FILTER_VALIDATE_INT);
-					$parallax_scroll = (int) filter_input(INPUT_POST, 'parallax_scroll', FILTER_VALIDATE_INT);
 					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					
-					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $header_image_timeout, $header_image_fade, $landing_page, $parallax_scroll, $utc_modified);
+					$result = $pages->updatePagesSetupSiteHeaderImage($pages_id, $header, $landing_page, $utc_modified);
 					if($result) {
 						$history = new History();
-						$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('site header image', $header_image), $users_id, $_SESSION['token'], $utc_modified);
-					}
-					
+						$history->setHistory($pages_id, 'pages_id', 'UPDATE', describe('site header image', $header), $users_id, $_SESSION['token'], $utc_modified);
+					}					
+
 				break;
 	
 
@@ -2245,25 +2250,21 @@ if (isset($_POST['token'])) {
 				$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 
 				// get parent page common settings as template
-				$meta_additional = $meta_robots = $tag = $stories_filter = $selections = null;
-				$header_caption_show = $template = 0;
-				$header_image = $header_caption = json_encode(array());
+				// $meta_additional = $meta_robots = $tag = $stories_filter = $selections = null;
+				// $header_caption_show = $template = 0;
+				// $header_image = $header_caption = json_encode(array());
 
 				$r = $pages->getPagesAsTemplate($parent_id);
 				if($r) {
 					$meta_additional = $r['meta_additional'];
 					$meta_robots = $r['meta_robots'];
 					$tag = $r['tag'];
-					$header_image = $r['header_image'];
-					$header_caption = $r['header_caption'];
-					$header_caption_align = $r['header_caption_align'];
-					$header_caption_vertical_align = $r['header_caption_vertical_align'];
-					$header_caption_show = $r['header_caption_show'];					
+					$header = $r['header'];
 					$template = $r['template'];
 					$stories_filter = $r['stories_filter'];
 					$selections = $r['selections'];
 					
-					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template);
+					$lastInsertId = $pages->setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header, $template);
 					
 					if (!is_dir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId)) {
 						mkdir(CMS_ABSPATH."/content/uploads/pages/".$lastInsertId, 0777);
@@ -2429,7 +2430,6 @@ if (isset($_POST['token'])) {
 			
 			return $result;
 		}
-		
 		
 		if ($action == 'calendar_categories') { 
 	

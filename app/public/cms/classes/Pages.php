@@ -68,18 +68,16 @@ class Pages extends Database
      * @param string $tag
      * @param string $stories_filter
      * @param string $selections
-     * @param string $header_image
-     * @param string $header_caption
-     * @param string $header_caption_show
+     * @param string $header
      * @param int $template
      * @return integer
      */
-    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $template)
+    public function setPagesAddChildPage($title, $parent_id, $parent, $position, $category_position, $access, $status, $utc_modified, $meta_additional, $meta_robots, $tag, $stories_filter, $selections, $header, $template)
     {
         try {
             $sql_insert = "INSERT INTO pages 
-			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template) VALUES
-			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header_image, :header_caption, :header_caption_align, :header_caption_vertical_align, :header_caption_show, :template)";
+			(title, parent_id, parent, position, category_position, access, status, utc_modified, meta_additional, meta_robots, tag, stories_filter, selections, header, template) VALUES
+			(:title, :parent_id, :parent, :position, :category_position, :access, :status, :utc_modified, :meta_additional, :meta_robots, :tag, :stories_filter, :selections, :header, :template)";
 
             $stmt = $this->db->prepare($sql_insert);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -95,11 +93,7 @@ class Pages extends Database
             $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
             $stmt->bindParam(':stories_filter', $stories_filter, PDO::PARAM_STR);
             $stmt->bindParam(':selections', $selections, PDO::PARAM_STR);
-            $stmt->bindParam(':header_image', $header_image, PDO::PARAM_STR);
-            $stmt->bindParam(':header_caption', $header_caption, PDO::PARAM_STR);
-            $stmt->bindParam(':header_caption_align', $header_caption_align, PDO::PARAM_STR);
-            $stmt->bindParam(':header_caption_vertical_align', $header_caption_vertical_align, PDO::PARAM_STR);
-            $stmt->bindParam(':header_caption_show', $header_caption_show, PDO::PARAM_INT);
+            $stmt->bindParam(':header', $header, PDO::PARAM_STR);
             $stmt->bindParam(':template', $template, PDO::PARAM_INT);
             $stmt->execute();
             return $this->db->lastInsertId('pages_id');
@@ -1322,24 +1316,18 @@ class Pages extends Database
 
     /**
      * @param int $pages_id
-     * @param string $header_image
+     * @param string $header
+     * @param string $landing_page
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesSetupSiteHeaderImage($pages_id, $header_image, $header_caption, $header_caption_align, $header_caption_vertical_align, $header_caption_show, $header_image_timeout, $header_image_fade, $landing_page, $parallax_scroll, $utc_modified)
+    public function updatePagesSetupSiteHeaderImage($pages_id, $header, $landing_page, $utc_modified)
     {
         try {
-            $stmt = $this->db->prepare("UPDATE pages SET header_image =:header_image, header_caption =:header_caption, header_caption_align =:header_caption_align, header_caption_vertical_align =:header_caption_vertical_align, header_caption_show =:header_caption_show, header_image_timeout =:header_image_timeout, header_image_fade =:header_image_fade, landing_page =:landing_page, parallax_scroll =:parallax_scroll, utc_modified = :utc_modified WHERE pages_id =:pages_id");
+            $stmt = $this->db->prepare("UPDATE pages SET header =:header, landing_page =:landing_page, utc_modified = :utc_modified WHERE pages_id =:pages_id");
             $stmt->bindParam(":pages_id", $pages_id, PDO::PARAM_INT);
-            $stmt->bindParam(":header_image", $header_image, PDO::PARAM_STR);
-            $stmt->bindParam(":header_caption", $header_caption, PDO::PARAM_STR);
-            $stmt->bindParam(":header_caption_align", $header_caption_align, PDO::PARAM_STR);
-            $stmt->bindParam(":header_caption_vertical_align", $header_caption_vertical_align, PDO::PARAM_STR);
-            $stmt->bindParam(":header_caption_show", $header_caption_show, PDO::PARAM_INT);
-            $stmt->bindParam(":header_image_timeout", $header_image_timeout, PDO::PARAM_INT);
-            $stmt->bindParam(":header_image_fade", $header_image_fade, PDO::PARAM_STR);
+            $stmt->bindParam(":header", $header, PDO::PARAM_STR);
             $stmt->bindParam(":landing_page", $landing_page, PDO::PARAM_INT);
-            $stmt->bindParam(":parallax_scroll", $parallax_scroll, PDO::PARAM_INT);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -2695,7 +2683,7 @@ class Pages extends Database
     public function getPagesAsTemplate($id)
     {
         $rows = null;
-        $sql = "SELECT meta_additional, meta_robots, tag, header_image, header_caption, header_caption_align, header_caption_vertical_align, header_caption_show, template, stories_filter, selections
+        $sql = "SELECT meta_additional, meta_robots, tag, header, template, stories_filter, selections
 		FROM pages 
 		WHERE pages_id = :pages_id";
 

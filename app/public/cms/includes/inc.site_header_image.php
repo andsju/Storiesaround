@@ -1,43 +1,129 @@
-<?php if (!defined('VALID_INCL')) {die();} ?>
-<div id="site-header-image" class="slideshow-cycle-wrapper parallax">
-	<?php
-	// header_image between square brackets
+<?php if (!defined('VALID_INCL')) {
+	die();
+}
 
-	if (is_null($arr['header_image'])) {
-		return;
-	}
+$header = $arr ? json_decode($arr['header'], true) : array();
 
-	if (preg_match("/\[.*?\]/", $arr['header_image'])) {
+$header_items = isset($header['items']) && is_array($header['items'])
+	? $header['items']
+	: array();
 
-		$header_image = json_decode($arr['header_image']);
-		$header_caption = json_decode($arr['header_caption']);
-		$header_caption_align = json_decode($arr['header_caption_align']);
-		$header_caption_vertical_align = json_decode($arr['header_caption_vertical_align']);
-		$type = strtolower(gettype($header_image));
+$header_caption_show = !empty($header['header_caption_show']);
+$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png', 'mp4');
 
-		if ($type == "null") {
-			echo '<img src="'. CMS_DIR .'/content/uploads/header/'. $_SESSION['site_header_image'] .'" alt="">';
+echo '<div id="site-header-image" class="slideshow-cycle-wrapper parallax">';
+
+if (count($header_items) > 0) {
+
+	foreach ($header_items as $item) {
+
+		if (!is_array($item) || empty($item['file'])) {
+			continue;
+		}
+
+		$file = basename($item['file']);
+		$extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+		if (!in_array($extension, $allowed_extensions, true)) {
+			continue;
+		}
+
+		$caption = isset($item['caption']) ? $item['caption'] : '';
+		$caption_align = isset($item['align']) ? $item['align'] : 'center';
+		$caption_vertical_align = isset($item['vertical_align'])
+			? $item['vertical_align']
+			: 'middle';
+
+		$valid_alignments = array('left', 'center', 'right');
+		$valid_vertical_alignments = array('top', 'middle', 'bottom');
+
+		if (!in_array($caption_align, $valid_alignments, true)) {
+			$caption_align = 'center';
+		}
+
+		if (!in_array($caption_vertical_align, $valid_vertical_alignments, true)) {
+			$caption_vertical_align = 'middle';
+		}
+
+		$file_url = CMS_DIR . '/content/uploads/header/' . rawurlencode($file);
+
+		$caption = $header_caption_show ? $caption : '';
+
+		$caption_html = htmlspecialchars(
+			$caption,
+			ENT_QUOTES,
+			'UTF-8'
+		);
+
+		$caption_align_html = htmlspecialchars(
+			$caption_align,
+			ENT_QUOTES,
+			'UTF-8'
+		);
+
+		$caption_vertical_align_html = htmlspecialchars(
+			$caption_vertical_align,
+			ENT_QUOTES,
+			'UTF-8'
+		);
+
+		$file_url_html = htmlspecialchars(
+			$file_url,
+			ENT_QUOTES,
+			'UTF-8'
+		);
+
+		if ($extension === 'mp4') {
+
+			echo '<video'
+				. ' class="slideshow-cycle-image"'
+				. ' data-caption="' . $caption_html . '"'
+				. ' data-caption-align="' . $caption_align_html . '"'
+				. ' data-caption-vertical-align="' . $caption_vertical_align_html . '"'
+				. ' autoplay'
+				. ' loop'
+				. ' muted'
+				. ' playsinline>'
+				. '<source src="' . $file_url_html . '" type="video/mp4">'
+				. '</video>';
 		} else {
-			if (count($header_image)) {	
-				for ($i = 0; $i < count($header_image); $i++) {
-					$parts = explode(".", $header_image[$i]);
-					// $caption = $arr['header_caption_show'] == 1 ? $header_caption[$i] : "";
-					$caption = count($header_caption) > 0 ? $header_caption[$i] : "";
-					$caption_align = count($header_caption_align) > 0 ? $header_caption_align[$i] : 'center';
-					$caption_vertical_align = count($header_caption_vertical_align) > 0 ? $header_caption_vertical_align[$i] : 'middle';
-					if ($parts[1] == "mp4") {
-						// black loading: poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
-						echo '<video class="slideshow-cycle-image" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" data-caption-vertical-align="'. $caption_vertical_align .'" autoplay loop muted><source src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'"></video>';
-					} else {
-						echo '<img src="'. CMS_DIR .'/content/uploads/header/'. $header_image[$i] .'" alt="'. $caption .'" data-caption="'. $caption .'" data-caption-align="'. $caption_align .'" data-caption-vertical-align="'. $caption_vertical_align .'" class="slideshow-cycle-image">';	
-					}
-				}
-			}
+
+			echo '<img'
+				. ' src="' . $file_url_html . '"'
+				. ' alt="' . $caption_html . '"'
+				. ' data-caption="' . $caption_html . '"'
+				. ' data-caption-align="' . $caption_align_html . '"'
+				. ' data-caption-vertical-align="' . $caption_vertical_align_html . '"'
+				. ' class="slideshow-cycle-image">';
 		}
 	}
-if ($arr['search_field_area'] == 2) {
-	print_search_field_area_page($languages);
+	
+} else {
+
+	$fallback_file = isset($_SESSION['site_header_image'])
+		? basename($_SESSION['site_header_image'])
+		: '';
+
+	if ($fallback_file !== '') {
+		$fallback_extension = strtolower(
+			pathinfo($fallback_file, PATHINFO_EXTENSION)
+		);
+
+		if (in_array($fallback_extension, $allowed_extensions, true)) {
+			$fallback_url = CMS_DIR
+				. '/content/uploads/header/'
+				. rawurlencode($fallback_file);
+
+			echo '<img'
+				. ' src="' . htmlspecialchars($fallback_url, ENT_QUOTES, 'UTF-8') . '"'
+				. ' alt=""'
+				. ' class="slideshow-cycle-image">';
+		}
+	}
 }
+
 ?>
+
 </div>
+
 <div id="site-header-caption"></div>

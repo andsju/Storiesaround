@@ -135,6 +135,7 @@ if ($id == null && count($request_parts)) {
 
 $sample = false;
 
+$header = $arr ? json_decode($arr['header'], true) : array();
 
 // get this page widgets
 $pages_widgets = new PagesWidgets();
@@ -436,10 +437,10 @@ $add_id_landing_page = $arr['landing_page'] == 0 ? "" : "landing-page";
                                                                 } ?>">
     <input type="hidden" name="site_language" id="site_language" value="<?php echo $_SESSION['site_language']; ?>">
     <input type="hidden" name="stories_equal_height" id="stories_equal_height" value="<?php echo $arr['stories_equal_height']; ?>">
-    <input type="hidden" name="parallax_scroll" id="parallax_scroll" value="<?php echo $arr['parallax_scroll']; ?>">
-    <input type="hidden" name="header_caption_show" id="header_caption_show" value="<?php echo $arr['header_caption_show']; ?>">
-    <input type="hidden" name="header_image_timeout" id="header_image_timeout" value="<?php echo $arr['header_image_timeout']; ?>">
-    <input type="hidden" name="header_image_fade" id="header_image_fade" value="<?php echo $arr['header_image_fade']; ?>">
+    <input type="hidden" name="parallax_scroll" id="parallax_scroll" value="<?= $header['parallax_scroll'] ?? 0 ?>">
+    <input type="hidden" name="header_caption_show" id="header_caption_show" value="<?= $header['header_caption_show'] ?? 0 ?>">
+    <input type="hidden" name="header_image_timeout" id="header_image_timeout" value="<?= $header['header_image_timeout'] ?? 10000 ?>">
+    <input type="hidden" name="header_image_fade" id="header_image_fade" value="<?= $arr['header_image_fade'] ?? 'normal' ?>">
 
     <?php
     $js_files = array_unique($js_files);

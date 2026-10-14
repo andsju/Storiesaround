@@ -147,6 +147,15 @@ $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_
 $sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_columns");
 
 
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "header_image");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "header_caption");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_align");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_vertical_align");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "header_caption_show");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "header_image_timeout");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "parallax_scroll");
+$sqls_alter_drop_column[] = array("tbl_name" => "pages", "col_name" => "stories_columns");
+
 
 $sqls[] = "ALTER TABLE `calendar_categories`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 $sqls[] = "ALTER TABLE `calendar_categories_rights`ENGINE=InnoDB, CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
