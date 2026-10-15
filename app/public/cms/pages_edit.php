@@ -980,6 +980,18 @@ foreach ($js_files as $js): ?>
 			});
 		});
 
+		$('#btn_site_header_reset').click(function(event) {
+			event.preventDefault();
+
+			$("#directory_view_slides .header-images").each(function() {
+				$(this).remove();
+			});
+
+			$("#directory_view .image_mark").each(function() {
+				$(this).prop("checked", false);
+			});
+		});
+
 		$('#btn_site_header_setup').click(function(event) {
 			event.preventDefault();
 
@@ -3169,16 +3181,17 @@ if (is_array($check_edit)) {
 						<h4><i class="fas fa-eye" aria-hidden="true"></i> Header settings</h4>
 						<p>
 							<span class="toolbar"><button id="btn_site_header_setup" value="btn_site_header_setup">Save</button></span>
+							<span class="toolbar"><button id="btn_site_header_reset" value="btn_site_header_reset">Reset</button></span>
 							<span id="ajax_spinner_header_image" style="display:none;"><img src="css/images/spinner.gif"></span>
 							<span id="ajax_status_header_image" style="display:none;"></span>
 						</p>
 					</td>
 					<td style="vertical-align:top">
 						<div style="margin:5px 0;">
-							<input type="checkbox" name="landing_page" id="landing_page" value="1" <?= $arr['landing_page'] == 1 ? ' checked' : ''?>> Apply CSS class 'landing-page" to body element (use full size header image)
+							<input type="checkbox" name="landing_page" id="landing_page" value="1" <?= $arr['landing_page'] == 1 ? ' checked' : '' ?>> Apply CSS class 'landing-page" to body element (use full size header image)
 						</div>
 						<div style="margin:5px 0;">
-							<input type="checkbox" name="header_parallax_scroll" id="header_parallax_scroll" value="1" <?= $header['header_parallax_scroll'] == 1 ? ' checked' : ''?>> Apply parallax scrolling effect to header content
+							<input type="checkbox" name="header_parallax_scroll" id="header_parallax_scroll" value="1" <?= $header['header_parallax_scroll'] == 1 ? ' checked' : '' ?>> Apply parallax scrolling effect to header content
 						</div>
 						<div style="margin:5px 0;">
 							<input type="checkbox" name="header_caption_show" id="header_caption_show" value="1" <?= $header['header_caption_show'] == 1 ? ' checked' : '' ?>> Show media caption
@@ -3488,9 +3501,9 @@ if (is_array($check_edit)) {
 						<h4><i class="fas fa-paw" aria-hidden="true"></i> Breadcrumb</h4>
 
 						<p>
-							<input type="radio" name="breadcrumb" value="0" <?= $arr['breadcrumb'] == 0 ? 'checked' : '' ?>> hide | 
-							<input type="radio" name="breadcrumb" value="1" <?= $arr['breadcrumb'] == 1 ? 'checked' : '' ?>> show (default) | 
-							<input type="radio" name="breadcrumb" value="2" <?= $arr['breadcrumb'] == 2 ?  'checked' : ''?>> show + children (select) | 
+							<input type="radio" name="breadcrumb" value="0" <?= $arr['breadcrumb'] == 0 ? 'checked' : '' ?>> hide |
+							<input type="radio" name="breadcrumb" value="1" <?= $arr['breadcrumb'] == 1 ? 'checked' : '' ?>> show (default) |
+							<input type="radio" name="breadcrumb" value="2" <?= $arr['breadcrumb'] == 2 ?  'checked' : '' ?>> show + children (select) |
 							<input type="radio" name="breadcrumb" value="3" <?= $arr['breadcrumb'] == 3 ?  'checked' : '' ?>> show + children (ul)
 						</p>
 
@@ -5087,56 +5100,56 @@ if (is_array($check_edit)) {
 																											echo '</td>';
 																											echo '<td class="paging">';
 																											?><input type="checkbox" name="rights_read[]" id="rights_read[]" title="read" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_read'] == 1) {
-																																																														echo 'checked';
-																																																													} ?> /><?php
-																																								echo '</td>';
-																																								echo '<td class="paging">';
-																																								?><input type="checkbox" name="rights_edit[]" id="rights_edit[]" title="edit" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_edit'] == 1) {
-																																																																																				echo 'checked';
-																																																																																			} ?> /><?php
-																																								echo '</td>';
-																																								echo '<td class="paging">';
-																																								?><input type="checkbox" name="rights_create[]" id="rights_create[]" title="create" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_create'] == 1) {
-																																																																																						echo 'checked';
-																																																																																					} ?> /><?php
-																																										echo '</td>';
-																																										echo '<td class="paging">';
-																																										?><span class="toolbar"><button class="btn_delete_rights" value="<?php echo $r['pages_rights_id']; ?>">Delete</button></span><?php
-																																																																																						echo '</td>';
-																																																																																						echo '</tr>';
-																																																																																					}
-																																																																																					foreach ($groups_rights as $r) {
-																																																																																						?><input type="hidden" name="r_id[]" id="r_id[]" value="<?php echo $r['pages_rights_id']; ?>" /><?php
-																																																																																						// switch odd-even
-																																																																																						$class = ($class == 'even') ? 'odd' : 'even';
-																																																																																						echo '<tr id="row-' . $r['pages_rights_id'] . '" class="paging_' . $class . '">';
-																																																																																						echo '<td class="paging">';
-																																																																																						echo $r['title'] . ' (group)';
-																																																																																						echo '</td>';
-																																																																																						echo '<td class="paging">';
-																																																															?><input type="checkbox" name="rights_read[]" id="rights_read[]" title="read" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_read'] == 1) {
-																																																																																							echo 'checked';
-																																																																																						} ?> /><?php
-																																																																																						echo '</td>';
-																																																																																						echo '<td class="paging">';
-																																									?><input type="checkbox" name="rights_edit[]" id="rights_edit[]" title="edit" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_edit'] == 1) {
-																																																																																							echo 'checked';
-																																																																																						} ?> /><?php
-																																																																																						echo '</td>';
-																																																																																						echo '<td class="paging">';
-																																									?><input type="checkbox" name="rights_create[]" id="rights_create[]" title="create" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_create'] == 1) {
-																																																																																							echo 'checked';
-																																																																																						} ?> /><?php
-																																																																																						echo '</td>';
-																																																																																						echo '<td class="paging">';
-																																										?><span class="toolbar"><button class="btn_delete_rights" value="<?php echo $r['pages_rights_id']; ?>">Delete</button></span><?php
-																																																																																						echo '</td>';
-																																																																																						echo '</tr>';
-																																																																																						echo '</tbody>';
-																																																																																					}
-																																																																																					echo '</table>';
+																																																											echo 'checked';
+																																																										} ?> /><?php
+																																																															echo '</td>';
+																																																															echo '<td class="paging">';
+																																																															?><input type="checkbox" name="rights_edit[]" id="rights_edit[]" title="edit" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_edit'] == 1) {
+																																																																								echo 'checked';
+																																																																							} ?> /><?php
+																																																																																					echo '</td>';
+																																																																																					echo '<td class="paging">';
+																																																																																					?><input type="checkbox" name="rights_create[]" id="rights_create[]" title="create" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_create'] == 1) {
+																																																																										echo 'checked';
+																																																																									} ?> /><?php
+																																																																																							echo '</td>';
+																																																																																							echo '<td class="paging">';
+																																																																																							?><span class="toolbar"><button class="btn_delete_rights" value="<?php echo $r['pages_rights_id']; ?>">Delete</button></span><?php
+																																																																										echo '</td>';
+																																																																										echo '</tr>';
+																																																																									}
+																																																																									foreach ($groups_rights as $r) {
+																																																																										?><input type="hidden" name="r_id[]" id="r_id[]" value="<?php echo $r['pages_rights_id']; ?>" /><?php
+																																																																																																														// switch odd-even
+																																																																																																														$class = ($class == 'even') ? 'odd' : 'even';
+																																																																																																														echo '<tr id="row-' . $r['pages_rights_id'] . '" class="paging_' . $class . '">';
+																																																																																																														echo '<td class="paging">';
+																																																																																																														echo $r['title'] . ' (group)';
+																																																																																																														echo '</td>';
+																																																																																																														echo '<td class="paging">';
+																																																																																																														?><input type="checkbox" name="rights_read[]" id="rights_read[]" title="read" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_read'] == 1) {
+																																																																																															echo 'checked';
+																																																																																														} ?> /><?php
+																																																																																								echo '</td>';
+																																																																																								echo '<td class="paging">';
+																																																																																								?><input type="checkbox" name="rights_edit[]" id="rights_edit[]" title="edit" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_edit'] == 1) {
+																																																																											echo 'checked';
+																																																																										} ?> /><?php
+																																																																																								echo '</td>';
+																																																																																								echo '<td class="paging">';
+																																																																																								?><input type="checkbox" name="rights_create[]" id="rights_create[]" title="create" value="<?php echo $r['pages_rights_id']; ?>" <?php if ($r['rights_create'] == 1) {
+																																																																											echo 'checked';
+																																																																										} ?> /><?php
+																																																																																								echo '</td>';
+																																																																																								echo '<td class="paging">';
+																																																																																								?><span class="toolbar"><button class="btn_delete_rights" value="<?php echo $r['pages_rights_id']; ?>">Delete</button></span><?php
+																																																																										echo '</td>';
+																																																																										echo '</tr>';
+																																																																										echo '</tbody>';
+																																																																									}
+																																																																									echo '</table>';
 
-																																																																																						?>
+																																																																										?>
 
 		</p>
 

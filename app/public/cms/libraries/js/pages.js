@@ -1123,13 +1123,12 @@ window.addEventListener('load', (event) => {
 
 // function to fade images
 function fadeSlideshowCycleImages() {
-
+	
 	// check if ready
 	if (swapSlideshowCycleImagesStart === false) {
 		return;
 	}
 
-	// get images
 	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
 
 	// just one image
