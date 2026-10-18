@@ -438,8 +438,7 @@ $(document).ready(function () {
 
 	$("#site-login-icon").click(function (event) {
 		event.preventDefault();
-		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/login.php";
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/login.php`;
 	});
 
 	$("#site-admin-icon").click(function (event) {

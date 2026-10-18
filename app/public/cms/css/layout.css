@@ -169,12 +169,9 @@ a#site-name-link:hover {
     cursor: pointer;
 }
 a#site-name-link div {
-    font-size: 1.7em;
+    font-size: 1.5em;
     color: black;
     display: block;
-    float: right;
-    margin-left: 20px;
-    margin-top: 20px
 }
 a#site-name-link:hover {
     text-decoration: none;
@@ -1241,7 +1238,7 @@ ul#user_navigation a {
     padding: 3px;
     color: #FFF;
     text-decoration: none;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 ul#user_navigation a:hover {
     background: #333;
@@ -1277,7 +1274,7 @@ li.dropdown ul li a:hover {
 }
 li.toolbar-icons {
     margin: 8px 10px 0 0;
-    font-size: 0.8em !important;
+    font-size: 1rem;
 }
 #user_navigation span.ui-icon {
     background-image: url('../libraries/jquery-ui/images/ui-icons_ffffff_256x240.png');
@@ -2670,6 +2667,19 @@ meta tag width=device-width,initial-scale=1.0
     #wrapper-site-footer {
         padding: 0 10px 0 10px
     }
+    div#wrapper-mobile-site-navigation {
+        position: fixed !important;
+        height: 3rem;
+    }
+    div.menu-button span.touch-button {
+        width: 3rem;
+        height: 3rem;
+        margin-right: .5rem;
+    }
+    
+    div#wrapper-user {
+        height: 3rem;
+    }
 
 
     /* top 
@@ -2718,7 +2728,7 @@ meta tag width=device-width,initial-scale=1.0
         width: 600px;
         height: auto;
         left: 50%;
-        margin-left: -300px;
+        transform: translate(-50%);
     }
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
         width: 800px;
@@ -2778,11 +2788,10 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     a#site-name-link img {
-        height: 40px;
+        height: 24px;
     }
     a#site-name-link div {
-        margin: 10px 0 0 10px;
-        font-size: 1rem;
+        margin: 4px
     }
 
     #site-search-page input[type=text] {
@@ -2962,7 +2971,7 @@ meta tag width=device-width,initial-scale=1.0
         width: 800px;
         height: auto;
         left: 50%;
-        margin-left: -400px;
+        transform: translate(-50%);
     }
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
         width: 1200px;
@@ -3142,10 +3151,10 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     #site-header-image img, #site-header-image video {
-        width: 1000px;
+        width: 1024px;
         height: auto;
-        left: 50%;
-        margin-left: -500px;
+        left: 0;
+        transform: initial
     }
 
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
@@ -3269,6 +3278,7 @@ meta tag width=device-width,initial-scale=1.0
     }
     #wrapper-site-header-image {
         width: 100%;
+        padding: .5rem
     }
 
     #wrapper-page.sidebar-right {
@@ -3337,8 +3347,13 @@ meta tag width=device-width,initial-scale=1.0
 
     div#site-navigation-identity {
         position: relative;
-        padding: 10px
+        padding: 10px;
     }
+ 
+    div#wrapper-user + div#wrapper-site-header {
+        margin-top: 2.5rem
+    }
+
     div#site-navigation-cms {
         position: absolute;
         top: 10px;
@@ -3355,11 +3370,10 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     a#site-name-link img {
-        height: 60px;
+        height: 24px;
     }
     a#site-name-link div {
-        margin: 24px 0 0 10px;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     div#site-navigation-cms {
@@ -3399,18 +3413,16 @@ meta tag width=device-width,initial-scale=1.0
         width: 100%;
         overflow: hidden;
         height: 250px;
+        border: 1px solid;
+        box-shadow: 0px 0px 0.5rem rgba(0, 0, 0, 0.3);
     }
 
 
     #site-header-image img, #site-header-image video {
-
-
         width: 100%;
         height: auto;
         left: 0;
         margin-left: 0;
-
-
     }
 
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
@@ -3629,7 +3641,7 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     #wrapper-site-header {
-        padding: 0 50px;
+        
     }
 
 
@@ -3637,9 +3649,6 @@ meta tag width=device-width,initial-scale=1.0
 
 @media (min-width: 1920px) {
 
-    #site-header-image {
-        height: 480px;
-    }
 }
 
 
@@ -3662,10 +3671,9 @@ meta tag width=device-width,initial-scale=1.0
         width: 100%;
         background-color: black;
         z-index: 999;
-        height: 46px
     }
     nav#site-navigation-mobile {
-        display: none;
+        margin-top: 4px;
     }
     .menu-button .touch-button .navicon {
         font-size: 24px;
