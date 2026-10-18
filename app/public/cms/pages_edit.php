@@ -2964,7 +2964,6 @@ foreach ($js_files as $js): ?>
 <input type="hidden" id="users_id" name="users_id" value="<?php echo $_SESSION['users_id']; ?>">
 <input type="hidden" id="theme" name="theme" value="<?php echo $_SESSION['site_theme']; ?>">
 <input type="hidden" id="parent_id" name="parent_id" value="<?php echo $arr['parent_id']; ?>">
-<!-- <input type="hidden" id="site_header_image" name="site_header_image" value="<?php echo $arr['header_image']; ?>"> -->
 
 <table style="width:100%;">
 	<tr>
@@ -3523,7 +3522,7 @@ if (is_array($check_edit)) {
 						<p>
 							<select id="search_field_area">
 								<?php
-								$search_fields = [0 => "none", 1 => "above header", 2 => "inside header", 3 => "page top", 4 => "page content"];
+								$search_fields = [0 => "none", 1 => "above header", 3 => "page top", 4 => "page content"];
 								if ($search_fields) {
 									foreach ($search_fields as $key => $value) {
 										$selected = $key == $arr['search_field_area'] ? " selected" : "";

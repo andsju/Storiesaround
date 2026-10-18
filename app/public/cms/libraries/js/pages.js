@@ -430,12 +430,6 @@ $(document).ready(function () {
 		$("#site-navigation-mobile").show();
 	});
 
-	$("#search-site-icon").click(function (event) {
-		event.preventDefault();
-		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/pages/sok";
-	});
-
 	$("#site-login-icon").click(function (event) {
 		event.preventDefault();
 		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/login.php`;
@@ -563,6 +557,8 @@ function searchPagesContent() {
 			var limit_start = 0;
 			var action = "pages_search_extended";
 			var token = $("#token").val();
+
+			console.log("find", limit_start, action, token, search);
 			$.ajax({
 				beforeSend: function () {
 					loading = $('#ajax_spinner_pages_search').show()
@@ -588,7 +584,8 @@ function searchPagesContent() {
 						$("#btn-site-search-page-more").show();
 					}
 					$("#pages_search_result_start").val(limit_start + 10);
-				}
+				}				
+				
 			});
 		}
 	}
