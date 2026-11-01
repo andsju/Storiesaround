@@ -177,11 +177,8 @@ if (isset($_POST['token'])) {
 
 				case 'save_seo_link':
 
-					
-					$pages_id_link = sanitize_text($_POST['pages_id_link']);
-					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
-					
-					$result = $pages->updatePagesSeoLink($pages_id, $pages_id_link, $utc_modified);
+					$pages_id_link = sanitize_text($_POST['pages_id_link']);					
+					$result = $pages->updatePagesSeoLink($pages_id, $pages_id_link);
 					
 					if($result) {
 						$history = new History();

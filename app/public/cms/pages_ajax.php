@@ -54,9 +54,9 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 
 			case 'pages_search_extended':
 				$s = trim($_POST['s'] ?? '');
-				$pages_id = trim($_POST['pages_id'] ?? '0');
-				$limit_tree = $_POST['limit_tree'] ?? 0;
-				$limit_start = intval($_POST['limit_start']);
+				$pages_id = (int) $_POST['pages_id'] ?? '0';
+				$limit_tree = (int) $_POST['limit_tree'] ?? 0;
+				$limit_start = (int) ($_POST['limit_start']);
 				$limit = 10;
 				$rows_total = $pages->getPagesSearchWordsRelevanceCount($s, $status=2, $pages_id, $limit_tree);
 				$rows = $pages->getPagesSearchWordsRelevance($s, 2, $pages_id, $limit_tree, $limit_start, $limit);

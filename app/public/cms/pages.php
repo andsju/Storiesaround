@@ -161,7 +161,7 @@ $css_files = array(
     CMS_DIR . '/cms/libraries/jquery-ui/jquery-ui.css',
     CMS_DIR . '/cms/libraries/jquery-colorbox/colorbox.css',
     CMS_DIR . '/cms/libraries/jquery-flexnav/flexnav.css',
-    CMS_DIR . '/cms/css/layout.css'
+    CMS_DIR . '/cms/css/style.css'
 );
 
 $css_files = add_css_themes($css_files);

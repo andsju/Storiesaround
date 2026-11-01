@@ -56,6 +56,8 @@ till
 
 Det innebär att CSS selektorer och egenskaper som nu finns i filen layout.css som enbart används av pages.php ska flyttas till style.css
 
+Filen pages.php inkluderar flera filer och ska fortsatt göra det.
+
 
 Det finns en grundläggande struktur i style.css med media queries som ska följas
 Mobile first ska vara gällande
@@ -77,3 +79,45 @@ Ska justeras till enheten rem enligt följande:
 13-16px => 1rem
 
 Efter flytt ska filen style.css användas istället för layout.css i filen pages.php 
+
+
+
+
+
+
+
+user-toolbar
+user_navigation
+toolbar-icons
+
+
+
+Bearbeta filen style.css
+
+- ersätt enheten `em` med `rem`
+- Använd följande överstättning mellan `px` och `rem`
+
+
+
+1px    1px
+2px    0.2rem
+3px    0.2rem
+4px    0.25rem
+5px    0.3rem
+6px    0.4rem
+7px    0.5rem
+8px    0.5rem
+9px    0.5rem
+10px   0.6rem
+11px   0.7rem
+12px   0.75rem
+13px   0.8rem
+14px   0.8rem
+15px   1rem
+16px   1rem
+
+Fler exempel
+
+20px   1.25rem
+30px   1.8rem
+32px   2rem

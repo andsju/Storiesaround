@@ -112,7 +112,7 @@ class ImageGalleryThumbs extends Widgets {
 						$("<img />").attr("src", input).attr("alt", alt).attr("title", title).attr("data-cycle-caption", caption).attr("style", style_slideshow_extended).appendTo("#slideshow_extended_<?php echo $pages_widgets_id; ?>");
 						// add thumbs
 						var style_thumbs = 'padding:2px 4px 2px 4px;';
-						$("<img />").attr("src", input).attr("width", "50").attr("height", 50*item.ratio).attr("style", style_thumbs).attr("class", "slideshow_extended_thumbs").attr("title", caption).attr("data-caption", caption).appendTo("#slideshow_extended_thumbs_<?php echo $pages_widgets_id; ?>")
+						$("<img />").attr("src", input).attr("width", "80").attr("height", "auto").attr("style", style_thumbs).attr("class", "slideshow_extended_thumbs").attr("title", caption).attr("data-caption", caption).appendTo("#slideshow_extended_thumbs_<?php echo $pages_widgets_id; ?>")
 						.click(function() { 
 							$("#slideshow_extended_<?php echo $pages_widgets_id; ?>").cycle(i); 
 							return false;

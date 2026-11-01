@@ -186,6 +186,7 @@ $(document).ready(function () {
 			var ajax_url = cms_dir + '/cms/pages_ajax.php';
 			var limit_tree = $('input:checkbox[name=search-page-limit-tree]').is(':checked') ? 1 : 0;
 			var pages_id = $("#pages_id").val();
+
 			$.ajax({
 				beforeSend: function () {
 					loading = $('#ajax_spinner_search').show()
@@ -204,7 +205,6 @@ $(document).ready(function () {
 					s: request.term
 				},
 				success: function (data) {
-					console.log(data);
 					data = data.length > 0 ? data : [{
 						title: languages["search_page_not_found"][lang],
 						category: "",
@@ -438,21 +438,21 @@ $(document).ready(function () {
 	$("#site-admin-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/admin.php";
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/admin.php`;
 	});
 
 	$("#site-edit-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		var pages_id = $(this).attr("data-id");
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages_edit.php?id=" + pages_id;
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/pages_edit.php?id=${pages_id}`;
 	});
 
 	$("#site-user-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		var users_id = $("#users_id").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/users_edit.php?id=" + users_id;
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/users_edit.php?id=${users_id}`;
 	});
 
 	// window resize
@@ -550,14 +550,13 @@ function searchPagesContent() {
 	var pages_id = $("#pages_id").val();
 
 	if (pid > 0) {
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages.php?id=" + pid;
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/pages.php?id=${pid}`;
 	} else {
 
 		if (pages_id > 0) {
 			var limit_start = 0;
 			var action = "pages_search_extended";
 			var token = $("#token").val();
-
 			console.log("find", limit_start, action, token, search);
 			$.ajax({
 				beforeSend: function () {

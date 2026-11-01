@@ -832,57 +832,65 @@ class Pages extends Database
      */
     public function getPagesSearchWordsRelevanceSummary($search, $status, $pages_id, $limit_tree)
     {
-        $query_parts = array();
-        $words = preg_replace('/\s+/', ' ', $search);
-        $words = explode(" ", $words);
-        foreach ($words as $word) {
-            $query_parts[] = "'%" . $word . "%'";
-        }
-        $titles = implode(' AND title LIKE ', $query_parts);
-        $contents = implode(' AND content LIKE ', $query_parts);
-        $story_contents = implode(' AND story_content LIKE ', $query_parts);
-        $grid_content = implode(' AND grid_content LIKE ', $query_parts);
-        $tags = implode(' AND tag LIKE ', $query_parts);
-        $pages_id_links = implode(' AND pages_id_link LIKE ', $query_parts);
-
+        $words = preg_split('/\s+/', trim($search), -1, PREG_SPLIT_NO_EMPTY);
+        $params = array();
         $ws = implode(' ', $words);
-        $ws = trim($ws);
+        $params[':ws1'] = "($ws)";
+        $params[':ws2'] = "($ws)";
 
-        $sql = "SELECT title, category, pages_id,  
-		MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE) AS relevance
-		FROM pages 
-		WHERE 
-		( MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST('($ws)' IN NATURAL LANGUAGE MODE)
-			OR title LIKE {$titles}
-			OR content LIKE {$contents} 
-			OR story_content LIKE {$story_contents} 
-            OR grid_content LIKE {$grid_content} 
-			OR tag LIKE {$tags} 
-            OR pages_id_link LIKE {$pages_id_links} 
+        // Builds "col LIKE :p AND col LIKE :p2 ..." with unique placeholders per use
+        $n = 0;
+        $like = function ($column) use ($words, &$params, &$n) {
+            $parts = array();
+            foreach ($words as $word) {
+                $key = ':w' . (++$n);
+                $params[$key] = '%' . $word . '%';
+                $parts[] = "$column LIKE $key";
+            }
+            return $parts ? '(' . implode(' AND ', $parts) . ')' : '0';
+        };
+
+        $titles = $like('title');
+        $contents = $like('content');
+        $story_contents = $like('story_content');
+        $grid_content = $like('grid_content');
+        $tags = $like('tag');
+        $pages_id_links = $like('pages_id_link');
+        $titles_order = $like('title');
+        $tags_order = $like('tag');
+
+        $sql = "SELECT title, category, pages_id,
+		MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST(:ws1 IN NATURAL LANGUAGE MODE) AS relevance
+		FROM pages
+		WHERE
+		( MATCH(title,content,story_content,grid_content,tag,pages_id_link) AGAINST(:ws2 IN NATURAL LANGUAGE MODE)
+			OR {$titles}
+			OR {$contents}
+			OR {$story_contents}
+			OR {$grid_content}
+			OR {$tags}
+			OR {$pages_id_links}
 		)";
 
         if ($status > 0) {
             $sql .= " AND status = :status ";
+            $params[':status'] = (int) $status;
         }
         if ($limit_tree > 0) {
-            $sql .= " AND parent_id = $pages_id ";
+            $sql .= " AND parent_id = :pages_id ";
+            $params[':pages_id'] = (int) $pages_id;
         }
 
         $sql .= " ORDER BY ";
         $sql .= " category_position ASC, ";
         $sql .= " position ASC, ";
-        $sql .= " title LIKE {$titles} ASC, ";
+        $sql .= " {$titles_order} ASC, ";
         $sql .= " relevance DESC, ";
-        $sql .= " tag LIKE {$tags} DESC ";
+        $sql .= " {$tags_order} DESC ";
         $sql .= " LIMIT 1000";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
-        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
-        $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
-        $stmt->bindParam(':limit_tree', $limit_tree, PDO::PARAM_INT);
-
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -932,7 +940,9 @@ class Pages extends Database
         }
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+        if ($status > 0) {
+            $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+        }
 
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1717,7 +1727,7 @@ class Pages extends Database
      * @param string $utc_modified
      * @return bool
      */
-    public function updatePagesSeoLink($pages_id, $pages_id_link, $utc_modified)
+    public function updatePagesSeoLink($pages_id, $pages_id_link)
     {
         try {
             $sql_update = "UPDATE pages
@@ -1728,7 +1738,6 @@ class Pages extends Database
             $stmt = $this->db->prepare($sql_update);
             $stmt->bindParam(':pages_id', $pages_id, PDO::PARAM_INT);
             $stmt->bindParam(':pages_id_link', $pages_id_link, PDO::PARAM_STR);
-            $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);

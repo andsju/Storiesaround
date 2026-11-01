@@ -3190,10 +3190,10 @@ if (is_array($check_edit)) {
 							<input type="checkbox" name="landing_page" id="landing_page" value="1" <?= $arr['landing_page'] == 1 ? ' checked' : '' ?>> Apply CSS class 'landing-page" to body element (use full size header image)
 						</div>
 						<div style="margin:5px 0;">
-							<input type="checkbox" name="header_parallax_scroll" id="header_parallax_scroll" value="1" <?= $header['header_parallax_scroll'] == 1 ? ' checked' : '' ?>> Apply parallax scrolling effect to header content
+							<input type="checkbox" name="header_parallax_scroll" id="header_parallax_scroll" value="1" <?= ($header['header_parallax_scroll'] ?? 0) == 1 ? ' checked' : '' ?>> Apply parallax scrolling effect to header content
 						</div>
 						<div style="margin:5px 0;">
-							<input type="checkbox" name="header_caption_show" id="header_caption_show" value="1" <?= $header['header_caption_show'] == 1 ? ' checked' : '' ?>> Show media caption
+							<input type="checkbox" name="header_caption_show" id="header_caption_show" value="1" <?= ($header['header_caption_show'] ?? 0) == 1 ? ' checked' : '' ?>> Show media caption
 						</div>
 						<div style="margin:5px 0;">
 							<select id="header_image_timeout">
@@ -3202,7 +3202,7 @@ if (is_array($check_edit)) {
 								foreach ($timeouts as $timeout) {
 									$sec = $timeout / 1000;
 									echo '<option value="' . $timeout . '"';
-									if ($header['header_image_timeout'] == $timeout) {
+									if (($header['header_image_timeout'] ?? null) == $timeout) {
 										echo ' selected';
 									}
 									echo '>' . $sec . ' sec</option>';
@@ -3216,7 +3216,7 @@ if (is_array($check_edit)) {
 								$speeds = array("super slow", "slow", "normal", "fast", "super fast");
 								foreach ($speeds as $speed) {
 									echo '<option value="' . $speed . '"';
-									if ($header['header_image_fade'] == $speed) {
+									if (($header['header_image_fade'] ?? null) == $speed) {
 										echo ' selected';
 									}
 									echo '>' . $speed . '</option>';
