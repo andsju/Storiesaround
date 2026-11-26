@@ -1209,12 +1209,15 @@ function swapSlideshowCycleImageCaption() {
 	let captionAlign = images[images.length - 1].getAttribute("data-caption-align");
 	let captionVerticalAlign = images[images.length - 1].getAttribute("data-caption-vertical-align");
 
-	if (caption.length === 0) {
+	if (!caption) {
 		return;
 	};
 
 	// get element
 	let elementCaption = document.querySelector("#site-header-caption");
+	if (!elementCaption) {
+		return;
+	}
 
 	// show caption
 	elementCaption.innerHTML = parseMarkdownCode(caption);

@@ -49,6 +49,13 @@ class Youtube extends Widgets {
 		<script>
 			$(document).ready(function() {
 				var w = <?php echo $width; ?>;
+				const wrapper = document.getElementById("wrapper-content");
+				const style = window.getComputedStyle(wrapper);
+				const padding = style ? parseInt(style.paddingRight) : 0;
+				if (wrapper) {
+					const rect = wrapper.getBoundingClientRect();
+					w = rect.width - padding;
+				}
 				var h = w * 0.5625;			
 				var videoID = "<?php echo $videoID; ?>";
 				var videoDiv = "videoDiv_<?php echo $pages_widgets_id; ?>"; 

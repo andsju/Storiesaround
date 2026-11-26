@@ -204,7 +204,9 @@ if (isset($_POST['token'])){
 						$rows = $db->query( 'SELECT * FROM `' . $table[0] . '`' );
 						$rows->setFetchMode( PDO::FETCH_ASSOC );
 						foreach ( $rows as $row ) {
-							$row = array_map( array( $db, 'quote' ), $row );
+							$row = array_map( function ( $value ) use ( $db ) {
+								return $value === null ? 'NULL' : $db->quote( $value );
+							}, $row );
 							$sql = 'INSERT INTO `' . $table[0] . '` (`' . implode( '`, `', array_keys( $row ) ) . '`) VALUES (' . implode( ', ', $row ) . ');' . PHP_EOL;
 							fwrite( $f, $sql );
 						}

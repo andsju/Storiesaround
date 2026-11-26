@@ -177,6 +177,7 @@ if (isset($_POST['token'])) {
 
 				case 'save_seo_link':
 
+					$utc_modified = utc_dtz(gmdate('Y-m-d H:i:s'), $dtz, 'Y-m-d H:i:s');
 					$pages_id_link = sanitize_text($_POST['pages_id_link']);					
 					$result = $pages->updatePagesSeoLink($pages_id, $pages_id_link);
 					
@@ -877,6 +878,14 @@ if (isset($_POST['token'])) {
 						// get position of right '_'
 						$pos = strrpos($filename, '_');
 
+						$pages = new Pages();
+						$rows = $pages->getPagesImagesSizes($filename, $pages_id);
+						if ($rows === false) {
+							http_response_code(500);
+							echo 'Could not retrieve image sizes';
+							break;
+						}
+
 						// possible image sizes
 						$objImage = new Image();
 						$sizes = $objImage->get_image_sizes();		
@@ -887,13 +896,18 @@ if (isset($_POST['token'])) {
 							}
 						}
 						// delete database saved sizes, includes original image if exists 
-						$pages = new Pages();
-						$rows = $pages->getPagesImagesSizes($filename, $pages_id);
-						$sizes = explode(",", $sizes_in_db);
-						foreach ($sizes as $size) {
-							$f = substr($filename, 0, $pos) .'_'.$size . $ext;
-							if (is_file($p . $f)) {
-								unlink($p . $f);
+						foreach ($rows as $row) {
+							if ($row['sizes'] === null || $row['sizes'] === '') {
+								continue;
+							}
+							foreach (explode(",", $row['sizes']) as $size) {
+								if ($size === '') {
+									continue;
+								}
+								$f = substr($filename, 0, $pos) .'_'.$size . $ext;
+								if (is_file($p . $f)) {
+									unlink($p . $f);
+								}
 							}
 						}
 

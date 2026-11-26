@@ -16,186 +16,180 @@ class ImageGalleryThumbs extends Widgets {
 		$a['title'] = 'ImageGalleryThumbs';
 		$a['description'] = 'Show pages images slideshow';
 		$a['classname'] = 'ImageGalleryThumbs';
-		// acceptable columns: 'sidebar', 'content' or either ''
 		$a['column'] = 'content';
-		// external css in filepath as in libraries, '../libraries/?/?.css
-		$a['css'] = CMS_DIR . '/cms/libraries/jquery-cycle/jquery.cycle2.css';
 		return $a;
     }
-	
 	public function default_objects() {
-		$default = '{"timeout": "7000", "speed": "1000", "ratio": "4:3", "control": "true", "thumbs": "true", "caption": "true", "caption_css": "", "copyright": "true", "tag": ""}';
-		return $default;
-    }
-	
+		return '{"timeout": "7000", "speed": "1000", "ratio": "4:3", "control": "true", "thumbs": "true", "caption": "true", "caption_css": "", "copyright": "true", "tag": ""}';
+	}
+
 	public function default_objects_validate() {
-		// validate objects using FILTER_VALDIDATE_REGEXP and function isValidString()
-		$default_validate = '{"timeout": "milliseconds", "speed": "milliseconds", "ratio": "ratio", "control": "boolean", "thumbs": "boolean", "caption": "boolean", "caption_css": "css", "copyright": "boolean", "tag": "alphanumerical"}';
-		return $default_validate;
-   }
+		return '{"timeout": "milliseconds", "speed": "milliseconds", "ratio": "ratio", "control": "boolean", "thumbs": "boolean", "caption": "boolean", "caption_css": "css", "copyright": "boolean", "tag": "alphanumerical"}';
+	}
 
 	public function help() {
-		// help text to show in form
-		$help = '{"timeout": "slideshow duration in milliseconds (100ms interval 100ms-1 second | 1000 ms interval 1-60 seconds)", "speed": "slideshow transitions speed milliseconds (100ms interval 100ms-1 second | 1000 ms interval 1-60 seconds)", "ratio": "set width:height ratio, allowed -> 1:1, 4:3, 16:9, 21:9 (crop image & adjust vertical)", "control": "show slideshow control", "thumbs": "show navigation thumbs", "caption": "true or false", "caption_css": "inline css styling caption", "copyright": "show copyright, set caption to true", "tag": "filter images"}';
-		return $help;
-   }
-
-	private function transl($text) {
-		$a = array(
-			"english" => array("Open Gallery" => "Open Gallery", "images" => "images", "Photo:" => "Photo:"), 
-			"swedish" => array("Open Gallery" => "Öppna Galleri", "images" => "bilder", "Photo:" => "Foto:"));
-
-		$l = isset($_SESSION['language']) ? $_SESSION['language'] : null;
-		if(!$l) {
-			$l = isset($_SESSION['site_language']) ? $_SESSION['site_language'] : null;
-		} 
-		$s = $l ? $a[$l][$text] : $text;
-		echo $s;
+		return '{"timeout": "slideshow duration in milliseconds (0 disables autoplay)", "speed": "slideshow transition speed in milliseconds", "ratio": "image width:height ratio, e.g. 1:1, 4:3, 16:9, 21:9", "control": "show slideshow controls", "thumbs": "show navigation thumbs", "caption": "show image caption", "caption_css": "inline css styling caption", "copyright": "show creator or copyright in the caption", "tag": "filter images"}';
 	}
-   
-	public function run($action, $pages_widgets_id=null, $pages_id=null, $width=null) {
 
-		// return objects in an associative array
-		$objects = json_decode($action, true);
+	public function run($action, $pages_widgets_id = null, $pages_id = null, $width = null) {
+		$objects = json_decode($action ?? '', true);
 		$defaults = json_decode($this->default_objects(), true);
-		$timeout = isset($objects['timeout']) ? $objects['timeout'] : $defaults['timeout'];
-		$speed = isset($objects['speed']) ? $objects['speed'] : $defaults['speed'];
-		$ratio = isset($objects['ratio']) ? $objects['ratio'] : $defaults['ratio'];
-		if(strstr($ratio,':')) {
-			$wh = explode(':', $ratio);
-			$wish_ratio = $wh[1]/$wh[0];
-		} else {
-			$wish_ratio = 1;
-		}
-		$tag = isset($objects['tag']) ? $objects['tag'] : $defaults['tag'];
-		$control = isset($objects['control']) ? $objects['control'] : $defaults['control'];
-		$thumbs = isset($objects['thumbs']) ? $objects['thumbs'] : $defaults['thumbs'];
-		$caption = isset($objects['caption']) ? $objects['caption'] : $defaults['caption'];
-		$caption_css = isset($objects['caption_css']) ? $objects['caption_css'] : $defaults['caption_css'];
-		$copyright = isset($objects['copyright']) ? $objects['copyright'] : $defaults['copyright'];		
-		?>		
-		
-		<script>
-			
-			$(document).ready(function() {
-
-				var token = "<?php echo $_SESSION['token']; ?>";
-				var id = <?php echo $pages_widgets_id; ?>;
-				var tag = "<?php echo $tag; ?>";
-				var cms_dir = "<?php echo $_SESSION['CMS_DIR']; ?>";
-				var photo = "<?php echo $this->transl("Photo:"); ?>";
-				var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-				$.getJSON(cms_dir+"/cms/pages_ajax.php?action=widget_images&pages_widgets_id="+id+"&token="+token+"&tag="+tag+"&width="+width+"", function(data){
-					
-					$.each(data, function(i,item){
-						var input = item.filename;
-						var page = item.pages_id;					
-						var caption = item.caption;
-						var title = item.title.length > 0 ? item.title : '';
-						var alt_text = item.alt.length > 0 ? item.alt : item.caption;
-						var alt_text = alt_text.length > 0 ? alt_text : '';					
-						var alt_rights = item.copyright.length > 0 ? '('+item.copyright+')' : '';
-						var alt_rights = item.creator.length > 0 ? photo+' '+item.creator : alt_rights;
-						var alt = alt_rights.length > 0 && alt_text.length > 0 ? alt_text +' / '+alt_rights : alt_text;
-						
-						var $container = "slideshow_extended_<?php echo $pages_widgets_id; ?>";
-						var wish_ratio = "<?php echo $wish_ratio; ?>";
-						// adjust img position if wished ratio is less than original ratio, use Golden ratio 0.618...
-						if(wish_ratio < item.ratio) {
-							var std_height = Math.round(item.ratio*<?php echo $width; ?>);
-							var wish_height = Math.round(wish_ratio*<?php echo $width; ?>);
-							var offset = Math.round((std_height-wish_height)*(1-0.618));
-						}
-						
-						var style_slideshow_extended = (typeof offset != 'undefined') ? 'margin: -'+offset+'px 0 0 0;width:100%;' : 'margin: 0 0 0 0;width:100%;';	
-						// add images not using attr height
-						$("<img />").attr("src", input).attr("alt", alt).attr("title", title).attr("data-cycle-caption", caption).attr("style", style_slideshow_extended).appendTo("#slideshow_extended_<?php echo $pages_widgets_id; ?>");
-						// add thumbs
-						var style_thumbs = 'padding:2px 4px 2px 4px;';
-						$("<img />").attr("src", input).attr("width", "80").attr("height", "auto").attr("style", style_thumbs).attr("class", "slideshow_extended_thumbs").attr("title", caption).attr("data-caption", caption).appendTo("#slideshow_extended_thumbs_<?php echo $pages_widgets_id; ?>")
-						.click(function() { 
-							$("#slideshow_extended_<?php echo $pages_widgets_id; ?>").cycle(i); 
-							return false;
-						});
-					});
-					
-					// images loaded - shoq & cycle...
-					$('.slideshow_extended_wrapper').show();
-					$('#slideshow_extended_<?php echo $pages_widgets_id; ?>').cycle();
-					
-					$('#slideshow_extended_<?php echo $pages_widgets_id; ?>').on('cycle-after',function(e, optionHash, outgoingSlideEl, incomingSlideEl, forwardFlag){
-						$('#slideshow_extended_descr_<?php echo $pages_widgets_id; ?>').html(incomingSlideEl.data);
-					});
-					
-				});
-				
-				$(function() {
-					$("#slideshow_extended_previous_<?php echo $pages_widgets_id; ?>").button({
-						text: false,
-						icons: { primary: "ui-icon-carat-1-w" }
-					});
-					$("#slideshow_extended_btn_play_<?php echo $pages_widgets_id; ?>").button({
-						text: false,
-						icons: { primary: "ui-icon-play" }
-					});
-					$("#slideshow_extended_btn_play_<?php echo $pages_widgets_id; ?>").click(function() { 
-						$('#slideshow_extended_<?php echo $pages_widgets_id; ?>').cycle('resume'); 
-					});				
-					$("#slideshow_extended_btn_pause_<?php echo $pages_widgets_id; ?>").button({
-						text: false,
-						icons: { primary: "ui-icon-pause" }
-					});
-					$("#slideshow_extended_btn_pause_<?php echo $pages_widgets_id; ?>").click(function() { 
-						$('#slideshow_extended_<?php echo $pages_widgets_id; ?>').cycle('pause'); 
-					});
-					$("#slideshow_extended_next_<?php echo $pages_widgets_id; ?>").button({
-						text: false,
-						icons: { primary: "ui-icon-carat-1-e" }
-					});
-				});
-				
-			});
-			
-		</script>
-
-		<div class="slideshow_extended_wrapper" style="display:none;">
-		
-			<?php if($control=="true") { ?>
-			
-				<div class="slideshow_extended_nav" style="float:left">
-					<a id="slideshow_extended_prev<?php echo $pages_widgets_id; ?>" href="#"><button id="slideshow_extended_previous_<?php echo $pages_widgets_id; ?>" class="slideshow_extended_control">previous</button></a>
-					<button id="slideshow_extended_btn_pause_<?php echo $pages_widgets_id; ?>" class="slideshow_extended_control">pause</button>
-					<button id="slideshow_extended_btn_play_<?php echo $pages_widgets_id; ?>" class="slideshow_extended_control">play</button>
-					<a id="slideshow_extended_next<?php echo $pages_widgets_id; ?>" href="#"><button id="slideshow_extended_next_<?php echo $pages_widgets_id; ?>" class="slideshow_extended_control">next</button></a>
+		$objects = is_array($objects) ? array_merge($defaults, $objects) : $defaults;
+		$ratio = explode(':', $objects['ratio']);
+		$height_ratio = count($ratio) === 2 && is_numeric($ratio[0]) && is_numeric($ratio[1]) && $ratio[0] > 0 && $ratio[1] > 0
+			? (float) $ratio[1] / (float) $ratio[0]
+			: 0.75;
+		$id = (int) $pages_widgets_id;
+		$control = filter_var($objects['control'], FILTER_VALIDATE_BOOLEAN);
+		$thumbs = filter_var($objects['thumbs'], FILTER_VALIDATE_BOOLEAN);
+		$caption = filter_var($objects['caption'], FILTER_VALIDATE_BOOLEAN);
+		$language = $_SESSION['language'] ?? $_SESSION['site_language'] ?? 'english';
+		$swedish = $language === 'swedish';
+		$config = array(
+			'id' => $id,
+			'token' => $_SESSION['token'],
+			'cmsDir' => $_SESSION['CMS_DIR'],
+			'tag' => $objects['tag'],
+			'timeout' => max(0, (int) $objects['timeout']),
+			'speed' => max(0, (int) $objects['speed']),
+			'heightRatio' => $height_ratio,
+			'copyright' => filter_var($objects['copyright'], FILTER_VALIDATE_BOOLEAN),
+			'photo' => $swedish ? 'Foto:' : 'Photo:',
+			'loadError' => $swedish ? 'Kunde inte ladda bilderna.' : 'Could not load images.',
+			'empty' => $swedish ? 'Inga bilder hittades.' : 'No images found.',
+			'imageLabel' => $swedish ? 'Visa bild' : 'Show image'
+		);
+		?>
+		<div id="image_gallery_splide_wrapper_<?php echo $id; ?>" class="slideshow_extended_wrapper">
+			<div id="image_gallery_splide_status_<?php echo $id; ?>" role="status"></div>
+			<div id="image_gallery_splide_content_<?php echo $id; ?>" style="display:none">
+				<?php if ($control) { ?>
+					<div class="slideshow_extended_nav">
+						<button type="button" class="slideshow_extended_control" data-gallery-action="previous">&ll;</button>
+						<button type="button" class="slideshow_extended_control" data-gallery-action="pause"<?php echo $config['timeout'] === 0 ? ' disabled' : ''; ?>>&cir;</button>
+						<button type="button" class="slideshow_extended_control" data-gallery-action="play"<?php echo $config['timeout'] === 0 ? ' disabled' : ''; ?>>&RightTriangle;</button>
+						<button type="button" class="slideshow_extended_control" data-gallery-action="next">&gg;</button>
+						<span data-gallery-counter></span>
+					</div>
+				<?php } ?>
+				<div id="image_gallery_splide_<?php echo $id; ?>" class="splide slideshow_extended" role="region" aria-label="<?php echo $swedish ? 'Bildspel' : 'Image slideshow'; ?>">
+					<div class="splide__track"><ul class="splide__list"></ul></div>
 				</div>
-				<div id="slideshow_extended_info_<?php echo $pages_widgets_id; ?>" class="slideshow_extended_counter" style="vertical-align:bottom;float:right;">&nbsp;</div>
-				<div class="clearfix"></div>
-
-			<?php } ?>
-
-			<div id="slideshow_extended_<?php echo $pages_widgets_id; ?>" class="slideshow_extended" 
-			data-cycle-caption="#slideshow_extended_descr_<?php echo $pages_widgets_id;?>" 
-			data-cycle-caption-template="{{caption}}"
-			data-cycle-speed="<?php echo $speed;?>"
-			data-cycle-timeout="<?php echo $timeout;?>"
-			data-cycle-log="false"
-			data-cycle-prev="#slideshow_extended_previous_<?php echo $pages_widgets_id; ?>"
-			data-cycle-next="#slideshow_extended_next_<?php echo $pages_widgets_id; ?>"
-			>				
+				<?php if ($caption) { ?>
+					<div class="slideshow_extended_caption" data-gallery-caption style="<?php echo htmlspecialchars($objects['caption_css'], ENT_QUOTES, 'UTF-8'); ?>"></div>
+				<?php } ?>
+				<?php if ($thumbs) { ?>
+					<div data-gallery-thumbs style="background:black"></div>
+				<?php } ?>
 			</div>
-			
-			<?php 
-			$styled = (strlen($caption_css)>0) ? $caption_css : '';	
-			if($caption=="true") {
-				echo '<div class="cycle-caption slideshow_extended_caption" id="slideshow_extended_descr_'.$pages_widgets_id.'" style="'.$styled.'"></div>';
-			}
-			if($thumbs=="true") {
-				echo '<div id="slideshow_extended_thumbs_'. $pages_widgets_id .'" style="background:black;"></div>';
-			}
-			?>
-			
 		</div>
+		<script>
+		jQuery(function ($) {
+			var config = <?php echo json_encode($config, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+			var wrapper = $("#image_gallery_splide_wrapper_" + config.id);
+			var content = wrapper.find("#image_gallery_splide_content_" + config.id);
+			var status = wrapper.find("#image_gallery_splide_status_" + config.id);
+			var list = content.find(".splide__list");
+			var thumbnails = content.find("[data-gallery-thumbs]");
+			var caption = content.find("[data-gallery-caption]");
+			var counter = content.find("[data-gallery-counter]");
+
+			$.ajax({
+				url: config.cmsDir + "/cms/pages_ajax.php",
+				dataType: "json",
+				data: {
+					action: "widget_images",
+					pages_widgets_id: config.id,
+					token: config.token,
+					tag: config.tag,
+					width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+				}
+			}).done(function (images) {
+				if (!Array.isArray(images)) {
+					status.text(config.loadError);
+					console.error("ImageGallerySplide: unexpected image response", images);
+					return;
+				}
+				if (!images.length) {
+					status.text(config.empty);
+					return;
+				}
+				if (typeof Splide !== "function") {
+					status.text(config.loadError);
+					console.error("ImageGallerySplide: Splide is not loaded");
+					return;
+				}
+
+				var textDecoder = document.createElement("textarea");
+				images.forEach(function (item, index) {
+					["caption", "alt", "title", "creator", "copyright"].forEach(function (field) {
+						textDecoder.innerHTML = item[field] || "";
+						item[field] = textDecoder.value;
+					});
+					var imageCaption = item.caption || "";
+					var rights = item.creator ? config.photo + " " + item.creator : (item.copyright ? "(" + item.copyright + ")" : "");
+					var alt = item.alt || imageCaption;
+					if (rights && alt) {
+						alt += " / " + rights;
+					}
+					var slide = $("<li>").addClass("splide__slide").appendTo(list);
+					$("<img>").attr({ src: item.filename, alt: alt, title: item.title || "" })
+						.css({ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 38.2%" })
+						.appendTo(slide);
+
+					if (thumbnails.length) {
+						var button = $("<button>").attr({
+							type: "button",
+							"aria-label": config.imageLabel + " " + (index + 1),
+							"aria-pressed": "false"
+						}).css({ padding: "2px 4px", border: 0, background: "transparent", cursor: "pointer" }).appendTo(thumbnails);
+						$("<img>").attr({ src: item.filename, alt: "", title: imageCaption, width: 80 }).appendTo(button);
+						button.on("click", function () { splide.go(index); });
+					}
+				});
+
+				content.show();
+				var splide = new Splide("#image_gallery_splide_" + config.id, {
+					type: "fade",
+					rewind: true,
+					arrows: false,
+					pagination: false,
+					heightRatio: config.heightRatio,
+					speed: config.speed,
+					autoplay: config.timeout > 0,
+					interval: config.timeout,
+					pauseOnHover: false,
+					pauseOnFocus: false
+				});
+
+				function update(index) {
+					var item = images[index];
+					var text = item.caption || "";
+					var rights = item.creator ? config.photo + " " + item.creator : (item.copyright ? "(" + item.copyright + ")" : "");
+					if (config.copyright && rights) {
+						text += (text ? " / " : "") + rights;
+					}
+					caption.text(text);
+					counter.text((index + 1) + " / " + images.length);
+					thumbnails.children("button").attr("aria-pressed", "false").eq(index).attr("aria-pressed", "true");
+				}
+
+				splide.on("mounted move", function () { update(splide.index); });
+				splide.mount();
+				content.find("[data-gallery-action]").on("click", function () {
+					switch ($(this).attr("data-gallery-action")) {
+						case "previous": splide.go("<"); break;
+						case "next": splide.go(">"); break;
+						case "pause": splide.Components.Autoplay.pause(); break;
+						case "play": splide.Components.Autoplay.play(); break;
+					}
+				});
+			}).fail(function (xhr, textStatus, error) {
+				status.text(config.loadError);
+				console.error("ImageGallerySplide: image request failed", textStatus, error);
+			});
+		});
+		</script>
 		<?php
 	}
 }
-?>

@@ -185,13 +185,13 @@ function isValidString($string, $reg)
                 // html, matches 1-128 alphanumerical and -+=%_~!@<>.,#* characters
                 'html' => '/^(?=^.{1,128}$)([A-Za-z0-9]|[-+=%_ ~!@<>.,#*:;()\/\'\"])*$/',
                 // code, matches alphanumerical and -+=%_ ~!@<>:;.,#?&'"/\ characters
-                'code' => '/^[\w-+=%_ ~!@<>:;.,#?&\/\"\'\/]*$/',
+                'code' => '/^[\w+=%_ ~!@<>:;.,#?&\/\"\'-]*$/',
                 // path, matches 1-128 alphanumerical and -+=%_~!@.,#* characters
                 'path' => '/^(?=^.{1,128}$)([A-Za-z0-9]|[-+=%_~!@.,#*:;()\/])*$/',
                 // strong password, must contain 8-50 characters, uppercase, lowercase, special char, number
                 'strong_password' => '/^(?=^.{8,50}$)((?=.*\d)(?=.*[A-Z])(?=.*[-+=%_~!@.,#*@])(?=.*[a-z])).*$/',
                 // words separated; letters and comma sign allowed if followed by one or more letters
-                'words' => '/^(?=^.{2,100}$)[A-Za-z]|[���]+(?:[,][A-Za-z]|[���]+)*$/',
+                'words' => '/^(?=.{2,100}$)[A-Za-zåäöÅÄÖ]+(?:,[A-Za-zåäöÅÄÖ]+)*$/u',
                 // name,  \p{L} # Unicode letter, or \p{Mn} # Unicode accents, or \p{Pd} # Unicode hyphens, or \' # single quote, or \x{2019} # single quote (alternative) ]+ # one or more times \s # any kind of space
                 'name' => '~^(?:[\p{L}\p{Mn}\p{Pd}\'\x{2019}]+\s?)+$~u',
                 // postnummer 123 45
@@ -205,7 +205,7 @@ function isValidString($string, $reg)
                 // numerical
                 'numerical' => '/^[\d]+$/',
                 // milliseconds
-                'milliseconds' => '/^100|200|300|400|500|600|700|800|900|(1|2|3|4|5|6|7|8|9|10|15|20|25|30|35|40|45|50|55|60|90|120|180|240|300)(000)$/',
+                'milliseconds' => '/^(100|200|300|400|500|600|700|800|900|(1|2|3|4|5|6|7|8|9|10|15|20|25|30|35|40|45|50|55|60|90|120|180|240|300)000)$/',
                 // alphanumerical
                 'alphanumerical' => '/^[a-zA-Z0-9]+$/',
                 // ratio
@@ -227,7 +227,7 @@ function isValidString($string, $reg)
                 // url
                 'url' => '/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$/',
                 // url_query
-                'url_query' => '/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/',
+                'url_query' => '/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_-]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/',
                 // php
                 'php' => '/^<\?[php]*([^\?>]*)\?>$/',
                 // bool
@@ -241,11 +241,11 @@ function isValidString($string, $reg)
                 //any
                 'any' => '/^([\s\S])*$/'
             );
-            if (filter_var($string, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $regex_string[$reg])))) {
-                return true;
-            }
+            // preg_match, not filter_var: filter_var returns the matched string, so "0" and "" were treated as invalid
+            return preg_match($regex_string[$reg], $string) === 1;
         }
     }
+    return false;
 }
 
 /**

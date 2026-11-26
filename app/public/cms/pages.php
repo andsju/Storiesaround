@@ -160,7 +160,7 @@ $og_properties = get_og_meta($pages, $protocol, $url, $page_title_body, $descrip
 $css_files = array(
     CMS_DIR . '/cms/libraries/jquery-ui/jquery-ui.css',
     CMS_DIR . '/cms/libraries/jquery-colorbox/colorbox.css',
-    CMS_DIR . '/cms/libraries/jquery-flexnav/flexnav.css',
+    CMS_DIR . '/cms/libraries/splide/splide.min.css',
     CMS_DIR . '/cms/css/style.css'
 );
 
@@ -177,8 +177,7 @@ $js_files = array(
     CMS_DIR . '/cms/libraries/jquery-timeago/jquery.timeago.js',
     CMS_DIR . '/cms/libraries/jquery-plugin-validation/jquery.validate.js',
     CMS_DIR . '/cms/libraries/jquery-jplayer/jquery.jplayer.min.js',
-    CMS_DIR . '/cms/libraries/jquery-cycle/jquery.cycle2.min.js',
-    CMS_DIR . '/cms/libraries/jquery-flexnav/jquery.flexnav.js'
+    CMS_DIR . '/cms/libraries/splide/splide.min.js'
 );
 
 $js_files = add_js_language_files($js_files);

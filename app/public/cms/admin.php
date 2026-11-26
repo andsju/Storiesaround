@@ -16,11 +16,10 @@ $wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editor
 // css files
 $css_files = array(
 	CMS_DIR.'/cms/css/normalize.css', 
-	CMS_DIR.'/cms/css/layout.css', 
-	CMS_DIR.'/cms/css/pages_edit.css',
+	CMS_DIR.'/cms/css/style_edit.css',
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
-	CMS_DIR.'/cms/libraries/jquery-datatables/style.css',
+	CMS_DIR.'/cms/libraries/datatables/datatables.min.css',
 	CMS_DIR.'/cms/libraries/fileuploader/fileuploader.css'
 );
 
@@ -41,7 +40,7 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery.ui.datepicker-sv.js', 
 	CMS_DIR.'/cms/libraries/jquery-plugin-validation/jquery.validate.js',
 	CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
-	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
+	CMS_DIR.'/cms/libraries/datatables/datatables.min.js',
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/js/functions.js',
 	CMS_DIR.'/cms/libraries/fileuploader/fileuploader.js'
@@ -63,7 +62,8 @@ $meta_keywords = $meta_description = $meta_robots = $meta_additional = $meta_aut
 
 // include header
 $page_title = 'Storiesaround - administration';
-$body_style = "width:1280px;max-width:100% !important;margin-top:50px;";
+$body_style = "";
+// $body_style = "width:100%;max-width:1280px;margin-top:50px;";
 
 include_once 'includes/inc.header_admin.php';
 

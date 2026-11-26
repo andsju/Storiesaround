@@ -199,10 +199,13 @@ $meta_additional = (strlen($arr['meta_additional'])>0) ? $arr['meta_additional']
 
 // css files, loaded in header.inc.php
 $css_files = array(
-	CMS_DIR.'/cms/css/normalize.css', 
-	CMS_DIR.'/cms/css/layout.css', 
-	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
-	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css' );
+	CMS_DIR . '/cms/css/normalize.css',
+	CMS_DIR . '/cms/libraries/jquery-ui/jquery-ui.css',
+	CMS_DIR . '/cms/css/style_edit.css',
+	CMS_DIR . '/cms/libraries/jquery-colorbox/colorbox.css',
+	CMS_DIR . '/cms/libraries/datatables/datatables.min.css',
+	CMS_DIR.'/cms/libraries/splide/splide.min.css' 
+);
 
 
 // add css theme
@@ -234,13 +237,14 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.custom.min.js', 
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery.ui.datepicker-sv.js', 
 	CMS_DIR.'/cms/libraries/js/functions.js', 
+	CMS_DIR . '/cms/libraries/datatables/datatables.min.js',
 	CMS_DIR.'/cms/libraries/js/pages.js', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/jquery-plugin-validation/jquery.validate.js',
 	CMS_DIR.'/cms/libraries/jquery-jplayer/jquery.jplayer.min.js', 
-	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js', 
-	CMS_DIR.'/cms/libraries/masonry/masonry.pkgd.min.js' );
+	CMS_DIR.'/cms/libraries/splide/splide.min.js'
+);
 
 // localization js files
 $use_language = isset($_SESSION['language']) ? $_SESSION['language'] : $_SESSION['site_language'];

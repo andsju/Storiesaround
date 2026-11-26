@@ -317,9 +317,8 @@ if (isset($_POST['token']) || isset($_GET['token'])){
 							$filename = $image->get_optimzed_image($filename_and_path, $width);
 							$rows[$key]['filename'] = $filename; 
 						}						
-
-						echo json_encode($rows);
 					}
+					echo json_encode($rows ?: array());
 				}
 			
 			break;

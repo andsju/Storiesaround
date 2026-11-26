@@ -119,12 +119,12 @@ $id = filter_var($id, FILTER_VALIDATE_INT) ? $id : 0;
                     <div class="container box_pages ui-black-white">
                         <p>Storiesaround version: <?php echo CMS_VERSION; ?></p>
                         <ul class="cms-version">
-                            <li>jQuery 3.1.1</li>
-                            <li>jQuery UI 1.12.1</li>
-                            <li>jQuery Cycle2 2.1.6</li>
-                            <li>tinyMCE 4.5.0</li>
-                            <li></li>
-
+                            <li>PHP 8.4</li>
+                            <li>jQuery 4.1.0</li>
+                            <li>jQuery UI 1.14.2</li>
+                            <li>tinyMCE 5.1.6</li>
+                            <li>DataTables 3.1.6</li>
+                            <li>Splide 4.1.2</li>
                         </ul>
                     </div>
                 </td>

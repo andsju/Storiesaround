@@ -57,8 +57,10 @@ $wysiwyg_editor = isset($_SESSION['site_wysiwyg']) ? get_editor_settings($editor
 $css_files = array(
 	CMS_DIR . '/cms/css/normalize.css',
 	CMS_DIR . '/cms/libraries/jquery-ui/jquery-ui.css',
-	CMS_DIR . '/cms/css/layout.css',
-	CMS_DIR . '/cms/libraries/jquery-colorbox/colorbox.css'
+	CMS_DIR . '/cms/css/style_edit.css',
+	CMS_DIR . '/cms/libraries/jquery-colorbox/colorbox.css',
+	CMS_DIR . '/cms/libraries/datatables/datatables.min.css',
+	CMS_DIR.'/cms/libraries/splide/splide.min.css' 
 );
 
 // css files... add css jquery-ui theme
@@ -87,8 +89,7 @@ $js_files = array(
 	CMS_DIR . '/cms/libraries/jquery-ui/jquery.ui.datepicker-sv.js',
 	CMS_DIR . '/cms/libraries/jquery-plugin-validation/jquery.validate.js',
 	CMS_DIR . '/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
-	CMS_DIR . '/cms/libraries/jquery-cycle/jquery.cycle2.min.js',
-	CMS_DIR . '/cms/libraries/jquery-datatables/jquery.datatables.min.js',
+	CMS_DIR . '/cms/libraries/datatables/datatables.min.js',
 	CMS_DIR . '/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR . '/cms/libraries/js/functions.js'
 );

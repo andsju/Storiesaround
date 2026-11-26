@@ -1724,15 +1724,13 @@ class Pages extends Database
     /**
      * @param int $pages_id
      * @param string $pages_id_link
-     * @param string $utc_modified
      * @return bool
      */
     public function updatePagesSeoLink($pages_id, $pages_id_link)
     {
         try {
             $sql_update = "UPDATE pages
-			SET pages_id_link = :pages_id_link,
-			utc_modified = :utc_modified
+			SET pages_id_link = :pages_id_link
 			WHERE pages_id = :pages_id";
 
             $stmt = $this->db->prepare($sql_update);
