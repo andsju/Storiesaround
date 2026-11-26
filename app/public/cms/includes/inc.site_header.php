@@ -11,7 +11,6 @@
 </div>
 
 <div id="site-navigation-cms">
-	<a aria-label="<?php echo translate("Search", "search", $languages); ?>" href="<?php echo CMS_DIR; ?>/pages/sok"><i class="fas fa-search" aria-hidden></i></a>
 	<?php if (!isset($_SESSION['users_id'])) { ?>
 		<a aria-label="<?php echo translate("Login", "site_login", $languages); ?>" href="<?php echo CMS_DIR; ?>/cms/login.php"><i class="fas fa-sign-in-alt"></i></a>
 	<?php } ?>

@@ -196,14 +196,15 @@ $form = false;
 $large_table = false;
 
 if (isset($_POST['btn_pages_search'])) {
-    if (strlen($_POST['pages_find']) > 0) {
-        $search = filter_var($_POST['pages_find'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    }
-    $form = true;
 
+    $search = sanitize_text($_POST['pages_find']);
+    $form = true;
 }
+
 $status = isset($_POST['status']) ? $_POST['status'] : 0;
+
 ?>
+
 
 
 <h4 class="admin-heading">Find page</h4>
@@ -340,6 +341,7 @@ $status = isset($_POST['status']) ? $_POST['status'] : 0;
 
 
 <?php
+
 $row_pages = $pages->getPagesSearchWordsRelevance($search, $status=0, $pages_id=0, $limit_tree=0, $limit_start=0, $limit=1000);
 
 if (!$form) {

@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 # FROM php:7.4-apache
 
 RUN apt-get update && apt-get upgrade -y
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
 RUN docker-php-ext-install calendar gd mysqli pdo pdo_mysql zip
 
-RUN a2enmod ssl rewrite
+RUN a2enmod ssl rewrite env
 
 # Patch the global SSL config to prevent passphrase error
 RUN sed -i 's|^SSLPassPhraseDialog.*|SSLPassPhraseDialog builtin|' /etc/apache2/mods-available/ssl.conf

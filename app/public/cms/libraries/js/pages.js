@@ -186,6 +186,7 @@ $(document).ready(function () {
 			var ajax_url = cms_dir + '/cms/pages_ajax.php';
 			var limit_tree = $('input:checkbox[name=search-page-limit-tree]').is(':checked') ? 1 : 0;
 			var pages_id = $("#pages_id").val();
+
 			$.ajax({
 				beforeSend: function () {
 					loading = $('#ajax_spinner_search').show()
@@ -429,36 +430,29 @@ $(document).ready(function () {
 		$("#site-navigation-mobile").show();
 	});
 
-	$("#search-site-icon").click(function (event) {
-		event.preventDefault();
-		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/pages/sok";
-	});
-
 	$("#site-login-icon").click(function (event) {
 		event.preventDefault();
-		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/login.php";
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/login.php`;
 	});
 
 	$("#site-admin-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/admin.php";
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/admin.php`;
 	});
 
 	$("#site-edit-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		var pages_id = $(this).attr("data-id");
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages_edit.php?id=" + pages_id;
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/pages_edit.php?id=${pages_id}`;
 	});
 
 	$("#site-user-icon").click(function (event) {
 		event.preventDefault();
 		var cms_dir = $("#cms_dir").val();
 		var users_id = $("#users_id").val();
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/users_edit.php?id=" + users_id;
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/users_edit.php?id=${users_id}`;
 	});
 
 	// window resize
@@ -556,13 +550,14 @@ function searchPagesContent() {
 	var pages_id = $("#pages_id").val();
 
 	if (pid > 0) {
-		window.location.href = location.protocol + "//" + location.hostname + cms_dir + "/cms/pages.php?id=" + pid;
+		window.location.href = `${location.protocol}//${location.hostname}:${location.port}/cms/pages.php?id=${pid}`;
 	} else {
 
 		if (pages_id > 0) {
 			var limit_start = 0;
 			var action = "pages_search_extended";
 			var token = $("#token").val();
+			console.log("find", limit_start, action, token, search);
 			$.ajax({
 				beforeSend: function () {
 					loading = $('#ajax_spinner_pages_search').show()
@@ -588,7 +583,8 @@ function searchPagesContent() {
 						$("#btn-site-search-page-more").show();
 					}
 					$("#pages_search_result_start").val(limit_start + 10);
-				}
+				}				
+				
 			});
 		}
 	}
@@ -671,6 +667,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 				});
 
 				tinymce.init({
+					entity_encoding: 'raw',
 					selector: 'h1.editable',
 					inline: true,
 					toolbar: 'undo redo | save',
@@ -700,6 +697,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 				});
 
 				tinymce.init({
+					entity_encoding: 'raw',
 					selector: 'div.editable_row',
 					inline: true,
 					toolbar: 'undo redo | save',
@@ -729,6 +727,7 @@ function inlineEdit(pages_id, users_id, role_cms, token) {
 				});
 
 				tinymce.init({
+					entity_encoding: 'raw',
 					selector: 'div.editable',
 					inline: true,
 					plugins: [
@@ -1119,13 +1118,12 @@ window.addEventListener('load', (event) => {
 
 // function to fade images
 function fadeSlideshowCycleImages() {
-
+	
 	// check if ready
 	if (swapSlideshowCycleImagesStart === false) {
 		return;
 	}
 
-	// get images
 	let images = document.querySelectorAll(".slideshow-cycle-wrapper video, .slideshow-cycle-wrapper img.slideshow-cycle-image");
 
 	// just one image
@@ -1211,12 +1209,15 @@ function swapSlideshowCycleImageCaption() {
 	let captionAlign = images[images.length - 1].getAttribute("data-caption-align");
 	let captionVerticalAlign = images[images.length - 1].getAttribute("data-caption-vertical-align");
 
-	if (caption.length === 0) {
+	if (!caption) {
 		return;
 	};
 
 	// get element
 	let elementCaption = document.querySelector("#site-header-caption");
+	if (!elementCaption) {
+		return;
+	}
 
 	// show caption
 	elementCaption.innerHTML = parseMarkdownCode(caption);

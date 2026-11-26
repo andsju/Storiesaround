@@ -4,7 +4,7 @@
  *
  * @name timeago
  * @version 1.6.7
- * @requires jQuery >=1.5.0 <4.0
+ * @requires jQuery >=1.5.0 (locally adapted for jQuery 4.1.0)
  * @author Ryan McGeary
  * @license MIT License - http://www.opensource.org/licenses/mit-license.php
  *
@@ -94,7 +94,7 @@
       var years = days / 365;
 
       function substitute(stringOrFunction, number) {
-        var string = $.isFunction(stringOrFunction) ? stringOrFunction(number, distanceMillis) : stringOrFunction;
+        var string = typeof stringOrFunction === "function" ? stringOrFunction(number, distanceMillis) : stringOrFunction;
         var value = ($l.numbers && $l.numbers[number]) || number;
         return string.replace(/%d/i, value);
       }
@@ -113,11 +113,11 @@
 
       var separator = $l.wordSeparator || "";
       if ($l.wordSeparator === undefined) { separator = " "; }
-      return $.trim([prefix, words, suffix].join(separator));
+      return [prefix, words, suffix].join(separator).trim();
     },
 
     parse: function(iso8601) {
-      var s = $.trim(iso8601);
+      var s = typeof iso8601 === 'string' ? iso8601.trim() : '';
       s = s.replace(/\.\d+/,""); // remove milliseconds
       s = s.replace(/-/,"/").replace(/-/,"/");
       s = s.replace(/T/," ").replace(/Z/," UTC");
@@ -208,7 +208,7 @@
     element = $(element);
     if (!element.data("timeago")) {
       element.data("timeago", { datetime: $t.datetime(element) });
-      var text = $.trim(element.text());
+      var text = element.text().trim();
       if ($t.settings.localeTitle) {
         element.attr("title", element.data('timeago').datetime.toLocaleString());
       } else if (text.length > 0 && !($t.isTime(element) && element.attr("title"))) {

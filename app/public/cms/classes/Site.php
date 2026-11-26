@@ -122,7 +122,7 @@ class Site extends Database
             $stmt->bindParam(':site_timezone', $site_timezone, PDO::PARAM_STR);
             $stmt->bindParam(':site_wysiwyg', $site_wysiwyg, PDO::PARAM_STR);
             $stmt->bindParam(':site_logotype', $site_logotype, PDO::PARAM_STR);
-            $stmt->bindParam(':site_seo_url', $site_seo_url, PDO::PARAM_STR);
+            $stmt->bindParam(':site_seo_url', $site_seo_url, PDO::PARAM_INT);
             $stmt->bindParam(':utc_modified', $utc_modified, PDO::PARAM_STR);
 
             $stmt->execute();
@@ -224,15 +224,13 @@ class Site extends Database
      * @param string $site_theme
      * @param string $site_ui_theme
      * @param string $site_template_default
-     * @param string $site_template_sidebar_width
-     * @param int $site_template_content_padding
      * @param int $site_navigation_horizontal
      * @param int $site_navigation_vertical
      * @param int $site_navigation_vertical_sidebar
      * @param string $utc_modified
      * @return bool
      */
-    public function setSiteDesign($site_id, $site_wrapper_page_width, $site_logotype, $site_theme, $site_ui_theme, $site_template_default, $site_template_sidebar_width, $site_template_content_padding, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified)
+    public function setSiteDesign($site_id, $site_wrapper_page_width, $site_logotype, $site_theme, $site_ui_theme, $site_template_default, $site_navigation_horizontal, $site_navigation_vertical, $site_navigation_vertical_sidebar, $utc_modified)
     {
         try {
             $sql = "UPDATE site
@@ -241,8 +239,6 @@ class Site extends Database
             site_wrapper_page_width = :site_wrapper_page_width,
 			site_ui_theme = :site_ui_theme,
 			site_template_default = :site_template_default,
-            site_template_sidebar_width = :site_template_sidebar_width,
-			site_template_content_padding = :site_template_content_padding,
 			site_navigation_horizontal = :site_navigation_horizontal,
 			site_navigation_vertical = :site_navigation_vertical,
 			site_navigation_vertical_sidebar = :site_navigation_vertical_sidebar,
@@ -256,8 +252,6 @@ class Site extends Database
             $stmt->bindParam(":site_theme", $site_theme, PDO::PARAM_STR);
             $stmt->bindParam(":site_ui_theme", $site_ui_theme, PDO::PARAM_STR);            
             $stmt->bindParam(":site_template_default", $site_template_default, PDO::PARAM_INT);
-            $stmt->bindParam(":site_template_sidebar_width", $site_template_sidebar_width, PDO::PARAM_INT);
-            $stmt->bindParam(":site_template_content_padding", $site_template_content_padding, PDO::PARAM_INT);
             $stmt->bindParam(":site_navigation_horizontal", $site_navigation_horizontal, PDO::PARAM_INT);
             $stmt->bindParam(":site_navigation_vertical", $site_navigation_vertical, PDO::PARAM_INT);
             $stmt->bindParam(":site_navigation_vertical_sidebar", $site_navigation_vertical_sidebar, PDO::PARAM_INT);
@@ -381,6 +375,32 @@ class Site extends Database
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
             $stmt->bindParam(":site_meta_tags", $site_meta_tags, PDO::PARAM_STR);
+            $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
+            return false;
+        }
+    }
+
+
+    /**
+     * @param int $site_id
+     * @param string $site_domain_url
+     * @param string $utc_modified
+     * @return bool
+     */
+    public function setSiteDomainURL($site_id, $site_domain_url, $utc_modified)
+    {
+        try {
+            $sql = "UPDATE site
+			SET site_domain_url = :site_domain_url,
+			utc_modified = :utc_modified
+			WHERE site_id = :site_id";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":site_id", $site_id, PDO::PARAM_INT);
+            $stmt->bindParam(":site_domain_url", $site_domain_url, PDO::PARAM_STR);
             $stmt->bindParam(":utc_modified", $utc_modified, PDO::PARAM_STR);
             return $stmt->execute();
         } catch (PDOException $e) {

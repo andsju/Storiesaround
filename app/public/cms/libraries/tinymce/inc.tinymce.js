@@ -3,7 +3,7 @@
 		var theme = $("#theme").val();
 		tinymce.init({
 			
-			//selector : "textarea.tinymce",
+			entity_encoding: 'raw',
 			mode : "specific_textareas",
 			selector : "textarea#content, textarea#story_content, textarea#content_html, textarea#site_404",
 			autoresize_max_height: 900,

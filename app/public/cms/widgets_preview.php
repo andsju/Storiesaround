@@ -35,7 +35,8 @@ foreach($rows_widgets as $rows_widget) {
 $css_files = array(
 	CMS_DIR.'/cms/css/layout.css', 
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.css', 
-	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css' );
+	CMS_DIR.'/cms/libraries/jquery-colorbox/colorbox.css',
+	CMS_DIR.'/cms/libraries/splide/splide.min.css' );
 
 // add required widgets css
 if(is_array($widgets_css)) {	
@@ -54,7 +55,8 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery-ui.custom.min.js', 
 	CMS_DIR.'/cms/libraries/js/functions.js', 
 	CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
-	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js' 
+	CMS_DIR.'/cms/libraries/jquery-cycle/jquery.cycle2.min.js',
+	CMS_DIR.'/cms/libraries/splide/splide.min.js'
 );
 
 // include header

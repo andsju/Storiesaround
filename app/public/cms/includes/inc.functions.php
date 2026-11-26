@@ -35,6 +35,60 @@ function replace_characters($string)
     return preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);~i', '$1', htmlentities($string, ENT_COMPAT, 'UTF-8'));
 }
 
+
+/**
+ * Translate accents and special characters.
+ * Friendly URLs and filenames.
+ *
+ * @param string $string
+ * @return string
+ */
+function friendly_string(string $string): string
+{
+    // Convert uppercase characters to lowercase.
+    $string = mb_strtolower($string, 'UTF-8');
+
+    // Replace special characters.
+    $characters = [
+        'å' => 'a',
+        'ä' => 'a',
+        'ö' => 'o',
+        'æ' => 'ae',
+        'œ' => 'oe',
+        'ø' => 'o',
+        'ß' => 'ss',
+        'þ' => 'th',
+        'ð' => 'd',
+        'ł' => 'l',
+        'đ' => 'd',
+    ];
+
+    $string = strtr($string, $characters);
+
+    // Transliterate remaining accented characters.
+    if (function_exists('iconv')) {
+        $converted = iconv(
+            'UTF-8',
+            'ASCII//TRANSLIT//IGNORE',
+            $string
+        );
+
+        if ($converted !== false) {
+            $string = $converted;
+        }
+    }
+
+    // Replace whitespace with hyphens.
+    $string = preg_replace('/\s+/', '-', $string) ?? $string;
+
+    // Collapse consecutive hyphens into one.
+    $string = preg_replace('/-+/', '-', $string) ?? $string;
+
+    // Remove leading and trailing hyphens.
+    return trim($string, '-');
+}
+
+
 /**
  * allow alphanumerics
  * @param $string
@@ -121,7 +175,7 @@ function isValidString($string, $reg)
         // allowed string
         $allowed = array('username', 'strong_password', 'str', 'css', 'html', 'code', 'path', 'words', 'name', 'postnummer', 'personnummer', 'personnummerPTF', 'milliseconds', 'alpha', 'numerical', 'alphanumerical', 'ratio', 'email', 'sevendigits', '0-9', '1-20', 'date', 'ip', 'url', 'url_query', 'hex', 'php', 'boolean', 'any-all', 'characters', 'comma_separated_numbers', 'any');
         if (in_array($reg, $allowed)) {
-            $regex_string = Array(
+            $regex_string = array(
                 // username; letters, digits. Underscore is allowed if followed by one or more letters / digits. Minimum 4 character. Maximum 20 characters
                 'username' => '/^(?=.{4,20}$)[a-zA-Z][a-zA-Z0-9]*(?:_[a-zA-Z0-9]+)*$/',
                 // str, matches 1-128 alphanumerical and -+=%_~!@.,#* characters
@@ -131,13 +185,13 @@ function isValidString($string, $reg)
                 // html, matches 1-128 alphanumerical and -+=%_~!@<>.,#* characters
                 'html' => '/^(?=^.{1,128}$)([A-Za-z0-9]|[-+=%_ ~!@<>.,#*:;()\/\'\"])*$/',
                 // code, matches alphanumerical and -+=%_ ~!@<>:;.,#?&'"/\ characters
-                'code' => '/^[\w-+=%_ ~!@<>:;.,#?&\/\"\'\/]*$/',
+                'code' => '/^[\w+=%_ ~!@<>:;.,#?&\/\"\'-]*$/',
                 // path, matches 1-128 alphanumerical and -+=%_~!@.,#* characters
                 'path' => '/^(?=^.{1,128}$)([A-Za-z0-9]|[-+=%_~!@.,#*:;()\/])*$/',
                 // strong password, must contain 8-50 characters, uppercase, lowercase, special char, number
                 'strong_password' => '/^(?=^.{8,50}$)((?=.*\d)(?=.*[A-Z])(?=.*[-+=%_~!@.,#*@])(?=.*[a-z])).*$/',
                 // words separated; letters and comma sign allowed if followed by one or more letters
-                'words' => '/^(?=^.{2,100}$)[A-Za-z]|[���]+(?:[,][A-Za-z]|[���]+)*$/',
+                'words' => '/^(?=.{2,100}$)[A-Za-zåäöÅÄÖ]+(?:,[A-Za-zåäöÅÄÖ]+)*$/u',
                 // name,  \p{L} # Unicode letter, or \p{Mn} # Unicode accents, or \p{Pd} # Unicode hyphens, or \' # single quote, or \x{2019} # single quote (alternative) ]+ # one or more times \s # any kind of space
                 'name' => '~^(?:[\p{L}\p{Mn}\p{Pd}\'\x{2019}]+\s?)+$~u',
                 // postnummer 123 45
@@ -151,7 +205,7 @@ function isValidString($string, $reg)
                 // numerical
                 'numerical' => '/^[\d]+$/',
                 // milliseconds
-                'milliseconds' => '/^100|200|300|400|500|600|700|800|900|(1|2|3|4|5|6|7|8|9|10|15|20|25|30|35|40|45|50|55|60|90|120|180|240|300)(000)$/',
+                'milliseconds' => '/^(100|200|300|400|500|600|700|800|900|(1|2|3|4|5|6|7|8|9|10|15|20|25|30|35|40|45|50|55|60|90|120|180|240|300)000)$/',
                 // alphanumerical
                 'alphanumerical' => '/^[a-zA-Z0-9]+$/',
                 // ratio
@@ -173,7 +227,7 @@ function isValidString($string, $reg)
                 // url
                 'url' => '/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$/',
                 // url_query
-                'url_query' => '/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/',
+                'url_query' => '/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_-]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/',
                 // php
                 'php' => '/^<\?[php]*([^\?>]*)\?>$/',
                 // bool
@@ -187,15 +241,87 @@ function isValidString($string, $reg)
                 //any
                 'any' => '/^([\s\S])*$/'
             );
-            if (filter_var($string, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $regex_string[$reg])))) {
-                return true;
-            }
+            // preg_match, not filter_var: filter_var returns the matched string, so "0" and "" were treated as invalid
+            return preg_match($regex_string[$reg], $string) === 1;
         }
     }
+    return false;
 }
 
 /**
- * generate a random string using echo rand_string(8);
+ * Strip all HTML tags.
+ *
+ * @param mixed $input
+ * @return string
+ */
+function sanitize_text(mixed $input): string
+{
+    if (!is_string($input)) {
+        return '';
+    }
+
+    return trim(strip_tags($input));
+}
+
+/**
+ * Allow HTML but remove disallowed tags
+ *
+ * @param mixed $input
+ * @return string
+ */
+function sanitize_html(mixed $input): string
+{
+    if (!is_string($input)) {
+        return '';
+    }
+
+    // Remove script and style elements and their contents.
+    $input = preg_replace(
+        '~<(script|style)\b[^>]*>.*?</\1\s*>~is',
+        '',
+        $input
+    ) ?? '';
+
+    // Remove remaining HTML tags.
+    return trim(strip_tags($input));
+}
+
+/**
+ * Allow specified HTML tags
+ *
+ * @param mixed $input
+ * @param mixed $allow_tags ['p','br', 'strong'];
+ * @return string
+ */
+function sanitize_html_tags(
+    mixed $input,
+    mixed $allow_tags
+): string {
+    if (!is_string($input)) {
+        return '';
+    }
+
+    if (!is_array($allow_tags)) {
+        return trim(strip_tags($input));
+    }
+
+    $tags = '';
+
+    foreach ($allow_tags as $tag) {
+        if (
+            is_string($tag)
+            && preg_match('/^[a-z][a-z0-9]*$/i', $tag) === 1
+        ) {
+            $tags .= '<' . $tag . '>';
+        }
+    }
+
+    return trim(strip_tags($input, $tags));
+}
+
+
+/**
+ * generate a random string using echo rand_string(8)
  * @param $length
  * @return string
  */
@@ -329,7 +455,17 @@ function highlight($content, array $keywords)
 /**
  * set utc datetime from datetime value: such as UTC_TIMESTAMP() (MySQL) and gmdate (PHP)
  * $utc = datetime, $dtz = DateTimeZone (Europe/Stockholm | Europe/London), $format = string like 'Y-m-d H:i:s' (http://www.php.net/manual/en/function.date.php)
- * returns string '----' if date not validates (like MySQL default value 0000-00-00 00:00:00)
+ * returns string '----' only if $utc itself is not a valid datetime (like MySQL default value 0000-00-00 00:00:00)
+ *
+ * Always returns a non-empty string. Never returns null, false or '',
+ * since the result is routinely written into NOT NULL datetime columns
+ * (an invalid/empty $dtz, e.g. from an unset site_timezone, previously
+ * caused either an uncaught DateTimeZone exception or a falsy return
+ * value that MySQL rejected with "Incorrect datetime value: ''"). If
+ * timezone conversion fails but $utc is valid, $utc is reformatted
+ * without timezone conversion instead, so callers that always pass a
+ * valid $utc (e.g. gmdate('Y-m-d H:i:s')) for utc_modified/utc_created
+ * still get a SQL-safe datetime string.
  *
  * @param $utc
  * @param $dtz
@@ -338,16 +474,29 @@ function highlight($content, array $keywords)
  */
 function utc_dtz($utc, $dtz, $format)
 {
-    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format))) {
-        if (isValidDateTime($utc)) {
+    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format)) && isValidDateTime($utc)) {
+        try {
             $dt = new DateTime($utc);
-            $dtz = new DateTimeZone($dtz);
-            $dt->setTimezone($dtz);
-            return $dt->format($format);
-        } else {
-            return '----';
+            $dt->setTimezone(new DateTimeZone($dtz));
+            $result = $dt->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // invalid timezone or formatting failure - fall back below
+        }
+
+        try {
+            $result = (new DateTime($utc))->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // $format itself is unusable - fall through to the sentinel below
         }
     }
+
+    return '----';
 }
 
 
@@ -356,6 +505,8 @@ function utc_dtz($utc, $dtz, $format)
  * $utc = datetime, $dtz = DateTimeZone (Europe/Stockholm | Europe/London), $format = string like 'Y-m-d H:i:s' (http://www.php.net/manual/en/function.date.php)
  * returns string '----' if date not validates (like MySQL default value 0000-00-00 00:00:00)
  *
+ * Invalid or empty timezones fall back to formatting the UTC value without conversion.
+ *
  * @param $utc
  * @param $dtz
  * @param $format
@@ -363,14 +514,30 @@ function utc_dtz($utc, $dtz, $format)
  */
 function get_utc_dtz($utc, $dtz, $format)
 {
-    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format))) {
-        if (isValidDateTime($utc)) {
+    if (is_string(($utc)) && is_string(($dtz)) && is_string(($format)) && isValidDateTime($utc)) {
+        try {
             $dt = new DateTime($utc, new DateTimeZone($dtz));
             $offset = $dt->getOffset();
             $dt->modify('+' . intval($offset) . 'seconds');
-            return $dt->format($format);
+            $result = $dt->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // invalid timezone or formatting failure - fall back below
+        }
+
+        try {
+            $result = (new DateTime($utc))->format($format);
+            if (is_string($result) && $result !== '') {
+                return $result;
+            }
+        } catch (\Throwable $e) {
+            // $format itself is unusable - fall through to the sentinel below
         }
     }
+
+    return '----';
 }
 
 
@@ -468,7 +635,6 @@ function get_tab_menu($s_tab_url, $a_tabs, $a_tab_descriptions, $s_tab_query, $s
             echo $a_tab_descriptions[$key];
             echo '</a></li>';
         }
-
     }
     echo '</ul>';
     echo '</span>';
@@ -525,11 +691,9 @@ function get_tab_menu_jquery_ui_look_alike($s_tab_url, $a_tabs, $a_tab_descripti
         }
         $str .= $a_tab_descriptions[$key];
         $str .= '</a></li>';
-
     }
     $str .= "\n\t" . '</ul>' . "\n";
     echo $str;
-
 }
 
 
@@ -594,7 +758,7 @@ function print_r2($val)
  */
 function print_r3($text, $val)
 {
-    echo '<div class="debug">' . $text . '</div>';    
+    echo '<div class="debug">' . $text . '</div>';
     echo '<pre class="debug">';
     print_r($val);
     echo '</pre>';
@@ -616,7 +780,7 @@ function recursiveArraySearch($haystack, $needle, $index = null)
     $aIt = new RecursiveArrayIterator($haystack);
     $it = new RecursiveIteratorIterator($aIt);
     while ($it->valid()) {
-        if (((isset($index) AND ($it->key() == $index)) OR (!isset($index))) AND ($it->current() == $needle)) {
+        if (((isset($index) and ($it->key() == $index)) or (!isset($index))) and ($it->current() == $needle)) {
             return $aIt->key();
             break;
         }
@@ -1125,5 +1289,3 @@ function getSQLtable($TablePager, $rows, $bookmark, $token, $table_description, 
     echo '<span class="' . $css . '_numbers">' . $TablePager->getNumberLinks($css, $css, $css . '_active', $css . '_active', $bookmark, $TablePager->pageIndex) . '</span>';
     echo '</div>';
 }
-
-?>

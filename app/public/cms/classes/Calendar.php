@@ -356,7 +356,6 @@ class Calendar extends Database
                 $stmt->bindParam(':calendar_categories_id', $calendar_categories_id, PDO::PARAM_INT);
                 $stmt->execute();
                 return $this->db->lastInsertId('calendar_views_members_id');
-
             } catch (PDOException $e) {
                 handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
                 return false;
@@ -383,7 +382,6 @@ class Calendar extends Database
             }
             $this->db->commit();
             echo 'calendar categories positions saved: ' . date('H:i:s');
-
         } catch (PDOException $e) {
             $this->db->rollBack();
             handle_pdo_exception($_SERVER['REQUEST_URI'], $e);
@@ -829,16 +827,87 @@ class Calendar extends Database
     private function transl($text)
     {
         $a = array(
-            "english" => array("Mon" => "Mon", "Tue" => "Tue", "Wed" => "Wed", "Thu" => "Thu", "Fri" => "Fri", "Sat" => "Sat", "Sun" => "Sun",
-                "Monday" => "Monday", "Tuesday" => "Tuesday", "Wednesday" => "Wednesday", "Thursday" => "Thursday", "Friday" => "Friday", "Saturday" => "Saturday", "Sunday" => "Sunday",
-                "one day" => "one day", "four days" => "four days", "one week" => "one week", "two weeks" => "two weeks", "four weeks" => "four weeks", "eight weeks" => "eight weeks", "one month" => "one month", "two months" => "two months", "four months" => "four months", "six months" => "six months",
-                "January" => "January", "February" => "February", "March" => "March", "April" => "April", "May" => "May", "June" => "June", "July" => "July", "August" => "August", "September" => "September", "October" => "October", "November" => "November", "December" => "December",
-                "w" => "w", "today" => "today"),
-            "swedish" => array("Mon" => "må", "Tue" => "ti", "Wed" => "on", "Thu" => "to", "Fri" => "fr", "Sat" => "lö", "Sun" => "sö",
-                "Monday" => "Måndag", "Tuesday" => "Tisdag", "Wednesday" => "Onsdag", "Thursday" => "Torsdag", "Friday" => "Fredag", "Saturday" => "Lördag", "Sunday" => "Söndag",
-                "one day" => "en dag", "four days" => "fyra dagar", "one week" => "en vecka", "two weeks" => "två veckor", "four weeks" => "fyra veckor", "eight weeks" => "åtta veckor", "one month" => "en månad", "two months" => "2 månader", "four months" => "4 månader", "six months" => "6 månader",
-                "January" => "Januari", "February" => "Februari", "March" => "Mars", "April" => "April", "May" => "Maj", "June" => "Juni", "July" => "Juli", "August" => "Augusti", "September" => "September", "October" => "Oktober", "November" => "November", "December" => "December",
-                "w" => "v", "today" => "idag"));
+            "english" => array(
+                "Mon" => "Mon",
+                "Tue" => "Tue",
+                "Wed" => "Wed",
+                "Thu" => "Thu",
+                "Fri" => "Fri",
+                "Sat" => "Sat",
+                "Sun" => "Sun",
+                "Monday" => "Monday",
+                "Tuesday" => "Tuesday",
+                "Wednesday" => "Wednesday",
+                "Thursday" => "Thursday",
+                "Friday" => "Friday",
+                "Saturday" => "Saturday",
+                "Sunday" => "Sunday",
+                "one day" => "one day",
+                "four days" => "four days",
+                "one week" => "one week",
+                "two weeks" => "two weeks",
+                "four weeks" => "four weeks",
+                "eight weeks" => "eight weeks",
+                "one month" => "one month",
+                "two months" => "two months",
+                "four months" => "four months",
+                "six months" => "six months",
+                "January" => "January",
+                "February" => "February",
+                "March" => "March",
+                "April" => "April",
+                "May" => "May",
+                "June" => "June",
+                "July" => "July",
+                "August" => "August",
+                "September" => "September",
+                "October" => "October",
+                "November" => "November",
+                "December" => "December",
+                "w" => "w",
+                "today" => "today"
+            ),
+            "swedish" => array(
+                "Mon" => "må",
+                "Tue" => "ti",
+                "Wed" => "on",
+                "Thu" => "to",
+                "Fri" => "fr",
+                "Sat" => "lö",
+                "Sun" => "sö",
+                "Monday" => "Måndag",
+                "Tuesday" => "Tisdag",
+                "Wednesday" => "Onsdag",
+                "Thursday" => "Torsdag",
+                "Friday" => "Fredag",
+                "Saturday" => "Lördag",
+                "Sunday" => "Söndag",
+                "one day" => "en dag",
+                "four days" => "fyra dagar",
+                "one week" => "en vecka",
+                "two weeks" => "två veckor",
+                "four weeks" => "fyra veckor",
+                "eight weeks" => "åtta veckor",
+                "one month" => "en månad",
+                "two months" => "2 månader",
+                "four months" => "4 månader",
+                "six months" => "6 månader",
+                "January" => "Januari",
+                "February" => "Februari",
+                "March" => "Mars",
+                "April" => "April",
+                "May" => "Maj",
+                "June" => "Juni",
+                "July" => "Juli",
+                "August" => "Augusti",
+                "September" => "September",
+                "October" => "Oktober",
+                "November" => "November",
+                "December" => "December",
+                "w" => "v",
+                "today" => "idag"
+            )
+        );
 
         $l = isset($_SESSION['language']) ? $_SESSION['language'] : null;
         if (!$l) {
@@ -891,7 +960,7 @@ class Calendar extends Database
         $weekdays = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 
         // show weeks
-        $weekdays [] = "w";
+        $weekdays[] = "w";
 
         $holidays = $this->getHolidays($year);
         $flagdays = $this->getFlagdays($year);
@@ -949,7 +1018,6 @@ class Calendar extends Database
                 $html .= "\n\t\t\t<td class=\"$class\"><a class=\"$a_class\" href=\"$href_date\" title=\"$title_holiday\">" . date('j', $ts) . "</a>";
 
                 $c++;
-
             } else {
 
                 // current date
@@ -1220,7 +1288,7 @@ class Calendar extends Database
         $html .= $period_select;
         $html .= "</td>";
         $html .= "\n\t\t<td style=\"text-align:right;\">";
-        $html .= "<span class=\"ajax_calendar_load\" style=\"display:none;padding-right:20px;\"><img src=\"css/images/spinner_1.gif\" alt=\"spinner\"></span>";
+        $html .= "<span class=\"ajax_calendar_load\" style=\"display:none;padding-right:20px;\"><img src=\"/cms/css/images/spinner_1.gif\" alt=\"spinner\"></span>";
         $today = $this->transl('today');
         $html .= "<span class=\"btn_today\" title=\"$date\"><button type=\"submit\">$today</button></span> ";
         $html .= "<span class=\"btn_previous_period\"><button type=\"submit\">&nbsp;</button></span> ";
@@ -1358,7 +1426,7 @@ class Calendar extends Database
                     $show_holiday = strlen($title_holiday) > 0 ? "<div class=\"ui-state-highlight calendar-somedays \">$title_holiday</div>" : "";
 
                     $flagday = $this->isSpecialday($date_this, $flagdays);
-                    $flagday = strlen($flagday) > 0 ? "<img src=\"css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
+                    $flagday = strlen($flagday) > 0 ? "<img src=\"/cms/css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
 
                     $week_nr = (date('w', $ts) - 1) == 0 ? '<span class="calendar-week">v' . date('W', $ts) . '&nbsp;&nbsp;&nbsp;</span>' : null;
                     $month_name = (date('m', $ts) != date('m', $timestamp) && date('d', $ts) == 1) ? '<div class="calendar-month-name">' . $this->transl(date('F', $ts)) . '</div>' : null;
@@ -1412,7 +1480,7 @@ class Calendar extends Database
                     $show_holiday = strlen($title_holiday) > 0 ? "<div class=\"ui-state-highlight calendar-somedays \">$title_holiday</div>" : "";
 
                     $flagday = $this->isSpecialday($date_this, $flagdays);
-                    $flagday = strlen($flagday) > 0 ? "<img src=\"css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
+                    $flagday = strlen($flagday) > 0 ? "<img src=\"/cms/css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
 
                     $week_nr = (date('w', $ts) - 1) == 0 ? '<span class="calendar-week">v' . date('W', $ts) . '&nbsp;&nbsp;&nbsp;</span>' : null;
                     $month_name = (date('m', $ts) != date('m', $timestamp) && date('d', $ts) == 1) ? '<div class="calendar-month-name">' . $this->transl(date('F', $ts)) . '</div>' : null;
@@ -1433,7 +1501,6 @@ class Calendar extends Database
                     $one_day = strtotime("+1 day", $one_day);
 
                     $html .= "\n\t\t</tr>";
-
                 }
                 break;
 
@@ -1465,7 +1532,7 @@ class Calendar extends Database
                     $weekdays = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 
                     // show weeks
-                    $weekdays [] = "w";
+                    $weekdays[] = "w";
 
                     $colspan = 8;
 
@@ -1501,7 +1568,7 @@ class Calendar extends Database
                             $show_holiday = strlen($title_holiday) > 0 ? "<div class=\"ui-state-highlight calendar-somedays \">$title_holiday</div>" : "";
 
                             $flagday = $this->isSpecialday($date_this_month, $flagdays);
-                            $flagday = strlen($flagday) > 0 ? "<img src=\"css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
+                            $flagday = strlen($flagday) > 0 ? "<img src=\"/cms/css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
 
                             $cid = $category['calendar_categories_id'] . '_' . $date_this_month;
                             $content_cid = 'content_' . $cid;
@@ -1512,7 +1579,6 @@ class Calendar extends Database
                             $html .= "\n\t\t\t<td class=\"ui-widget ui-widget-content $class_edit $class\" id=\"$cid\" width=\"14%\"><span class=\"calendar-date\">" . date('j', $ts) . "</span>" . $flagday . $show_holiday;
 
                             $c++;
-
                         } else {
 
                             $ts = strtotime($y . '-' . $m . '-01');
@@ -1522,7 +1588,6 @@ class Calendar extends Database
                             $event = ($acc_read == true) ? $this->getDayEvent($date_previous_month, $events, $category['calendar_categories_id']) : null;
 
                             $html .= "\n\t\t\t<td class=\"ui-widget ui-widget-content $class\" width=\"14%\"><span class=\"calendar-date\">" . date('d', strtotime('- ' . $n . ' day', $ts)) . "</span>";
-
                         }
 
                         $html .= "<div id=\"$content_cid\" class=\"calendar-event-container\">$event</div></td>";
@@ -1530,7 +1595,6 @@ class Calendar extends Database
                         // wrap week
                         $html .= ($i != 0 && $i % 7 == 0) ? "\n\t\t\t<td class=\"ui-widget ui-widget-content ui-state-highlight\">" . date('W', $ts) . "</td>\n\t\t</tr>\n\t\t<tr class=\"ui-widget ui-widget-content\">" : null;
                         $wrap_close = ($i % 35 == 0) ? true : false;
-
                     }
 
                     if (!$wrap_close) {
@@ -1551,18 +1615,15 @@ class Calendar extends Database
                         }
 
                         $html .= "\n\t\t\t<td class=\"ui-widget ui-widget-content ui-state-highlight\">" . date('W', $ts) . "</td>\n\t\t</tr>";
-
                     }
                     $html .= "\n\t</tbody>";
                     $html .= "\n\t</table>\n";
 
                     $date = date('Y-m-d', strtotime("+1 months", strtotime($date)));
-
                 }
 
                 return $html;
                 break;
-
         }
 
         $html .= "\n\t</tbody>";
@@ -1625,8 +1686,6 @@ class Calendar extends Database
                             }
                         }
                     }
-                    
-
                 }
             }
         }
@@ -1722,7 +1781,6 @@ class Calendar extends Database
                     break;
                 }
             }
-
         }
     }
 
@@ -1865,7 +1923,7 @@ class Calendar extends Database
                     $show_holiday = strlen($title_holiday) > 0 ? "<div class=\"ui-state-highlight calendar-somedays \">$title_holiday</div>" : "";
 
                     $flagday = $this->isSpecialday($date_this, $flagdays);
-                    $flagday = strlen($flagday) > 0 ? "<img src=\"css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
+                    $flagday = strlen($flagday) > 0 ? "<img src=\"/cms/css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
 
                     $week_nr = (date('w', $ts) - 1) == 0 ? '<span class="calendar-week">v' . date('W', $ts) . '&nbsp;&nbsp;&nbsp;</span>' : null;
                     $month_name = (date('m', $ts) != date('m', $timestamp) && date('d', $ts) == 1) ? '<div class="calendar-month-name">' . $this->transl(date('F', $ts)) . '</div>' : null;
@@ -1956,7 +2014,7 @@ class Calendar extends Database
                     $show_holiday = strlen($title_holiday) > 0 ? "<div class=\"ui-state-highlight calendar-somedays \">$title_holiday</div>" : "";
 
                     $flagday = $this->isSpecialday($date_this, $flagdays);
-                    $flagday = strlen($flagday) > 0 ? "<img src=\"css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
+                    $flagday = strlen($flagday) > 0 ? "<img src=\"/cms/css/images/flag_swedish.gif\" title=\"$flagday\" class=\"calendar-flagday\" />" : "";
 
                     $week_nr = (date('w', $ts) - 1) == 0 ? '<span class="calendar-week">v' . date('W', $ts) . '&nbsp;&nbsp;&nbsp;</span>' : null;
                     $month_name = (date('m', $ts) != date('m', $timestamp) && date('d', $ts) == 1) ? '<div class="calendar-month-name">' . $this->transl(date('F', $ts)) . '</div>' : null;
@@ -1983,7 +2041,6 @@ class Calendar extends Database
                     $html .= "\n\t\t</tr>";
                 }
                 break;
-
         }
 
         $html .= "\n\t</tbody>";
@@ -2039,7 +2096,4 @@ class Calendar extends Database
         $date = new DateTime($year . '-03-21');
         return $date->add(new DateInterval('P' . easter_days($year) . 'D'));
     }
-
 }
-
-?>

@@ -86,6 +86,9 @@ class JplayerVideo extends Widgets {
 				$filename2 = $fileinfo2['filename'];
 			}
 		}
+		// jPlayer names the mp4 video format m4v
+		$fmt = (strtolower((string)$ext) === 'mp4') ? 'm4v' : strtolower((string)$ext);
+		$fmt2 = (strtolower((string)$ext2) === 'mp4') ? 'm4v' : strtolower((string)$ext2);
 		$path = strstr($dirname, '/') ? $dirname .'/' : '/content/uploads/pages/'.$pages_id .'/';
 		
 		$path = CMS_PROTOCOL . CMS_PATH . $path;
@@ -105,7 +108,7 @@ class JplayerVideo extends Widgets {
 					ready: function(event) {
 						$(this).jPlayer("setMedia", {							
 							<?php
-							switch($ext) {
+							switch($fmt) {
 								case 'm4v':
 									?>
 									m4v: "<?php echo $path . $filename .'.'. $ext; ?>",
@@ -117,7 +120,7 @@ class JplayerVideo extends Widgets {
 									<?php
 								break;
 							}
-							switch($ext2) {
+							switch($fmt2) {
 								case 'm4v':
 									?>
 									m4v: "<?php echo $path . $filename2 .'.'. $ext2; ?>",
@@ -141,7 +144,7 @@ class JplayerVideo extends Widgets {
 						$(this).jPlayer("play");
 					},					
 					swfPath: "<?php echo $_SESSION['CMS_DIR'];?>/cms/libraries/jquery-jplayer/Jplayer.swf",
-					supplied: "<?php echo $ext; ?><?php if ($ext2) { echo ','. $ext2; } ?>",
+					supplied: "<?php echo $fmt; ?><?php if ($fmt2) { echo ','. $fmt2; } ?>",
 					size: {
 						width: "<?php echo $width."px";?>",
 						height: "<?php echo $width/1.75."px";?>",

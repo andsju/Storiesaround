@@ -19,7 +19,7 @@ if (isset($_POST['token'])){
 		}
 	
 		// $action
-		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);	
+		$action = filter_var(trim($_POST['action'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);	
 		
 		// validate pages_id
 		if ($calendar_categories_id = filter_input(INPUT_POST, 'calendar_categories_id', FILTER_VALIDATE_INT)) { 
@@ -85,17 +85,18 @@ if (isset($_POST['token'])){
 
 					
 				case 'calendar_categories_rights_delete':
-					$calendar_categories_rights_id = $_POST['calendar_categories_rights_id'];
+					
+					$calendar_categories_rights_id = (int) filter_input(INPUT_POST, 'calendar_categories_rights_id', FILTER_VALIDATE_INT);
 					$rights = new CalendarRights();
 					$row = $rights->setCalendarUsersRightsDelete($calendar_categories_rights_id);
 					break;
 
 
 				case 'calendar_categories_rights_save':
-					// this can be made less database intensive... fix arrays one sunny day
-					// pages_rights_id
-					$r_id = $_POST['r_id'];
 					
+					// this can be made less database intensive... fix arrays one sunny day
+					
+					$r_id = $_POST['r_id'];
 					$r_read = $_POST['r_read'];
 					$r_edit = $_POST['r_edit'];
 					$r_create = $_POST['r_create'];

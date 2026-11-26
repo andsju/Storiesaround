@@ -36,7 +36,6 @@ $js_files = array(
 	CMS_DIR.'/cms/libraries/jquery-ui/jquery.ui.datepicker-sv.js', 
 	CMS_DIR.'/cms/libraries/jquery-plugin-validation/jquery.validate.js',
 	CMS_DIR.'/cms/libraries/jquery-colorbox/jquery.colorbox-min.js',
-	CMS_DIR.'/cms/libraries/jquery-datatables/jquery.datatables.min.js',	
 	CMS_DIR.'/cms/libraries/jquery-timeago/jquery.timeago.js',
 	CMS_DIR.'/cms/libraries/js/functions.js'
 );

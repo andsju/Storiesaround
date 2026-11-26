@@ -370,7 +370,11 @@ class Plugins extends Database
                 // list all files in the current directory and strip out . and ..
                 if ($file != "." && $file != "..") {
 
-                    //if (is_dir($handle)) continue;
+                    if ($file === ".gitkeep") {
+                        continue;
+                    }
+
+                    // if (!is_dir($file)) continue;
                     echo '<td class="paging">';
                     // get title from class name >> skip .class.php
                     $classname = substr($file, 0, -10);

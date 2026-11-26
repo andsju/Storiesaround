@@ -48,15 +48,7 @@ if (isset($_GET['token'])){
 		?>
 
         <div style="width:100%;overflow:auto;height:600px;" id="set_custom_css">
-        <?php
-
-        foreach($css_custom as $key => $value) {
-            echo '<div class="choose-class space '.$key.'" data-css="'.$key.'" style="float:left; width:100px;height:100px;margin:5px;padding:10px;position:relative" title="'.$key.'">';
-				echo '<p>'.$value.'</p>';
-				echo '<div class="grid-design '.$key.'"></div>';
-            echo '</div>';
-        }
-        ?>
+			---
         </div>
 
 		<input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token'];?>">

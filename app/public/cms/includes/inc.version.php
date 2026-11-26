@@ -6,13 +6,15 @@
 // $global string
 // version number start on character 16 
 // reading version file line by line -> substr($string, 16, 6)
-$cms_version = '2.2.0';
+$cms_version = '2.3.0';
 
 // CMS VERSION
-define('CMS_VERSION','2.2.0');
+define('CMS_VERSION','2.3.0');
 
 
 // required php version 
 // $global string
+// checked 8.4
 $php_version_required = '8.3';
+
 ?>

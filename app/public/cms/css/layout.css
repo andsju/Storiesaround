@@ -169,12 +169,9 @@ a#site-name-link:hover {
     cursor: pointer;
 }
 a#site-name-link div {
-    font-size: 1.7em;
+    font-size: 1.5em;
     color: black;
     display: block;
-    float: right;
-    margin-left: 20px;
-    margin-top: 20px
 }
 a#site-name-link:hover {
     text-decoration: none;
@@ -241,14 +238,14 @@ div#site-navigation-cms a {
 }
 #site-search-page {
     margin: 0;
-    padding: 10px;
+    padding: .5rem;
     position: relative;
     text-align: center;
     background-color: #e0e0e0
 }
 #site-search-page input[type=text] {
     width: 250px;
-    padding: 10px;
+    padding: .5rem;
     font-size: 1em
 }
 #site-search-page input[type=checkbox] {
@@ -793,45 +790,6 @@ ul#navigation-root li:last-child {
     margin: 0 0 40px 0
 }
 
-/* custom classes
-------------------------- */
-.sky {
-    background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-}
-.snow {
-    background-image: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%);
-}
-.wheat-cornsilk {
-    background: linear-gradient(135deg, #F5DEB3, #FFF8DC);
-    color: #000;
-}
-.eggwhite {
-    background-color: #ffefc1;
-    color: #000;
-}
-.white {
-    background: #FFF;
-    color: #000;
-}
-
-.sky h3, .sky div, .sky p, .sky a,
-.snow h3, .snow div, .snow p, .snow a,
-.wheat-cornsilk h3, .wheat-cornsilk div, .wheat-cornsilk p, .wheat-cornsilk a,
-.eggwhite h3, .eggwhite div, .eggwhite p, .eggwhite a,
-.white h3, .white div, .white p, .white a {
-    color: #000;
-    text-decoration: none
-}
-
-.frost {
-    background: linear-gradient(#000428, #004e92);
-    color: #FFF;
-}
-.frost h3, .frost div, .frost p, .frost a {
-    color: #fff;
-    text-decoration: none
-}
-
 .border {
     border: 1px solid grey
 }
@@ -1241,7 +1199,7 @@ ul#user_navigation a {
     padding: 3px;
     color: #FFF;
     text-decoration: none;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 ul#user_navigation a:hover {
     background: #333;
@@ -1277,7 +1235,7 @@ li.dropdown ul li a:hover {
 }
 li.toolbar-icons {
     margin: 8px 10px 0 0;
-    font-size: 0.8em !important;
+    font-size: 1rem;
 }
 #user_navigation span.ui-icon {
     background-image: url('../libraries/jquery-ui/images/ui-icons_ffffff_256x240.png');
@@ -1580,7 +1538,7 @@ div.ui-menu {
     width: 100px;
 }
 .ui-autocomplete-loading {
-    background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+    /* background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; */
 }
 .ui-datepicker {
     width: inherit;
@@ -2670,6 +2628,19 @@ meta tag width=device-width,initial-scale=1.0
     #wrapper-site-footer {
         padding: 0 10px 0 10px
     }
+    div#wrapper-mobile-site-navigation {
+        position: fixed !important;
+        height: 3rem;
+    }
+    div.menu-button span.touch-button {
+        width: 3rem;
+        height: 3rem;
+        margin-right: .5rem;
+    }
+    
+    div#wrapper-user {
+        height: 3rem;
+    }
 
 
     /* top 
@@ -2718,7 +2689,7 @@ meta tag width=device-width,initial-scale=1.0
         width: 600px;
         height: auto;
         left: 50%;
-        margin-left: -300px;
+        transform: translate(-50%);
     }
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
         width: 800px;
@@ -2778,22 +2749,15 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     a#site-name-link img {
-        height: 40px;
+        height: 24px;
     }
     a#site-name-link div {
-        margin: 10px 0 0 10px;
-        font-size: 1rem;
+        margin: 4px
     }
 
     #site-search-page input[type=text] {
-        width: 40%;
-        padding: 15px;
-        font-size: 1em;
-        margin-left: 50px
-    }
-    #site-search-page input[type=text] {
-        width: 150px;
-        padding: 5px;
+        width: 50%;
+        padding: .5rem;
         font-size: 1em;
         margin-left: auto;
         margin-right: auto
@@ -2811,7 +2775,7 @@ meta tag width=device-width,initial-scale=1.0
         display: none;
     }
     ul.nav-tree {
-        margin: 0 !important;
+        margin-top: 0.5rem
     }
     ul.nav-tree li {
         margin: 0;
@@ -2909,6 +2873,13 @@ meta tag width=device-width,initial-scale=1.0
         margin-right: 0;
     }
 
+    div#site-search-header {
+        margin: .5rem
+    }
+    input#search-page, button#btn-site-search-page {
+        padding: .5rem
+    }
+
 
     /* footer 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -2962,7 +2933,7 @@ meta tag width=device-width,initial-scale=1.0
         width: 800px;
         height: auto;
         left: 50%;
-        margin-left: -400px;
+        transform: translate(-50%);
     }
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
         width: 1200px;
@@ -2986,7 +2957,7 @@ meta tag width=device-width,initial-scale=1.0
 
     #site-search-page input[type=text] {
         max-width: 250px;
-        padding: 5px;
+        padding: .5rem;
         font-size: 1em;
         margin-left: auto;
         margin-right: auto
@@ -3102,6 +3073,29 @@ meta tag width=device-width,initial-scale=1.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
     /* wrappers 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+    #wrapper-page.sidebar-right {
+        display: grid;
+        grid-template-columns: auto minmax(250px, 280px);
+    }
+    #wrapper-page.sidebar-left {
+        display: grid;
+        grid-template-columns: minmax(250px, 280px) auto;
+    }
+    #wrapper-page.panorama {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    #wrapper-page.sidebars {
+        display: grid;
+        grid-template-columns: minmax(200px, 200px) auto minmax(200px, 200px);
+    }
+    #wrapper-page.sidebars-joined {
+        display: grid;
+        grid-template-columns: auto minmax(150px, 150px) minmax(200px, 200px);
+    }
+
+
     /* top 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
     /* header 
@@ -3119,10 +3113,10 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     #site-header-image img, #site-header-image video {
-        width: 1000px;
+        width: 1024px;
         height: auto;
-        left: 50%;
-        margin-left: -500px;
+        left: 0;
+        transform: initial
     }
 
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
@@ -3142,7 +3136,7 @@ meta tag width=device-width,initial-scale=1.0
 
     #site-search-page input[type=text] {
         max-width: 250px;
-        padding: 5px;
+        padding: .5rem;
         font-size: 1em;
         margin-left: auto;
         margin-right: auto
@@ -3162,14 +3156,11 @@ meta tag width=device-width,initial-scale=1.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
     div#wrapper-content {
-        float: left;
     }
     div#wrapper-left-sidebar {
-        float: left;
         padding-right: 20px;
     }
     div#wrapper-right-sidebar {
-        float: left;
         padding-left: 20px;
     }
 
@@ -3249,7 +3240,27 @@ meta tag width=device-width,initial-scale=1.0
     }
     #wrapper-site-header-image {
         width: 100%;
+        padding: .5rem
     }
+
+    #wrapper-page.sidebar-right {
+        display: grid;
+        grid-template-columns: auto 300px;
+    }
+    #wrapper-page.sidebar-left {
+        display: grid;
+        grid-template-columns: 300px auto;
+    }
+    #wrapper-page.sidebars {
+        display: grid;
+        grid-template-columns: 300px auto 300px;
+    }
+    #wrapper-page.sidebars-joined {
+        display: grid;
+        grid-template-columns: auto 150px 300px;
+    }
+
+
     #wrapper-page {
         width: 1024px;
         min-height: 10px;
@@ -3298,8 +3309,13 @@ meta tag width=device-width,initial-scale=1.0
 
     div#site-navigation-identity {
         position: relative;
-        padding: 10px
+        padding: 10px;
     }
+ 
+    div#wrapper-user + div#wrapper-site-header {
+        margin-top: 2.5rem
+    }
+
     div#site-navigation-cms {
         position: absolute;
         top: 10px;
@@ -3316,11 +3332,10 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     a#site-name-link img {
-        height: 60px;
+        height: 24px;
     }
     a#site-name-link div {
-        margin: 24px 0 0 10px;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     div#site-navigation-cms {
@@ -3360,18 +3375,16 @@ meta tag width=device-width,initial-scale=1.0
         width: 100%;
         overflow: hidden;
         height: 250px;
+        border: 1px solid;
+        box-shadow: 0px 0px 0.5rem rgba(0, 0, 0, 0.3);
     }
 
 
     #site-header-image img, #site-header-image video {
-
-
         width: 100%;
         height: auto;
         left: 0;
         margin-left: 0;
-
-
     }
 
     body#landing-page #site-header-image img, body#landing-page #site-header-image video {
@@ -3486,6 +3499,11 @@ meta tag width=device-width,initial-scale=1.0
         color: white;
         background-color: black;
     }
+
+    #wrapper-site-header, #wrapper-site-header-image {
+        width: 1270px;
+        margin: 0 auto
+    }
     #wrapper-page {
         width: 1270px;
         min-height: 10px;
@@ -3519,10 +3537,6 @@ meta tag width=device-width,initial-scale=1.0
         display: table
     }
 
-    #wrapper-site-header-image {
-        width: 100%;
-    }
-
 
 
     /* top 
@@ -3540,7 +3554,8 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     div#site-search-page {
-        width: 100%
+        width: 1270px;
+        margin: 0 auto;
     }
 
 
@@ -3588,7 +3603,7 @@ meta tag width=device-width,initial-scale=1.0
     }
 
     #wrapper-site-header {
-        padding: 0 50px;
+        
     }
 
 
@@ -3596,9 +3611,6 @@ meta tag width=device-width,initial-scale=1.0
 
 @media (min-width: 1920px) {
 
-    #site-header-image {
-        height: 480px;
-    }
 }
 
 
@@ -3621,10 +3633,9 @@ meta tag width=device-width,initial-scale=1.0
         width: 100%;
         background-color: black;
         z-index: 999;
-        height: 46px
     }
     nav#site-navigation-mobile {
-        display: none;
+        margin-top: 4px;
     }
     .menu-button .touch-button .navicon {
         font-size: 24px;

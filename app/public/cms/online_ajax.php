@@ -11,7 +11,7 @@ if (isset($_POST['token'])){
 
 	if ($_POST['token'] == $_SESSION['token']) {
 
-		$action = filter_var(trim($_POST['action']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$action = filter_var(trim($_POST['action'] ?? ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		
 		// switch action 
 		switch ($action) {
