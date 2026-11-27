@@ -2,7 +2,7 @@
 	die();
 }
 
-$header = $arr ? json_decode($arr['header'], true) : array();
+$header = !empty($arr['header']) && is_string($arr['header']) ? json_decode($arr['header'], true) : array();
 
 $header_items = isset($header['items']) && is_array($header['items'])
 	? $header['items']

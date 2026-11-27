@@ -3153,7 +3153,7 @@ if (is_array($check_edit)) {
 
 		<?php
 
-		$header = json_decode($arr['header'], true);
+		$header = json_decode($arr['header'] ?? '', true);
 
 		if (!is_array($header)) {
 			$header = array();

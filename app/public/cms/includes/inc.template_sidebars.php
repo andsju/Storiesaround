@@ -45,6 +45,9 @@ $wrapper_sidebar_width = (int) $wrapper_page_width * 0.25;
                     <div id="content-html" class="editable"> 
                         <?php echo $arr['content'];?>
                     </div>
+                    <div id="content-bottom-widgets">
+                        <?php if($rows_widgets){ show_widgets_content($rows_widgets, "widgets_content", $wrapper_content_width);} ?>
+                    </div>
                     <footer>
                         <div id="content-meta"><?php print_meta($arr['utc_modified'], $dtz, $languages) ?></div>
                         <div id="content-author-leading"><?php print_author($arr['content_author'], $languages)?></div>
@@ -55,9 +58,6 @@ $wrapper_sidebar_width = (int) $wrapper_page_width * 0.25;
                 <div id="content-bottom-grid"><?php print_grid($arr, 2);?></div>
                 <?php print_selection("selection-content-below", $selection_area['content_below']); ?>
             </main>
-            <aside id="content-bottom-widgets">
-                <?php if($rows_widgets){ show_widgets_content($rows_widgets, "widgets_content", $wrapper_content_width);} ?>
-            </aside>
             <aside id="content-bottom-stories">
                 <?php
                 print_story_events($pages, $languages, $wrapper_content_width, $arr['stories_event_dates'], $arr['stories_event_dates_filter'], $arr['stories_wide_teaser_image_align'], $arr['stories_last_modified'], $dtz);
